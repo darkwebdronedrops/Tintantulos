@@ -1,0 +1,91 @@
+{
+  "name": "Inheritance Dispute",
+  "faction": "Undead",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 45,
+  "max_hp": 45,
+  "attack": 7,
+  "pattern": ["Contest", "Melee", "Claim"],
+  "weight": "Uncommon",
+  "graft": "Shroud",
+  "mechanic": {
+    "name": "Contest",
+    "description": "Contest = Random card type 'disputed' (cannot play that type for 2 turns). Claim = Steals disputed cards from hand.",
+    "contest": {
+      "target": "random_card_type",
+      "effect": "cannot_play",
+      "duration": 2,
+      "message": "That is mine."
+    },
+    "claim": {
+      "steal_contested": true,
+      "destination": "discard",
+      "message": "It was always mine."
+    },
+    "visual_feedback": {
+      "litigant_form": true,
+      "family_dispute": true,
+      "contest_vfx": "res://vfx/contest.tscn",
+      "claim_vfx": "res://vfx/claim.tscn",
+      "legal_aura": true
+    },
+    "sound": "sfx/contest.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_inheritance_dispute_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "litigant": true,
+      "family_ghost": true,
+      "dispute_form": true
+    },
+    "contest": {
+      "sprite": "res://assets/sprites/enemies/enemy_inheritance_dispute_contest.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/contest.wav",
+      "contest_vfx": "res://vfx/contest.tscn",
+      "type_disputed": true,
+      "mine_says": true
+    },
+    "claim": {
+      "sprite": "res://assets/sprites/enemies/enemy_inheritance_dispute_claim.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/claim.wav",
+      "claim_vfx": "res://vfx/claim.tscn",
+      "cards_taken": true,
+      "always_mine": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_inheritance_dispute_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/family_strike.wav",
+      "dispute_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_inheritance_dispute_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.6, 0.7, 0.4],
+      "claim_wavers": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_inheritance_dispute_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/dispute_resolved.wav",
+      "claim_settled": true,
+      "family_rest": true
+    }
+  }
+}

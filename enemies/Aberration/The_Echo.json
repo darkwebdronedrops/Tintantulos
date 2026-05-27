@@ -1,0 +1,84 @@
+{
+  "name": "The Echo",
+  "faction": "Aberration",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 12,
+  "max_hp": 12,
+  "attack": 3,
+  "pattern": ["Copy", "Defend", "Copy"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Reverb",
+    "description": "Copies player's last played card and throws it back next turn. If player plays the same card again, Echo deals double damage.",
+    "copy_system": {
+      "copy_last_card": true,
+      "throwback_delay": 1,
+      "double_damage_condition": "player_repeats_card"
+    },
+    "visual_feedback": {
+      "echo_form": true,
+      "lag_trail": true,
+      "copy_preview": true,
+      "reverb_pulse": "res://vfx/echo_reverb.tscn"
+    },
+    "sound": "sfx/echo_copy.wav",
+    "sound_double": "sfx/echo_amplify.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_echo_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "fading_copy": true,
+      "player_likeness": true,
+      "lag_behind": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_echo_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/echo_strike.wav",
+      "mimic_player_attack": true,
+      "delayed_motion": true
+    },
+    "copy": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_echo_copy.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/echo_copy.wav",
+      "card_mirror": true,
+      "reverb_build": true,
+      "double_damage_glow": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_echo_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/echo_shield.tscn",
+      "mimic_player_defend": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_echo_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.4, 0.8, 0.3],
+      "echo_fade": true,
+      "reverb_disrupt": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_echo_death.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/echo_fade.wav",
+      "reverb_dissipate": true,
+      "silence": true
+    }
+  }
+}

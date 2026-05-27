@@ -1,0 +1,213 @@
+[gd_scene load_steps=13 format=3 uid="uid://floor5boiler001"]
+
+[ext_resource type="Script" path="res://scripts/Floor5RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/bg_boiler.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/steam_vent.png" id="3_vent"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/cargo_crate.png" id="4_crate"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/gangplank.png" id="5_gangplank"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/mooring_valve.png" id="6_valve"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/banner_elemental.png" id="7_banner_e"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/banner_undead.png" id="8_banner_u"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/tile_airship_deck.png" id="9_deck"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/cargo_crane.png" id="10_crane"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/fake_wall_tank.png" id="11_fake_wall"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/secret_door_green.png" id="12_secret_door"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(80, 80)
+
+[node name="Floor5_Boiler" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "boiler"
+room_display_name = "The Boiler"
+dominant_faction = "Elemental"
+has_steam_valve = true
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1100, 1200)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1100, 1000)
+
+[node name="PortalDown" type="Marker2D" parent="."]
+position = Vector2(1100, 1300)
+
+[node name="PortalUp" type="Marker2D" parent="."]
+position = Vector2(1100, 400)
+
+[node name="PortalLeft" type="Marker2D" parent="."]
+position = Vector2(200, 800)
+
+[node name="PortalRight" type="Marker2D" parent="."]
+position = Vector2(2000, 800)
+
+[node name="PortalSecret" type="Marker2D" parent="."]
+position = Vector2(1900, 700)
+
+[node name="Interior" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 800)
+texture = ExtResource("2_bg")
+
+[node name="SteamVents" type="Node2D" parent="Interior"]
+
+[node name="Vent1" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(300, 900)
+texture = ExtResource("3_vent")
+scale = Vector2(1.2, 1.2)
+
+[node name="Vent2" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(600, 850)
+texture = ExtResource("3_vent")
+scale = Vector2(1.2, 1.2)
+
+[node name="Vent3" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(1500, 850)
+texture = ExtResource("3_vent")
+scale = Vector2(1.2, 1.2)
+
+[node name="Vent4" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(1800, 900)
+texture = ExtResource("3_vent")
+scale = Vector2(1.2, 1.2)
+
+[node name="Vent5" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(900, 950)
+texture = ExtResource("3_vent")
+scale = Vector2(1.2, 1.2)
+
+[node name="Vent6" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(1300, 950)
+texture = ExtResource("3_vent")
+
+[node name="Crates" type="Node2D" parent="Interior"]
+
+[node name="Crate1" type="Sprite2D" parent="Interior/Crates"]
+position = Vector2(500, 900)
+texture = ExtResource("4_crate")
+scale = Vector2(1.0, 1.0)
+
+[node name="Crate2" type="Sprite2D" parent="Interior/Crates"]
+position = Vector2(700, 900)
+texture = ExtResource("4_crate")
+scale = Vector2(1.1, 1.1)
+
+[node name="Crate3" type="Sprite2D" parent="Interior/Crates"]
+position = Vector2(1500, 900)
+texture = ExtResource("4_crate")
+scale = Vector2(1.1, 1.1)
+
+[node name="Crate4" type="Sprite2D" parent="Interior/Crates"]
+position = Vector2(1700, 900)
+texture = ExtResource("4_crate")
+scale = Vector2(1.0, 1.0)
+
+[node name="Gangplank_Boiler" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 700)
+texture = ExtResource("5_gangplank")
+scale = Vector2(2.0, 2.0)
+
+[node name="GangplankLabel" type="Label" parent="Interior/Gangplank_Boiler"]
+offset_left = -80.0
+offset_top = -30.0
+offset_right = 80.0
+offset_bottom = -10.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Gangplank (max 3)"
+
+[node name="SteamValve_Boiler" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 850)
+texture = ExtResource("6_valve")
+scale = Vector2(1.2, 1.2)
+
+[node name="ValveLabel" type="Label" parent="Interior/SteamValve_Boiler"]
+offset_left = -40.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Steam Valve"
+
+[node name="Banner_Elemental" type="Sprite2D" parent="Interior"]
+position = Vector2(400, 400)
+texture = ExtResource("7_banner_e")
+scale = Vector2(1.2, 1.2)
+
+[node name="Banner_Undead" type="Sprite2D" parent="Interior"]
+position = Vector2(1800, 400)
+texture = ExtResource("8_banner_u")
+scale = Vector2(1.2, 1.2)
+
+[node name="DeckTiles" type="Node2D" parent="Interior"]
+
+[node name="Deck1" type="Sprite2D" parent="Interior/DeckTiles"]
+position = Vector2(200, 1000)
+texture = ExtResource("9_deck")
+scale = Vector2(2.0, 2.0)
+
+[node name="Deck2" type="Sprite2D" parent="Interior/DeckTiles"]
+position = Vector2(2000, 1000)
+texture = ExtResource("9_deck")
+scale = Vector2(2.0, 2.0)
+
+[node name="CargoCrane" type="Sprite2D" parent="Interior"]
+position = Vector2(300, 700)
+texture = ExtResource("10_crane")
+scale = Vector2(1.0, 1.0)
+
+; ============================================
+; FAKE WALL — Replaced Polygon2D with Sprite2D
+; ============================================
+[node name="FakeWall" type="Sprite2D" parent="Interior"]
+position = Vector2(1900, 700)
+texture = ExtResource("11_fake_wall")
+
+[node name="FakeWallLabel" type="Label" parent="Interior/FakeWall"]
+offset_left = -40.0
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 0.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.5, 0.47, 0.45, 1)
+horizontal_alignment = 1
+text = "Steam Tank"
+
+; ============================================
+; SECRET DOOR — Replaced Polygon2D with Sprite2D
+; ============================================
+[node name="SecretDoor" type="Sprite2D" parent="Interior"]
+visible = false
+position = Vector2(1900, 700)
+texture = ExtResource("12_secret_door")
+
+[node name="SecretLabel" type="Label" parent="Interior/SecretDoor"]
+offset_left = -40.0
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 0.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.3, 0.9, 0.3, 1)
+horizontal_alignment = 1
+text = "→ Cargo Hold"
+
+[node name="SavePoint" type="Marker2D" parent="Interior"]
+position = Vector2(1100, 1050)
+
+[node name="Interactables" type="Node2D" parent="Interior"]
+
+[node name="ValveArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1100, 850)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/ValveArea"]
+shape = SubResource("Rect_interact")
+
+[node name="FakeWallArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1900, 700)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/FakeWallArea"]
+shape = SubResource("Rect_interact")

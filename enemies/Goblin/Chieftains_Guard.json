@@ -1,0 +1,84 @@
+{
+  "name": "Chieftain's Guard",
+  "faction": "Goblin",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 15,
+  "max_hp": 15,
+  "attack": 5,
+  "pattern": ["Melee", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Elite",
+    "description": "+2 damage per other Goblin Elite within 3 hexes. Cannot Flee while allies present",
+    "elite_bonus": {
+      "per_elite_within": 3,
+      "damage_add": 2
+    },
+    "flee_prevent": {
+      "condition": "allies_present",
+      "cannot_flee": true
+    },
+    "visual_feedback": {
+      "elite_aura": "gold_trim",
+      "elite_glow": true,
+      "formation_bonus": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_guard_idle.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "armor_polished": true,
+      "elite_stance": true,
+      "gold_trim": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_guard_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/elite_strike.wav",
+      "spear_thrust": true,
+      "disciplined_form": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_guard_special.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/elite_command.wav",
+      "formation_align": true,
+      "bonus_show": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_guard_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "armor_clang": true,
+      "elite_resolve": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_guard_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/elite_fall.wav",
+      "armor_break": true,
+      "elite_falls": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_guard_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/elite_shield.tscn",
+      "shield_wall": true,
+      "formation_defense": true
+    }
+  }
+}

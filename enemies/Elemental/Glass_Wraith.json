@@ -1,0 +1,97 @@
+{
+  "name": "Glass Wraith",
+  "faction": "Elemental",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 8,
+  "max_hp": 8,
+  "attack": 4,
+  "pattern": ["Melee", "Special", "Defend"],
+  "weight": "Common",
+  "element": "Pyre",
+  "mechanic": {
+    "name": "Thermal",
+    "description": "+1 CHARGE when hit by fire. At 5 CHARGE, becomes living glass (immune to physical, reflects 50% damage)",
+    "charge_system": {
+      "max": 5,
+      "gain_on": "hit_by_fire",
+      "gain_amount": 1
+    },
+    "release": {
+      "trigger": "at_max",
+      "form_change": {
+        "name": "Living Glass",
+        "physical_immunity": true,
+        "damage_reflect": 0.5
+      },
+      "duration": "until_end_combat",
+      "visual": "glass_form"
+    },
+    "visual_feedback": {
+      "heat_glow": true,
+      "glass_form": "res://vfx/glass_form.tscn",
+      "reflect_indicator": true,
+      "thermal_aura": true
+    },
+    "sound": "sfx/thermal_build.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_glass_wraith_idle.png",
+      "frames": 8,
+      "fps": 5,
+      "loop": true,
+      "glass_form": true,
+      "heat shimmer": true,
+      "thermal_distortion": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_glass_wraith_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/glass_slice.wav",
+      "glass_edge": true,
+      "heat_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_glass_wraith_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/thermal_build.wav",
+      "charge_gain": true,
+      "glass_intensify": true,
+      "form_change": "res://vfx/glass_form.tscn"
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_glass_wraith_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/glass_shield.tscn",
+      "harden_glass": true,
+      "reflect_ready": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_glass_wraith_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.9, 0.8, 0.3],
+      "glass_crack": true,
+      "heat_pulse": true,
+      "check_charge_gain": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_glass_wraith_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/glass_shatter.wav",
+      "shatter": true,
+      "glass_shards": true,
+      "heat_release": true
+    }
+  }
+}

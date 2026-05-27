@@ -1,0 +1,99 @@
+{
+  "name": "Shardling",
+  "faction": "Elemental",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 4,
+  "max_hp": 4,
+  "attack": 3,
+  "pattern": ["Melee", "Defend", "Special"],
+  "weight": "Common",
+  "element": "Vitreous",
+  "mechanic": {
+    "name": "Crystallize",
+    "description": "Special = +1 CHARGE. At 2 CHARGE, gains +3 Armor. At 4 CHARGE, releases shards (2d4 to adjacent)",
+    "charge_system": {
+      "max": 4,
+      "gain_on": "Special",
+      "gain_amount": 1
+    },
+    "milestones": {
+      "at_2": {
+        "armor_bonus": 3,
+        "visual": "crystal_grow"
+      },
+      "at_max": {
+        "release": {
+          "damage": "2d4",
+          "radius": 1,
+          "aoe": true,
+          "reset_after": true
+        }
+      }
+    },
+    "visual_feedback": {
+      "crystal_growth": true,
+      "shard_form": true,
+      "shard_burst": "res://vfx/shard_explode.tscn",
+      "armor_shine": true
+    },
+    "sound": "sfx/crystal_grow.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_shardling_idle.png",
+      "frames": 5,
+      "fps": 5,
+      "loop": true,
+      "crystal_pulse": true,
+      "facet_shimmer": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_shardling_attack.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/shard_strike.wav",
+      "crystal_slice": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_shardling_special.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/crystal_grow.wav",
+      "charge_gain": true,
+      "crystal_expand": true,
+      "armor_form": true,
+      "milestone_check": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_shardling_defend.png",
+      "frames": 5,
+      "fps": 5,
+      "loop": false,
+      "shield_vfx": "res://vfx/crystal_shield.tscn",
+      "crystal_wall": true,
+      "facet_reinforce": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_shardling_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.9, 1.0, 0.3],
+      "shard_crack": true,
+      "check_fracture": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_shardling_death.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/crystal_shatter.wav",
+      "shatter": true,
+      "shard_scatter": true,
+      "crystal_dust": true
+    }
+  }
+}

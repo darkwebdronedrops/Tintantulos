@@ -1,0 +1,101 @@
+{
+  "name": "Lithospheric Titan",
+  "faction": "Elemental",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 60,
+  "max_hp": 60,
+  "attack": 7,
+  "pattern": ["Special", "Melee", "Special", "Defend"],
+  "weight": "Common",
+  "element": "Vitreous",
+  "mechanic": {
+    "name": "Mantle",
+    "description": "+1 CHARGE per turn, +1 when any crystal present. At 12 CHARGE, volcanic winter (all fire damage doubled for 3 turns)",
+    "charge_system": {
+      "max": 12,
+      "gain_per_turn": 1,
+      "gain_per_crystal": 1,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "volcanic_winter": {
+        "fire_damage_multiplier": 2,
+        "duration": 3,
+        "global_effect": true
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "mantle_aura": true,
+      "tectonic_presence": true,
+      "volcanic_winter_vfx": "res://vfx/volcanic_winter.tscn",
+      "ash_fall": true,
+      "fire_intensify": true
+    },
+    "sound": "sfx/mantle_build.wav",
+    "sound_release": "sfx/volcanic_winter.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_lithospheric_titan_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "lithospheric_form": true,
+      "mantle_core": true,
+      "continental_presence": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_lithospheric_titan_attack.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/lithospheric_slam.wav",
+      "continental_impact": true,
+      "mantle_burst": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_lithospheric_titan_special.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/volcanic_winter.wav",
+      "volcanic_winter_vfx": "res://vfx/volcanic_winter.tscn",
+      "ash_erupt": true,
+      "fire_intensify": true,
+      "global_darkening": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_lithospheric_titan_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/lithospheric_shield.tscn",
+      "continental_wall": true,
+      "mantle_barrier": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_lithospheric_titan_damage.png",
+      "frames": 7,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.4, 0.3, 0.3],
+      "continental_crack": true,
+      "mantle_leak": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_lithospheric_titan_death.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/lithospheric_collapse.wav",
+      "continental_collapse": true,
+      "mantle_release": true,
+      "earthquake_final": true
+    }
+  }
+}

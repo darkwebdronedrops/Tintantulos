@@ -1,0 +1,80 @@
+{
+  "name": "Gear Train",
+  "faction": "Construct",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 8,
+  "max_hp": 8,
+  "attack": 3,
+  "pattern": ["Melee", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Link",
+    "description": "Link with 1 other Gear Train. When one acts, all linked act simultaneously (same action, same target). Each still gets its own separate turn.",
+    "link_range": 3,
+    "max_links": 1,
+    "shared_action": true,
+    "visual_feedback": {
+      "link_beam": "res://vfx/gear_link.tscn",
+      "sync_glow": true,
+      "resonance_hum": "sfx/gear_resonance.wav"
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_train_idle.png",
+      "frames": 6,
+      "fps": 5,
+      "loop": true,
+      "train_rotation": true,
+      "linked_pulsing": true,
+      "chain_movement": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_train_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/train_strike.wav",
+      "linked_sync": true,
+      "simultaneous_strike_vfx": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_train_special.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "link_establish": true,
+      "beam_connect": true,
+      "resonance_pulse": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_train_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "link_flicker": true,
+      "chain_rattle": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_train_death.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/train_derail.wav",
+      "link_break": true,
+      "chain_explode": true,
+      "parts_scatter": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_train_defend.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/metal_shield.tscn",
+      "linked_defense": true,
+      "formation_brace": true
+    }
+  }
+}

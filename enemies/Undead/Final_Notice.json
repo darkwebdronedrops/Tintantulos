@@ -1,0 +1,79 @@
+{
+  "name": "Final Notice",
+  "faction": "Undead",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 48,
+  "max_hp": 48,
+  "attack": 9,
+  "pattern": ["Demand", "Melee", "Execute"],
+  "weight": "Rare",
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Execute",
+    "description": "Execute = If player has <3 Quiddity, deals 25 damage. Otherwise, steals 5 Quiddity.",
+    "demand": {
+      "message": "Final notice. Pay now."
+    },
+    "execute": {
+      "condition": "player_quiddity_under_3",
+      "damage": 25,
+      "else_steal": 5
+    },
+    "visual_feedback": {
+      "final_notice_form": true,
+      "red_stamp": true,
+      "execute_vfx": "res://vfx/execute.tscn",
+      "urgent": true
+    },
+    "sound": "sfx/final_notice.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_notice_idle.png",
+      "frames": 10,
+      "fps": 2,
+      "loop": true,
+      "notice_form": true,
+      "red_stamp": true,
+      "urgent": true
+    },
+    "demand": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_notice_demand.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/demand.wav"
+    },
+    "execute": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_notice_execute.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/execute.wav",
+      "execute_vfx": "res://vfx/execute.tscn",
+      "final_collection": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_notice_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/notice_strike.wav"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_notice_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.5, 0.5, 0.5]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_notice_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/notice_resolved.wav"
+    }
+  }
+}

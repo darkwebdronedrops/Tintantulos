@@ -1,0 +1,87 @@
+{
+  "name": "The Unraveler",
+  "faction": "Aberration",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 20,
+  "max_hp": 20,
+  "attack": 5,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Pull",
+    "description": "Removes one keyword from random card in hand (Stun→blank, Glitch→blank). Post-combat: One card type shows no icon for remainder of floor. Must remember what everything is.",
+    "keyword_removal": {
+      "target": "random_card_in_hand",
+      "remove_one_keyword": true,
+      "keywords_affected": ["Stun", "Glitch", "Lifesteal", "Banish", "Void"]
+    },
+    "post_combat": {
+      "lost_definition": {
+        "duration": "floor",
+        "effect": "no_icon_one_card_type",
+        "must_remember": true
+      }
+    },
+    "visual_feedback": {
+      "threadbare_reality": true,
+      "unraveling_edges": true,
+      "keyword_fade_vfx": "res://vfx/keyword_fade.tscn",
+      "definition_loss_indicator": true
+    },
+    "sound": "sfx/unraveler_pull.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_unraveler_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "threadbare_form": true,
+      "edges_unraveling": true,
+      "reality_fray": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_unraveler_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/unraveler_strike.wav",
+      "thread_pull": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_unraveler_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/unraveler_pull.wav",
+      "keyword_fade_vfx": "res://vfx/keyword_fade.tscn",
+      "definition_remove": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_unraveler_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/unraveler_shield.tscn",
+      "thread_barrier": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_unraveler_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.5, 0.7, 0.3],
+      "thread_tangle": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_unraveler_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/unraveler_fade.wav",
+      "completely_unraveled": true,
+      "thread_scatter": true
+    }
+  }
+}

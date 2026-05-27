@@ -1,0 +1,95 @@
+{
+  "name": "Goblin Warlord",
+  "faction": "Goblin",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 22,
+  "max_hp": 22,
+  "attack": 6,
+  "pattern": ["Melee", "Special", "Defend", "Melee"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Warlord",
+    "description": "All Goblins within 5 hexes gain +3 damage, +2 HP, and cannot Flee. Summons 1 Grunt each turn",
+    "aura": {
+      "range": 5,
+      "effects": {
+        "damage_bonus": 3,
+        "hp_bonus": 2,
+        "prevent_flee": true
+      }
+    },
+    "summon": {
+      "unit": "Goblin Grunt",
+      "per_turn": 1
+    },
+    "visual_feedback": {
+      "warlord_aura": "red_gold",
+      "massive_presence": true,
+      "banner_war": true,
+      "summon_vfx": "res://vfx/warlord_summon.tscn"
+    },
+    "sound": "sfx/warlord_command.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_warlord_idle.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": true,
+      "massive_armor": true,
+      "warlord_crown": true,
+      "command_aura": "red_gold",
+      "goblins_kneel": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_warlord_attack.png",
+      "frames": 10,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/warlord_slam.wav",
+      "great_axe_swing": true,
+      "cleave": true,
+      "ground_shatter": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_warlord_special.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/warlord_command.wav",
+      "war_cry": true,
+      "summon_pulse": "res://vfx/warlord_summon.tscn",
+      "grunt_emerge": true,
+      "aura_pulse": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_warlord_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "armor_dent": true,
+      "warlord_rage": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_warlord_death.png",
+      "frames": 16,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/warlord_fall.wav",
+      "army_scatters": true,
+      "crown_falls": true,
+      "war_ends": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_warlord_defend.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/warlord_shield.tscn",
+      "fortress_stance": true,
+      "goblins_shield_wall": true
+    }
+  }
+}

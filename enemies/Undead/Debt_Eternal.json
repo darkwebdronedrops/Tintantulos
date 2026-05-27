@@ -1,0 +1,85 @@
+{
+  "name": "Debt Eternal",
+  "faction": "Undead",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 62,
+  "max_hp": 62,
+  "attack": 8,
+  "pattern": ["Accrue", "Compound", "Collect"],
+  "weight": "Boss-like",
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Eternal Debt",
+    "description": "Accrue = Steal 2 Quiddity. Compound = Interest +20% on all stolen Quiddity. Collect = Deals damage equal to total stolen + interest.",
+    "accrue": {
+      "steal": 2,
+      "tracks_total": true
+    },
+    "compound": {
+      "interest": 0.2,
+      "message": "The debt transcends death."
+    },
+    "collect": {
+      "damage": "total_with_interest",
+      "message": "Pay forever."
+    },
+    "visual_feedback": {
+      "eternal_debt_form": true,
+      "infinite_calculation": true,
+      "debt_counter": true,
+      "eternal_flame": "res://vfx/eternal_debt.tscn"
+    },
+    "sound": "sfx/eternal_debt.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_debt_eternal_idle.png",
+      "frames": 12,
+      "fps": 2,
+      "loop": true,
+      "eternal_creditor": true,
+      "debt_counter_spins": true,
+      "infinite": true
+    },
+    "accrue": {
+      "sprite": "res://assets/sprites/enemies/enemy_debt_eternal_accrue.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/accrue.wav",
+      "quiddity_taken": true
+    },
+    "compound": {
+      "sprite": "res://assets/sprites/enemies/enemy_debt_eternal_compound.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/compound.wav",
+      "interest_grows": true
+    },
+    "collect": {
+      "sprite": "res://assets/sprites/enemies/enemy_debt_eternal_collect.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/eternal_collect.wav",
+      "eternal_flame": "res://vfx/eternal_debt.tscn",
+      "infinite_payment": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_debt_eternal_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.6, 0.5]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_debt_eternal_death.png",
+      "frames": 20,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/eternity_breaks.wav"
+    }
+  }
+}

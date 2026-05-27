@@ -1,0 +1,90 @@
+{
+  "name": "Pressurized Cylinder",
+  "faction": "Construct",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 10,
+  "max_hp": 10,
+  "attack": 4,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Vent",
+    "description": "Special = Charge (gain 5 Shield), next Melee = Release (damage = Shield)",
+    "charge": {
+      "shield_gain": 5,
+      "store_damage": true,
+      "visual": "steam_buildup",
+      "sound": "sfx/pressure_build.wav"
+    },
+    "release": {
+      "damage_equals_shield": true,
+      "clear_shield": true,
+      "sound": "sfx/pressure_release.wav",
+      "visual": "steam_burst"
+    },
+    "gauge_ui": true
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressurized_cylinder_idle.png",
+      "frames": 6,
+      "fps": 5,
+      "loop": true,
+      "steam_puff_periodic": true,
+      "pressure_gauge_idle": true,
+      "slight_vibration": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressurized_cylinder_attack.png",
+      "frames": 10,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/pressure_release.wav",
+      "steam_burst": true,
+      "piston_extend": true,
+      "release_vent": true,
+      "gauge_drop": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressurized_cylinder_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/pressure_build.wav",
+      "steam_intensify": true,
+      "gauge_fill": true,
+      "pressure_warning_light": true,
+      "shield_form": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressurized_cylinder_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "pressure_loss": true,
+      "steam_escape": true,
+      "dent_tank": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressurized_cylinder_death.png",
+      "frames": 14,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/tank_explode.wav",
+      "explosion": true,
+      "steam_cloud": true,
+      "shrapnel": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressurized_cylinder_defend.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/metal_shield.tscn",
+      "pressure_stabilize": true,
+      "gauge_hold": true
+    }
+  }
+}

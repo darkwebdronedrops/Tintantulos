@@ -1,0 +1,99 @@
+{
+  "name": "Torch Boy",
+  "faction": "Goblin",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 2,
+  "max_hp": 2,
+  "attack": 1,
+  "pattern": ["Special", "Melee", "Flee"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Fire!",
+    "description": "Special = Throw torch (2 damage + Burn for 2 turns). If killed while holding torch, explodes (3 damage to adjacent)",
+    "torch_throw": {
+      "damage": 2,
+      "burn": {
+        "damage_per_turn": 1,
+        "duration": 2
+      }
+    },
+    "death_explosion": {
+      "trigger": "killed_while_holding_torch",
+      "damage": 3,
+      "radius": 1,
+      "aoe": true
+    },
+    "visual_feedback": {
+      "torch_flame": true,
+      "fire_particles": true,
+      "explosion_vfx": "res://vfx/fire_explosion.tscn"
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_torch_boy_idle.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true,
+      "torch_wave": true,
+      "flame_flicker": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_torch_boy_attack.png",
+      "frames": 5,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/torch_swing.wav",
+      "torch_club": true,
+      "burn_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_torch_boy_special.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/torch_throw.wav",
+      "throw_torch": true,
+      "projectile_trail": "res://vfx/fire_trail.tscn",
+      "torch_lands": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_torch_boy_flee.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/goblin_panic.wav",
+      "torch_still_lit": true,
+      "run_panicked": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_torch_boy_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "torch_drops": true,
+      "check_explosion": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_torch_boy_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/torch_explode.wav",
+      "explosion": true,
+      "fire_burst": true,
+      "aoe_damage": true
+    },
+    "explode": {
+      "sprite": "res://assets/sprites/enemies/enemy_torch_boy_explode.png",
+      "frames": 8,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/fire_burst.wav",
+      "explosion_vfx": "res://vfx/fire_explosion.tscn",
+      "damage_radius": 1
+    }
+  }
+}

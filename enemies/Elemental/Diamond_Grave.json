@@ -1,0 +1,87 @@
+{
+  "name": "Diamond Grave",
+  "faction": "Elemental",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 20,
+  "max_hp": 20,
+  "attack": 5,
+  "pattern": ["Special", "Melee", "Special"],
+  "weight": "Common",
+  "element": "Vitreous",
+  "mechanic": {
+    "name": "Compression",
+    "description": "+1 CHARGE when damaged. At 6 CHARGE, compresses into singularity (pulls all within 3 hexes, deals 4d8)",
+    "charge_system": {
+      "max": 6,
+      "gain_on": "damaged",
+      "gain_amount": 1
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "singularity": {
+        "pull_radius": 3,
+        "damage": "4d8",
+        "aoe": true
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "crystal_crush": true,
+      "density_increase": true,
+      "singularity_vfx": "res://vfx/singularity.tscn",
+      "gravity_well": true
+    },
+    "sound": "sfx/compression_build.wav",
+    "sound_release": "sfx/singularity.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_diamond_grave_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "diamond_pressure": true,
+      "density_hum": true,
+      "gravity_aura": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_diamond_grave_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/diamond_strike.wav",
+      "compressed_impact": true,
+      "density_slash": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_diamond_grave_special.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/compression_build.wav",
+      "charge_gain": true,
+      "compress_animation": true,
+      "singularity_form": "res://vfx/singularity.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_diamond_grave_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.9, 0.95, 1.0, 0.3],
+      "diamond_crack": true,
+      "charge_gain_flash": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_diamond_grave_death.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/diamond_shatter.wav",
+      "singularity_collapse": true,
+      "density_release": true
+    }
+  }
+}

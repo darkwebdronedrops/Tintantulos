@@ -1,0 +1,95 @@
+{
+  "name": "The Mirror",
+  "faction": "Aberration",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 25,
+  "max_hp": 25,
+  "attack": 6,
+  "pattern": ["Reflect", "Copy", "Consume"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Learn Pattern",
+    "description": "Copies player's last card. Player can only play cards they've already played this combat. Keep playing pattern = Mirror shatters. Try something new = Mirror deals massive damage.",
+    "pattern_lock": {
+      "copy_last": true,
+      "player_restriction": "played_cards_only",
+      "reward": {
+        "condition": "continue_pattern",
+        "effect": "mirror_shatters"
+      },
+      "penalty": {
+        "condition": "new_card",
+        "damage": "massive"
+      }
+    },
+    "visual_feedback": {
+      "silver_surface": true,
+      "slight_delay": true,
+      "card_copy_preview": true,
+      "shatter_warning": "res://vfx/mirror_shatter.tscn"
+    },
+    "sound": "sfx/mirror_learn.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "perfect_surface": true,
+      "player_delayed_reflection": true,
+      "learned_cards_glow": true
+    },
+    "reflect": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_reflect.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/mirror_reflect.wav",
+      "pattern_check": true
+    },
+    "copy": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_copy.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/mirror_copy.wav",
+      "card_mirror": true,
+      "copy_vfx": true
+    },
+    "consume": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_consume.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/mirror_consume.wav",
+      "massive_damage": true,
+      "new_card_penalty": true
+    },
+    "shatter": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_shatter.png",
+      "frames": 14,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/mirror_break.wav",
+      "shatter_vfx": "res://vfx/mirror_shatter.tscn",
+      "pattern_complete": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 1.0, 1.0, 0.5],
+      "surface_crack": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_death.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "silver_fade": true
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "name": "Ultimate Truth",
+  "faction": "Demon",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 60,
+  "max_hp": 60,
+  "attack": 9,
+  "pattern": ["Truth", "Melee", "Punish"],
+  "weight": "Rare",
+  "offer": "Certainty",
+  "mechanic": {
+    "name": "Ultimate Truth",
+    "description": "Truth = Reveal 'the truth' (show how this run ends). If accepted, that outcome is locked ('fate accepted'). If refused, take 20 damage ('truth denied').",
+    "truth": {
+      "reveal_run_outcome": true,
+      "cost_if_accepted": "outcome_locked",
+      "punishment_if_refused": 20,
+      "message": "I can show you how this ends. Do you want to know?"
+    },
+    "visual_feedback": {
+      "scroll_form": true,
+      "infinite_text": true,
+      "truth_glow": "res://vfx/ultimate_truth.tscn",
+      "doom_shadow": "res://vfx/fate_sealed.tscn"
+    },
+    "sound": "sfx/ultimate_truth.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_truth_idle.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": true,
+      "scroll_form": true,
+      "text_unfolding": true,
+      "ending_written": true
+    },
+    "truth": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_truth_truth.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/ultimate_truth.wav",
+      "truth_glow": "res://vfx/ultimate_truth.tscn",
+      "ending_revealed": true
+    },
+    "punish": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_truth_punish.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/truth_denied.wav",
+      "punishes_refusal": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_truth_attack.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/truth_strikes.wav",
+      "prophecy_fulfilled": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_truth_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 1.0, 1.0, 0.5],
+      "text_tears": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_truth_death.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/truth_fades.wav",
+      "ending_uncertain": true
+    }
+  }
+}

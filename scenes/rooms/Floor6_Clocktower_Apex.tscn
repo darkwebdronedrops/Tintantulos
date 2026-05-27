@@ -1,0 +1,164 @@
+[gd_scene load_steps=13 format=3 uid="uid://floor6clocktower001"]
+
+[ext_resource type="Script" path="res://scripts/Floor6RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/bg_clocktower_apex.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/tile_courtyard_stone.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/clocktower_bell.png" id="4_bell"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/moonlight_beam.png" id="5_beam"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/dean_door.png" id="6_door"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/item_deans_key.png" id="7_key"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/banner_construct.png" id="8_banner"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(100, 100)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(120, 120)
+
+[node name="Floor6_Clocktower_Apex" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "clocktower"
+room_display_name = "The Clocktower Apex"
+encounter_type = "boss"
+
+; ============================================
+; MARKERS
+; ============================================
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1200, 1200)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1200, 850)
+
+[node name="PortalDown" type="Marker2D" parent="."]
+position = Vector2(1200, 1400)
+
+; ============================================
+; INTERIOR
+; ============================================
+[node name="Interior" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1200, 800)
+texture = ExtResource("2_bg")
+
+; --- Floor tiles (circular chamber) ---
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(600, 1000)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1800, 1000)
+texture = ExtResource("3_tile")
+
+[node name="Tile3" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1200, 1100)
+texture = ExtResource("3_tile")
+
+[node name="Tile4" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(900, 900)
+texture = ExtResource("3_tile")
+
+[node name="Tile5" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1500, 900)
+texture = ExtResource("3_tile")
+
+; --- Bells around dome ---
+[node name="Bells" type="Node2D" parent="Interior"]
+
+[node name="Bell1" type="Sprite2D" parent="Interior/Bells"]
+position = Vector2(900, 500)
+texture = ExtResource("4_bell")
+
+[node name="Bell2" type="Sprite2D" parent="Interior/Bells"]
+position = Vector2(1500, 500)
+texture = ExtResource("4_bell")
+
+[node name="Bell3" type="Sprite2D" parent="Interior/Bells"]
+position = Vector2(1200, 400)
+texture = ExtResource("4_bell")
+
+; --- Moonlight Beams (stronger in arena) ---
+[node name="MoonlightBeams" type="Node2D" parent="Interior"]
+
+[node name="Beam1" type="Sprite2D" parent="Interior/MoonlightBeams"]
+position = Vector2(900, 700)
+texture = ExtResource("5_beam")
+modulate = Color(1, 1, 1, 0.4)
+scale = Vector2(1.5, 1.5)
+
+[node name="Beam2" type="Sprite2D" parent="Interior/MoonlightBeams"]
+position = Vector2(1500, 700)
+texture = ExtResource("5_beam")
+modulate = Color(1, 1, 1, 0.4)
+scale = Vector2(1.5, 1.5)
+
+[node name="Beam3" type="Sprite2D" parent="Interior/MoonlightBeams"]
+position = Vector2(1200, 600)
+texture = ExtResource("5_beam")
+modulate = Color(1, 1, 1, 0.35)
+scale = Vector2(1.5, 1.5)
+
+; --- Boss Door (to Floor 7, after boss defeat) ---
+[node name="DeanDoor" type="Sprite2D" parent="Interior"]
+position = Vector2(1200, 300)
+texture = ExtResource("6_door")
+scale = Vector2(1.2, 1.2)
+
+[node name="DoorLabel" type="Label" parent="Interior/DeanDoor"]
+offset_left = -60.0
+offset_top = -110.0
+offset_right = 60.0
+offset_bottom = -90.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.3, 0.3, 1.0)
+horizontal_alignment = 1
+text = "To Floor 7"
+
+; --- Dean's Key (reward, appears after boss defeat) ---
+[node name="DeansKey" type="Sprite2D" parent="Interior"]
+position = Vector2(1200, 950)
+texture = ExtResource("7_key")
+visible = false
+
+[node name="KeyLabel" type="Label" parent="Interior/DeansKey"]
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = -10.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Dean's Key"
+
+; --- Faction Banner ---
+[node name="Banner" type="Sprite2D" parent="Interior"]
+position = Vector2(600, 500)
+texture = ExtResource("8_banner")
+
+; --- Save Point ---
+[node name="SavePoint" type="Marker2D" parent="Interior"]
+position = Vector2(1100, 1050)
+
+; --- Interactable Areas ---
+[node name="Interactables" type="Node2D" parent="Interior"]
+
+[node name="BossArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1200, 700)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/BossArea"]
+shape = SubResource("Rect_interact")
+
+[node name="DoorArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1200, 300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/DoorArea"]
+shape = SubResource("Rect_interact")
+
+[node name="PortalDownArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1200, 1400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/PortalDownArea"]
+shape = SubResource("Rect_spawn")

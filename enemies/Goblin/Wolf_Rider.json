@@ -1,0 +1,87 @@
+{
+  "name": "Wolf Rider",
+  "faction": "Goblin",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 7,
+  "max_hp": 7,
+  "attack": 4,
+  "pattern": ["Melee", "Special", "Flee"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Charge",
+    "description": "Special = Rush and knockback. If hits wall/obstacle, +3 damage",
+    "rush": {
+      "knockback": true,
+      "wall_bonus": {
+        "condition": "hits_wall_or_obstacle",
+        "damage_add": 3
+      }
+    },
+    "visual_feedback": {
+      "charge_trail": true,
+      "knockback_push": true,
+      "wall_impact_vfx": "res://vfx/wall_slam.tscn"
+    },
+    "sound": "sfx/wolf_charge.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_rider_idle.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": true,
+      "wolf_pant": true,
+      "rider_ready": true,
+      "spear_hold": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_rider_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/rider_stab.wav",
+      "spear_thrust": true,
+      "wolf_lunge": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_rider_special.png",
+      "frames": 12,
+      "fps": 18,
+      "loop": false,
+      "sound": "sfx/wolf_charge.wav",
+      "charge_animation": true,
+      "rush_trail": "res://vfx/charge_trail.tscn",
+      "knockback_impact": true,
+      "check_wall_bonus": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_rider_flee.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/wolf_retreat.wav",
+      "wolf_whimper": true,
+      "ride_away": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_rider_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "wolf_yelp": true,
+      "rider_stagger": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_rider_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/rider_fall.wav",
+      "wolf_falls": true,
+      "rider_thrown": true,
+      "spear_drops": true
+    }
+  }
+}

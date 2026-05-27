@@ -1,0 +1,81 @@
+{
+  "name": "Flesh Reclamation",
+  "faction": "Undead",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 40,
+  "max_hp": 40,
+  "attack": 6,
+  "pattern": ["Reclaim", "Melee", "Special"],
+  "weight": "Uncommon",
+  "graft": "Flesh",
+  "mechanic": {
+    "name": "Reclaim Flesh",
+    "description": "Reclaim = Mill 4 cards. Heals 2 HP per card. Special = If 8+ cards milled, summons Flesh Debt (HP 10, attacks for 4).",
+    "reclaim": {
+      "mill": 4,
+      "heal_per_card": 2,
+      "summon_threshold": 8,
+      "summon": {
+        "name": "Flesh Debt",
+        "hp": 10,
+        "attack": 4
+      }
+    },
+    "visual_feedback": {
+      "reclamation_form": true,
+      "flesh_renewal": true,
+      "reclaim_vfx": "res://vfx/flesh_reclaim.tscn"
+    },
+    "sound": "sfx/reclaim_flesh.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_reclamation_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "reclamation_form": true,
+      "flesh_grows": true
+    },
+    "reclaim": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_reclamation_reclaim.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/reclaim_flesh.wav",
+      "reclaim_vfx": "res://vfx/flesh_reclaim.tscn",
+      "deck_mill": true,
+      "heals": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_reclamation_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/reclamation_strike.wav"
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_reclamation_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/flesh_summon.wav",
+      "flesh_debt_summon": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_reclamation_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.4, 0.4, 0.4]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_reclamation_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/reclamation_fades.wav"
+    }
+  }
+}

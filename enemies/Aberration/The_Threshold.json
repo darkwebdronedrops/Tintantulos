@@ -1,0 +1,92 @@
+{
+  "name": "The Threshold",
+  "faction": "Aberration",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 58,
+  "max_hp": 58,
+  "attack": 8,
+  "pattern": ["Cross", "Be Crossed", "Return"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Cross",
+    "description": "Swaps position with enemy. You are now the enemy. Enemy plays your cards against you (AI plays your deck). Post-combat: Start next combat with 1 HP. Didn't fully cross back.",
+    "swap": {
+      "position_exchange": true,
+      "role_reversal": true,
+      "ai_plays_player_deck": true,
+      "player_is_enemy": true
+    },
+    "post_combat": {
+      "stuck": {
+        "next_combat_start_hp": 1,
+        "message": "Didn't fully cross back.",
+        "partial_return": true
+      }
+    },
+    "visual_feedback": {
+      "door_opens_inward": true,
+      "already_where_you_are": true,
+      "swap_vfx": "res://vfx/threshold_cross.tscn",
+      "role_reversal_aura": true
+    },
+    "sound": "sfx/threshold_cross.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_threshold_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "door_form": true,
+      "opens_inward": true,
+      "same_place": true
+    },
+    "cross": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_threshold_cross.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/threshold_cross.wav",
+      "swap_vfx": "res://vfx/threshold_cross.tscn",
+      "role_exchange": true,
+      "you_become_enemy": true
+    },
+    "be_crossed": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_threshold_be_crossed.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/threshold_cross.wav",
+      "ai_plays_your_cards": true,
+      "enemy_becomes_you": true
+    },
+    "return": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_threshold_return.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/threshold_return.wav",
+      "partial_return": true,
+      "incomplete": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_threshold_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.4, 0.4, 0.5, 0.4],
+      "door_shake": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_threshold_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/threshold_fade.wav",
+      "stuck_vfx": "res://vfx/stuck.tscn",
+      "1hp_warning": true,
+      "door_closes": true
+    }
+  }
+}

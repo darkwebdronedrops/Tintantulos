@@ -1,0 +1,97 @@
+{
+  "name": "The Immutable Prime",
+  "faction": "Construct",
+  "tier": "Boss",
+  "floor": 9,
+  "hp": 50,
+  "max_hp": 50,
+  "attack": 6,
+  "pattern": ["Defend", "Special", "Melee", "Melee"],
+  "mechanic": {
+    "name": "Perfection",
+    "description": "Ignores all status, fixed damage, cannot be debuffed",
+    "immunities": {
+      "status_effects": "all",
+      "debuffs": true,
+      "damage_variance": false
+    },
+    "fixed_damage": {
+      "dealt": 6,
+      "variance": 0
+    },
+    "visual_feedback": {
+      "status_immunity_vfx": true,
+      "debuff_resist_show": true,
+      "golden_perfection": true,
+      "perfect_geometry": true
+    },
+    "sound": "sfx/perfection_clang.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_immutable_prime_idle.png",
+      "frames": 8,
+      "fps": 2,
+      "loop": true,
+      "absolute_stillness": true,
+      "divine_geometry": true,
+      "golden_perfection": true,
+      "no_movement": true,
+      "ideal_form": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_immutable_prime_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/perfection_strike.wav",
+      "perfect_motion": true,
+      "unavoidable": true,
+      "fixed_six_damage": true,
+      "divine_delivery": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_the_immutable_prime_special.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/perfection_affirm.wav",
+      "perfect_aura_pulse": true,
+      "immunity_show": true,
+      "debuff_resist_vfx": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_immutable_prime_damage.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": false,
+      "flash": [0.8, 0.8, 0.2, 0.3],
+      "gold_flash": true,
+      "no_recoil": true,
+      "status_immunity_show": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_immutable_prime_death.png",
+      "frames": 18,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/perfection_lost.wav",
+      "perfect_form_fracture": true,
+      "golden_shatter": true,
+      "geometry_break": true,
+      "divine_fall": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_immutable_prime_defend.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/perfection_shield.tscn",
+      "perfect_stance": true,
+      "divine_defense": true,
+      "invincible_aura": true
+    }
+  }
+}

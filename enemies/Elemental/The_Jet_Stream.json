@@ -1,0 +1,119 @@
+{
+  "name": "The Jet Stream",
+  "faction": "Elemental",
+  "tier": "Boss",
+  "floor": "Secret",
+  "hp": 100,
+  "max_hp": 100,
+  "attack": 8,
+  "pattern": ["Melee", "Special", "Flee", "Special"],
+  "variable_pattern": true,
+  "mechanic": {
+    "name": "Unpredictable",
+    "description": "Pattern changes each turn. Gains random CHARGE (0-3) per turn. At 10 CHARGE: Chaos Release — Random effect: teleport player, scramble hand, reverse controls, or 8d8 damage. Boss telegraphs CHARGE type via aura color (exploitable).",
+    "charge_system": {
+      "max": 10,
+      "gain_per_turn": "random",
+      "gain_range": [0, 3],
+      "aura_telegraph": {
+        "pyre_red": "damage",
+        "abyss_blue": "teleport",
+        "vitreous_brown": "scramble",
+        "stratospheric_green": "reverse"
+      }
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "chaos_release": {
+        "random_effect": ["teleport_player", "scramble_hand", "reverse_controls", "damage_8d8"]
+      },
+      "reset_after": true
+    },
+    "exploitable": {
+      "condition": "read_aura_color",
+      "effect": "predict_release_type",
+      "note": "Aura telegraphs which chaos will occur"
+    },
+    "hard_counter": {
+      "name": "Wind Shear",
+      "trigger": "player_3_cards_one_turn",
+      "effect": "boss_steals_third_card",
+      "remove_from_deck": "combat_only"
+    },
+    "visual_feedback": {
+      "aurora_ribbons": true,
+      "ionization_trails": true,
+      "impossible_geometry": true,
+      "aura_color_indicator": true,
+      "chaos_vfx": "res://vfx/chaos_release.tscn",
+      "upper_atmosphere": true
+    },
+    "sound": "sfx/jet_stream.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_jet_stream_idle.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": true,
+      "aurora_form": true,
+      "ribbon_dance": true,
+      "ion_trails": true,
+      "upper_atmosphere": true,
+      "aura_color_shift": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_jet_stream_attack.png",
+      "frames": 10,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/jet_strike.wav",
+      "shear_blade": true,
+      "wind_cut": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_the_jet_stream_special.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/chaos_release.wav",
+      "chaos_vfx": "res://vfx/chaos_release.tscn",
+      "random_effect_show": true,
+      "teleport": "res://vfx/chaos_teleport.tscn",
+      "scramble": "res://vfx/chaos_scramble.tscn",
+      "reverse": "res://vfx/chaos_reverse.tscn",
+      "damage": "res://vfx/chaos_damage.tscn"
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/boss_the_jet_stream_flee.png",
+      "frames": 8,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/jet_dash.wav",
+      "aurora_dash": true,
+      "upper_atmosphere_move": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_jet_stream_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.8, 1.0, 0.3],
+      "ribbon_fray": true,
+      "ion_disrupt": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_jet_stream_death.png",
+      "frames": 18,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/jet_dissipate.wav",
+      "aurora_fade": true,
+      "ribbons_scatter": true,
+      "upper_atmosphere_clear": true
+    }
+  }
+}

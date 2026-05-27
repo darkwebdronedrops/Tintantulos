@@ -1,0 +1,106 @@
+{
+  "name": "Chieftain's Champion",
+  "faction": "Goblin",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 24,
+  "max_hp": 24,
+  "attack": 6,
+  "pattern": ["Melee", "Melee", "Special", "Defend"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Champion",
+    "description": "Immune to crowd control. +1 damage per Goblin still alive in combat (max +10). Heals 5 HP when any Goblin dies",
+    "immunities": {
+      "crowd_control": true,
+      "stun": true,
+      "knockback": true,
+      "freeze": true
+    },
+    "damage_bonus": {
+      "per_goblin_alive": 1,
+      "max_bonus": 10
+    },
+    "on_goblin_death": {
+      "heal": 5,
+      "trigger": "any_goblin_dies"
+    },
+    "visual_feedback": {
+      "champion_aura": "gold",
+      "cc_immune_indicator": true,
+      "heal_pulse_on_death": true,
+      "damage_counter_show": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_champion_idle.png",
+      "frames": 8,
+      "fps": 5,
+      "loop": true,
+      "massive_presence": true,
+      "champion_aura": "gold",
+      "cc_immune_glow": true,
+      "trophy_collection": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_champion_attack.png",
+      "frames": 10,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/champion_strike.wav",
+      "dual_weapons": true,
+      "savage_combo": true,
+      "bonus_damage_flash": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_champion_special.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/champion_roar.wav",
+      "roar_buff": true,
+      "damage_count_pulse": true,
+      "champion_intimidate": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_champion_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "cc_immune_shake": true,
+      "no_stagger": true,
+      "champion_resolve": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_champion_death.png",
+      "frames": 14,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/champion_fall.wav",
+      "champion_falls": true,
+      "trophies_scatter": true,
+      "final_stand": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_champion_defend.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/champion_shield.tscn",
+      "unbreakable_stance": true,
+      "champion_wall": true
+    },
+    "heal_on_death": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_champion_heal.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/champion_absorb.wav",
+      "heal_pulse": true,
+      "green_flash": true,
+      "hp_gain_number": true
+    }
+  }
+}

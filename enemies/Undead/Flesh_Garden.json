@@ -1,0 +1,86 @@
+{
+  "name": "Flesh Garden",
+  "faction": "Undead",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 3,
+  "pattern": ["Grow", "Melee", "Special"],
+  "weight": "Rare",
+  "graft": "Flesh",
+  "mechanic": {
+    "name": "Grow",
+    "description": "Grow = Mill 3 cards. Heals 2 HP per card milled. If deck empty, summons Flesh Sprout (HP 5, attacks for 2).",
+    "grow": {
+      "mill": 3,
+      "heal_per_card": 2,
+      "summon_on_empty": {
+        "name": "Flesh Sprout",
+        "hp": 5,
+        "attack": 2
+      }
+    },
+    "visual_feedback": {
+      "garden_of_rot": true,
+      "flesh_flowers": true,
+      "growth_vfx": "res://vfx/flesh_grow.tscn",
+      "organic_expansion": true
+    },
+    "sound": "sfx/flesh_grow.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_garden_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "garden_form": true,
+      "flesh_blooms": true,
+      "pollen_of_rot": true
+    },
+    "grow": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_garden_grow.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/flesh_grow.wav",
+      "growth_vfx": "res://vfx/flesh_grow.tscn",
+      "deck_consumes": true,
+      "flesh_expands": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_garden_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/flesh_vine.wav",
+      "vine_strike": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_garden_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/sprout_spawn.wav",
+      "flesh_sprout_summon": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_garden_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.4, 0.4, 0.4],
+      "garden_wounds": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_garden_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/garden_withers.wav",
+      "growth_ends": true,
+      "flesh_composts": true
+    }
+  }
+}

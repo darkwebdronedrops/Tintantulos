@@ -1,0 +1,105 @@
+[gd_scene load_steps=11 format=3 uid="uid://floor8padlock001"]
+
+[ext_resource type="Script" path="res://scripts/Floor8RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/bg_padlock_door.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/tile_brass_factory.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/padlock.png" id="4_padlock"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/item_wrench.png" id="5_wrench"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/overclock_console.png" id="6_console"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(60, 60)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(100, 100)
+
+[node name="Floor8_PadlockDoor" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "padlock_door"
+room_display_name = "The Padlock Door"
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1100, 1000)
+
+[node name="PortalSouth" type="Marker2D" parent="."]
+position = Vector2(1100, 1100)
+
+[node name="PortalUp" type="Marker2D" parent="."]
+position = Vector2(1100, 400)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(900, 600)
+texture = ExtResource("2_bg")
+
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(500, 800)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1300, 800)
+texture = ExtResource("3_tile")
+
+[node name="Tile3" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(900, 950)
+texture = ExtResource("3_tile")
+
+[node name="PadlockCluster" type="Node2D" parent="Interior"]
+position = Vector2(0, 0)
+
+[node name="Padlock1" type="Sprite2D" parent="Interior/PadlockCluster"]
+position = Vector2(600, 450)
+texture = ExtResource("4_padlock")
+
+[node name="PadlockArea1" type="Area2D" parent="Interior/PadlockCluster/Padlock1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/PadlockCluster/Padlock1/PadlockArea1"]
+shape = SubResource("Rect_interact")
+
+[node name="Padlock2" type="Sprite2D" parent="Interior/PadlockCluster"]
+position = Vector2(750, 450)
+texture = ExtResource("4_padlock")
+
+[node name="PadlockArea2" type="Area2D" parent="Interior/PadlockCluster/Padlock2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/PadlockCluster/Padlock2/PadlockArea2"]
+shape = SubResource("Rect_interact")
+
+[node name="Padlock3" type="Sprite2D" parent="Interior/PadlockCluster"]
+position = Vector2(900, 450)
+texture = ExtResource("4_padlock")
+
+[node name="PadlockArea3" type="Area2D" parent="Interior/PadlockCluster/Padlock3"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/PadlockCluster/Padlock3/PadlockArea3"]
+shape = SubResource("Rect_interact")
+
+[node name="Cache" type="Sprite2D" parent="Interior"]
+position = Vector2(300, 900)
+texture = ExtResource("5_wrench")
+
+[node name="CacheArea" type="Area2D" parent="Interior/Cache"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Cache/CacheArea"]
+shape = SubResource("Rect_interact")
+
+[node name="Console" type="Sprite2D" parent="Interior"]
+position = Vector2(1400, 900)
+texture = ExtResource("6_console")
+
+[node name="ConsoleArea" type="Area2D" parent="Interior/Console"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Console/ConsoleArea"]
+shape = SubResource("Rect_interact")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 600.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 20
+text = "FLOOR 8: THE OVERCLOCK FORGE — Padlock Door"

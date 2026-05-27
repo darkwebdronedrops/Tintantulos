@@ -1,0 +1,87 @@
+{
+  "name": "Oath Keeper",
+  "faction": "Demon",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 19,
+  "max_hp": 19,
+  "attack": 4,
+  "pattern": ["Oath", "Melee", "Collect"],
+  "weight": "Uncommon",
+  "offer": "Certainty",
+  "mechanic": {
+    "name": "Oath",
+    "description": "Oath = Player swears to deal X damage this turn (choose 5-10). If achieved: heal 5. If failed: take X damage ('oath betrayed').",
+    "oath": {
+      "player_chooses_target": "5_to_10",
+      "reward": "heal_5",
+      "punishment": "take_target_damage",
+      "message": "Swear to me. Swear you will strike true."
+    },
+    "collect": {
+      "effect": "check_oath",
+      "message": "Did you keep your word?"
+    },
+    "visual_feedback": {
+      "oath_stone": true,
+      "binding_light": true,
+      "oath_glow": "res://vfx/oath.tscn",
+      "betrayal_shadow": "res://vfx/betrayal.tscn"
+    },
+    "sound": "sfx/oath.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_oath_keeper_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "oath_stone_form": true,
+      "ancient_binding": true,
+      "waits_for_sworn_word": true
+    },
+    "oath": {
+      "sprite": "res://assets/sprites/enemies/enemy_oath_keeper_oath.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/oath.wav",
+      "oath_glow": "res://vfx/oath.tscn",
+      "binding_complete": true,
+      "word_given": true
+    },
+    "collect": {
+      "sprite": "res://assets/sprites/enemies/enemy_oath_keeper_collect.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/oath_fulfilled_or_broken.wav",
+      "reward_or_punishment": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_oath_keeper_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/oath_strikes.wav",
+      "binding_force": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_oath_keeper_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.7, 0.8, 0.4],
+      "oath_stone_cracks": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_oath_keeper_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/oath_released.wav",
+      "oaths_forgiven": true,
+      "binding_breaks": true
+    }
+  }
+}

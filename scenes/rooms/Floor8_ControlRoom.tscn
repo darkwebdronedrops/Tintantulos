@@ -1,0 +1,110 @@
+[gd_scene load_steps=14 format=3 uid="uid://floor8control001"]
+
+[ext_resource type="Script" path="res://scripts/Floor8RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/bg_control_room.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/tile_brass_factory.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/overclock_console.png" id="4_console"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/coolant_pipe.png" id="5_pipe"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/reactor_core.png" id="6_reactor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/boss_chief_engineer_blix_idle.png" id="7_blix"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/vent_valve.png" id="8_valve"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(100, 100)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(100, 100)
+
+[node name="Floor8_ControlRoom" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "control_room"
+room_display_name = "The Control Room"
+coolant_pipe_present = true
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1400, 1400)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1400, 1000)
+
+[node name="PortalDown" type="Marker2D" parent="."]
+position = Vector2(1400, 1500)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(2600, 900)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1300, 900)
+texture = ExtResource("2_bg")
+
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(700, 1200)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1900, 1200)
+texture = ExtResource("3_tile")
+
+[node name="Tile3" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1300, 1400)
+texture = ExtResource("3_tile")
+
+[node name="Console1" type="Sprite2D" parent="Interior"]
+position = Vector2(600, 600)
+texture = ExtResource("4_console")
+
+[node name="Console2" type="Sprite2D" parent="Interior"]
+position = Vector2(2000, 600)
+texture = ExtResource("4_console")
+
+[node name="Console3" type="Sprite2D" parent="Interior"]
+position = Vector2(600, 1300)
+texture = ExtResource("4_console")
+
+[node name="Console4" type="Sprite2D" parent="Interior"]
+position = Vector2(2000, 1300)
+texture = ExtResource("4_console")
+
+[node name="CoolantPipe" type="Sprite2D" parent="Interior"]
+position = Vector2(1300, 300)
+texture = ExtResource("5_pipe")
+
+[node name="PipeArea" type="Area2D" parent="Interior/CoolantPipe"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/CoolantPipe/PipeArea"]
+shape = SubResource("Rect_interact")
+
+[node name="ReactorCore" type="Sprite2D" parent="Interior"]
+position = Vector2(1300, 800)
+texture = ExtResource("6_reactor")
+
+[node name="Blix" type="Sprite2D" parent="Interior"]
+position = Vector2(1300, 600)
+texture = ExtResource("7_blix")
+
+[node name="BlixArea" type="Area2D" parent="Interior/Blix"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Blix/BlixArea"]
+shape = SubResource("Rect_interact")
+
+[node name="ScramLever" type="Sprite2D" parent="Interior"]
+position = Vector2(1600, 500)
+texture = ExtResource("8_valve")
+
+[node name="ScramArea" type="Area2D" parent="Interior/ScramLever"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/ScramLever/ScramArea"]
+shape = SubResource("Rect_interact")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 600.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 20
+text = "FLOOR 8: THE OVERCLOCK FORGE — Control Room"

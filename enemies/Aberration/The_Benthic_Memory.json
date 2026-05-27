@@ -1,0 +1,90 @@
+{
+  "name": "The Benthic Memory",
+  "faction": "Aberration",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 30,
+  "max_hp": 30,
+  "attack": 6,
+  "pattern": ["Recall", "Melee", "Defend"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Temporal Anchor",
+    "description": "Shows card played 3 combats ago. Post-combat: That old card appears in current hand, replaced a card you needed. Cannot remove for 2 combats.",
+    "recall": {
+      "show_card_from": "3_combats_ago",
+      "visible_to_player": true
+    },
+    "post_combat": {
+      "temporal_anchor": {
+        "card_appears_in_hand": "recalled_card",
+        "replaces_random_card": true,
+        "cannot_remove_duration": 2,
+        "must_play_or_discard": true
+      }
+    },
+    "visual_feedback": {
+      "fossilized_thoughts": true,
+      "sedimentary_rock_patterns": true,
+      "memory_fossil": true,
+      "recall_vfx": "res://vfx/temporal_recall.tscn",
+      "old_card_preview": true
+    },
+    "sound": "sfx/benthic_recall.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_benthic_memory_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "fossilized_form": true,
+      "sedimentary_layers": true,
+      "ancient_memory": true
+    },
+    "recall": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_benthic_memory_recall.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/benthic_recall.wav",
+      "recall_vfx": "res://vfx/temporal_recall.tscn",
+      "old_card_show": true,
+      "memory_surface": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_benthic_memory_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/benthic_strike.wav",
+      "fossil_impact": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_benthic_memory_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/benthic_shield.tscn",
+      "sediment_wall": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_benthic_memory_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.6, 0.3],
+      "sediment_crack": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_benthic_memory_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/benthic_release.wav",
+      "temporal_anchor_vfx": "res://vfx/temporal_anchor.tscn",
+      "old_card_appears": true,
+      "memory_anchors": true
+    }
+  }
+}

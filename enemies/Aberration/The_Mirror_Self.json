@@ -1,0 +1,79 @@
+{
+  "name": "The Mirror Self",
+  "faction": "Aberration",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 20,
+  "max_hp": 20,
+  "attack": 5,
+  "pattern": ["Attack", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Clone",
+    "description": "Special = Copies player's last played card, throws it back at them. Horror: Not killing you — replacing you.",
+    "clone": {
+      "copy_last_played": true,
+      "throwback": true,
+      "theme": "replacement_not_destruction"
+    },
+    "visual_feedback": {
+      "perfect_reflection": true,
+      "wrong_handed": true,
+      "card_copy_vfx": "res://vfx/mirror_copy.tscn",
+      "uncanny_horror": true
+    },
+    "sound": "sfx/mirror_reflect.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_self_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "mirror_surface": true,
+      "player_reflection": true,
+      "slightly_delayed": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_self_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/mirror_strike.wav"
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_self_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/mirror_shield.tscn"
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_self_special.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/mirror_copy.wav",
+      "card_copy_vfx": "res://vfx/mirror_copy.tscn",
+      "clone_attack": true,
+      "replacement_horror": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_self_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.9, 0.9, 1.0, 0.3],
+      "mirror_crack": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_mirror_self_death.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/mirror_shatter.wav",
+      "reflection_breaks": true,
+      "you_remain": true
+    }
+  }
+}

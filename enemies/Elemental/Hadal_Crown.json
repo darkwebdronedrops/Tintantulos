@@ -1,0 +1,98 @@
+{
+  "name": "Hadal Crown",
+  "faction": "Elemental",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 35,
+  "max_hp": 35,
+  "attack": 6,
+  "pattern": ["Defend", "Special", "Melee"],
+  "weight": "Common",
+  "element": "Abyss",
+  "mechanic": {
+    "name": "Depth",
+    "description": "+1 CHARGE per turn, +1 when player plays Water card. At 8 CHARGE, crushing pressure (player max HP reduced by 10 for combat)",
+    "charge_system": {
+      "max": 8,
+      "gain_per_turn": 1,
+      "gain_on_water_card": 1,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "crushing_pressure": {
+        "max_hp_reduction": 10,
+        "duration": "combat"
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "hadal_aura": true,
+      "depth_pressure": true,
+      "crown_glow": true,
+      "pressure_crush_vfx": "res://vfx/crushing_pressure.tscn"
+    },
+    "sound": "sfx/depth_build.wav",
+    "sound_release": "sfx/crushing_pressure.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_hadal_crown_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "hadal_crown": true,
+      "abyssal_depth": true,
+      "pressure_aura": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_hadal_crown_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/depth_strike.wav",
+      "pressure_impact": true,
+      "crush_force": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_hadal_crown_special.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/crushing_pressure.wav",
+      "pressure_crush_vfx": "res://vfx/crushing_pressure.tscn",
+      "hp_reduce_animation": true,
+      "depth_choke": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_hadal_crown_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/hadal_shield.tscn",
+      "abyssal_wall": true,
+      "pressure_dome": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_hadal_crown_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.15, 0.25, 0.5, 0.3],
+      "crown_flicker": true,
+      "pressure_wave": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_hadal_crown_death.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/hadal_fall.wav",
+      "pressure_release": true,
+      "abyssal_collapse": true,
+      "crown_falls": true
+    }
+  }
+}

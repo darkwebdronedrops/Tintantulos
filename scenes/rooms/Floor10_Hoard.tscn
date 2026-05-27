@@ -1,0 +1,203 @@
+[gd_scene load_steps=13 format=3 uid="uid://floor10moment04hoard"]
+
+[ext_resource type="Script" path="res://scripts/Floor10RoomBase.gd" id="1_room_base"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/bg_hoard.png" id="2_bg"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/hoard_aether_key.png" id="3_hoard_aether_key"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/hoard_soul_gem.png" id="4_hoard_soul_gem"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/hoard_dial_fragment.png" id="5_hoard_dial_fragment"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/hoard_pact_scroll.png" id="6_hoard_pact_scroll"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/hoard_blood_contract.png" id="7_hoard_blood_contract"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/hoard_elevator_gear.png" id="8_hoard_elevator_gear"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/hoard_graduate_scroll.png" id="9_hoard_graduate_scroll"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/hoard_master_key.png" id="10_hoard_master_key"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/hoard_lifter_part.png" id="11_hoard_lifter_part"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/hoard_reforged_blade.png" id="12_hoard_reforged_blade"]
+[node name="Floor10_Hoard" type="Node2D"]
+script = ExtResource("1_room_base")
+room_id = "moment_04_hoard"
+room_display_name = "The Hoard"
+moment_type = "hoard"
+
+[node name="Floor" type="Sprite2D" parent="."]
+texture = ExtResource("2_bg")
+scale = Vector2(2.0, 2.0)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="BloodContract" type="Sprite2D" parent="Interior"]
+position = Vector2(-150, -50)
+texture = ExtResource("7_hoard_blood_contract")
+
+[node name="BloodContractLabel" type="Label" parent="Interior/BloodContract"]
+offset_left = -50.0
+offset_top = 25.0
+offset_right = 50.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Touch Blood Contract"
+
+[node name="SoulGem" type="Sprite2D" parent="Interior"]
+position = Vector2(0, -50)
+texture = ExtResource("4_hoard_soul_gem")
+
+[node name="SoulGemLabel" type="Label" parent="Interior/SoulGem"]
+offset_left = -50.0
+offset_top = 25.0
+offset_right = 50.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Touch Soul Gem"
+
+[node name="ReforgedBlade" type="Sprite2D" parent="Interior"]
+position = Vector2(150, -50)
+texture = ExtResource("12_hoard_reforged_blade")
+
+[node name="ReforgedBladeLabel" type="Label" parent="Interior/ReforgedBlade"]
+offset_left = -50.0
+offset_top = 25.0
+offset_right = 50.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Touch Reforged Blade"
+
+[node name="GraduateScroll" type="Sprite2D" parent="Interior"]
+position = Vector2(-150, 80)
+texture = ExtResource("9_hoard_graduate_scroll")
+
+[node name="GraduateScrollLabel" type="Label" parent="Interior/GraduateScroll"]
+offset_left = -50.0
+offset_top = 25.0
+offset_right = 50.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Touch Graduate Scroll"
+
+[node name="ElevatorGear" type="Sprite2D" parent="Interior"]
+position = Vector2(0, 80)
+texture = ExtResource("8_hoard_elevator_gear")
+
+[node name="ElevatorGearLabel" type="Label" parent="Interior/ElevatorGear"]
+offset_left = -50.0
+offset_top = 25.0
+offset_right = 50.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Touch Elevator Gear"
+
+[node name="DialFragment" type="Sprite2D" parent="Interior"]
+position = Vector2(150, 80)
+texture = ExtResource("5_hoard_dial_fragment")
+
+[node name="DialFragmentLabel" type="Label" parent="Interior/DialFragment"]
+offset_left = -50.0
+offset_top = 25.0
+offset_right = 50.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Touch Dial Fragment"
+
+[node name="LifterPart" type="Sprite2D" parent="Interior"]
+position = Vector2(-150, 180)
+texture = ExtResource("11_hoard_lifter_part")
+
+[node name="LifterPartLabel" type="Label" parent="Interior/LifterPart"]
+offset_left = -50.0
+offset_top = 25.0
+offset_right = 50.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Touch Lifter Part"
+
+[node name="AetherKey" type="Sprite2D" parent="Interior"]
+position = Vector2(0, 180)
+texture = ExtResource("3_hoard_aether_key")
+
+[node name="AetherKeyLabel" type="Label" parent="Interior/AetherKey"]
+offset_left = -50.0
+offset_top = 25.0
+offset_right = 50.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Touch Aether Key"
+
+[node name="MasterKey" type="Sprite2D" parent="Interior"]
+position = Vector2(150, 180)
+texture = ExtResource("10_hoard_master_key")
+
+[node name="MasterKeyLabel" type="Label" parent="Interior/MasterKey"]
+offset_left = -50.0
+offset_top = 25.0
+offset_right = 50.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Touch Master Key"
+
+[node name="PactScroll" type="Sprite2D" parent="Interior"]
+position = Vector2(-80, 280)
+texture = ExtResource("6_hoard_pact_scroll")
+
+[node name="PactScrollLabel" type="Label" parent="Interior/PactScroll"]
+offset_left = -50.0
+offset_top = 25.0
+offset_right = 50.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Touch Pact Scroll"
+
+[node name="RevealWeight" type="Area2D" parent="Interior"]
+position = Vector2(0, 350)
+
+[node name="RevealLabel" type="Label" parent="Interior/RevealWeight"]
+offset_left = -80.0
+offset_top = -15.0
+offset_right = 80.0
+offset_bottom = 15.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.8, 0.8, 0.9, 1.0)
+horizontal_alignment = 1
+text = "[S] Reveal Your Weight"
+
+[node name="PortalEntrance" type="Marker2D" parent="."]
+position = Vector2(-180, 0)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(-150, 0)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(0, 0)
+
+[node name="RoomWalls" type="StaticBody2D" parent="."]
+
+[node name="Wall_North" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(-256, -256, 256, -256, 256, -240, -256, -240)
+
+[node name="Wall_South" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(-256, 240, 256, 240, 256, 256, -256, 256)
+
+[node name="Wall_West" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(-256, -256, -240, -256, -240, 256, -256, 256)
+
+[node name="Wall_East" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(240, -256, 256, -256, 256, 256, 240, 256)

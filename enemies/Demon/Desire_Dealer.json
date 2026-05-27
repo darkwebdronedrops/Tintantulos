@@ -1,0 +1,85 @@
+{
+  "name": "Desire Dealer",
+  "faction": "Demon",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 35,
+  "max_hp": 35,
+  "attack": 8,
+  "pattern": ["Want", "Melee", "Take"],
+  "weight": "Common",
+  "offer": "Intensity",
+  "mechanic": {
+    "name": "Feed Desire",
+    "description": "Want = Offer 'more' (copy last card played). If accepted, that card is removed from deck for this combat ('consumed').",
+    "want": {
+      "offer": "copy_last_card",
+      "cost": "remove_original_for_combat",
+      "message": "You want that again? I can give it. But the first is mine."
+    },
+    "take": {
+      "effect": "consume_original",
+      "message": "Payment taken."
+    },
+    "visual_feedback": {
+      "hunger_form": true,
+      "always_wanting": true,
+      "want_glow": "res://vfx/want_offer.tscn",
+      "consumption_shadow": "res://vfx/consume.tscn"
+    },
+    "sound": "sfx/want.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_desire_dealer_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "hungry_form": true,
+      "mouth_open": true,
+      "always_wanting": true
+    },
+    "want": {
+      "sprite": "res://assets/sprites/enemies/enemy_desire_dealer_want.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/want.wav",
+      "want_glow": "res://vfx/want_offer.tscn",
+      "offered": true
+    },
+    "take": {
+      "sprite": "res://assets/sprites/enemies/enemy_desire_dealer_take.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/consume.wav",
+      "consumption_shadow": "res://vfx/consume.tscn",
+      "original_consumed": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_desire_dealer_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/desire_strikes.wav",
+      "hunger_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_desire_dealer_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.9, 0.5, 0.6, 0.5],
+      "hunger_pains": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_desire_dealer_death.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/desire_fades.wav",
+      "hunger_ends": true
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "name": "Forgetful Wound",
+  "faction": "Undead",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 20,
+  "max_hp": 20,
+  "attack": 6,
+  "pattern": ["Special", "Melee", "Melee"],
+  "weight": "Uncommon",
+  "graft": "Marrow",
+  "mechanic": {
+    "name": "Numb",
+    "description": "Special = Player 'forgets' current HP (display shows ???). Lasts 2 turns or until healed.",
+    "numb": {
+      "effect": "hide_hp",
+      "duration": 2,
+      "break_on_heal": true,
+      "message": "You cannot feel your own condition."
+    },
+    "visual_feedback": {
+      "wound_form": true,
+      "bleeding_memory": true,
+      "numb_vfx": "res://vfx/numb.tscn",
+      "question_marks": true
+    },
+    "sound": "sfx/numb.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_forgetful_wound_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "wound_form": true,
+      "bleeds_silently": true,
+      "numb_aura": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_forgetful_wound_special.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/numb.wav",
+      "numb_vfx": "res://vfx/numb.tscn",
+      "hp_hidden": true,
+      "sensation_fades": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_forgetful_wound_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/wound_strike.wav",
+      "bleeding_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_forgetful_wound_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.6, 0.6, 0.4],
+      "wound_reopens": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_forgetful_wound_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/wound_closes.wav",
+      "sensation_returns": true,
+      "pain_remembered": true
+    }
+  }
+}

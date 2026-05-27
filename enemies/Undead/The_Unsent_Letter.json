@@ -1,0 +1,102 @@
+{
+  "name": "The Unsent Letter",
+  "faction": "Undead",
+  "tier": "Boss",
+  "floor": 3,
+  "boss_type": "Mini",
+  "hp": 90,
+  "max_hp": 90,
+  "attack": 6,
+  "pattern": ["Seal", "Melee", "Accuse", "Defend"],
+  "graft": "Shroud",
+  "mechanic": {
+    "name": "Unfinished Business",
+    "description": "Seal = Target 2 cards in hand. They cannot be played (sealed). Accuse = Deals 8 damage per sealed card. Sealed cards break free after 2 turns OR if player deals 15+ damage in one turn (burst breaks seal).",
+    "seal": {
+      "target": "random_cards_in_hand",
+      "count": 2,
+      "effect": "cannot_play",
+      "duration": 2,
+      "break_condition": "15_damage_burst"
+    },
+    "accuse": {
+      "damage_per_sealed": 8,
+      "message": "Words you never sent... they hurt."
+    },
+    "visual_feedback": {
+      "envelope_form": true,
+      "sealed_wax": true,
+      "seal_vfx": "res://vfx/letter_seal.tscn",
+      "break_free_vfx": "res://vfx/seal_break.tscn",
+      "unsent_words": true
+    },
+    "sound": "sfx/seal.wav",
+    "sound_accuse": "sfx/accuse.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_unsent_letter_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "envelope_form": true,
+      "wax_seal": true,
+      "words_inside": true
+    },
+    "seal": {
+      "sprite": "res://assets/sprites/enemies/boss_the_unsent_letter_seal.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/seal.wav",
+      "seal_vfx": "res://vfx/letter_seal.tscn",
+      "cards_trapped": true,
+      "wax_spreads": true
+    },
+    "accuse": {
+      "sprite": "res://assets/sprites/enemies/boss_the_unsent_letter_accuse.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/accuse.wav",
+      "unsent_words_attack": true,
+      "guilt_damage": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_unsent_letter_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/paper_strike.wav",
+      "edge_cut": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_unsent_letter_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/envelope_barrier.tscn",
+      "sealed_protects": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_unsent_letter_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.7, 0.8, 0.3],
+      "paper_tears": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_unsent_letter_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/letter_burns.wav",
+      "finally_sent": true,
+      "words_released": true,
+      "business_finished": true
+    }
+  }
+}

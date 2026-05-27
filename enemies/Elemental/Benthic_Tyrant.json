@@ -1,0 +1,97 @@
+{
+  "name": "Benthic Tyrant",
+  "faction": "Elemental",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 38,
+  "max_hp": 38,
+  "attack": 6,
+  "pattern": ["Defend", "Special", "Defend"],
+  "weight": "Rare",
+  "element": "Abyss",
+  "mechanic": {
+    "name": "Crush Depth",
+    "description": "+1 CHARGE per turn, max 12. At 12 CHARGE, absolute pressure (instant kill below 25% HP, 8d8 otherwise)",
+    "charge_system": {
+      "max": 12,
+      "gain_per_turn": 1,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "crush_depth": {
+        "execute_threshold": 0.25,
+        "execute_damage": "instant_kill",
+        "normal_damage": "8d8"
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "crush_depth_indicator": true,
+      "abyssal_pressure": true,
+      "execution_glow": true,
+      "crush_vfx": "res://vfx/crush_depth.tscn"
+    },
+    "sound": "sfx/crush_build.wav",
+    "sound_release": "sfx/absolute_pressure.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_benthic_tyrant_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "tyrant_presence": true,
+      "abyssal_crown": true,
+      "pressure_aura": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_benthic_tyrant_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/tyrant_strike.wav",
+      "crush_impact": true,
+      "depth_force": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_benthic_tyrant_special.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/absolute_pressure.wav",
+      "crush_vfx": "res://vfx/crush_depth.tscn",
+      "pressure_release": true,
+      "execution_check": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_benthic_tyrant_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/tyrant_shield.tscn",
+      "abyssal_wall": true,
+      "pressure_barrier": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_benthic_tyrant_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.1, 0.15, 0.4, 0.3],
+      "tyrant_anger": true,
+      "pressure_wave": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_benthic_tyrant_death.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/tyrant_fall.wav",
+      "pressure_collapse": true,
+      "abyssal_release": true
+    }
+  }
+}

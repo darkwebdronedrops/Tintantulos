@@ -1,0 +1,92 @@
+{
+  "name": "The Immutable",
+  "faction": "Construct",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 25,
+  "max_hp": 25,
+  "attack": 4,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Summon Defend",
+    "description": "Summon copy of self at 50% HP (once)",
+    "summon": {
+      "unit": "The Immutable Copy",
+      "trigger": "hp_below_50",
+      "once_per_combat": true,
+      "hp_percent": 0.5,
+      "position": "adjacent_hex"
+    },
+    "visual_feedback": {
+      "duplicate_split": true,
+      "perfect_copy": true,
+      "golden_divide": true
+    },
+    "sound": "sfx/immutable_duplicate.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_immutable_idle.png",
+      "frames": 6,
+      "fps": 3,
+      "loop": true,
+      "absolute_stillness": true,
+      "golden_perfection": true,
+      "divine_geometry": true,
+      "no_breath": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_immutable_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/immutable_strike.wav",
+      "perfect_motion": true,
+      "unavoidable": true,
+      "divine_delivery": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_immutable_special.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/immutable_duplicate.wav",
+      "split_animation": true,
+      "duplicate_form": true,
+      "golden_divide": true,
+      "two_bodies_one_will": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_immutable_damage.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.5, 0.3],
+      "gray_flash": true,
+      "perfect_dent": true,
+      "check_duplicate_trigger": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_immutable_death.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/immutable_destroyed.wav",
+      "perfect_fracture": true,
+      "golden_shatter": true,
+      "geometry_break": true,
+      "essence_release": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_immutable_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/immutable_shield.tscn",
+      "perfect_defense": true,
+      "divine_stance": true,
+      "invincible_aura": true
+    }
+  }
+}

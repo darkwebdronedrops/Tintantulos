@@ -1,0 +1,86 @@
+{
+  "name": "Grave Tax",
+  "faction": "Undead",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 30,
+  "max_hp": 30,
+  "attack": 5,
+  "pattern": ["Assess", "Collect", "Melee"],
+  "weight": "Common",
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Assess",
+    "description": "Assess = Count cards in hand. Collect = Steal Quiddity equal to cards in hand.",
+    "assess": {
+      "count": "cards_in_hand",
+      "display": true
+    },
+    "collect": {
+      "steal": "equal_to_hand_count",
+      "message": "Pay what you owe."
+    },
+    "visual_feedback": {
+      "assessor_form": true,
+      "counting": true,
+      "assess_vfx": "res://vfx/assessment.tscn",
+      "tax_collector": true
+    },
+    "sound": "sfx/assess.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_grave_tax_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "assessor": true,
+      "counting": true,
+      "abacus_of_bone": true
+    },
+    "assess": {
+      "sprite": "res://assets/sprites/enemies/enemy_grave_tax_assess.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/assess.wav",
+      "assess_vfx": "res://vfx/assessment.tscn",
+      "counts_your_wealth": true,
+      "calculation": true
+    },
+    "collect": {
+      "sprite": "res://assets/sprites/enemies/enemy_grave_tax_collect.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/collect.wav",
+      "quiddity_taken": true,
+      "tax_collected": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_grave_tax_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/tax_strike.wav",
+      "penalty_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_grave_tax_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.6, 0.7, 0.3],
+      "assessment_errors": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_grave_tax_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/tax_complete.wav",
+      "final_accounting": true,
+      "taxes_done": true
+    }
+  }
+}

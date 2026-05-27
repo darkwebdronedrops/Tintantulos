@@ -1,0 +1,96 @@
+{
+  "name": "Magnetospheric Warden",
+  "faction": "Elemental",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 28,
+  "max_hp": 28,
+  "attack": 5,
+  "pattern": ["Special", "Flee", "Special"],
+  "weight": "Common",
+  "element": "Stratospheric",
+  "mechanic": {
+    "name": "Polarity",
+    "description": "+1 CHARGE when player plays Air card. At 7 CHARGE, magnetic reversal (player cards randomized in hand, costs scrambled)",
+    "charge_system": {
+      "max": 7,
+      "gain_on_air_card": 1
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "magnetic_reversal": {
+        "scramble_hand": true,
+        "randomize_costs": true,
+        "duration": 1
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "magnetic_field": true,
+      "polarity_aura": true,
+      "reversal_vfx": "res://vfx/magnetic_reversal.tscn",
+      "cards_scramble": true
+    },
+    "sound": "sfx/magnet_build.wav",
+    "sound_release": "sfx/magnetic_reversal.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_magnetospheric_warden_idle.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": true,
+      "magnetic_field": true,
+      "polarity_poles": true,
+      "field_lines": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_magnetospheric_warden_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/magnet_strike.wav",
+      "field_discharge": true,
+      "polarity_slash": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_magnetospheric_warden_special.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/magnetic_reversal.wav",
+      "charge_gain": true,
+      "reversal_vfx": "res://vfx/magnetic_reversal.tscn",
+      "hand_scramble_animation": true,
+      "field_invert": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_magnetospheric_warden_flee.png",
+      "frames": 8,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/magnet_dash.wav",
+      "field_propel": true,
+      "magnetic_repulsion": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_magnetospheric_warden_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.7, 1.0, 0.3],
+      "field_disrupt": true,
+      "polarity_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_magnetospheric_warden_death.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/field_collapse.wav",
+      "magnetic_collapse": true,
+      "field_dissipate": true
+    }
+  }
+}

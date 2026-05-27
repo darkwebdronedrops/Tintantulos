@@ -1,0 +1,74 @@
+{
+  "name": "Clockwork Hound",
+  "faction": "Construct",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 5,
+  "max_hp": 5,
+  "attack": 3,
+  "pattern": ["Melee", "Special", "Flee"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Chase",
+    "description": "Special = Rush player (close distance), Flee = Reset to max range",
+    "rush": {
+      "action": "close_distance",
+      "sound": "sfx/hound_rush.wav"
+    },
+    "flee": {
+      "action": "reset_to_max_range",
+      "sound": "sfx/hound_retreat.wav"
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_clockwork_hound_idle.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": true,
+      "tail_wag": true,
+      "steam_puffs": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_clockwork_hound_attack.png",
+      "frames": 8,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/hound_bite.wav",
+      "lunge": true,
+      "bite_frame": 4
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_clockwork_hound_special.png",
+      "frames": 10,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/hound_rush.wav",
+      "dash_trail": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_clockwork_hound_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "whimper_sound": "sfx/hound_whimper.wav"
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_clockwork_hound_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/hound_shutdown.wav",
+      "steam_release": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_clockwork_hound_flee.png",
+      "frames": 8,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/hound_retreat.wav",
+      "backwards": true
+    }
+  }
+}

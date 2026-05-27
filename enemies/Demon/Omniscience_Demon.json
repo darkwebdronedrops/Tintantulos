@@ -1,0 +1,85 @@
+{
+  "name": "Omniscience Demon",
+  "faction": "Demon",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 62,
+  "max_hp": 62,
+  "attack": 8,
+  "pattern": ["All_Know", "Melee", "Punish"],
+  "weight": "Uncommon",
+  "offer": "Certainty",
+  "mechanic": {
+    "name": "Perfect Knowledge",
+    "description": "All_Know = Offer 'see all' (reveal full dungeon map, all enemy positions, all loot). If accepted, player cannot change path ('fate sealed').",
+    "all_know": {
+      "offer": "reveal_all",
+      "cost": "cannot_deviate_from_path",
+      "message": "I can show you everything. Every secret. But then you must walk the path."
+    },
+    "punish": {
+      "trigger": "if_deviates",
+      "effect": "take_15_damage",
+      "message": "You knew the path. Why did you stray?"
+    },
+    "visual_feedback": {
+      "eye_covered_form": true,
+      "sees_through": true,
+      "knowledge_glow": "res://vfx/omniscience_offer.tscn",
+      "binding_shadow": "res://vfx/path_sealed.tscn"
+    },
+    "sound": "sfx/omniscience.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_omniscience_demon_idle.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": true,
+      "covered_eyes": true,
+      "sees_all_anyway": true,
+      "universal_vision": true
+    },
+    "all_know": {
+      "sprite": "res://assets/sprites/enemies/enemy_omniscience_demon_all_know.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/omniscience.wav",
+      "knowledge_glow": "res://vfx/omniscience_offer.tscn",
+      "world_revealed": true
+    },
+    "punish": {
+      "sprite": "res://assets/sprites/enemies/enemy_omniscience_demon_punish.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/deviation_punished.wav",
+      "punishes_straying": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_omniscience_demon_attack.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/omniscience_strikes.wav",
+      "foreseen": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_omniscience_demon_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.9, 1.0, 0.5],
+      "vision_blurs": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_omniscience_demon_death.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/omniscience_fades.wav",
+      "mystery_returns": true
+    }
+  }
+}

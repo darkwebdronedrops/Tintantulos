@@ -1,0 +1,123 @@
+[gd_scene load_steps=10 format=3 uid="uid://room_07_escapement_v2"]
+
+[ext_resource type="Script" path="res://scripts/Floor3RoomBase.gd" id="1_room_scene"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui_env/env_floor_escapement.png" id="2_floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/room_objects/escapement_pendulum.png" id="3_escapement_pendulum"]
+[ext_resource type="Texture2D" path="res://assets/sprites/room_objects/escapement_tick_wheel.png" id="4_escapement_tick_wheel"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor3/bg_escapement.png" id="5_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor3/room_00_escapementwheel.png" id="poly_escapementwheel"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor3/room_00_wheelhub.png" id="poly_wheelhub"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor3/room_00_tooth_1.png" id="poly_tooth_1"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor3/room_00_tickmark_n.png" id="poly_tickmark_n"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor3/room_00_regscrew_1.png" id="poly_regscrew_1"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_escapement"]
+vertices = PackedVector2Array(-200, -100, 200, -100, 250, 0, 200, 150, -200, 150, -250, 0)
+polygons = [PackedInt32Array(0, 1, 2, 3, 4, 5)]
+outlines = [PackedVector2Array(-200, -100, 200, -100, 250, 0, 200, 150, -200, 150, -250, 0)]
+
+[node name="Room_07_Escapement" type="Node2D"]
+script = ExtResource("1_room_scene")
+
+; ============================================
+; WALKABLE FLOOR
+; ============================================
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(0, 0)
+texture = ExtResource("5_bg")
+z_index = -1
+
+[node name="Floor" type="Sprite2D" parent="."]
+position = Vector2(0, 25)
+texture = ExtResource("2_floor")
+scale = Vector2(6, 5)
+z_index = 0
+
+; Navigation mesh for walkable area
+[node name="WalkableArea" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_escapement")
+
+; ============================================
+; INTERIOR (shown when player enters)
+; ============================================
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+; --- Backdrop sprites ---
+[node name="EscapementPendulum" type="Sprite2D" parent="Interior"]
+position = Vector2(80, 0)
+texture = ExtResource("3_escapement_pendulum")
+scale = Vector2(0.8, 0.8)
+z_index = 1
+[node name="EscapementTickWheel" type="Sprite2D" parent="Interior"]
+position = Vector2(-80, 0)
+texture = ExtResource("4_escapement_tick_wheel")
+scale = Vector2(0.8, 0.8)
+z_index = 1
+
+; --- Puzzle geometry ---
+
+; --- NW Entrance / Portal ---
+[node name="EntrancePortal" type="Marker2D" parent="Interior"]
+position = Vector2(-200, -100)
+
+; --- Puzzle: Clockwork Timing ---
+; Central escapement wheel with teeth
+[node name="EscapementWheel" type="Sprite2D" parent="Interior"]
+position = Vector2(32.0, 32.0)
+texture = ExtResource("poly_escapementwheel")
+modulate = Color(1, 1, 1, 0.80)
+[node name="WheelHub" type="Sprite2D" parent="Interior/EscapementWheel"]
+position = Vector2(32.0, 32.0)
+texture = ExtResource("poly_wheelhub")
+modulate = Color(1, 1, 1, 0.90)
+[node name="Tooth_1" type="Sprite2D" parent="Interior"]
+position = Vector2(32.0, 32.0)
+texture = ExtResource("poly_tooth_1")
+modulate = Color(1, 1, 1, 0.90)
+[node name="TickMark_N" type="Sprite2D" parent="Interior"]
+position = Vector2(32.0, 32.0)
+texture = ExtResource("poly_tickmark_n")
+modulate = Color(1, 1, 1, 0.70)
+[node name="RegScrew_1" type="Sprite2D" parent="Interior"]
+position = Vector2(32.0, 32.0)
+texture = ExtResource("poly_regscrew_1")
+modulate = Color(1, 1, 1, 0.90)
+[node name="WidgetSocket" type="Marker2D" parent="."]
+position = Vector2(0, -180)
+
+; ============================================
+; ENEMY SPAWN (patrol starts here)
+; ============================================
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(150, 100)
+
+; ============================================
+; CENTER MARKER
+; ============================================
+[node name="CenterMarker" type="Marker2D" parent="."]
+position = Vector2(0, 0)
+
+; ============================================
+; COLLISION / WALLS (non-walkable edges)
+; ============================================
+[node name="Walls" type="StaticBody2D" parent="."]
+
+[node name="Wall_NW" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(-250, 0, -200, -100, -150, -100, -150, 0)
+
+[node name="Wall_NE" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(150, -100, 200, -100, 250, 0, 200, 0)
+
+[node name="Wall_E" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(200, 0, 250, 0, 200, 150, 150, 150)
+
+[node name="Wall_SE" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(150, 150, 200, 150, 0, 200, -50, 200)
+
+[node name="Wall_SW" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(-50, 200, 0, 200, -200, 150, -250, 0)

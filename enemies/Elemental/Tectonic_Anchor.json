@@ -1,0 +1,91 @@
+{
+  "name": "Tectonic Anchor",
+  "faction": "Elemental",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 40,
+  "max_hp": 40,
+  "attack": 6,
+  "pattern": ["Special", "Melee", "Special"],
+  "weight": "Common",
+  "element": "Vitreous",
+  "mechanic": {
+    "name": "Plate",
+    "description": "+1 CHARGE when hit. At 8 CHARGE, continental shift (terrain rearranges, all knocked prone)",
+    "charge_system": {
+      "max": 8,
+      "gain_on": "damaged",
+      "gain_amount": 1
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "continental_shift": {
+        "terrain_rearrange": true,
+        "knock_prone": true,
+        "aoe": true
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "tectonic_rumble": true,
+      "plate_stress": true,
+      "earthquake_vfx": "res://vfx/continental_shift.tscn",
+      "terrain_crack": true,
+      "screen_shake": true
+    },
+    "sound": "sfx/tectonic_build.wav",
+    "sound_release": "sfx/continental_shift.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_tectonic_anchor_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "tectonic_form": true,
+      "plate_armor": true,
+      "continental_rumble": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_tectonic_anchor_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/tectonic_strike.wav",
+      "plate_slam": true,
+      "earth_shatter": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_tectonic_anchor_special.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/continental_shift.wav",
+      "earthquake_vfx": "res://vfx/continental_shift.tscn",
+      "terrain_shift": true,
+      "plate_tectonics": true,
+      "screen_shake": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_tectonic_anchor_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.5, 0.4, 0.3],
+      "plate_crack": true,
+      "charge_gain_flash": true,
+      "earthquake_tremor": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_tectonic_anchor_death.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/tectonic_collapse.wav",
+      "continental_collapse": true,
+      "plate_shatter": true,
+      "earthquake_final": true
+    }
+  }
+}

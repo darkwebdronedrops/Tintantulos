@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_masochists_trap"]
+
+[resource]
+script = ExtResource("1_masochists_trap")
+card_name = "Infernal Bolt"
+faction = "Overlays"
+card_type = "Overlay"
+attention_cost = 0
+quiddity_gain = 0
+damage_dice = ""
+damage_flat = 0
+uses_dice = true
+shield_amount = 0
+heal_amount = 0
+summon_attack = 0
+summon_hp = 0
+summon_count = 0
+summon_growth_atk = 0
+summon_growth_hp = 0
+attack_type = ""
+attack_roll = ""
+keywords = PackedStringArray("Infernal", "Trap")
+trap_cast_cost = 0
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+range_type = ""
+aoe_radius = 0
+targets_all = false
+special_effect = ""
+requires_condition = ""
+corruption_gain = 1
+is_overlay = true
+overlay_type = "Infernal"
+gem_cost = 32
+description = "Infernal Overlay (+0 Attention): Trap triggers when you take damage. Deal 6 damage to attacker and heal 3. Gain 1 Corruption."
+frame_texture_path = "res://assets/sprites/cards/untyped_frame.png"
+sprite_texture_path = "res://assets/sprites/cards/Overlays/Infernal/05_infernal_bolt.png"

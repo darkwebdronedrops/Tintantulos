@@ -1,0 +1,131 @@
+{
+  "name": "The Cano Protocol",
+  "faction": "Aberration",
+  "tier": "Boss",
+  "floor": "Secret",
+  "hp": 250,
+  "max_hp": 250,
+  "attack": 12,
+  "pattern": ["Recall", "Adapt", "Meta", "Break"],
+  "variable_pattern": true,
+  "mechanic": {
+    "name": "Meta-Aware",
+    "description": "Knows your previous runs. Knows your win rate. Knows your preferred cards. Comments on your choices. 'You always play that card third. I was waiting.' Deals bonus damage based on how predictable you are.",
+    "meta_awareness": {
+      "knows_previous_runs": true,
+      "tracks_win_rate": true,
+      "learns_preferences": true,
+      "predictability_damage": {
+        "formula": "predictability_score × 2"
+      }
+    },
+    "fourth_wall": {
+      "comments_on_choices": true,
+      "references_out_of_game": true,
+      "breaks_immersion": true,
+      "dialogue_examples": [
+        "You always play that card third. I was waiting.",
+        "Last run you died here. Different deck, same mistake.",
+        "Your win rate with that build is 23%. Why try?",
+        "I see you checking Discord. Focus."
+      ]
+    },
+    "loop_acknowledgment": {
+      "knows_this_is_loop": true,
+      "references_previous_instances": true,
+      "you_always_come_back": true
+    },
+    "visual_feedback": {
+      "code_visible": true,
+      "ui_elements_in_world": true,
+      "health_bar_is_part_of_sprite": true,
+      "debug_mode_aura": "res://vfx/debug_mode.tscn",
+      "meta_glow": true
+    },
+    "sound": "sfx/cano_speak.wav"
+  },
+  "is_boss": true,
+  "phases": 2,
+  "phase_transition": {
+    "at_hp": 125,
+    "change": "reveals_true_form",
+    "dialogue": "That's not even my final form. You knew that."
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_cano_protocol_idle.png",
+      "frames": 14,
+      "fps": 4,
+      "loop": true,
+      "meta_aura": true,
+      "code_overlay": true,
+      "ui_integration": true,
+      "knows_youre_there": true
+    },
+    "recall": {
+      "sprite": "res://assets/sprites/enemies/boss_the_cano_protocol_recall.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/cano_recall.wav",
+      "previous_run_data": true,
+      "your_history_shown": true
+    },
+    "adapt": {
+      "sprite": "res://assets/sprites/enemies/boss_the_cano_protocol_adapt.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/cano_adapt.wav",
+      "learns_from_you": true,
+      "pattern_adjustment": true
+    },
+    "meta": {
+      "sprite": "res://assets/sprites/enemies/boss_the_cano_protocol_meta.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/cano_meta.wav",
+      "fourth_wall_break": true,
+      "direct_address": true,
+      "predictability_attack": true
+    },
+    "break": {
+      "sprite": "res://assets/sprites/enemies/boss_the_cano_protocol_break.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/cano_break.wav",
+      "reality_tear": true,
+      "screen_glitch": true
+    },
+    "phase_2": {
+      "sprite": "res://assets/sprites/enemies/boss_the_cano_protocol_true_form.png",
+      "frames": 18,
+      "fps": 3,
+      "loop": true,
+      "true_form_revealed": true,
+      "not_final_form_joke": true,
+      "pure_aberration": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_cano_protocol_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.3, 0.9, 0.5],
+      "code_error": true,
+      "glitch_spike": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_cano_protocol_death.png",
+      "frames": 24,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/cano_final.wav",
+      "loop_acknowledgment": "See you next run.",
+      "not_really_dead": true,
+      "protocol_restarts": true
+    }
+  }
+}

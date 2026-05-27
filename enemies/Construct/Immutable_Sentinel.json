@@ -1,0 +1,82 @@
+{
+  "name": "Immutable Sentinel",
+  "faction": "Construct",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 4,
+  "pattern": ["Defend", "Defend", "Melee"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Immutable",
+    "description": "Ignores first 2 damage each turn, fixed damage output",
+    "damage_reduction": {
+      "flat_reduction": 2,
+      "per_turn": true,
+      "applies_to": "all_incoming"
+    },
+    "fixed_output": {
+      "damage_variance": 0,
+      "always_deals_exact": true
+    },
+    "visual_feedback": {
+      "damage_numbers_gray": true,
+      "block_vfx": "res://vfx/immutable_block.tscn",
+      "glow_perfect": true
+    },
+    "sound": "sfx/immutable_clang.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_immutable_sentinel_idle.png",
+      "frames": 6,
+      "fps": 3,
+      "loop": true,
+      "perfect_stillness": true,
+      "golden_glow": true,
+      "no_vibration": true,
+      "absolute_precision": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_immutable_sentinel_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/immutable_strike.wav",
+      "perfect_motion": true,
+      "no_windup": true,
+      "instant_delivery": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_immutable_sentinel_damage.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.5, 0.3],
+      "gray_flash": true,
+      "no_recoil": true,
+      "block_numbers_show": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_immutable_sentinel_death.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/immutable_crack.wav",
+      "perfect_form_fracture": true,
+      "golden_shatter": true,
+      "essence_release": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_immutable_sentinel_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/immutable_shield.tscn",
+      "perfect_stance": true,
+      "golden_aura": true,
+      "immunity_glow": true
+    }
+  }
+}

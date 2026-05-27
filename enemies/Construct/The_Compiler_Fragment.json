@@ -1,0 +1,88 @@
+{
+  "name": "The Compiler Fragment",
+  "faction": "Construct",
+  "tier": "Boss",
+  "floor": "Secret",
+  "hp": 35,
+  "max_hp": 35,
+  "attack": 4,
+  "pattern": ["Special", "Melee", "Defend", "Special"],
+  "mechanic": {
+    "name": "Debug",
+    "description": "Destroys random player card each turn. Spawns if deck >40 cards.",
+    "spawn_condition": "player_deck_size > 40",
+    "debug": {
+      "trigger": "each_turn",
+      "target": "random_card_from_deck",
+      "action": "destroy_permanently",
+      "exhaust_instead": false
+    },
+    "visual_feedback": {
+      "card_target_vfx": true,
+      "delete_animation": true,
+      "glitch_corrupt": true
+    },
+    "sound": "sfx/debug_delete.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_compiler_fragment_idle.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": true,
+      "glitch_flicker": true,
+      "code_corrupt": true,
+      "fragmented_form": true,
+      "error_messages_float": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_compiler_fragment_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/fragment_strike.wav",
+      "glitch_strike": true,
+      "error_burst": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_the_compiler_fragment_special.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/debug_delete.wav",
+      "card_target": true,
+      "delete_vfx": true,
+      "glitch_intensify": true,
+      "code_corrupt_card": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_compiler_fragment_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "glitch_spike": true,
+      "fragment_desync": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_compiler_fragment_death.png",
+      "frames": 14,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/fragment_purge.wav",
+      "glitch_cascade": true,
+      "code_scramble": true,
+      "fade_to_static": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_compiler_fragment_defend.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/glitch_shield.tscn",
+      "error_shield": true
+    }
+  }
+}

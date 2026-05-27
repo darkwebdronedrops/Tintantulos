@@ -1,0 +1,80 @@
+{
+  "name": "Banner Boy",
+  "faction": "Goblin",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 4,
+  "max_hp": 4,
+  "attack": 2,
+  "pattern": ["Defend", "Special", "Defend"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Rally",
+    "description": "All Goblins within 4 hexes gain +1 damage and cannot Flee for 2 turns",
+    "aura_range": 4,
+    "effect": {
+      "damage_bonus": 1,
+      "prevent_flee": true,
+      "duration": 2
+    },
+    "visual_feedback": {
+      "banner_wave": true,
+      "rally_aura": "res://vfx/rally_field.tscn",
+      "goblins_glow": true
+    },
+    "sound": "sfx/banner_rally.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_banner_boy_idle.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "banner_hold_high": true,
+      "flag_wave": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_banner_boy_attack.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/banner_swing.wav",
+      "pole_slam": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_banner_boy_special.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/banner_rally.wav",
+      "wave_banner": true,
+      "rally_pulse": true,
+      "aura_expand": "res://vfx/rally_field.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_banner_boy_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "banner_droop": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_banner_boy_death.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/banner_fall.wav",
+      "banner_falls": true,
+      "rally_ends": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_banner_boy_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/goblin_shield.tscn",
+      "brace_banner": true
+    }
+  }
+}

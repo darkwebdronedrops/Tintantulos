@@ -1,0 +1,125 @@
+{
+  "name": "The Elemental Core",
+  "faction": "Elemental",
+  "tier": "Boss",
+  "floor": 10,
+  "alt_for": "Dragon",
+  "hp": 200,
+  "max_hp": 200,
+  "attack": 10,
+  "pattern": ["Melee", "Special", "Defend", "Special", "Melee"],
+  "mechanic": {
+    "name": "Elemental Mastery",
+    "description": "Rotates element each turn (Pyre→Abyss→Vitreous→Stratospheric→repeat). Gains +1 CHARGE per turn for each element present. At 25 total CHARGE: Apocalypse — All four elements release simultaneously (player must survive 4 consecutive 6d6 hits). Using cards matching boss's CURRENT element reduces that element's CHARGE by 3 (exploitable).",
+    "charge_system": {
+      "max": 25,
+      "elements": ["Pyre", "Abyss", "Vitreous", "Stratospheric"],
+      "rotate_per_turn": true,
+      "gain_per_element_present": 1,
+      "current_element_indicator": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "apocalypse": {
+        "damage_sequence": "4x 6d6",
+        "one_hit_per_element": true,
+        "consecutive": true
+      },
+      "reset_after": true
+    },
+    "exploitable": {
+      "condition": "use_matching_element_card",
+      "charge_reduction": 3,
+      "note": "Manage which elements release"
+    },
+    "hard_counter": {
+      "name": "Elemental Dominance",
+      "trigger": "player_same_element_3_turns",
+      "effect": "boss_gains_immunity_to_element",
+      "bonus_charge": 10
+    },
+    "visual_feedback": {
+      "rotating_core": true,
+      "four_elements": true,
+      "element_indicator": true,
+      "apocalypse_vfx": "res://vfx/apocalypse.tscn",
+      "reality_distortion": true,
+      "element_aura": "all_four"
+    },
+    "sound": "sfx/elemental_core.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_elemental_core_idle.png",
+      "frames": 16,
+      "fps": 3,
+      "loop": true,
+      "elemental_core": true,
+      "four_elements_rotate": true,
+      "unstable_beauty": true,
+      "world_ending": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_elemental_core_attack.png",
+      "frames": 14,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/core_strike.wav",
+      "current_element_attack": true,
+      "elemental_weapon": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_the_elemental_core_special.png",
+      "frames": 24,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/apocalypse.wav",
+      "apocalypse_vfx": "res://vfx/apocalypse.tscn",
+      "four_releases": true,
+      "reality_tear": true,
+      "world_end": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_elemental_core_defend.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/elemental_shield.tscn",
+      "four_element_barrier": true,
+      "core_harden": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_elemental_core_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 1.0, 1.0, 0.5],
+      "core_instability": true,
+      "element_spike": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_elemental_core_death.png",
+      "frames": 24,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/elemental_collapse.wav",
+      "four_elements_separate": true,
+      "core_shatter": true,
+      "reality_restore": true
+    },
+    "element_rotate": {
+      "sprite": "res://assets/sprites/enemies/boss_the_elemental_core_rotate.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/element_shift.wav",
+      "element_change": true,
+      "aura_shift": true,
+      "indicator_update": true
+    }
+  }
+}

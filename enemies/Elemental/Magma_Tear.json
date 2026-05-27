@@ -1,0 +1,84 @@
+{
+  "name": "Magma Tear",
+  "faction": "Elemental",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 3,
+  "max_hp": 3,
+  "attack": 3,
+  "pattern": ["Melee", "Special", "Melee"],
+  "weight": "Uncommon",
+  "element": "Pyre",
+  "mechanic": {
+    "name": "Molten",
+    "description": "+1 CHARGE per turn automatically. At 4 CHARGE, melts floor (player movement costs +1 AP for 2 turns)",
+    "charge_system": {
+      "max": 4,
+      "gain_per_turn": 1,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "terrain_effect": {
+        "type": "melt_floor",
+        "movement_cost_add": 1,
+        "duration": 2
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "heat_haze": true,
+      "floor_glow": true,
+      "magma_spread": "res://vfx/magma_pool.tscn"
+    },
+    "sound": "sfx/magma_bubble.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_magma_tear_idle.png",
+      "frames": 5,
+      "fps": 5,
+      "loop": true,
+      "magma_bubble": true,
+      "heat_shimmer": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_magma_tear_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/magma_splash.wav",
+      "molten_splash": true,
+      "burn_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_magma_tear_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/floor_melt.wav",
+      "magma_spread": "res://vfx/magma_pool.tscn",
+      "floor_melt": true,
+      "heat_wave": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_magma_tear_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.3, 0.0, 0.3],
+      "magma_splash": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_magma_tear_death.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/magma_cool.wav",
+      "cooling_rock": true,
+      "solidify": true
+    }
+  }
+}

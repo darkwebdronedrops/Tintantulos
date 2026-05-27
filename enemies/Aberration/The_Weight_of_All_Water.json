@@ -1,0 +1,74 @@
+{
+  "name": "The Weight of All Water",
+  "faction": "Aberration",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 50,
+  "max_hp": 50,
+  "attack": 7,
+  "pattern": ["Drown", "Drown", "Drown"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Drown",
+    "description": "No damage. One card in hand becomes 'Waterlogged' (unplayable) per turn. Post-combat: Start next floor with 3 random cards Waterlogged.",
+    "drown": {
+      "no_damage": true,
+      "waterlogged_per_turn": 1,
+      "waterlogged_effect": "unplayable",
+      "target": "random_card_in_hand"
+    },
+    "post_combat": {
+      "soggy": {
+        "start_next_floor": true,
+        "waterlogged_cards": 3,
+        "random_selection": true,
+        "unplayable_until_dried": true
+      }
+    },
+    "visual_feedback": {
+      "drowns_in_possibility": true,
+      "every_version_of_you_that_died": true,
+      "waterlogged_indicator": "res://vfx/waterlogged.tscn",
+      "card_soggy_visual": true
+    },
+    "sound": "sfx/weight_water.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_weight_of_all_water_idle.png",
+      "frames": 12,
+      "fps": 2,
+      "loop": true,
+      "oceanic_pressure": true,
+      "dead_versions_float": true,
+      "possibility_drown": true
+    },
+    "drown": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_weight_of_all_water_drown.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/drown_card.wav",
+      "waterlogged_vfx": "res://vfx/waterlogged.tscn",
+      "card_submerges": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_weight_of_all_water_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.2, 0.3, 0.5, 0.4],
+      "water_ripple": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_weight_of_all_water_death.png",
+      "fps": 6,
+      "frames": 16,
+      "loop": false,
+      "sound": "sfx/weight_fade.wav",
+      "soggy_vfx": "res://vfx/soggy.tscn",
+      "water_recedes": true,
+      "dead_versions_sink": true
+    }
+  }
+}

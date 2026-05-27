@@ -1,0 +1,71 @@
+{
+  "name": "Marrow Interest",
+  "faction": "Undead",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 19,
+  "max_hp": 19,
+  "attack": 5,
+  "pattern": ["Forget", "Melee", "Accrue"],
+  "weight": "Uncommon",
+  "graft": "Marrow",
+  "mechanic": {
+    "name": "Forget",
+    "description": "Forget = Hide enemy intent for 1 turn. Accrue = Each Forget steals 1 max HP (returns after combat).",
+    "forget": {
+      "hide_intent": 1,
+      "accrue": {
+        "steal_max_hp": 1,
+        "returns_after_combat": true
+      }
+    },
+    "visual_feedback": {
+      "marrow_form": true,
+      "interest_memory": true,
+      "forget_vfx": "res://vfx/memory_forget.tscn"
+    },
+    "sound": "sfx/forget.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_interest_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "memory_interest": true,
+      "cold_accrual": true
+    },
+    "forget": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_interest_forget.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/forget.wav",
+      "forget_vfx": "res://vfx/memory_forget.tscn",
+      "intent_hidden": true,
+      "max_hp_steals": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_interest_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/marrow_strike.wav"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_interest_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.8, 0.9, 0.4]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_interest_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/marrow_release.wav",
+      "max_hp_returns": true
+    }
+  }
+}

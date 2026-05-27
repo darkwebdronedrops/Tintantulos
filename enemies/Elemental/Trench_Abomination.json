@@ -1,0 +1,99 @@
+{
+  "name": "Trench Abomination",
+  "faction": "Elemental",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 55,
+  "max_hp": 55,
+  "attack": 7,
+  "pattern": ["Defend", "Special", "Melee", "Defend"],
+  "weight": "Common",
+  "element": "Abyss",
+  "mechanic": {
+    "name": "Pressure",
+    "description": "+1 CHARGE per turn, max 15. At 15 CHARGE, planetary core (15d12 damage to all, ignores defense)",
+    "charge_system": {
+      "max": 15,
+      "gain_per_turn": 1,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "planetary_core": {
+        "damage": "15d12",
+        "aoe": true,
+        "ignore_defense": true
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "trench_aura": true,
+      "planetary_core_indicator": true,
+      "core_vfx": "res://vfx/planetary_core.tscn",
+      "pressure_maximum": true,
+      "reality_distort": true
+    },
+    "sound": "sfx/trench_build.wav",
+    "sound_release": "sfx/planetary_core.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_trench_abomination_idle.png",
+      "frames": 12,
+      "fps": 2,
+      "loop": true,
+      "abomination_form": true,
+      "hadal_depth": true,
+      "crushing_presence": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_trench_abomination_attack.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/trench_strike.wav",
+      "pressure_crush": true,
+      "depth_force": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_trench_abomination_special.png",
+      "frames": 20,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/planetary_core.wav",
+      "core_vfx": "res://vfx/planetary_core.tscn",
+      "planetary_burst": true,
+      "pressure_release": true,
+      "reality_tear": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_trench_abomination_defend.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": false,
+      "shield_vfx": "res://vfx/trench_shield.tscn",
+      "abyssal_dome": true,
+      "pressure_barrier": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_trench_abomination_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.1, 0.15, 0.3, 0.3],
+      "abomination_ripple": true,
+      "pressure_wave": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_trench_abomination_death.png",
+      "frames": 18,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/trench_collapse.wav",
+      "pressure_release": true,
+      "abyssal_collapse": true
+    }
+  }
+}

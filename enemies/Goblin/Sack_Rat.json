@@ -1,0 +1,84 @@
+{
+  "name": "Sack Rat",
+  "faction": "Goblin",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 3,
+  "max_hp": 3,
+  "attack": 1,
+  "pattern": ["Special", "Defend", "Flee"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Scavenge",
+    "description": "Special = Steal 1 random card from discard, add to hand next turn",
+    "steal_from": "player_discard",
+    "steal_count": 1,
+    "delivery_turns": 1,
+    "visual_feedback": {
+      "sack_rummage": true,
+      "card_steal_vfx": "res://vfx/card_snatch.tscn",
+      "card_to_sack": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_sack_rat_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "sack_heavy": true,
+      "hunched": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_sack_rat_attack.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/sack_swing.wav",
+      "sack_slam": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_sack_rat_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/sack_rummage.wav",
+      "rummage_animation": true,
+      "card_snatch_vfx": "res://vfx/card_snatch.tscn",
+      "card_to_sack": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_sack_rat_flee.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/sack_scurry.wav",
+      "run_with_sack": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_sack_rat_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "sack_tear": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_sack_rat_death.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/sack_burst.wav",
+      "sack_bursts": true,
+      "cards_scatter": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_sack_rat_defend.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/goblin_shield.tscn",
+      "hide_behind_sack": true
+    }
+  }
+}

@@ -1,0 +1,70 @@
+[gd_scene load_steps=9 format=3 uid="uid://floor7lab001"]
+
+[ext_resource type="Script" path="res://scripts/Floor7RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/bg_laboratory.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/tile_void.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/blood_ink_vat.png" id="4_vat"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/banner_aberration.png" id="5_banner"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(80, 80)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(100, 100)
+
+[node name="Floor7_Laboratory" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "laboratory"
+room_display_name = "The Void Laboratory"
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1200, 1200)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1200, 900)
+
+[node name="PortalEast" type="Marker2D" parent="."]
+position = Vector2(2000, 800)
+
+[node name="PortalSouth" type="Marker2D" parent="."]
+position = Vector2(1200, 1400)
+
+[node name="PortalSouthwest" type="Marker2D" parent="."]
+position = Vector2(600, 1400)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1200, 800)
+texture = ExtResource("2_bg")
+
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(600, 1000)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1800, 1000)
+texture = ExtResource("3_tile")
+
+[node name="Vat1" type="Sprite2D" parent="Interior"]
+position = Vector2(400, 600)
+texture = ExtResource("4_vat")
+
+[node name="Vat2" type="Sprite2D" parent="Interior"]
+position = Vector2(1900, 700)
+texture = ExtResource("4_vat")
+
+[node name="Banner" type="Sprite2D" parent="Interior"]
+position = Vector2(200, 400)
+texture = ExtResource("5_banner")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 20
+text = "FLOOR 7: THE BROKEN PACT — Laboratory"

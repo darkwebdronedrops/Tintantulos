@@ -1,0 +1,85 @@
+{
+  "name": "The Lag",
+  "faction": "Aberration",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 4,
+  "pattern": ["Queue", "Queue", "Release"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Delayed Resolution",
+    "description": "The Lag's attacks don't deal damage immediately. They queue up. After 3 turns, all queued damage hits at once. Player can see the queue building.",
+    "damage_queue": {
+      "queue_duration": 3,
+      "release_trigger": "queue_full",
+      "visible_queue": true,
+      "queue_damage_multiplier": 1.0
+    },
+    "visual_feedback": {
+      "stuttering_form": true,
+      "phase_in_out": true,
+      "damage_queue_indicator": true,
+      "queue_build_vfx": "res://vfx/lag_queue.tscn"
+    },
+    "sound": "sfx/lag_stutter.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_lag_idle.png",
+      "frames": 8,
+      "fps": 2,
+      "loop": true,
+      "stuttering": true,
+      "phase_shift": true,
+      "frame_skip": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_lag_attack.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/lag_attack.wav",
+      "delayed_impact": true,
+      "queue_add": true
+    },
+    "queue": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_lag_queue.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/lag_queue.wav",
+      "queue_build_vfx": "res://vfx/lag_queue.tscn",
+      "damage_queued": true,
+      "pending_indicator": true
+    },
+    "release": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_lag_release.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/lag_release.wav",
+      "all_queued_hits": true,
+      "delayed_damage_burst": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_lag_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.5, 0.7, 0.3],
+      "stutter_disrupt": true,
+      "phase_glitch": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_lag_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/lag_fade.wav",
+      "queue_dissipate": true,
+      "final_stutter": true
+    }
+  }
+}

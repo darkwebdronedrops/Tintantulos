@@ -1,0 +1,79 @@
+{
+  "name": "The Cursor",
+  "faction": "Aberration",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 4,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Auto-Select",
+    "description": "Each turn, Cursor automatically 'plays' the player's highest-cost card for them (random target). Player cannot choose targets while Cursor lives.",
+    "auto_play": {
+      "target_card": "highest_cost_in_hand",
+      "target_selection": "random",
+      "player_target_lock": true
+    },
+    "visual_feedback": {
+      "blinking_pointer": true,
+      "selection_arrow": true,
+      "auto_target_highlight": "res://vfx/cursor_select.tscn",
+      "forced_play_indicator": true
+    },
+    "sound": "sfx/cursor_click.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_cursor_idle.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": true,
+      "pointer_arrow": true,
+      "blinking": true,
+      "autonomous_movement": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_cursor_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/cursor_strike.wav",
+      "pointer_slash": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_cursor_special.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/cursor_click.wav",
+      "auto_select_vfx": "res://vfx/cursor_select.tscn",
+      "forced_card_play": true,
+      "random_target": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_cursor_defend.png",
+      "frames": 5,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/cursor_shield.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_cursor_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.8, 1.0, 0.3],
+      "pointer_glitch": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_cursor_death.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/cursor_dissolve.wav",
+      "pointer_fade": true
+    }
+  }
+}

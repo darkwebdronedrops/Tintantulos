@@ -1,0 +1,85 @@
+{
+  "name": "The Long Arm",
+  "faction": "Aberration",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 35,
+  "max_hp": 35,
+  "attack": 6,
+  "pattern": ["Reach", "Reach", "Pull"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Reach",
+    "description": "Targets cards in draw pile. If it 'hits,' that card enters play next turn exhausted. Post-combat: Draw pile visible to enemies for 3 combats. They prioritize destroying best cards.",
+    "reach": {
+      "target": "cards_in_draw_pile",
+      "hits_cause": {
+        "card_enters_play": true,
+        "exhausted": true,
+        "next_turn": true
+      }
+    },
+    "post_combat": {
+      "extended": {
+        "duration": 3,
+        "effect": "draw_pile_visible_to_enemies",
+        "ai_priority": "destroy_best_cards",
+        "targeting_optimization": true
+      }
+    },
+    "visual_feedback": {
+      "reaches_from_nowhere": true,
+      "touches_where_cannot_feel": true,
+      "draw_pile_targeting": true,
+      "reach_vfx": "res://vfx/reach.tscn"
+    },
+    "sound": "sfx/long_arm_reach.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_long_arm_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "arm_from_darkness": true,
+      "impossible_length": true,
+      "reach_ready": true
+    },
+    "reach": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_long_arm_reach.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/long_arm_reach.wav",
+      "draw_pile_target": true,
+      "card_selection": true
+    },
+    "pull": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_long_arm_pull.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/long_arm_pull.wav",
+      "card_forced_play": true,
+      "exhausted_entry": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_long_arm_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.4, 0.3, 0.5, 0.3],
+      "arm_retracts": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_long_arm_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/long_arm_fade.wav",
+      "extended_vfx": "res://vfx/extended.tscn",
+      "draw_pile_visible_warning": true,
+      "arm_withdraws": true
+    }
+  }
+}

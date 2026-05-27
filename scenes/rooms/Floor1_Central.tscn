@@ -1,0 +1,252 @@
+[gd_scene load_steps=9 format=3 uid="uid://floor1central001"]
+
+[ext_resource type="Script" path="res://scripts/Floor1RoomBase.gd" id="1_room_base"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/floor1_central.png" id="2_floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/portal_main.png" id="3_portal_main"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/portal_north.png" id="4_portal_n"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/portal_east.png" id="5_portal_e"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/portal_south.png" id="6_portal_s"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/portal_west.png" id="7_portal_w"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/npc_transit_construct.png" id="8_npc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/shop_kiosk.png" id="9_shop"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/banner_goblin.png" id="10_banner_g"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/banner_construct.png" id="11_banner_c"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/banner_demon.png" id="12_banner_d"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/banner_elemental.png" id="13_banner_el"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/banner_undead.png" id="14_banner_u"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/banner_aberration.png" id="15_banner_a"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/boss_portal_up.png" id="16_portal_up"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/save_point_crystal.png" id="17_save_crystal"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_npc"]
+radius = 60.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_shop"]
+size = Vector2(80, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_portal"]
+size = Vector2(80, 80)
+
+[node name="Floor1_Central" type="Node2D"]
+script = ExtResource("1_room_base")
+room_id = "central"
+room_display_name = "The Threshold"
+
+; ============================================
+; FLOOR
+; ============================================
+[node name="Floor" type="Sprite2D" parent="."]
+texture = ExtResource("2_floor")
+scale = Vector2(2.5, 2.5)
+
+; ============================================
+; INTERIOR
+; ============================================
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+; --- Central Portal (Main) ---
+[node name="MainPortal" type="Sprite2D" parent="Interior"]
+texture = ExtResource("3_portal_main")
+scale = Vector2(0.6, 0.6)
+
+[node name="PortalLabel_M" type="Label" parent="Interior/MainPortal"]
+offset_left = -40.0
+offset_top = 40.0
+offset_right = 40.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1.0)
+horizontal_alignment = 1
+text = "MAIN"
+
+; --- North Portal ---
+[node name="PortalNorth" type="Sprite2D" parent="Interior"]
+position = Vector2(0, -250)
+texture = ExtResource("4_portal_n")
+scale = Vector2(0.5, 0.5)
+
+[node name="PortalLabel_N" type="Label" parent="Interior/PortalNorth"]
+offset_left = -30.0
+offset_top = 20.0
+offset_right = 30.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1.0)
+horizontal_alignment = 1
+text = "NORTH"
+
+; --- East Portal ---
+[node name="PortalEast" type="Sprite2D" parent="Interior"]
+position = Vector2(250, 0)
+texture = ExtResource("5_portal_e")
+scale = Vector2(0.5, 0.5)
+
+[node name="PortalLabel_E" type="Label" parent="Interior/PortalEast"]
+offset_left = -30.0
+offset_top = 20.0
+offset_right = 30.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1.0)
+horizontal_alignment = 1
+text = "EAST"
+
+; --- South Portal ---
+[node name="PortalSouth" type="Sprite2D" parent="Interior"]
+position = Vector2(0, 250)
+texture = ExtResource("6_portal_s")
+scale = Vector2(0.5, 0.5)
+
+[node name="PortalLabel_S" type="Label" parent="Interior/PortalSouth"]
+offset_left = -30.0
+offset_top = 20.0
+offset_right = 30.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1.0)
+horizontal_alignment = 1
+text = "SOUTH"
+
+; --- West Portal ---
+[node name="PortalWest" type="Sprite2D" parent="Interior"]
+position = Vector2(-250, 0)
+texture = ExtResource("7_portal_w")
+scale = Vector2(0.5, 0.5)
+
+[node name="PortalLabel_W" type="Label" parent="Interior/PortalWest"]
+offset_left = -30.0
+offset_top = 20.0
+offset_right = 30.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1.0)
+horizontal_alignment = 1
+text = "WEST"
+
+; --- NPC: Transit Construct ---
+[node name="NPC_Construct" type="Sprite2D" parent="Interior"]
+position = Vector2(-150, -100)
+texture = ExtResource("8_npc")
+scale = Vector2(0.5, 0.5)
+
+[node name="InteractArea" type="Area2D" parent="Interior/NPC_Construct"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/NPC_Construct/InteractArea"]
+shape = SubResource("CircleShape2D_npc")
+
+[node name="NPCLabel" type="Label" parent="Interior/NPC_Construct"]
+offset_left = -50.0
+offset_top = -60.0
+offset_right = 50.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.7, 0.7, 0.8, 1.0)
+horizontal_alignment = 1
+text = "Transit Construct"
+
+; --- Shop Kiosk ---
+[node name="ShopKiosk" type="Sprite2D" parent="Interior"]
+position = Vector2(150, -100)
+texture = ExtResource("9_shop")
+scale = Vector2(0.5, 0.5)
+
+[node name="ShopLabel" type="Label" parent="Interior/ShopKiosk"]
+offset_left = -30.0
+offset_top = -50.0
+offset_right = 30.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.8, 0.7, 0.4, 1.0)
+horizontal_alignment = 1
+text = "Kiosk"
+
+; --- Faction Banners (6) ---
+[node name="Banners" type="Node2D" parent="Interior"]
+
+[node name="Banner_Goblin" type="Sprite2D" parent="Interior/Banners"]
+position = Vector2(-200, 150)
+texture = ExtResource("10_banner_g")
+scale = Vector2(0.5, 0.5)
+
+[node name="Banner_Construct" type="Sprite2D" parent="Interior/Banners"]
+position = Vector2(-120, 150)
+texture = ExtResource("11_banner_c")
+scale = Vector2(0.5, 0.5)
+
+[node name="Banner_Demon" type="Sprite2D" parent="Interior/Banners"]
+position = Vector2(-40, 150)
+texture = ExtResource("12_banner_d")
+scale = Vector2(0.5, 0.5)
+
+[node name="Banner_Elemental" type="Sprite2D" parent="Interior/Banners"]
+position = Vector2(40, 150)
+texture = ExtResource("13_banner_el")
+scale = Vector2(0.5, 0.5)
+
+[node name="Banner_Undead" type="Sprite2D" parent="Interior/Banners"]
+position = Vector2(120, 150)
+texture = ExtResource("14_banner_u")
+scale = Vector2(0.5, 0.5)
+
+[node name="Banner_Aberration" type="Sprite2D" parent="Interior/Banners"]
+position = Vector2(200, 150)
+texture = ExtResource("15_banner_a")
+scale = Vector2(0.5, 0.5)
+
+; --- Boss Portal (Up) ---
+[node name="PortalUp" type="Sprite2D" parent="Interior"]
+visible = false
+position = Vector2(300, -200)
+texture = ExtResource("16_portal_up")
+scale = Vector2(0.8, 0.8)
+
+[node name="PortalLabel_Up" type="Label" parent="Interior/PortalUp"]
+offset_left = -30.0
+offset_top = 20.0
+offset_right = 30.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.3, 0.3, 1.0)
+horizontal_alignment = 1
+text = "UP"
+
+; --- Save Point (Main Portal base) ---
+[node name="SavePoint" type="Sprite2D" parent="Interior"]
+position = Vector2(0, 75)
+texture = ExtResource("17_save_crystal")
+scale = Vector2(0.8, 0.8)
+
+[node name="SaveLabel" type="Label" parent="Interior/SavePoint"]
+offset_left = -30.0
+offset_top = -20.0
+offset_right = 30.0
+offset_bottom = 0.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.6, 0.6, 0.7, 1.0)
+horizontal_alignment = 1
+text = "Save Point"
+
+; ============================================
+; PORTAL MARKERS
+; ============================================
+; ============================================
+; PORTAL MARKERS
+; ============================================
+[node name="PortalEntrance" type="Marker2D" parent="."]
+position = Vector2(0, 100)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(0, -100)
+
+; ============================================
+; ENEMY SPAWN
+; ============================================
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(200, 200)
+
+; ============================================
+; CENTER MARKER
+; ============================================
+[node name="CenterMarker" type="Marker2D" parent="."]
+position = Vector2(0, 0)

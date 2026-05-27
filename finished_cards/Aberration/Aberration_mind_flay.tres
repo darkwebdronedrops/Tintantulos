@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_mind_flay"]
+
+[resource]
+script = ExtResource("1_mind_flay")
+card_name = "Mind Flay"
+faction = "Aberration"
+card_type = "Attack"
+attention_cost = 5
+quiddity_gain = 0
+damage_dice = "2d6"
+damage_flat = 0
+uses_dice = true
+shield_amount = 0
+heal_amount = 0
+summon_attack = 0
+summon_hp = 0
+summon_count = 0
+summon_growth_atk = 0
+summon_growth_hp = 0
+attack_type = ""
+attack_roll = ""
+keywords = PackedStringArray("Void")
+trap_cast_cost = 0
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+range_type = ""
+aoe_radius = 0
+targets_all = false
+special_effect = ""
+requires_condition = ""
+corruption_gain = 0
+is_overlay = false
+overlay_type = ""
+gem_cost = 0
+description = "2d6 damage. Target loses 1d4 Attention."
+frame_texture_path = "res://assets/sprites/cards/aberration_frame.png"
+sprite_texture_path = "res://assets/sprites/cards/Aberration/Aberration_mind_flay.png"

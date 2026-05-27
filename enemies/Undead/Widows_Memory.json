@@ -1,0 +1,92 @@
+{
+  "name": "Widow's Memory",
+  "faction": "Undead",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 35,
+  "max_hp": 35,
+  "attack": 8,
+  "pattern": ["Lament", "Melee", "Hold"],
+  "weight": "Uncommon",
+  "graft": "Marrow",
+  "mechanic": {
+    "name": "Hold",
+    "description": "Hold = Target card in hand becomes 'Held' (cannot be played, does not discard). Lasts 3 turns or until Widow dies.",
+    "hold": {
+      "target": "random_card_in_hand",
+      "effect": "cannot_play_or_discard",
+      "duration": 3,
+      "break_on_death": true,
+      "message": "She keeps what she loves."
+    },
+    "lament": {
+      "heal_per_held": 3,
+      "message": "Her grief feeds her."
+    },
+    "visual_feedback": {
+      "widow_form": true,
+      "mourning_veil": true,
+      "hold_vfx": "res://vfx/widow_hold.tscn",
+      "held_card_glow": true,
+      "grief_aura": true
+    },
+    "sound": "sfx/lament.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_widows_memory_idle.png",
+      "frames": 10,
+      "fps": 2,
+      "loop": true,
+      "widow_form": true,
+      "veiled": true,
+      "mourning": true,
+      "grief_heavy": true
+    },
+    "lament": {
+      "sprite": "res://assets/sprites/enemies/enemy_widows_memory_lament.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/lament.wav",
+      "heals_from_grief": true,
+      "tears_fall": true
+    },
+    "hold": {
+      "sprite": "res://assets/sprites/enemies/enemy_widows_memory_hold.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/hold.wav",
+      "hold_vfx": "res://vfx/widow_hold.tscn",
+      "card_captured": true,
+      "keeps_what_she_loves": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_widows_memory_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/widow_strike.wav",
+      "grief_strike": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_widows_memory_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.7, 0.8, 0.4],
+      "veil_tears": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_widows_memory_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/lament_ends.wav",
+      "held_cards_release": true,
+      "mourning_ends": true,
+      "grief_fades": true
+    }
+  }
+}

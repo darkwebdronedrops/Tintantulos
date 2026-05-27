@@ -1,0 +1,72 @@
+{
+  "name": "The Pressure",
+  "faction": "Aberration",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 0,
+  "pattern": ["Crush", "Crush", "Crush"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Crush",
+    "description": "Deals 0 damage, applies invisible 'Pressure Stack.' Post-combat: Each Pressure Stack from Floor 8 = start next floor with 1 less max Attention (min 5).",
+    "pressure_stack": {
+      "invisible": true,
+      "stack_per_attack": 1,
+      "no_combat_damage": true
+    },
+    "post_combat": {
+      "pressure_applied": {
+        "condition": "from_floor_8",
+        "effect": "reduce_max_attention",
+        "reduction_per_stack": 1,
+        "minimum_attention": 5
+      }
+    },
+    "visual_feedback": {
+      "nothing_visible": true,
+      "deep_underwater_feeling": true,
+      "pressure_indicator_hidden": true,
+      "subtle_screen_darken": 0.02
+    },
+    "sound": "sfx/pressure_silence.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_pressure_idle.png",
+      "frames": 4,
+      "fps": 1,
+      "loop": true,
+      "absence": true,
+      "deep_water_sense": true,
+      "invisible_presence": true
+    },
+    "crush": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_pressure_crush.png",
+      "frames": 6,
+      "fps": 2,
+      "loop": false,
+      "sound": "sfx/pressure_crush.wav",
+      "pressure_stack_applied": true,
+      "subtle_darken": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_pressure_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.2, 0.2, 0.3, 0.3],
+      "pressure_wave": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_pressure_death.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/pressure_release.wav",
+      "pressure_releases": true,
+      "water_surface": true
+    }
+  }
+}

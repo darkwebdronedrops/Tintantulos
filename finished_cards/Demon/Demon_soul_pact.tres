@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_demon25"]
+
+[resource]
+script = ExtResource("1_demon25")
+card_name = "Soul Pact"
+card_type = "Special"
+faction = "Demon"
+attention_cost = 1
+description = "Take 3 damage. Gain 3 Corruption. Draw 3 cards. Pact: Corruption increases card draw by 1 (max +2)."
+keywords = ["Pact"]
+damage_flat = 3
+damage_dice = ""
+uses_dice = false
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "self_damage_3, gain_corruption_3, pact_draw_plus_corruption_max_2"
+trap_cast_cost = 1
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Demon/Demon_soul_pact.png"
+frame_texture_path = "res://assets/sprites/cards/demon_frame.png"

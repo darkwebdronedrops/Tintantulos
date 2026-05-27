@@ -1,0 +1,107 @@
+[gd_scene load_steps=10 format=3 uid="uid://floor8contain001"]
+
+[ext_resource type="Script" path="res://scripts/Floor8RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/bg_containment_hall.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/tile_brass_factory.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/containment_vessel.png" id="4_vessel"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/banner_elemental.png" id="5_banner_e"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor8/banner_goblin.png" id="6_banner_g"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(100, 100)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(100, 100)
+
+[node name="Floor8_ContainmentHall" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "containment_hall"
+room_display_name = "The Containment Hall"
+containment_vessel_present = true
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1300, 1200)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1300, 900)
+
+[node name="PortalWest" type="Marker2D" parent="."]
+position = Vector2(400, 800)
+
+[node name="PortalNorth" type="Marker2D" parent="."]
+position = Vector2(1300, 300)
+
+[node name="PortalNortheast" type="Marker2D" parent="."]
+position = Vector2(2000, 600)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1200, 800)
+texture = ExtResource("2_bg")
+
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(600, 1000)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1800, 1000)
+texture = ExtResource("3_tile")
+
+[node name="Tile3" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1200, 1200)
+texture = ExtResource("3_tile")
+
+[node name="Tile4" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(800, 1300)
+texture = ExtResource("3_tile")
+
+[node name="Tile5" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1600, 1300)
+texture = ExtResource("3_tile")
+
+[node name="ContainmentVessel1" type="Sprite2D" parent="Interior"]
+position = Vector2(600, 600)
+texture = ExtResource("4_vessel")
+
+[node name="VesselArea1" type="Area2D" parent="Interior/ContainmentVessel1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/ContainmentVessel1/VesselArea1"]
+shape = SubResource("Rect_interact")
+
+[node name="ContainmentVessel2" type="Sprite2D" parent="Interior"]
+position = Vector2(1200, 500)
+texture = ExtResource("4_vessel")
+
+[node name="VesselArea2" type="Area2D" parent="Interior/ContainmentVessel2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/ContainmentVessel2/VesselArea2"]
+shape = SubResource("Rect_interact")
+
+[node name="ContainmentVessel3" type="Sprite2D" parent="Interior"]
+position = Vector2(1800, 600)
+texture = ExtResource("4_vessel")
+
+[node name="VesselArea3" type="Area2D" parent="Interior/ContainmentVessel3"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/ContainmentVessel3/VesselArea3"]
+shape = SubResource("Rect_interact")
+
+[node name="BannerElemental" type="Sprite2D" parent="Interior"]
+position = Vector2(200, 400)
+texture = ExtResource("5_banner_e")
+
+[node name="BannerGoblin" type="Sprite2D" parent="Interior"]
+position = Vector2(2200, 400)
+texture = ExtResource("6_banner_g")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 600.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 20
+text = "FLOOR 8: THE OVERCLOCK FORGE — Containment Hall"

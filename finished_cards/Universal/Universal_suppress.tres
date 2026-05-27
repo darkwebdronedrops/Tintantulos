@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_suppress"]
+
+[resource]
+script = ExtResource("1_suppress")
+card_name = "Suppress"
+card_type = "Special"
+faction = "Universal"
+attention_cost = 2
+quiddity_gain = 0
+damage_dice = ""
+damage_flat = 0
+uses_dice = false
+shield_amount = 0
+heal_amount = 0
+summon_attack = 0
+summon_hp = 0
+summon_count = 0
+keywords = PackedStringArray()
+trap_cast_cost = 0
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+field_persist = false
+range_type = ""
+aoe_radius = 0
+targets_all = false
+special_effect = "Enemy -2 Atk for 2 turns"
+requires_condition = ""
+corruption_gain = 0
+is_overlay = false
+overlay_type = ""
+gem_cost = 0
+description = "Enemy attacks at -2 damage for 2 turns."
+frame_texture_path = "res://assets/sprites/cards/untyped_frame.png"
+sprite_texture_path = "res://assets/sprites/cards/Universal/Universal_suppress.png"

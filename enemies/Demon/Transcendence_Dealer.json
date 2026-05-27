@@ -1,0 +1,81 @@
+{
+  "name": "Transcendence Dealer",
+  "faction": "Demon",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 58,
+  "max_hp": 58,
+  "attack": 10,
+  "pattern": ["Transcend", "Melee", "Defend"],
+  "weight": "Uncommon",
+  "offer": "Ambition",
+  "mechanic": {
+    "name": "Transcend",
+    "description": "Transcend = Offer 'become more' (+1 to all stats for rest of run). If accepted, lose 1 card slot permanently ('evolved beyond need').",
+    "transcend": {
+      "offer": "plus_1_all_stats_run",
+      "cost": "permanent_minus_1_card_slot",
+      "message": "Evolve. Become greater. Shed your limitations."
+    },
+    "visual_feedback": {
+      "ascension_form": true,
+      "glowing": true,
+      "transcend_glow": "res://vfx/transcend_offer.tscn",
+      "sacrifice_shadow": "res://vfx/shed_limitation.tscn"
+    },
+    "sound": "sfx/transcend.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_transcendence_dealer_idle.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": true,
+      "ascending": true,
+      "beyond_human": true,
+      "evolution_aura": true
+    },
+    "transcend": {
+      "sprite": "res://assets/sprites/enemies/enemy_transcendence_dealer_transcend.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/transcend.wav",
+      "transcend_glow": "res://vfx/transcend_offer.tscn",
+      "evolution_offered": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_transcendence_dealer_attack.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/transcendence_strikes.wav",
+      "superior_blow": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_transcendence_dealer_defend.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/evolution_barrier.tscn",
+      "beyond_harm": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_transcendence_dealer_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.9, 0.7, 1.0, 0.5],
+      "evolution_stalled": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_transcendence_dealer_death.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/transcendence_fails.wav",
+      "fallen": true,
+      "mortal_again": true
+    }
+  }
+}

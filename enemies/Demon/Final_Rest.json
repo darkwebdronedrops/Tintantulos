@@ -1,0 +1,73 @@
+{
+  "name": "Final Rest",
+  "faction": "Demon",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 55,
+  "max_hp": 55,
+  "attack": 6,
+  "pattern": ["Rest_Forever", "Defend", "Defend"],
+  "weight": "Uncommon",
+  "offer": "Absolution",
+  "mechanic": {
+    "name": "Eternal Rest",
+    "description": "Rest_Forever = Offer 'true peace' (heal to full, remove all debuffs). If accepted, max HP reduced by half permanently ('peace everlasting').",
+    "rest_forever": {
+      "offer": "full_heal_cleanse",
+      "cost": "half_max_hp_permanent",
+      "message": "Rest now. Forever. No more struggle. No more pain."
+    },
+    "visual_feedback": {
+      "grave_form": true,
+      "peaceful": true,
+      "rest_glow": "res://vfx/final_rest_offer.tscn",
+      "death_shadow": "res://vfx/peace_cost.tscn"
+    },
+    "sound": "sfx/final_rest.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_rest_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "grave_form": true,
+      "peaceful": true,
+      "eternal_sleep": true
+    },
+    "rest_forever": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_rest_rest_forever.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/final_rest.wav",
+      "rest_glow": "res://vfx/final_rest_offer.tscn",
+      "peace_offered": true,
+      "final": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_rest_defend.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/grave_barrier.tscn",
+      "peace_protects": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_rest_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.6, 0.7, 0.5],
+      "peace_disturbed": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_rest_death.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/rest_claims.wav",
+      "peace_taken": true
+    }
+  }
+}

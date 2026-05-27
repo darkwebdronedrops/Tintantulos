@@ -1,0 +1,99 @@
+{
+  "name": "Obsidian Saint",
+  "faction": "Elemental",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 5,
+  "pattern": ["Melee", "Special", "Defend"],
+  "weight": "Common",
+  "element": "Pyre",
+  "mechanic": {
+    "name": "Consecration",
+    "description": "+1 CHARGE per turn. At 6 CHARGE, immolates (6d6 damage to all, self dies, leaves lava pool)",
+    "charge_system": {
+      "max": 6,
+      "gain_per_turn": 1,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "immolation": {
+        "damage": "6d6",
+        "aoe": true,
+        "self_kill": true,
+        "leave_terrain": "lava_pool"
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "saint_glow": true,
+      "consecrated_aura": true,
+      "immolation_vfx": "res://vfx/immolation.tscn",
+      "lava_pool_spawn": "res://vfx/lava_pool.tscn"
+    },
+    "sound": "sfx/consecration_build.wav",
+    "sound_release": "sfx/immolation.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsidian_saint_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "saint_aura": true,
+      "obsidian_glow": true,
+      "consecrated_fire": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsidian_saint_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/obsidian_strike.wav",
+      "holy_fire": true,
+      "saint_blade": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsidian_saint_special.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/immolation.wav",
+      "immolation_vfx": "res://vfx/immolation.tscn",
+      "self_sacrifice": true,
+      "lava_spawn": "res://vfx/lava_pool.tscn"
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsidian_saint_defend.png",
+      "frames": 8,
+      "fps": 5,
+      "loop": false,
+      "shield_vfx": "res://vfx/saint_shield.tscn",
+      "consecrated_barrier": true,
+      "faith_wall": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsidian_saint_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.4, 0.1, 0.3],
+      "saint_resolve": true,
+      "obsidian_crack": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsidian_saint_death.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/saint_fall.wav",
+      "immolation_final": true,
+      "martyrdom": true,
+      "lava_pool_form": true
+    }
+  }
+}

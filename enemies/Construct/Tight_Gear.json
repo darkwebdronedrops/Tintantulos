@@ -1,0 +1,59 @@
+{
+  "name": "Tight Gear",
+  "faction": "Construct",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 3,
+  "max_hp": 3,
+  "attack": 2,
+  "pattern": ["Melee", "Melee", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Summon Defend",
+    "description": "When defending, summon Loose Gear (max 2)",
+    "summon": {
+      "unit": "Loose Gear",
+      "max_count": 2,
+      "position": "adjacent_hex"
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_tight_gear_idle.png",
+      "frames": 4,
+      "fps": 5,
+      "loop": true,
+      "tighter_rotation": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_tight_gear_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/gear_slam.wav"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_tight_gear_damage.png",
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_tight_gear_death.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/gear_shatter.wav",
+      "shatter": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_tight_gear_defend.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/metal_shield.tscn",
+      "summon_animation": true
+    }
+  }
+}

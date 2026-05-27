@@ -1,0 +1,175 @@
+[gd_scene load_steps=9 format=3 uid="uid://floor5aether001"]
+
+[ext_resource type="Script" path="res://scripts/Floor5RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/bg_aetherworks.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/steam_vent.png" id="3_vent"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/lightning_rod.png" id="4_rod"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/tile_airship_deck.png" id="5_deck"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/banner_elemental.png" id="6_banner_e"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/aether_lens.png" id="7_lens"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/aether_core_glow.png" id="8_core_glow"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/boss_altar_platform.png" id="9_altar"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(100, 100)
+
+[node name="Floor5_Aetherworks" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "aether"
+room_display_name = "The Aetherworks"
+dominant_faction = "Elemental"
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1200, 1300)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1200, 800)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(1200, 1400)
+
+[node name="BossSpawn" type="Marker2D" parent="."]
+position = Vector2(1200, 800)
+
+[node name="Interior" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1200, 800)
+texture = ExtResource("2_bg")
+
+[node name="AetherCore" type="Node2D" parent="Interior"]
+position = Vector2(1200, 800)
+
+; ============================================
+; CORE GLOW — Replaced Polygon2D with Sprite2D
+; ============================================
+[node name="CoreGlow" type="Sprite2D" parent="Interior/AetherCore"]
+texture = ExtResource("8_core_glow")
+modulate = Color(1, 1, 1, 0.3)
+
+[node name="CoreLabel" type="Label" parent="Interior/AetherCore"]
+offset_left = -80.0
+offset_top = -80.0
+offset_right = 80.0
+offset_bottom = -60.0
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.8, 0.6, 1.0, 1.0)
+horizontal_alignment = 1
+text = "◆ THE ELEMENTAL CORE ◆"
+
+[node name="SteamVents" type="Node2D" parent="Interior"]
+
+[node name="Vent1" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(600, 1000)
+texture = ExtResource("3_vent")
+scale = Vector2(1.5, 1.5)
+
+[node name="Vent2" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(1800, 1000)
+texture = ExtResource("3_vent")
+scale = Vector2(1.5, 1.5)
+
+[node name="Vent3" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(900, 1100)
+texture = ExtResource("3_vent")
+scale = Vector2(1.5, 1.5)
+
+[node name="Vent4" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(1500, 1100)
+texture = ExtResource("3_vent")
+scale = Vector2(1.5, 1.5)
+
+[node name="LightningRods" type="Node2D" parent="Interior"]
+
+[node name="Rod1" type="Sprite2D" parent="Interior/LightningRods"]
+position = Vector2(400, 600)
+texture = ExtResource("4_rod")
+scale = Vector2(1.5, 1.5)
+
+[node name="Rod2" type="Sprite2D" parent="Interior/LightningRods"]
+position = Vector2(2000, 600)
+texture = ExtResource("4_rod")
+scale = Vector2(1.5, 1.5)
+
+[node name="Rod3" type="Sprite2D" parent="Interior/LightningRods"]
+position = Vector2(1200, 400)
+texture = ExtResource("4_rod")
+scale = Vector2(2.0, 2.0)
+
+[node name="DeckTiles" type="Node2D" parent="Interior"]
+
+[node name="Deck1" type="Sprite2D" parent="Interior/DeckTiles"]
+position = Vector2(400, 1200)
+texture = ExtResource("5_deck")
+scale = Vector2(3.0, 3.0)
+
+[node name="Deck2" type="Sprite2D" parent="Interior/DeckTiles"]
+position = Vector2(800, 1200)
+texture = ExtResource("5_deck")
+scale = Vector2(3.0, 3.0)
+
+[node name="Deck3" type="Sprite2D" parent="Interior/DeckTiles"]
+position = Vector2(1600, 1200)
+texture = ExtResource("5_deck")
+scale = Vector2(3.0, 3.0)
+
+[node name="Deck4" type="Sprite2D" parent="Interior/DeckTiles"]
+position = Vector2(2000, 1200)
+texture = ExtResource("5_deck")
+scale = Vector2(3.0, 3.0)
+
+[node name="Banner_Elemental" type="Sprite2D" parent="Interior"]
+position = Vector2(200, 300)
+texture = ExtResource("6_banner_e")
+scale = Vector2(1.5, 1.5)
+
+[node name="RewardLens" type="Sprite2D" parent="Interior"]
+visible = false
+position = Vector2(1200, 700)
+texture = ExtResource("7_lens")
+scale = Vector2(2.0, 2.0)
+
+[node name="RewardLabel" type="Label" parent="Interior/RewardLens"]
+offset_left = -60.0
+offset_top = -50.0
+offset_right = 60.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.9, 0.7, 1.0, 1.0)
+horizontal_alignment = 1
+text = "Aether Key"
+
+; ============================================
+; BOSS ALTAR — Replaced Polygon2D with Sprite2D
+; ============================================
+[node name="BossAltar" type="Sprite2D" parent="Interior"]
+position = Vector2(1200, 900)
+texture = ExtResource("9_altar")
+modulate = Color(1, 1, 1, 0.8)
+
+[node name="AltarLabel" type="Label" parent="Interior/BossAltar"]
+offset_left = -80.0
+offset_top = -60.0
+offset_right = 80.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.8, 0.6, 1.0, 1.0)
+horizontal_alignment = 1
+text = "Challenge the Elemental Core"
+
+[node name="SavePoint" type="Marker2D" parent="Interior"]
+position = Vector2(1200, 1250)
+
+[node name="Interactables" type="Node2D" parent="Interior"]
+
+[node name="BossArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1200, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/BossArea"]
+shape = SubResource("Rect_interact")
+
+[node name="AltarArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1200, 900)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/AltarArea"]
+shape = SubResource("Rect_interact")

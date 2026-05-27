@@ -1,0 +1,70 @@
+{
+  "name": "Guttersnipe",
+  "faction": "Goblin",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 8,
+  "max_hp": 8,
+  "attack": 3,
+  "pattern": ["Melee", "Melee", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Gang-Up",
+    "description": "+1d6 damage per adjacent Goblin (max +3d6)",
+    "damage_bonus": {
+      "per_adjacent_goblin": "1d6",
+      "max_bonus_dice": "3d6",
+      "adjacent_range": 1
+    },
+    "visual_feedback": {
+      "swarm_indicator": true,
+      "dice_roll_vfx": true,
+      "gang_animation": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_guttersnipe_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "shiv_twirl": true,
+      "street_crouch": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_guttersnipe_attack.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/guttersnipe_stab.wav",
+      "shiv_flurry": true,
+      "dice_roll_vfx": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_guttersnipe_special.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/gang_up.wav",
+      "call_gang": true,
+      "bonus_damage_show": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_guttersnipe_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "stagger": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_guttersnipe_death.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/guttersnipe_die.wav",
+      "shiv_drop": true,
+      "street_collapse": true
+    }
+  }
+}

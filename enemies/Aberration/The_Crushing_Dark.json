@@ -1,0 +1,77 @@
+{
+  "name": "The Crushing Dark",
+  "faction": "Aberration",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 28,
+  "max_hp": 28,
+  "attack": 6,
+  "pattern": ["Extinction", "Extinction", "Extinction"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Extinction",
+    "description": "Screen darkens 5% per turn. 50% = cannot see enemy intent. 100% = combat auto-resolves. Post-combat: If reached 100% dark, next combat starts at 25% dark baseline.",
+    "extinction": {
+      "darken_per_turn": 0.05,
+      "at_50_percent": {
+        "effect": "hide_enemy_intent"
+      },
+      "at_100_percent": {
+        "effect": "combat_auto_resolves",
+        "player_cannot_act": true
+      }
+    },
+    "post_combat": {
+      "extinction_memory": {
+        "condition": "reached_100_percent",
+        "next_combat_darkness": 0.25,
+        "persists": true
+      }
+    },
+    "visual_feedback": {
+      "absence_of_light": true,
+      "light_dies": true,
+      "darkness_spreads": true,
+      "screen_darken_vfx": "res://vfx/extinction_dark.tscn",
+      "darkness_percent_indicator": true
+    },
+    "sound": "sfx/extinction_silence.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_crushing_dark_idle.png",
+      "frames": 6,
+      "fps": 1,
+      "loop": true,
+      "absolute_darkness": true,
+      "light_consumption": true,
+      "void_presence": true
+    },
+    "extinction": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_crushing_dark_extinction.png",
+      "frames": 8,
+      "fps": 2,
+      "loop": false,
+      "sound": "sfx/extinction_spread.wav",
+      "darken_5_percent": true,
+      "light_dies_more": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_crushing_dark_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.1, 0.1, 0.1, 0.5],
+      "void_disrupt": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_crushing_dark_death.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/extinction_fade.wav",
+      "darkness_releases": true,
+      "light_returns": true
+    }
+  }
+}

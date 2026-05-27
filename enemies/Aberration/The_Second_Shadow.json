@@ -1,0 +1,73 @@
+{
+  "name": "The Second Shadow",
+  "faction": "Aberration",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 38,
+  "max_hp": 38,
+  "attack": 7,
+  "pattern": ["Replace", "Replace", "Replace"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Replace",
+    "description": "Copies your last played card each turn, plays it against you. Post-combat: Deck representation offset by 1. Top card is actually second card.",
+    "replacement": {
+      "copy_last_card": true,
+      "plays_against_player": true,
+      "every_turn": true
+    },
+    "post_combat": {
+      "wrong_shadow": {
+        "deck_offset": 1,
+        "top_card_is_second": true,
+        "visual_deception": true,
+        "must_remember_true_order": true
+      }
+    },
+    "visual_feedback": {
+      "stands_where_your_shadow_should_be": true,
+      "your_shadow_gone": true,
+      "card_copy_each_turn": true,
+      "replacement_aura": "res://vfx/replacement.tscn"
+    },
+    "sound": "sfx/second_shadow.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_second_shadow_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "wrong_position": true,
+      "your_shadow_replaced": true,
+      "uncanny_silhouette": true
+    },
+    "replace": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_second_shadow_replace.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/second_shadow.wav",
+      "card_copy": true,
+      "shadow_mimic": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_second_shadow_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.2, 0.2, 0.25, 0.5],
+      "shadow_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_second_shadow_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/shadow_return.wav",
+      "wrong_shadow_vfx": "res://vfx/wrong_shadow.tscn",
+      "deck_offset_warning": true,
+      "shadow_restores": true
+    }
+  }
+}

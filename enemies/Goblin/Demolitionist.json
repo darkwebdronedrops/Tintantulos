@@ -1,0 +1,82 @@
+{
+  "name": "Demolitionist",
+  "faction": "Goblin",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 14,
+  "max_hp": 14,
+  "attack": 4,
+  "pattern": ["Special", "Melee", "Flee"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Big Boom",
+    "description": "Special = Place bomb (3 turn fuse). Bomb explodes for 6d6 damage to all within 3 hexes. Cannot be disarmed, only avoided",
+    "bomb_place": {
+      "fuse_turns": 3,
+      "damage_dice": "6d6",
+      "radius": 3,
+      "disarmable": false
+    },
+    "visual_feedback": {
+      "bomb_place_vfx": "res://vfx/bomb_place.tscn",
+      "fuse_countdown": true,
+      "explosion_warning": "res://vfx/bomb_warning.tscn",
+      "massive_explosion": "res://vfx/big_boom.tscn"
+    },
+    "sound_place": "sfx/big_bomb_place.wav",
+    "sound_explode": "sfx/massive_boom.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_demolitionist_idle.png",
+      "frames": 6,
+      "fps": 5,
+      "loop": true,
+      "bomb_bandolier": true,
+      "heavy_breathing": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_demolitionist_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/demo_swing.wav",
+      "detonator_club": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_demolitionist_special.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/big_bomb_place.wav",
+      "place_bomb": true,
+      "bomb_vfx": "res://vfx/bomb_place.tscn",
+      "countdown_start": 3
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_demolitionist_flee.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/demo_run.wav",
+      "run_from_own_bomb": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_demolitionist_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "bombs_shake": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_demolitionist_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/demo_die.wav",
+      "bandolier_burst": true,
+      "bombs_scatter": true
+    }
+  }
+}

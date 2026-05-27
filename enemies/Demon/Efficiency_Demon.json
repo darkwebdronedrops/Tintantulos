@@ -1,0 +1,82 @@
+{
+  "name": "Efficiency Demon",
+  "faction": "Demon",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 7,
+  "max_hp": 7,
+  "attack": 3,
+  "pattern": ["Optimize", "Melee", "Defend"],
+  "weight": "Common",
+  "offer": "Ambition",
+  "mechanic": {
+    "name": "Optimize",
+    "description": "Optimize = Offer -1 cost to all cards this turn. If accepted, next turn all cards cost +1 ('rebalancing').",
+    "optimize": {
+      "offer": "minus_1_all_costs",
+      "cost_trigger": "next_turn",
+      "cost": "plus_1_all_costs",
+      "message": "Let me streamline your process."
+    },
+    "visual_feedback": {
+      "geometric_form": true,
+      "perfect_symmetry": true,
+      "optimization_glow": "res://vfx/optimize.tscn",
+      "rebalance_shadow": "res://vfx/rebalance.tscn"
+    },
+    "sound": "sfx/optimize.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_efficiency_demon_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "geometric_perfection": true,
+      "golden_ratio": true,
+      "moving_efficiently": true
+    },
+    "optimize": {
+      "sprite": "res://assets/sprites/enemies/enemy_efficiency_demon_optimize.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/optimize.wav",
+      "optimization_glow": "res://vfx/optimize.tscn",
+      "streamlines_you": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_efficiency_demon_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/efficient_strike.wav",
+      "minimum_motion": true,
+      "maximum_impact": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_efficiency_demon_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/efficient_barrier.tscn",
+      "optimal_defense": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_efficiency_demon_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.7, 0.6, 0.4],
+      "perfection_tarnished": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_efficiency_demon_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/inefficient.wav",
+      "wasteful": true
+    }
+  }
+}

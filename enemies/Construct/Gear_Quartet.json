@@ -1,0 +1,74 @@
+{
+  "name": "Gear Quartet",
+  "faction": "Construct",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 8,
+  "max_hp": 8,
+  "attack": 4,
+  "pattern": ["Melee", "Melee", "Special", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Summon Defend",
+    "description": "Summon Gear Pair when defending (max 1)",
+    "summon": {
+      "unit": "Gear Pair",
+      "max_count": 1,
+      "position": "adjacent_hex"
+    },
+    "note": "Cannot summon if at max Gear Pairs"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_quartet_idle.png",
+      "frames": 6,
+      "fps": 5,
+      "loop": true,
+      "quad_rotation": true,
+      "complex_sync": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_quartet_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/quartet_slam.wav",
+      "multi_strike": true,
+      "echo_frames": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_quartet_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "charge_vortex": true,
+      "gear_ring_expand": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_quartet_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "wobble_gears": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_quartet_death.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/quartet_collapse.wav",
+      "explode_apart": true,
+      "individual_gear_death": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_quartet_defend.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/metal_shield.tscn",
+      "summon_animation": true,
+      "formation_shift": true
+    }
+  }
+}

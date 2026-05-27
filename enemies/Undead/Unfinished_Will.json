@@ -1,0 +1,87 @@
+{
+  "name": "Unfinished Will",
+  "faction": "Undead",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 58,
+  "max_hp": 58,
+  "attack": 7,
+  "pattern": ["Testate", "Melee", "Bequeath"],
+  "weight": "Uncommon",
+  "graft": "Shroud",
+  "mechanic": {
+    "name": "Testate",
+    "description": "Testate = Steal 2 cards from hand. Bequeath = If Unfinished Will dies, return 1 stolen card to hand. Otherwise, stolen cards gone for run.",
+    "testate": {
+      "steal_from_hand": 2,
+      "destination": "shroud_storage"
+    },
+    "bequeath": {
+      "on_death": {
+        "return_cards": 1,
+        "message": "The will is settled."
+      },
+      "if_survives": {
+        "stolen_cards": "gone_for_run"
+      }
+    },
+    "visual_feedback": {
+      "will_form": true,
+      "document_ghost": true,
+      "testate_vfx": "res://vfx/testate.tscn",
+      "seal_pending": true
+    },
+    "sound": "sfx/testate.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_unfinished_will_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "document_form": true,
+      "unsealed": true,
+      "pending": true
+    },
+    "testate": {
+      "sprite": "res://assets/sprites/enemies/enemy_unfinished_will_testate.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/testate.wav",
+      "testate_vfx": "res://vfx/testate.tscn",
+      "cards_willed": true
+    },
+    "bequeath": {
+      "sprite": "res://assets/sprites/enemies/enemy_unfinished_will_bequeath.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/bequeath.wav",
+      "will_settled": true,
+      "cards_return": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_unfinished_will_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/will_strike.wav"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_unfinished_will_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.6, 0.7, 0.4]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_unfinished_will_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/will_executed.wav",
+      "bequeath_triggers": true
+    }
+  }
+}

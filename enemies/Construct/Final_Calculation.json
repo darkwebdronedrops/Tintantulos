@@ -1,0 +1,86 @@
+{
+  "name": "Final Calculation",
+  "faction": "Construct",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 5,
+  "pattern": ["Special", "Special", "Melee"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Compute",
+    "description": "Special locks all dice to average (3.5) for 2 turns",
+    "dice_lock": {
+      "value": 3.5,
+      "duration": 2,
+      "affects": "all_player_dice"
+    },
+    "visual_feedback": {
+      "dice_glow_blue": true,
+      "numbers_fix": true,
+      "calculus_symbols": true
+    },
+    "sound": "sfx/final_calculate.wav",
+    "ui_indicator": "dice_locked"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_calculation_idle.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": true,
+      "abacus_float": true,
+      "numbers_spin": true,
+      "equations_form": true,
+      "perfect_math": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_calculation_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/calculation_strike.wav",
+      "formula_projectile": true,
+      "math_becomes_force": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_calculation_special.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/dice_lock.wav",
+      "dice_lock_vfx": true,
+      "numbers_stabilize": true,
+      "blue_glow": true,
+      "ui_dice_lock": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_calculation_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "numbers_scatter": true,
+      "equation_break": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_calculation_death.png",
+      "frames": 18,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/calculation_complete.wav",
+      "numbers_cascade": true,
+      "final_sum": true,
+      "fade_to_answer": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_final_calculation_defend.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/math_shield.tscn",
+      "equation_shield": true
+    }
+  }
+}

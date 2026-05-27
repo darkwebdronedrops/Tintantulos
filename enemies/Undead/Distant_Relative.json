@@ -1,0 +1,87 @@
+{
+  "name": "Distant Relative",
+  "faction": "Undead",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 6,
+  "max_hp": 6,
+  "attack": 2,
+  "pattern": ["Inherit", "Melee", "Defend"],
+  "weight": "Uncommon",
+  "graft": "Shroud",
+  "mechanic": {
+    "name": "Inherit",
+    "description": "Inherit = Steal 1 card from discard pile (returns to your hand). If discard empty, deals 5 damage.",
+    "steal": {
+      "target": "discard_pile",
+      "count": 1,
+      "destination": "enemy_hand",
+      "bonus_damage": {
+        "condition": "discard_empty",
+        "damage": 5,
+        "message": "Nothing left to inherit."
+      }
+    },
+    "visual_feedback": {
+      "familiar_face": true,
+      "wrong_eyes": true,
+      "inheritance_vfx": "res://vfx/inheritance.tscn",
+      "shroud_family": true
+    },
+    "sound": "sfx/inherit_claim.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_distant_relative_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "almost_recognizable": true,
+      "wrong_eyes": true,
+      "family_ghost": true
+    },
+    "inherit": {
+      "sprite": "res://assets/sprites/enemies/enemy_distant_relative_inherit.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/inherit_claim.wav",
+      "inheritance_vfx": "res://vfx/inheritance.tscn",
+      "claim_discard": true,
+      "family_taking": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_distant_relative_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/shroud_strike.wav",
+      "familiar_blow": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_distant_relative_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/family_shield.tscn",
+      "old_memories_barrier": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_distant_relative_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.6, 0.7, 0.3],
+      "form_flickers": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_distant_relative_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/family_fade.wav",
+      "inheritance_lost": true,
+      "distant_now": true
+    }
+  }
+}

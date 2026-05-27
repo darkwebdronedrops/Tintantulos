@@ -1,0 +1,87 @@
+{
+  "name": "Mass Grave",
+  "faction": "Undead",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 28,
+  "max_hp": 28,
+  "attack": 5,
+  "pattern": ["Consume", "Melee", "Special"],
+  "weight": "Common",
+  "graft": "Flesh",
+  "mechanic": {
+    "name": "Consume",
+    "description": "Consume = Mill 5 cards. Heals 1 HP per card. If 10+ cards milled this combat, summons Grave Servant (HP 15, attacks for 4).",
+    "consume": {
+      "mill": 5,
+      "heal_per_card": 1,
+      "summon_threshold": 10,
+      "summon": {
+        "name": "Grave Servant",
+        "hp": 15,
+        "attack": 4
+      }
+    },
+    "visual_feedback": {
+      "pit_of_bodies": true,
+      "mass_death": true,
+      "consume_vfx": "res://vfx/mass_consume.tscn",
+      "hungry_earth": true
+    },
+    "sound": "sfx/mass_consume.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_mass_grave_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "grave_form": true,
+      "bodies_below": true,
+      "hungry_pit": true
+    },
+    "consume": {
+      "sprite": "res://assets/sprites/enemies/enemy_mass_grave_consume.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/mass_consume.wav",
+      "consume_vfx": "res://vfx/mass_consume.tscn",
+      "deck_devours": true,
+      "earth_hungry": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_mass_grave_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/grave_strike.wav",
+      "hand_of_dead": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_mass_grave_special.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/servant_rise.wav",
+      "grave_servant_summon": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_mass_grave_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.4, 0.4, 0.4, 0.4],
+      "earth_shudders": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_mass_grave_death.png",
+      "frames": 18,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/grave_collapses.wav",
+      "pit_fills": true,
+      "dead_rest": true
+    }
+  }
+}

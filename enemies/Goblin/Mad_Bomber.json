@@ -1,0 +1,94 @@
+{
+  "name": "Mad Bomber",
+  "faction": "Goblin",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 4,
+  "pattern": ["Special", "Special", "Melee", "Flee"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Chain Reaction",
+    "description": "Special = Throw 2 bombs (3d6 each, 2 hex radius). If kills, target explodes (2d6 to adjacent)",
+    "bomb_throw": {
+      "count": 2,
+      "damage": "3d6",
+      "radius": 2
+    },
+    "chain_reaction": {
+      "trigger": "kill_with_bomb",
+      "damage": "2d6",
+      "radius": 1,
+      "aoe": true
+    },
+    "visual_feedback": {
+      "dual_bomb_throw": true,
+      "explosion_vfx": "res://vfx/chain_bomb.tscn",
+      "chain_explosion": true,
+      "kill_trigger_flash": true
+    },
+    "sound": "sfx/chain_bomb.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_mad_bomber_idle.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": true,
+      "bomb_crazy_eyes": true,
+      "giggle": true,
+      "bombs_everywhere": true,
+      "unstable": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_mad_bomber_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/mad_swing.wav",
+      "bomb_club": true,
+      "crazy_laugh": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_mad_bomber_special.png",
+      "frames": 12,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/chain_bomb.wav",
+      "dual_throw": true,
+      "bomb_arc": true,
+      "explosion_vfx": "res://vfx/chain_bomb.tscn",
+      "check_chain": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_mad_bomber_flee.png",
+      "frames": 6,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/mad_cackle.wav",
+      "giddy_run": true,
+      "bombs_drop": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_mad_bomber_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "crazy_no_pain": true,
+      "laugh": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_mad_bomber_death.png",
+      "frames": 14,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/mad_final_boom.wav",
+      "self_detonate": true,
+      "massive_chain": true,
+      "screen_shake": true,
+      "bombs_everywhere_explode": true
+    }
+  }
+}

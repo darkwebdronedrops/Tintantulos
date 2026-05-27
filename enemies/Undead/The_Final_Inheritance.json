@@ -1,0 +1,125 @@
+{
+  "name": "The Final Inheritance",
+  "faction": "Undead",
+  "tier": "Boss",
+  "floor": 10,
+  "hp": 250,
+  "max_hp": 250,
+  "attack": 12,
+  "pattern": ["Shroud", "Hollow", "Flesh", "Marrow"],
+  "graft_rotation": true,
+  "mechanic": {
+    "name": "Legacy",
+    "description": "Rotates through all four Grafts each turn. Shroud: Steal 5 cards from hand. Hollow: Steal 5 Quiddity. Flesh: Mill 10 cards. Marrow: Player 'forgets' 1 card type for 1 turn.",
+    "shroud_turn": {
+      "steal_from_hand": 5,
+      "destination": "discard"
+    },
+    "hollow_turn": {
+      "steal_quiddity": 5
+    },
+    "flesh_turn": {
+      "mill": 10
+    },
+    "marrow_turn": {
+      "forget_card_type": 1,
+      "duration": 1,
+      "message": "You cannot remember how that works."
+    },
+    "visual_feedback": {
+      "shroud_form": "tattered_memory",
+      "hollow_form": "bone_framework",
+      "flesh_form": "rotting_persistence",
+      "marrow_form": "core_essence",
+      "graft_indicator": true,
+      "rotation_vfx": "res://vfx/graft_rotate.tscn"
+    },
+    "sound": "sfx/legacy_shift.wav"
+  },
+  "is_boss": true,
+  "phases": 4,
+  "phase_rotation": {
+    "shroud": "shroud_visual",
+    "hollow": "hollow_visual",
+    "flesh": "flesh_visual",
+    "marrow": "marrow_visual"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_final_inheritance_idle.png",
+      "frames": 16,
+      "fps": 3,
+      "loop": true,
+      "inheritance_form": true,
+      "all_grafts_present": true,
+      "legacy_visible": true,
+      "graft_indicator": true
+    },
+    "shroud": {
+      "sprite": "res://assets/sprites/enemies/boss_the_final_inheritance_shroud.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/legacy_shift.wav",
+      "shroud_active": true,
+      "hand_theft": true,
+      "tattered_memory_dominates": true
+    },
+    "hollow": {
+      "sprite": "res://assets/sprites/enemies/boss_the_final_inheritance_hollow.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/legacy_shift.wav",
+      "hollow_active": true,
+      "quiddity_drain": true,
+      "bone_framework_dominates": true
+    },
+    "flesh": {
+      "sprite": "res://assets/sprites/enemies/boss_the_final_inheritance_flesh.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/legacy_shift.wav",
+      "flesh_active": true,
+      "deck_mill": true,
+      "rotting_persistence_dominates": true
+    },
+    "marrow": {
+      "sprite": "res://assets/sprites/enemies/boss_the_final_inheritance_marrow.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/legacy_shift.wav",
+      "marrow_active": true,
+      "memory_loss": true,
+      "core_essence_dominates": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_final_inheritance_attack.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/inheritance_strike.wav",
+      "legacy_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_final_inheritance_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.6, 0.7, 0.4],
+      "legacy_shudders": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_final_inheritance_death.png",
+      "frames": 24,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/legacy_settled.wav",
+      "inheritance_distributed": true,
+      "all_grafts_release": true,
+      "what_was_taken_returns": true
+    }
+  }
+}

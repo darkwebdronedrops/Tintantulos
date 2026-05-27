@@ -1,0 +1,83 @@
+{
+  "name": "The Contagion",
+  "faction": "Aberration",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 20,
+  "max_hp": 20,
+  "attack": 5,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Terrain Infection",
+    "description": "Ooze spreads to adjacent hexes. Player standing on Ooze hexes: Cards cost +1. Ooze hexes persist for 3 turns after Ooze dies.",
+    "terrain_infection": {
+      "spread_radius": 1,
+      "cost_increase": 1,
+      "persist_after_death": 3,
+      "spread_per_turn": true
+    },
+    "visual_feedback": {
+      "black_ichor": true,
+      "glitch_trails": true,
+      "infected_terrain": "res://vfx/ooze_terrain.tscn",
+      "spread_animation": true
+    },
+    "sound": "sfx/contagion_spread.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_contagion_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "black_ichor": true,
+      "oozing": true,
+      "terrain_spread": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_contagion_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/contagion_strike.wav",
+      "ichor_splash": true,
+      "glitch_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_contagion_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/contagion_spread.wav",
+      "spread_vfx": "res://vfx/ooze_spread.tscn",
+      "terrain_infection_pulse": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_contagion_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/ooze_shield.tscn",
+      "ichor_harden": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_contagion_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.2, 0.1, 0.2, 0.3],
+      "ichor_splash": true,
+      "contagion_spray": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_contagion_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/contagion_dry.wav",
+      "ooze_dries": true,
+      "terrain_remains": true
+    }
+  }
+}

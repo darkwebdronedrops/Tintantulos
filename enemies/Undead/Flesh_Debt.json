@@ -1,0 +1,72 @@
+{
+  "name": "Flesh Debt",
+  "faction": "Undead",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 6,
+  "max_hp": 6,
+  "attack": 3,
+  "pattern": ["Gnaw", "Melee", "Gnaw"],
+  "weight": "Common",
+  "graft": "Flesh",
+  "mechanic": {
+    "name": "Flesh Debt",
+    "description": "Gnaw = Mill 1 card. Heals 1 HP. If deck empty, takes 2 HP from player directly.",
+    "gnaw": {
+      "mill": 1,
+      "heal": 1,
+      "fallback": {
+        "condition": "deck_empty",
+        "damage_to_player": 2,
+        "message": "The body pays what the deck cannot."
+      }
+    },
+    "visual_feedback": {
+      "flesh_form": true,
+      "hungry_debt": true,
+      "gnaw_vfx": "res://vfx/flesh_gnaw.tscn"
+    },
+    "sound": "sfx/flesh_gnaw.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_debt_idle.png",
+      "frames": 6,
+      "fps": 3,
+      "loop": true,
+      "hungry_flesh": true,
+      "debt_hunger": true
+    },
+    "gnaw": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_debt_gnaw.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/flesh_gnaw.wav",
+      "gnaw_vfx": "res://vfx/flesh_gnaw.tscn",
+      "deck_mill": true,
+      "heals": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_debt_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/flesh_strike.wav"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_debt_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.4, 0.4, 0.4]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_debt_death.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/flesh_melt.wav"
+    }
+  }
+}

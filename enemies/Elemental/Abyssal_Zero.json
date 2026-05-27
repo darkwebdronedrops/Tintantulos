@@ -1,0 +1,100 @@
+{
+  "name": "Abyssal Zero",
+  "faction": "Elemental",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 58,
+  "max_hp": 58,
+  "attack": 6,
+  "pattern": ["Defend", "Special", "Defend", "Special"],
+  "weight": "Rare",
+  "element": "Abyss",
+  "mechanic": {
+    "name": "Absolute Zero",
+    "description": "+1 CHARGE per turn, max 20. At 20 CHARGE, heat death (all CHARGE resets, all enemies heal full, player frozen 1 turn)",
+    "charge_system": {
+      "max": 20,
+      "gain_per_turn": 1,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "heat_death": {
+        "reset_all_charge": true,
+        "heal_all_enemies": "full",
+        "freeze_player": 1
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "cold_aura": true,
+      "absolute_zero_indicator": true,
+      "heat_death_vfx": "res://vfx/heat_death.tscn",
+      "freeze_vfx": "res://vfx/freeze_player.tscn",
+      "reality_distortion": true
+    },
+    "sound": "sfx/absolute_zero_build.wav",
+    "sound_release": "sfx/heat_death.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_zero_idle.png",
+      "frames": 12,
+      "fps": 2,
+      "loop": true,
+      "absolute_cold": true,
+      "heat_absence": true,
+      "blue_void": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_zero_attack.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/zero_strike.wav",
+      "cold_impact": true,
+      "heat_drain": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_zero_special.png",
+      "frames": 20,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/heat_death.wav",
+      "heat_death_vfx": "res://vfx/heat_death.tscn",
+      "reality_collapse": true,
+      "enemies_heal": true,
+      "freeze_player": "res://vfx/freeze_player.tscn"
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_zero_defend.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": false,
+      "shield_vfx": "res://vfx/zero_shield.tscn",
+      "absolute_barrier": true,
+      "cold_wall": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_zero_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.2, 0.3, 0.5, 0.3],
+      "cold_disrupt": true,
+      "heat_influx": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_zero_death.png",
+      "frames": 18,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/zero_disperses.wav",
+      "cold_release": true,
+      "heat_returns": true,
+      "entropy_increase": true
+    }
+  }
+}

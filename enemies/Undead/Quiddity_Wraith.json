@@ -1,0 +1,78 @@
+{
+  "name": "Quiddity Wraith",
+  "faction": "Undead",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 36,
+  "max_hp": 36,
+  "attack": 7,
+  "pattern": ["Drain", "Melee", "Defend"],
+  "weight": "Common",
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Essence Drain",
+    "description": "Drain = Steal 4 Quiddity. If player has 0 Quiddity after drain, Wraith gains +5 damage for 2 turns.",
+    "drain": {
+      "steal": 4,
+      "bonus": {
+        "condition": "player_quiddity_0_after",
+        "damage_bonus": 5,
+        "duration": 2,
+        "message": "Your emptiness feeds me."
+      }
+    },
+    "visual_feedback": {
+      "wraith_form": true,
+      "essence_hunger": true,
+      "drain_vfx": "res://vfx/essence_drain.tscn"
+    },
+    "sound": "sfx/essence_drain.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_quiddity_wraith_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "wraith_form": true,
+      "quiddity_hunger": true
+    },
+    "drain": {
+      "sprite": "res://assets/sprites/enemies/enemy_quiddity_wraith_drain.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/essence_drain.wav",
+      "drain_vfx": "res://vfx/essence_drain.tscn",
+      "quiddity_flows": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_quiddity_wraith_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/wraith_strike.wav"
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_quiddity_wraith_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/wraith_shield.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_quiddity_wraith_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.8, 0.9, 0.4]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_quiddity_wraith_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/wraith_fade.wav"
+    }
+  }
+}

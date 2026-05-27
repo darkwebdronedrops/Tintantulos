@@ -1,0 +1,104 @@
+{
+  "name": "The Bomb Mother",
+  "faction": "Goblin",
+  "tier": "Boss",
+  "floor": "Secret",
+  "hp": 40,
+  "max_hp": 40,
+  "attack": 5,
+  "pattern": ["Special", "Defend", "Special", "Melee"],
+  "mechanic": {
+    "name": "Explosive Birth",
+    "description": "Spawns Boomers each turn. When Boomer explodes, she heals. Immune to fire damage",
+    "spawn": {
+      "unit": "Boomer",
+      "per_turn": 1
+    },
+    "heal_on_explosion": {
+      "trigger": "boomer_explodes",
+      "heal_amount": 5
+    },
+    "immunities": {
+      "fire": true
+    },
+    "visual_feedback": {
+      "birth_animation": "res://vfx/explosive_birth.tscn",
+      "boomer_spawn": true,
+      "heal_on_explode_vfx": "res://vfx/explosion_heal.tscn",
+      "fire_immunity_shield": true
+    },
+    "sound": "sfx/bomb_mother.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_bomb_mother_idle.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": true,
+      "massive_pregnant_form": true,
+      "bombs_inside": true,
+      "fire_immunity_aura": true,
+      "furnace_glow": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_bomb_mother_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/mother_slam.wav",
+      "belly_slam": true,
+      "bombs_rattle": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_bomb_mother_special.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/explosive_birth.wav",
+      "birth_animation": "res://vfx/explosive_birth.tscn",
+      "boomer_spawn": true,
+      "belly_contract": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_bomb_mother_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "bombs_shake": true,
+      "fire_immunity_show": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_bomb_mother_death.png",
+      "frames": 18,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/mother_final_boom.wav",
+      "massive_explosion": true,
+      "all_bombs_detonate": true,
+      "screen_shake_intense": true,
+      "fire_nova": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_bomb_mother_defend.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/fire_shield.tscn",
+      "bombs_armor": true,
+      "fire_barrier": true
+    },
+    "heal_explode": {
+      "sprite": "res://assets/sprites/enemies/boss_bomb_mother_heal.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/explosion_heal.wav",
+      "absorb_explosion": true,
+      "heal_flash": true,
+      "hp_gain_number": true
+    }
+  }
+}

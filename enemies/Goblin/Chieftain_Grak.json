@@ -1,0 +1,106 @@
+{
+  "name": "Chieftain Grak",
+  "faction": "Goblin",
+  "tier": "Boss",
+  "floor": 6,
+  "hp": 45,
+  "max_hp": 45,
+  "attack": 7,
+  "pattern": ["Melee", "Melee", "Special", "Defend"],
+  "mechanic": {
+    "name": "Tribal Fury",
+    "description": "All Goblins gain +2 damage and Mob Mentality. When Grak hits 50% HP, all Goblins Frenzy (+50% damage, cannot Defend)",
+    "aura": {
+      "damage_bonus": 2,
+      "mob_mentality": true
+    },
+    "frenzy": {
+      "trigger": "hp_below_50",
+      "damage_multiplier": 1.5,
+      "prevent_defend": true,
+      "affects": "all_goblins"
+    },
+    "visual_feedback": {
+      "chieftain_aura": "red",
+      "frenzy_red_glow": true,
+      "berserk_indicator": true,
+      "drums_intensify": true
+    },
+    "sound": "sfx/grak_command.wav",
+    "sound_frenzy": "sfx/tribal_frenzy.wav"
+  },
+  "is_boss": true,
+  "phases": 2,
+  "phase_threshold": 0.5,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_chieftain_grak_idle.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": true,
+      "massive_chieftain": true,
+      "trophy_armor": true,
+      "command_aura": "red",
+      "drums_idle": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_chieftain_grak_attack.png",
+      "frames": 12,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/grak_slam.wav",
+      "war_axe_cleave": true,
+      "tremor_impact": true,
+      "screen_shake": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_chieftain_grak_special.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/grak_command.wav",
+      "war_cry": true,
+      "goblins_rally": true,
+      "aura_pulse": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_chieftain_grak_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "armor_dent": true,
+      "check_frenzy": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_chieftain_grak_death.png",
+      "frames": 16,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/grak_falls.wav",
+      "tribe_scatters": true,
+      "chieftain_falls": true,
+      "drums_stop": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_chieftain_grak_defend.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/chieftain_shield.tscn",
+      "goblin_shield_wall": true,
+      "brace": true
+    },
+    "frenzy": {
+      "sprite": "res://assets/sprites/enemies/boss_chieftain_grak_frenzy.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/tribal_frenzy.wav",
+      "red_aura_burst": true,
+      "berserk_roar": true,
+      "all_goblins_glow": true,
+      "drums_intense": true
+    }
+  }
+}

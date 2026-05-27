@@ -1,0 +1,88 @@
+{
+  "name": "The Confluence",
+  "faction": "Aberration",
+  "tier": "Boss",
+  "floor": 6,
+  "hp": 45,
+  "max_hp": 45,
+  "attack": 6,
+  "pattern": ["Summon", "Melee", "Defend", "Summon"],
+  "mechanic": {
+    "name": "Factions Bleed Together",
+    "description": "Summons random faction minions (Construct/Goblin/Elemental/Undead/Demon). Each minion keeps its faction mechanic. When 3+ factions present: All minions gain +50% damage (cross-contamination).",
+    "summon": {
+      "source": "random_faction",
+      "factions": ["Construct", "Goblin", "Elemental", "Undead", "Demon"],
+      "minion_tier": "floor_appropriate",
+      "keeps_mechanic": true
+    },
+    "cross_contamination": {
+      "trigger": "3_plus_factions_present",
+      "damage_bonus": 1.5,
+      "affects_all_minions": true
+    },
+    "visual_feedback": {
+      "bleeding_boundaries": true,
+      "faction_mix_aura": true,
+      "summon_portals": "res://vfx/confluence_portal.tscn",
+      "contamination_glow": "res://vfx/cross_contaminate.tscn"
+    },
+    "sound": "sfx/confluence_bleed.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_confluence_idle.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": true,
+      "boundary_bleed": true,
+      "factions_mix": true,
+      "multiple_auras": true
+    },
+    "summon": {
+      "sprite": "res://assets/sprites/enemies/boss_the_confluence_summon.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/confluence_summon.wav",
+      "portal_vfx": "res://vfx/confluence_portal.tscn",
+      "random_faction_appear": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_confluence_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/confluence_strike.wav",
+      "chaotic_slash": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_confluence_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/confluence_shield.tscn",
+      "boundary_wall": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_confluence_damage.png",
+      "frames": 7,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.4, 0.7, 0.4],
+      "boundaries_tear": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_confluence_death.png",
+      "frames": 18,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/confluence_separate.wav",
+      "factions_split": true,
+      "boundaries_restore": true,
+      "minions_vanish": true
+    }
+  }
+}

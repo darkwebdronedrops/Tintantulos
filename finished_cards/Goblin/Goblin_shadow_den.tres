@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_goblin24"]
+
+[resource]
+script = ExtResource("1_goblin24")
+card_name = "Shadow Den"
+card_type = "Field"
+faction = "Goblin"
+attention_cost = 4
+description = "Field (Persist): Your Sneaky cards deal +2 damage. All your summons have Evasion (25% miss chance)."
+keywords = ["Sneaky", "Persist"]
+damage_flat = 0
+damage_dice = ""
+uses_dice = false
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = true
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "sneaky_bonus_damage:2, summon_evasion:25"
+trap_cast_cost = 4
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Goblin/Goblin_shadow_den.png"
+frame_texture_path = "res://assets/sprites/cards/goblin_frame.png"

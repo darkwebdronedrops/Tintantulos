@@ -1,0 +1,76 @@
+{
+  "name": "Shank Runner",
+  "faction": "Goblin",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 2,
+  "max_hp": 2,
+  "attack": 2,
+  "pattern": ["Melee", "Melee", "Flee"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Backstab",
+    "description": "+2 damage if attacking from behind target",
+    "position_bonus": {
+      "from_behind": {
+        "damage_add": 2
+      }
+    },
+    "visual_feedback": {
+      "backstab_indicator": true,
+      "critical_flash": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_shank_runner_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "knife_twirl": true,
+      "crouch": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_shank_runner_attack.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/shank_slash.wav",
+      "lunge": true,
+      "knife_stab": true
+    },
+    "backstab": {
+      "sprite": "res://assets/sprites/enemies/enemy_shank_runner_backstab.png",
+      "frames": 8,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/backstab_crit.wav",
+      "critical_vfx": true,
+      "red_flash": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_shank_runner_flee.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/goblin_retreat.wav",
+      "dash_away": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_shank_runner_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "stagger": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_shank_runner_death.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/goblin_die.wav",
+      "knife_drop": true
+    }
+  }
+}

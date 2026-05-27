@@ -1,0 +1,84 @@
+{
+  "name": "Sapper Chief",
+  "faction": "Goblin",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 10,
+  "max_hp": 10,
+  "attack": 3,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Mines",
+    "description": "Special = Place 2 hidden mines (traps). Mines trigger on player entering hex (3d6 damage)",
+    "mine_place": {
+      "count": 2,
+      "hidden": true,
+      "trigger": "player_enter_hex",
+      "damage": "3d6",
+      "visible_to_enemies": true,
+      "visible_to_player": false
+    },
+    "visual_feedback": {
+      "place_mine_vfx": "res://vfx/mine_bury.tscn",
+      "mine_trigger_vfx": "res://vfx/mine_explode.tscn",
+      "hidden_indicator": "subtle_ground_disturbance"
+    },
+    "sound_place": "sfx/mine_bury.wav",
+    "sound_trigger": "sfx/mine_explode.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_sapper_chief_idle.png",
+      "frames": 6,
+      "fps": 5,
+      "loop": true,
+      "shovel_hold": true,
+      "mine_belt": true,
+      "shifty_eyes": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_sapper_chief_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/sapper_swing.wav",
+      "shovel_slam": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_sapper_chief_special.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/mine_bury.wav",
+      "dig_animation": true,
+      "mine_place_vfx": "res://vfx/mine_bury.tscn",
+      "hide_mines": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_sapper_chief_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "mines_shake": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_sapper_chief_death.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/sapper_die.wav",
+      "mines_detonate": true,
+      "chain_explosion": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_sapper_chief_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/goblin_shield.tscn",
+      "shovel_block": true
+    }
+  }
+}

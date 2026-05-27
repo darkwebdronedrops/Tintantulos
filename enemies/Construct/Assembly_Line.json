@@ -1,0 +1,85 @@
+{
+  "name": "Assembly Line",
+  "faction": "Construct",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 12,
+  "max_hp": 12,
+  "attack": 5,
+  "pattern": ["Melee", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Combine",
+    "description": "Each turn, if another Construct within 3 hexes, merge HP (max 24)",
+    "merge_range": 3,
+    "max_hp_cap": 24,
+    "hp_transfer_rate": "all_excess",
+    "target_type": "Construct",
+    "visual_feedback": {
+      "conveyor_belt": true,
+      "transfer_beam": "res://vfx/assembly_link.tscn",
+      "hp_merge_animation": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_assembly_line_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "conveyor_move": true,
+      "arms_extend_retract": true,
+      "component_rotate": true,
+      "factory_ambience": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_assembly_line_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/assembly_strike.wav",
+      "arm_slam": true,
+      "component_launch": true,
+      "conveyor_accelerate": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_assembly_line_special.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/assembly_merge.wav",
+      "transfer_beam": true,
+      "hp_flow_vfx": true,
+      "components_fuse": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_assembly_line_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "conveyor_jam": true,
+      "sparks_fly": true,
+      "arm_recoil": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_assembly_line_death.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/assembly_shutdown.wav",
+      "conveyor_stop": true,
+      "arms_collapse": true,
+      "factory_powerdown": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_assembly_line_defend.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/metal_shield.tscn",
+      "arms_shield_formation": true,
+      "components_lock": true
+    }
+  }
+}

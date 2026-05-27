@@ -1,0 +1,95 @@
+{
+  "name": "Abyssal Lens",
+  "faction": "Elemental",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 22,
+  "max_hp": 22,
+  "attack": 5,
+  "pattern": ["Defend", "Special", "Melee"],
+  "weight": "Common",
+  "element": "Abyss",
+  "mechanic": {
+    "name": "Refraction",
+    "description": "+1 CHARGE when player uses Special. At 5 CHARGE, duplicates last player card (casts it against player)",
+    "charge_system": {
+      "max": 5,
+      "gain_on": "player_uses_special",
+      "gain_amount": 1
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "duplicate_last_card": true,
+      "cast_against_player": true,
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "lens_focus": true,
+      "refraction_rainbow": true,
+      "card_duplicate_vfx": "res://vfx/card_duplicate.tscn",
+      "mirror_cast": true
+    },
+    "sound": "sfx/refraction_build.wav",
+    "sound_release": "sfx/card_mirror.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_lens_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "lens_float": true,
+      "refraction_rainbow": true,
+      "liquid_surface": true,
+      "depth_illusion": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_lens_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/refraction_strike.wav",
+      "focused_beam": true,
+      "pressure_impact": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_lens_special.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/refraction_build.wav",
+      "charge_gain": true,
+      "lens_tighten": true,
+      "duplicate_vfx": "res://vfx/card_duplicate.tscn"
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_lens_defend.png",
+      "frames": 8,
+      "fps": 5,
+      "loop": false,
+      "shield_vfx": "res://vfx/lens_shield.tscn",
+      "reflective_surface": true,
+      "harden_lens": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_lens_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.3, 0.5, 0.8, 0.3],
+      "lens_crack": true,
+      "refraction_distort": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_abyssal_lens_death.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/lens_shatter.wav",
+      "lens_burst": true,
+      "water_release": true,
+      "refraction_scatter": true
+    }
+  }
+}

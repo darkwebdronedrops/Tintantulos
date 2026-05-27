@@ -1,0 +1,82 @@
+{
+  "name": "Snotling",
+  "faction": "Goblin",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 1,
+  "max_hp": 1,
+  "attack": 1,
+  "pattern": ["Melee", "Flee", "Flee"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Swarm",
+    "description": "+1 damage per adjacent Goblin (max +3). If alone, cowers (50% miss chance)",
+    "damage_bonus": {
+      "per_adjacent_goblin": 1,
+      "max_bonus": 3,
+      "adjacent_range": 1
+    },
+    "isolated_penalty": {
+      "cower": true,
+      "miss_chance": 0.5
+    },
+    "visual_feedback": {
+      "swarm_glow": "green",
+      "damage_numbers_show": true,
+      "huddle_animation": true,
+      "isolated_shake": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_snotling_idle.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true,
+      "sniff": true,
+      "nose_drip": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_snotling_attack.png",
+      "frames": 5,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/snotling_screech.wav",
+      "lunge": true,
+      "claw_slash": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_snotling_flee.png",
+      "frames": 6,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/snotling_whimper.wav",
+      "run_away": true,
+      "panic": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_snotling_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "snot_splash": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_snotling_death.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/snotling_die.wav",
+      "splat": true
+    },
+    "cower": {
+      "sprite": "res://assets/sprites/enemies/enemy_snotling_cower.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "shake": true,
+      "fear_animation": true
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "name": "Pyroclast",
+  "faction": "Elemental",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 19,
+  "max_hp": 19,
+  "attack": 6,
+  "pattern": ["Melee", "Melee", "Special"],
+  "weight": "Uncommon",
+  "element": "Pyre",
+  "mechanic": {
+    "name": "Eruption",
+    "description": "+2 CHARGE per turn. At 7 CHARGE, volcanic eruption (8d6 damage, terrain becomes lava)",
+    "charge_system": {
+      "max": 7,
+      "gain_per_turn": 2,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "eruption": {
+        "damage": "8d6",
+        "aoe": true,
+        "terrain_change": "lava",
+        "duration": 3
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "magma_build": true,
+      "volcanic_rumble": true,
+      "eruption_vfx": "res://vfx/volcanic_eruption.tscn",
+      "lava_spread": true,
+      "screen_shake": true
+    },
+    "sound": "sfx/magma_build.wav",
+    "sound_release": "sfx/eruption.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_pyroclast_idle.png",
+      "frames": 8,
+      "fps": 5,
+      "loop": true,
+      "magma_veins": true,
+      "volcanic_form": true,
+      "heat_shimmer": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_pyroclast_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/pyroclast_slam.wav",
+      "magma_splash": true,
+      "burn_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_pyroclast_special.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/eruption.wav",
+      "eruption_vfx": "res://vfx/volcanic_eruption.tscn",
+      "volcano_burst": true,
+      "lava_fountain": true,
+      "screen_shake": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_pyroclast_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.3, 0.0, 0.3],
+      "magma_splash": true,
+      "crust_crack": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_pyroclast_death.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/volcano_cool.wav",
+      "magma_cool": true,
+      "rock_form": true
+    }
+  }
+}

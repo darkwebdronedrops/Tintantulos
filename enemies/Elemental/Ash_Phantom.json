@@ -1,0 +1,88 @@
+{
+  "name": "Ash Phantom",
+  "faction": "Elemental",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 8,
+  "max_hp": 8,
+  "attack": 4,
+  "pattern": ["Melee", "Special", "Melee"],
+  "weight": "Uncommon",
+  "element": "Pyre",
+  "mechanic": {
+    "name": "Smolder",
+    "description": "+1 CHARGE when any enemy dies. At 5 CHARGE, resurrects as Cinder Mote at 50% HP once",
+    "charge_system": {
+      "max": 5,
+      "gain_on": "enemy_death",
+      "gain_amount": 1,
+      "trigger": "any_enemy_dies"
+    },
+    "release": {
+      "trigger": "at_max",
+      "resurrect": {
+        "as": "Cinder Mote",
+        "hp_percent": 50,
+        "once": true
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "ash_aura": true,
+      "ember_rekindle": true,
+      "resurrect_vfx": "res://vfx/ash_resurrect.tscn",
+      "death_absorb": true
+    },
+    "sound": "sfx/ash_whisper.wav",
+    "sound_resurrect": "sfx/ember_rekindle.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_ash_phantom_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "ash_form": true,
+      "ember_glow_within": true,
+      "drift": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_ash_phantom_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/ash_strike.wav",
+      "ash_swirl": true,
+      "ember_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_ash_phantom_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/ember_rekindle.wav",
+      "charge_gain": true,
+      "reform_animation": true,
+      "resurrect_vfx": "res://vfx/ash_resurrect.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_ash_phantom_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.5, 0.3],
+      "ash_disperse": true,
+      "reform": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_ash_phantom_death.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/ash_scatter.wav",
+      "check_resurrect": true,
+      "ash_scatter": true,
+      "ember_fade": true
+    }
+  }
+}

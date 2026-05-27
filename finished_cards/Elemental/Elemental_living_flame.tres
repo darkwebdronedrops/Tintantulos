@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_elemental26"]
+
+[resource]
+script = ExtResource("1_elemental26")
+card_name = "Living Flame"
+card_type = "Summon"
+faction = "Elemental"
+attention_cost = 4
+description = "Summon 2/3 Living Flame. Nature: Gains +1 attack per turn (Growth). Flow: Attacks add 1 CHARGE stack."
+keywords = ["Nature", "Flow"]
+damage_flat = 0
+damage_dice = ""
+uses_dice = false
+shield_amount = 0
+summon_count = 1
+summon_attack = 2
+summon_hp = 3
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "nature_growth_attack, flow_attacks_add_charge"
+trap_cast_cost = 4
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Elemental/Elemental_living_flame.png"
+frame_texture_path = "res://assets/sprites/cards/elemental_frame.png"

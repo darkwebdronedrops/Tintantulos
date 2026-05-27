@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://room_base_001"]
+
+[ext_resource type="Script" path="res://scripts/RoomScene.gd" id="1_room_scene"]
+[ext_resource type="Texture2D" uid="uid://base_floor_texture" path="res://assets/sprites/room_objects/floor_gear_tile.png" id="2_floor_tex"]
+
+[node name="Room" type="Node2D"]
+script = ExtResource("1_room_scene")
+
+[node name="Floor" type="Sprite2D" parent="."]
+position = Vector2(0, 0)
+texture = ExtResource("2_floor_tex")
+scale = Vector2(4, 4)
+z_index = 0
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="WidgetSocket" type="Marker2D" parent="."]
+position = Vector2(0, -120)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(0, 0)
+
+[node name="CenterMarker" type="Marker2D" parent="."]
+position = Vector2(0, 0)

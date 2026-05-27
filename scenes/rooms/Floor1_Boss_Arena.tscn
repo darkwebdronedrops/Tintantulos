@@ -1,0 +1,68 @@
+[gd_scene load_steps=7 format=3 uid="uid://floor1boss001"]
+
+[ext_resource type="Script" path="res://scripts/Floor1RoomBase.gd" id="1_room_base"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/boss_arena_bg.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/boss_throne.png" id="3_throne"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/goblin_banner.png" id="4_banner"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/snotling_pile.png" id="5_snotling"]
+
+[node name="Floor1_Boss_Arena" type="Node2D"]
+script = ExtResource("1_room_base")
+room_id = "boss"
+room_display_name = "The Snotling Throne"
+transit_token_name = ""
+encounter_type = "boss"
+auto_spawn = false
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(0, 0)
+texture = ExtResource("2_bg")
+scale = Vector2(3.2, 2.4)
+
+[node name="Throne" type="Sprite2D" parent="Interior"]
+position = Vector2(0, -100)
+texture = ExtResource("3_throne")
+scale = Vector2(1.2, 1.2)
+
+[node name="ThroneGlow" type="Sprite2D" parent="Interior"]
+modulate = Color(1, 0.84, 0, 0.4)
+position = Vector2(0, -100)
+texture = ExtResource("3_throne")
+scale = Vector2(1.4, 1.4)
+
+[node name="GoblinBanner1" type="Sprite2D" parent="Interior"]
+position = Vector2(-250, -200)
+texture = ExtResource("4_banner")
+scale = Vector2(1.2, 1.2)
+
+[node name="GoblinBanner2" type="Sprite2D" parent="Interior"]
+position = Vector2(250, -200)
+texture = ExtResource("4_banner")
+scale = Vector2(1.2, 1.2)
+flip_h = true
+
+[node name="SnotlingPile" type="Sprite2D" parent="Interior"]
+position = Vector2(150, 50)
+texture = ExtResource("5_snotling")
+scale = Vector2(1.2, 1.2)
+
+[node name="SnotlingPile2" type="Sprite2D" parent="Interior"]
+position = Vector2(-150, 50)
+texture = ExtResource("5_snotling")
+scale = Vector2(1.2, 1.2)
+flip_h = true
+
+[node name="PortalExit" type="Marker2D" parent="Interior"]
+position = Vector2(0, 250)
+
+[node name="PortalEntrance" type="Marker2D" parent="."]
+position = Vector2(0, 200)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(0, 100)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(0, 0)

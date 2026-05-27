@@ -1,0 +1,99 @@
+{
+  "name": "Boomer",
+  "faction": "Goblin",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 5,
+  "max_hp": 5,
+  "attack": 2,
+  "pattern": ["Special", "Melee", "Flee"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Kaboom",
+    "description": "Special = Light fuse (self-Burn). Next turn: Explode for 4d4 damage to all within 2 hexes. Can be killed to prevent",
+    "fuse_light": {
+      "self_burn": true,
+      "fuse_turns": 1
+    },
+    "explosion": {
+      "damage_dice": "4d4",
+      "radius": 2,
+      "aoe": true,
+      "trigger": "next_turn_or_death"
+    },
+    "preventable": true,
+    "visual_feedback": {
+      "fuse_spark": true,
+      "red_blink": true,
+      "countdown_indicator": true,
+      "explosion_vfx": "res://vfx/boomer_explosion.tscn"
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_boomer_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "bomb_heavy": true,
+      "fuse_unlit": true,
+      "wobble_walk": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_boomer_attack.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/boomer_swing.wav",
+      "bomb_club": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_boomer_special.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/fuse_light.wav",
+      "light_fuse": true,
+      "fuse_spark": true,
+      "red_blink_start": true,
+      "countdown_show": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_boomer_flee.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/boomer_run.wav",
+      "fuse_still_burning": true,
+      "desperate_run": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_boomer_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "check_explode": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_boomer_death.png",
+      "frames": 12,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/boomer_explode.wav",
+      "explode": true,
+      "aoe_damage": true,
+      "bomb_detonate": true
+    },
+    "explode": {
+      "sprite": "res://assets/sprites/enemies/enemy_boomer_explode.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/massive_boom.wav",
+      "explosion_vfx": "res://vfx/boomer_explosion.tscn",
+      "radius": 2,
+      "screen_shake": true
+    }
+  }
+}

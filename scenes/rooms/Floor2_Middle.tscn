@@ -1,0 +1,274 @@
+[gd_scene load_steps=8 format=3 uid="uid://floor2_middle_cavern"]
+
+[ext_resource type="Script" path="res://scripts/Floor2RoomBase.gd" id="1_floor2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/bg_middle.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/portal_fungal.png" id="3_portal"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/spore_cloud.png" id="4_spore_cloud"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/gear_overgrown.png" id="5_gear"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/banner_elemental.png" id="6_banner_el"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/breakable_wall_f2.png" id="7_wall"]
+
+[node name="Floor2_Middle" type="Node2D"]
+script = ExtResource("1_floor2")
+room_id = "middle"
+room_display_name = "The Cinder Path"
+transit_token_name = "Middle Pass"
+dominant_faction = "Elemental"
+has_spore_clouds = true
+
+[node name="PortalEntrance" type="Marker2D" parent="."]
+position = Vector2(960, 1150)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(960, 1050)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(960, 800)
+texture = ExtResource("2_bg")
+scale = Vector2(8, 8)
+
+[node name="SporeCloud1" type="Sprite2D" parent="Interior"]
+position = Vector2(600, 400)
+texture = ExtResource("4_spore_cloud")
+scale = Vector2(1.5, 1.5)
+modulate = Color(1, 1, 1, 0.35)
+
+[node name="SporeCloud2" type="Sprite2D" parent="Interior"]
+position = Vector2(1400, 600)
+texture = ExtResource("4_spore_cloud")
+scale = Vector2(1.2, 1.2)
+modulate = Color(1, 1, 1, 0.4)
+
+[node name="Gear1" type="Sprite2D" parent="Interior"]
+position = Vector2(400, 1200)
+texture = ExtResource("5_gear")
+scale = Vector2(0.7, 0.7)
+
+[node name="Gear2" type="Sprite2D" parent="Interior"]
+position = Vector2(1500, 1100)
+texture = ExtResource("5_gear")
+scale = Vector2(0.9, 0.9)
+
+[node name="Banner_Elemental" type="Sprite2D" parent="Interior"]
+position = Vector2(960, 200)
+texture = ExtResource("6_banner_el")
+scale = Vector2(1.2, 1.2)
+
+[node name="BreakableWall" type="Sprite2D" parent="Interior"]
+position = Vector2(300, 800)
+texture = ExtResource("7_wall")
+scale = Vector2(1.0, 1.0)
+
+[node name="PortalReturn" type="Sprite2D" parent="Interior"]
+position = Vector2(960, 1050)
+texture = ExtResource("3_portal")
+scale = Vector2(0.8, 0.8)
+
+[node name="PortalDown" type="Sprite2D" parent="Interior"]
+position = Vector2(960, 250)
+texture = ExtResource("3_portal")
+scale = Vector2(0.8, 0.8)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(960, 800)
+
+[node name="Walls" type="StaticBody2D" parent="."]
+
+[node name="Wall_001" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(594.0, 735.3, 610.0, 47.3, 670.0, 48.7, 654.0, 736.7)
+
+[node name="Wall_002" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(655.0, 22.0, 1559.0, 542.0, 1529.0, 594.0, 625.0, 74.0)
+
+[node name="Wall_003" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1514.1, 570.2, 1474.1, 34.2, 1533.9, 29.8, 1573.9, 565.8)
+
+[node name="Wall_004" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1533.4, 26.0, 1637.4, 538.0, 1578.6, 550.0, 1474.6, 38.0)
+
+[node name="Wall_005" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1579.5, 534.8, 1667.5, 262.8, 1724.5, 281.2, 1636.5, 553.2)
+
+[node name="Wall_006" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1726.0, 272.0, 1726.0, 560.0, 1666.0, 560.0, 1666.0, 272.0)
+
+[node name="Wall_007" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1680.6, 534.3, 2536.6, 22.3, 2567.4, 73.7, 1711.4, 585.7)
+
+[node name="Wall_008" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2582.0, 48.0, 2582.0, 1008.0, 2522.0, 1008.0, 2522.0, 48.0)
+
+[node name="Wall_009" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2567.9, 982.6, 2887.9, 1182.6, 2856.1, 1233.4, 2536.1, 1033.4)
+
+[node name="Wall_010" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2872.0, 1238.0, 2752.0, 1238.0, 2752.0, 1178.0, 2872.0, 1178.0)
+
+[node name="Wall_011" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2746.5, 1237.5, 2618.5, 1213.5, 2629.5, 1154.5, 2757.5, 1178.5)
+
+[node name="Wall_012" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2639.3, 1158.2, 3111.3, 1438.2, 3080.7, 1489.8, 2608.7, 1209.8)
+
+[node name="Wall_013" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(3126.0, 1465.5, 3094.0, 2105.5, 3034.0, 2102.5, 3066.0, 1462.5)
+
+[node name="Wall_014" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(3043.8, 2126.2, 1659.8, 870.2, 1700.2, 825.8, 3084.2, 2081.8)
+
+[node name="Wall_015" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1690.5, 876.1, 58.5, 1484.1, 37.5, 1427.9, 1669.5, 819.9)
+
+[node name="Wall_016" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(29.6, 1432.3, 349.6, 1184.3, 386.4, 1231.7, 66.4, 1479.7)
+
+[node name="Wall_017" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(367.0, 1238.0, 119.0, 1230.0, 121.0, 1170.0, 369.0, 1178.0)
+
+[node name="Wall_018" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(109.9, 1171.8, 621.9, 987.8, 642.1, 1044.2, 130.1, 1228.2)
+
+[node name="Wall_019" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(602.0, 1016.9, 594.0, 736.9, 654.0, 735.1, 662.0, 1015.1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

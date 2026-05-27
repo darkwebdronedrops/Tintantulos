@@ -1,0 +1,95 @@
+{
+  "name": "Hydrostatic Eye",
+  "faction": "Elemental",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 11,
+  "max_hp": 11,
+  "attack": 3,
+  "pattern": ["Special", "Defend", "Special"],
+  "weight": "Rare",
+  "element": "Abyss",
+  "mechanic": {
+    "name": "Focus",
+    "description": "Special = +2 CHARGE. At 6 CHARGE, gaze petrifies (player loses next action)",
+    "charge_system": {
+      "max": 6,
+      "gain_on": "Special",
+      "gain_amount": 2
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "effect": "petrify",
+      "skip_next_player_action": true,
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "eye_glow": true,
+      "pressure_build": true,
+      "petrify_beam": "res://vfx/petrify_gaze.tscn",
+      "eye_intensify": true
+    },
+    "sound": "sxf/focus_charge.wav",
+    "sound_release": "sfx/petrify.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_hydrostatic_eye_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "eye_float": true,
+      "liquid_lens": true,
+      "pressure_pulses": true,
+      "bioluminescence": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_hydrostatic_eye_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/pressure_strike.wav",
+      "lens_focus": true,
+      "pressure_burst": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_hydrostatic_eye_special.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/focus_charge.wav",
+      "charge_gain": true,
+      "eye_intensify": true,
+      "lens_tighten": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_hydrostatic_eye_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/water_shield.tscn",
+      "lens_harden": true,
+      "pressure_contain": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_hydrostatic_eye_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.3, 0.5, 0.8, 0.3],
+      "lens_distort": true,
+      "pressure_wave": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_hydrostatic_eye_death.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/pressure_release.wav",
+      "lens_burst": true,
+      "pressure_release": true,
+      "liquid_scatter": true
+    }
+  }
+}

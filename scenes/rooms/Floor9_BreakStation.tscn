@@ -1,0 +1,106 @@
+[gd_scene load_steps=10 format=3 uid="uid://floor9break_001"]
+
+[ext_resource type="Script" path="res://scripts/Floor9RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor9/bg_break_station.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor9/tile_bone_factory.png" id="3_tile"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor9/assembly_station.png" id="4_assembly_station_png"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor9/soul_furnace.png" id="5_soul_furnace_png"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor9/bone_crate.png" id="6_bone_crate_png"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor9/gear_crate.png" id="7_gear_crate_png"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(100, 100)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(100, 100)
+
+[node name="Floor9_BreakStation" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "break_station"
+room_display_name = "The Break Station"
+assembly_station_present = true
+soul_furnace_present = true
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1000, 1100)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1000, 800)
+
+[node name="PortalWest" type="Marker2D" parent="."]
+position = Vector2(200, 700)
+
+[node name="PortalEast" type="Marker2D" parent="."]
+position = Vector2(1800, 700)
+
+[node name="PortalNorth" type="Marker2D" parent="."]
+position = Vector2(1000, 200)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(1000, 1100)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1000, 700)
+texture = ExtResource("2_bg")
+
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(500, 1000)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1500, 1000)
+texture = ExtResource("3_tile")
+
+[node name="Tile3" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1000, 1100)
+texture = ExtResource("3_tile")
+
+[node name="AssemblyStation" type="Sprite2D" parent="Interior"]
+position = Vector2(1000, 650)
+texture = ExtResource("4_assembly_station_png")
+
+[node name="AssemblyStationArea" type="Area2D" parent="Interior/AssemblyStation"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/AssemblyStation/AssemblyStationArea"]
+shape = SubResource("Rect_interact")
+
+[node name="SoulFurnace" type="Sprite2D" parent="Interior"]
+position = Vector2(600, 900)
+texture = ExtResource("5_soul_furnace_png")
+
+[node name="SoulFurnaceArea" type="Area2D" parent="Interior/SoulFurnace"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/SoulFurnace/SoulFurnaceArea"]
+shape = SubResource("Rect_interact")
+
+[node name="BoneCrate" type="Sprite2D" parent="Interior"]
+position = Vector2(1400, 1000)
+texture = ExtResource("6_bone_crate_png")
+
+[node name="BoneCrateArea" type="Area2D" parent="Interior/BoneCrate"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/BoneCrate/BoneCrateArea"]
+shape = SubResource("Rect_interact")
+
+[node name="GearCrate" type="Sprite2D" parent="Interior"]
+position = Vector2(1500, 1000)
+texture = ExtResource("7_gear_crate_png")
+
+[node name="GearCrateArea" type="Area2D" parent="Interior/GearCrate"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/GearCrate/GearCrateArea"]
+shape = SubResource("Rect_interact")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 600.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 20
+text = "FLOOR 9: THE BONE FORGES — The Break Station"

@@ -1,0 +1,72 @@
+{
+  "name": "Loose Gear",
+  "faction": "Construct",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 1,
+  "max_hp": 1,
+  "attack": 1,
+  "pattern": ["Melee", "Defend", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Combine",
+    "description": "If 2+ Loose Gears in combat, merge into Tight Gear after 2 turns",
+    "visual_feedback": {
+      "sparks": true,
+      "clicking_intensity": "increasing",
+      "merge_animation": "interlock_glow_resize"
+    },
+    "rules": {
+      "same_type_only": true,
+      "hp_addition": "sum_of_components",
+      "pattern_upgrade": "simple_to_complex",
+      "interruptible": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_loose_gear_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "wobble": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_loose_gear_attack.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/gear_clack.wav"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_loose_gear_damage.png",
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_loose_gear_death.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/gear_break.wav",
+      "shatter": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_loose_gear_defend.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/metal_shield.tscn"
+    },
+    "combine": {
+      "sprite": "res://assets/sprites/enemies/enemy_loose_gear_combine.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/gears_merging.wav",
+      "particles": "sparks"
+    }
+  }
+}

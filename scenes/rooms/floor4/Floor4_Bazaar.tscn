@@ -1,0 +1,241 @@
+[gd_scene load_steps=5 format=3 uid="uid://floor4_bazaar_001"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/bazaar_floor.png" id="1_bazaar_floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/great_lifter.png" id="2_great_lifter"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_gearwright.png" id="3_booth_gearwright"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_steampress.png" id="4_booth_steampress"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_curio.png" id="5_booth_curio"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_1.png" id="6_trap1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_2.png" id="7_trap2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_3.png" id="8_trap3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_4.png" id="9_trap4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_5.png" id="10_trap5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_6.png" id="11_trap6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_7.png" id="12_trap7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_8.png" id="13_trap8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_9.png" id="14_trap9"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/grate.png" id="15_grate"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/stairs_up.png" id="16_stairs_up"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lifter"]
+radius = 100.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_transition"]
+radius = 60.0
+
+[node name="Floor4_Bazaar" type="Node2D"]
+
+; ============================================
+; BACKGROUND
+; ============================================
+[node name="BazaarFloor" type="Sprite2D" parent="."]
+scale = Vector2(3.0, 3.0)
+texture = ExtResource("1_bazaar_floor")
+
+; --- GREAT LIFTER (center) ---
+[node name="GreatLifter" type="Sprite2D" parent="."]
+texture = ExtResource("2_great_lifter")
+
+[node name="LifterLabel" type="Label" parent="GreatLifter"]
+offset_left = -60.0
+offset_top = -50.0
+offset_right = 60.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.7, 0.6, 0.4, 1.0)
+horizontal_alignment = 1
+text = "GREAT LIFTER"
+
+[node name="StatusLabel" type="Label" parent="GreatLifter"]
+offset_left = -60.0
+offset_top = 70.0
+offset_right = 60.0
+offset_bottom = 90.0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.8, 0.3, 0.2, 1.0)
+horizontal_alignment = 1
+text = "BROKEN"
+
+[node name="InteractArea" type="Area2D" parent="GreatLifter"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreatLifter/InteractArea"]
+shape = SubResource("CircleShape2D_lifter")
+
+; --- BOOTH MARKERS (12 positions) ---
+[node name="BoothMarkers" type="Node2D" parent="."]
+
+[node name="BoothMarker_12" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(0, -900)
+texture = ExtResource("3_booth_gearwright")
+
+[node name="BoothLabel" type="Label" parent="BoothMarkers/BoothMarker_12"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.7, 0.6, 0.4, 1.0)
+horizontal_alignment = 1
+text = "Gearwright"
+
+[node name="BoothMarker_1" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(450, -779)
+texture = ExtResource("6_trap1")
+
+[node name="BoothMarker_2" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(779, -450)
+texture = ExtResource("7_trap2")
+
+[node name="BoothMarker_3" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(900, 0)
+texture = ExtResource("8_trap3")
+
+[node name="BoothMarker_4" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(779, 450)
+texture = ExtResource("4_booth_steampress")
+
+[node name="BoothLabel" type="Label" parent="BoothMarkers/BoothMarker_4"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.6, 0.5, 0.4, 1.0)
+horizontal_alignment = 1
+text = "Steam-Press"
+
+[node name="BoothMarker_5" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(450, 779)
+texture = ExtResource("9_trap4")
+
+[node name="BoothMarker_6" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(0, 900)
+texture = ExtResource("10_trap5")
+
+[node name="BoothMarker_7" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(-450, 779)
+texture = ExtResource("11_trap6")
+
+[node name="BoothMarker_8" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(-779, 450)
+texture = ExtResource("5_booth_curio")
+
+[node name="BoothLabel" type="Label" parent="BoothMarkers/BoothMarker_8"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.45, 0.6, 1.0)
+horizontal_alignment = 1
+text = "Curio Collector"
+
+[node name="BoothMarker_9" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(-900, 0)
+texture = ExtResource("12_trap7")
+
+[node name="BoothMarker_10" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(-779, -450)
+texture = ExtResource("13_trap8")
+
+[node name="BoothMarker_11" type="Sprite2D" parent="BoothMarkers"]
+position = Vector2(-450, -779)
+texture = ExtResource("14_trap9")
+
+; --- LEVEL TRANSITIONS ---
+; Grates to Undercroft
+[node name="UndercroftGrate1" type="Sprite2D" parent="."]
+position = Vector2(-400, 400)
+texture = ExtResource("15_grate")
+
+[node name="Label" type="Label" parent="UndercroftGrate1"]
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = -20.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1.0)
+horizontal_alignment = 1
+text = "⇓ Undercroft"
+
+[node name="UndercroftGrate2" type="Sprite2D" parent="."]
+position = Vector2(400, -300)
+texture = ExtResource("15_grate")
+
+[node name="UndercroftGrate3" type="Sprite2D" parent="."]
+position = Vector2(0, 800)
+texture = ExtResource("15_grate")
+
+; Stairs/Lifts to Refectory
+[node name="RefectoryStairs1" type="Sprite2D" parent="."]
+position = Vector2(-700, 0)
+texture = ExtResource("16_stairs_up")
+
+[node name="Label" type="Label" parent="RefectoryStairs1"]
+offset_left = -40.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.7, 0.65, 0.5, 1.0)
+horizontal_alignment = 1
+text = "⇑ Refectory"
+
+[node name="RefectoryStairs2" type="Sprite2D" parent="."]
+position = Vector2(700, 200)
+texture = ExtResource("16_stairs_up")
+
+[node name="RefectoryLift" type="Sprite2D" parent="."]
+position = Vector2(200, -600)
+texture = ExtResource("16_stairs_up")
+
+[node name="Label" type="Label" parent="RefectoryLift"]
+offset_left = -30.0
+offset_top = -40.0
+offset_right = 30.0
+offset_bottom = -20.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.6, 0.55, 0.45, 1.0)
+horizontal_alignment = 1
+text = "⇑ Lift"
+
+; --- PLAYER SPAWN ---
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(0, -700)
+
+; --- PORTAL AREAS ---
+[node name="PortalUndercroft1" type="Area2D" parent="."]
+position = Vector2(-400, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalUndercroft1"]
+shape = SubResource("CircleShape2D_transition")
+
+[node name="PortalUndercroft2" type="Area2D" parent="."]
+position = Vector2(400, -300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalUndercroft2"]
+shape = SubResource("CircleShape2D_transition")
+
+[node name="PortalUndercroft3" type="Area2D" parent="."]
+position = Vector2(0, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalUndercroft3"]
+shape = SubResource("CircleShape2D_transition")
+
+[node name="PortalRefectory1" type="Area2D" parent="."]
+position = Vector2(-700, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalRefectory1"]
+shape = SubResource("CircleShape2D_transition")
+
+[node name="PortalRefectory2" type="Area2D" parent="."]
+position = Vector2(700, 200)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalRefectory2"]
+shape = SubResource("CircleShape2D_transition")
+
+[node name="PortalRefectory3" type="Area2D" parent="."]
+position = Vector2(200, -600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalRefectory3"]
+shape = SubResource("CircleShape2D_transition")

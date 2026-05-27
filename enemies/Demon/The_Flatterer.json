@@ -1,0 +1,82 @@
+{
+  "name": "The Flatterer",
+  "faction": "Demon",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 8,
+  "max_hp": 8,
+  "attack": 2,
+  "pattern": ["Flatter", "Melee", "Defend"],
+  "weight": "Common",
+  "offer": "Ambition",
+  "mechanic": {
+    "name": "Compliment",
+    "description": "Flatter = Offer 'optimization' (+1 card draw this turn). If accepted, next turn player must discard 2 cards ('streamlining').",
+    "flatter": {
+      "offer": "+1_card_draw",
+      "cost_trigger": "next_turn",
+      "cost": "discard_2",
+      "message": "You're so efficient. Let me help you optimize."
+    },
+    "visual_feedback": {
+      "mirror_form": true,
+      "flattering_face": true,
+      "offer_glow": "res://vfx/flatter_offer.tscn",
+      "cost_shadow": "res://vfx/streamline_cost.tscn"
+    },
+    "sound": "sfx/flatter.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_flatterer_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "mirror_surface": true,
+      "pleasing_form": true,
+      "too_perfect": true
+    },
+    "flatter": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_flatterer_flatter.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/flatter.wav",
+      "offer_glow": "res://vfx/flatter_offer.tscn",
+      "compliment_offered": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_flatterer_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/flatter_strike.wav",
+      "backhanded": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_flatterer_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/mirror_barrier.tscn",
+      "reflects_praise": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_flatterer_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.6, 0.8, 0.3],
+      "mirror_cracks": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_flatterer_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/flatter_shatters.wav",
+      "mirror_breaks": true,
+      "truth_revealed": true
+    }
+  }
+}

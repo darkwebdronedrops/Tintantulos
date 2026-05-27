@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_aberration24"]
+
+[resource]
+script = ExtResource("1_aberration24")
+card_name = "Dimensional Anchor"
+card_type = "Trap"
+faction = "Aberration"
+attention_cost = 3
+description = "Trap: Cast 1, Trigger 0, Disarm 4. TRIGGER: Enemy Special. Their Special fails and you draw 2 cards. DISARM: Enemy attacks. They take 3d6 damage and are pulled 1 hex toward the trap."
+keywords = ["Glitch", "Trap"]
+damage_flat = 0
+damage_dice = "3d6"
+uses_dice = true
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = "special"
+trap_disarm_action = "attack"
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "special_fails_draw_2, attack_damage_pull_1"
+trap_cast_cost = 1
+trap_trigger_cost = 0
+trap_disarm_cost = 4
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Aberration/Aberration_dimensional_anchor.png"
+frame_texture_path = "res://assets/sprites/cards/aberration_frame.png"

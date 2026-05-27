@@ -1,0 +1,85 @@
+{
+  "name": "Compound Interest",
+  "faction": "Undead",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 12,
+  "max_hp": 12,
+  "attack": 3,
+  "pattern": ["Accrue", "Melee", "Defend"],
+  "weight": "Uncommon",
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Accrue",
+    "description": "Accrue = Steal 1 Quiddity. Each subsequent Accrue steals +1 more (1, then 2, then 3...).",
+    "steal": {
+      "target": "quiddity",
+      "scaling": {
+        "base": 1,
+        "increase_per_use": 1,
+        "message": "The debt compounds."
+      }
+    },
+    "visual_feedback": {
+      "debt_form": true,
+      "growing_heavier": true,
+      "accrue_vfx": "res://vfx/compound_debt.tscn",
+      "numbers_climbing": true
+    },
+    "sound": "sfx/debt_grows.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_compound_interest_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "debt_creature": true,
+      "numbers_float": true,
+      "growing_form": true
+    },
+    "accrue": {
+      "sprite": "res://assets/sprites/enemies/enemy_compound_interest_accrue.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/debt_grows.wav",
+      "accrue_vfx": "res://vfx/compound_debt.tscn",
+      "debt_increases": true,
+      "number_climb": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_compound_interest_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/debt_strike.wav",
+      "interest_slash": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_compound_interest_defend.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/debt_barrier.tscn",
+      "asset_protection": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_compound_interest_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.6, 0.7, 0.3],
+      "debt_shudders": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_compound_interest_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/debt_cleared.wav",
+      "debt_forgiven": true,
+      "numbers_fade": true
+    }
+  }
+}

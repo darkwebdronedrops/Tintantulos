@@ -1,0 +1,137 @@
+[gd_scene load_steps=12 format=3 uid="uid://floor6gears001"]
+
+[ext_resource type="Script" path="res://scripts/Floor6RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/bg_gears.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/tile_courtyard_stone.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/lecture_desk.png" id="4_desk"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/steam_pipe.png" id="5_pipe"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/clocktower_bell.png" id="6_bell"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/banner_construct.png" id="7_banner"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(80, 80)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(100, 100)
+
+[node name="Floor6_Gears" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "gears"
+room_display_name = "College of Gears"
+
+; ============================================
+; MARKERS
+; ============================================
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1100, 1200)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1100, 900)
+
+[node name="PortalSouth" type="Marker2D" parent="."]
+position = Vector2(1100, 1400)
+
+[node name="PortalShortcut" type="Marker2D" parent="."]
+position = Vector2(2000, 800)
+
+; ============================================
+; INTERIOR
+; ============================================
+[node name="Interior" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 800)
+texture = ExtResource("2_bg")
+
+; --- Floor tiles ---
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(600, 1100)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1600, 1100)
+texture = ExtResource("3_tile")
+
+[node name="Tile3" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1100, 1100)
+texture = ExtResource("3_tile")
+
+; --- Lecture Desks (professor areas) ---
+[node name="Desks" type="Node2D" parent="Interior"]
+
+[node name="Desk1" type="Sprite2D" parent="Interior/Desks"]
+position = Vector2(500, 800)
+texture = ExtResource("4_desk")
+
+[node name="Desk2" type="Sprite2D" parent="Interior/Desks"]
+position = Vector2(1700, 800)
+texture = ExtResource("4_desk")
+
+[node name="Desk3" type="Sprite2D" parent="Interior/Desks"]
+position = Vector2(1100, 600)
+texture = ExtResource("4_desk")
+
+; --- Steam Pipes ---
+[node name="Pipes" type="Node2D" parent="Interior"]
+
+[node name="Pipe1" type="Sprite2D" parent="Interior/Pipes"]
+position = Vector2(200, 600)
+texture = ExtResource("5_pipe")
+
+[node name="Pipe2" type="Sprite2D" parent="Interior/Pipes"]
+position = Vector2(2000, 600)
+texture = ExtResource("5_pipe")
+
+; --- Clocktower Mechanism ---
+[node name="ClockMechanism" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 300)
+texture = ExtResource("6_bell")
+scale = Vector2(1.5, 1.5)
+
+[node name="MechanismLabel" type="Label" parent="Interior/ClockMechanism"]
+offset_left = -50.0
+offset_top = -60.0
+offset_right = 50.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Clock Mechanism"
+
+; --- Faction Banner ---
+[node name="Banner" type="Sprite2D" parent="Interior"]
+position = Vector2(400, 500)
+texture = ExtResource("7_banner")
+
+; --- Save Point ---
+[node name="SavePoint" type="Marker2D" parent="Interior"]
+position = Vector2(1000, 1050)
+
+; --- Interactable Areas ---
+[node name="Interactables" type="Node2D" parent="Interior"]
+
+[node name="ClockArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1100, 300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/ClockArea"]
+shape = SubResource("Rect_interact")
+
+[node name="DeskArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(500, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/DeskArea"]
+shape = SubResource("Rect_interact")
+
+[node name="PortalSouthArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1100, 1400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/PortalSouthArea"]
+shape = SubResource("Rect_spawn")
+
+[node name="PortalShortcutArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(2000, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/PortalShortcutArea"]
+shape = SubResource("Rect_spawn")

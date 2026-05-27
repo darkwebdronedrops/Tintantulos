@@ -1,0 +1,76 @@
+[gd_scene load_steps=10 format=3 uid="uid://floor7storage001"]
+
+[ext_resource type="Script" path="res://scripts/Floor7RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/bg_storage.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/tile_bureaucracy.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/contract_station.png" id="4_contract"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/item_pact_scroll.png" id="5_scroll"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/banner_demon.png" id="6_banner"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(80, 80)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(100, 100)
+
+[node name="Floor7_Storage" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "storage"
+room_display_name = "The Contract Storage"
+contract_station_active = true
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1200, 1200)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1200, 900)
+
+[node name="PortalNortheast" type="Marker2D" parent="."]
+position = Vector2(1800, 500)
+
+[node name="PortalNorth" type="Marker2D" parent="."]
+position = Vector2(1200, 400)
+
+[node name="PortalWest" type="Marker2D" parent="."]
+position = Vector2(400, 800)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 600)
+texture = ExtResource("2_bg")
+
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(500, 800)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1700, 800)
+texture = ExtResource("3_tile")
+
+[node name="ContractStation" type="Sprite2D" parent="Interior"]
+position = Vector2(900, 1000)
+texture = ExtResource("4_contract")
+
+[node name="Scroll1" type="Sprite2D" parent="Interior"]
+position = Vector2(400, 500)
+texture = ExtResource("5_scroll")
+
+[node name="Scroll2" type="Sprite2D" parent="Interior"]
+position = Vector2(1700, 600)
+texture = ExtResource("5_scroll")
+
+[node name="Banner" type="Sprite2D" parent="Interior"]
+position = Vector2(200, 300)
+texture = ExtResource("6_banner")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 20
+text = "FLOOR 7: THE BROKEN PACT — Storage"

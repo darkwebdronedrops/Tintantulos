@@ -1,0 +1,89 @@
+{
+  "name": "Droplet",
+  "faction": "Elemental",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 3,
+  "max_hp": 3,
+  "attack": 2,
+  "pattern": ["Defend", "Special", "Melee"],
+  "weight": "Common",
+  "element": "Abyss",
+  "mechanic": {
+    "name": "Pressure",
+    "description": "Special = +1 CHARGE. At 3 CHARGE, Melee deals +2d6 and pushes player 2 hexes",
+    "charge_system": {
+      "max": 3,
+      "gain_on": "Special",
+      "gain_amount": 1
+    },
+    "release": {
+      "trigger": "melee_at_max",
+      "damage_bonus": "2d6",
+      "knockback": 2,
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "charge_glow": true,
+      "water_tension": true,
+      "pressure_wave": "res://vfx/pressure_release.tscn",
+      "ripple_expand": true
+    },
+    "sound": "sfx/water_charge.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_droplet_idle.png",
+      "frames": 6,
+      "fps": 5,
+      "loop": true,
+      "liquid_wobble": true,
+      "surface_tension": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_droplet_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/pressure_strike.wav",
+      "pressure_burst": true,
+      "knockback_wave": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_droplet_special.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/water_charge.wav",
+      "charge_gain": true,
+      "surface_tighten": true,
+      "pressure_build": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_droplet_defend.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/water_shield.tscn",
+      "harden_surface": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_droplet_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.2, 0.4, 1.0, 0.3],
+      "splash": true,
+      "surface_break": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_droplet_death.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/water_splash.wav",
+      "splash_expand": true,
+      "dissipate": true
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "name": "The First Machine",
+  "faction": "Construct",
+  "tier": "Boss",
+  "floor": 10,
+  "alt_for": "Dragon",
+  "hp": 60,
+  "max_hp": 60,
+  "attack": 8,
+  "pattern": ["Melee", "Special", "Defend", "Special", "Melee"],
+  "mechanic": {
+    "name": "Origin",
+    "description": "Combines all defeated Constructs this run. Gains their abilities.",
+    "ability_absorption": {
+      "track": "defeated_Constructs_this_run",
+      "gain_abilities": true,
+      "ability_count": "all_unique_defeated",
+      "passive_bonuses": {
+        "per_construct_type": {
+          "hp_bonus": 5,
+          "attack_bonus": 1
+        }
+      }
+    },
+    "visual_feedback": {
+      "absorbed_parts_visible": true,
+      "ability_icons_float": true,
+      "origin_aura": true
+    },
+    "sound": "sfx/origin_manifest.wav"
+  },
+  "is_boss": true,
+  "phases": 2,
+  "phase_threshold": 0.5,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_machine_idle.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": true,
+      "primordial_gear": true,
+      "all_constructs_combined": true,
+      "origin_aura": true,
+      "ancient_power": true,
+      "first_ever_made": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_machine_attack.png",
+      "frames": 14,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/origin_strike.wav",
+      "primal_force": true,
+      "combined_weapon": true,
+      "reality_shake": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_machine_special.png",
+      "frames": 18,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/origin_power.wav",
+      "ability_shift": true,
+      "construct_memory": true,
+      "ability_flashback": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_machine_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "ancient_pain": true,
+      "construct_memory_flash": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_machine_death.png",
+      "frames": 24,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/origin_ends.wav",
+      "origin_fade": true,
+      "all_construct_release": true,
+      "first_becomes_last": true,
+      "history_ends": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_machine_defend.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/origin_shield.tscn",
+      "primordial_defense": true,
+      "ancient_stance": true
+    },
+    "phase_change": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_machine_phase.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/origin_evolve.wav",
+      "power_surge": true,
+      "construct_fusion": true,
+      "reality_distort": true
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "name": "Shaman Apprentice",
+  "faction": "Goblin",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 6,
+  "max_hp": 6,
+  "attack": 2,
+  "pattern": ["Special", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Hex",
+    "description": "Special = Random debuff (Attention +2, or next card costs +1, or -1 draw next turn)",
+    "debuff_options": [
+      {
+        "name": "Distraction",
+        "effect": "attention_plus",
+        "value": 2
+      },
+      {
+        "name": "Cost Hex",
+        "effect": "next_card_cost_plus",
+        "value": 1
+      },
+      {
+        "name": "Draw Hex",
+        "effect": "draw_minus_next_turn",
+        "value": 1
+      }
+    ],
+    "random": true,
+    "visual_feedback": {
+      "hex_cast": "res://vfx/hex_cast.tscn",
+      "curse_apply": true,
+      "random_debuff_icon": true
+    },
+    "sound": "sfx/hex_cast.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_shaman_apprentice_idle.png",
+      "frames": 6,
+      "fps": 5,
+      "loop": true,
+      "staff_glow": true,
+      "mystic_aura": true,
+      "float_slight": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_shaman_apprentice_attack.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/shaman_staff.wav",
+      "staff_strike": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_shaman_apprentice_special.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/hex_cast.wav",
+      "cast_animation": true,
+      "staff_raise": true,
+      "hex_vfx": "res://vfx/hex_cast.tscn",
+      "curse_orb_fire": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_shaman_apprentice_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "staff_shake": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_shaman_apprentice_death.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/shaman_die.wav",
+      "staff_falls": true,
+      "magic_dissipate": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_shaman_apprentice_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/magic_shield.tscn",
+      "magic_barrier": true
+    }
+  }
+}

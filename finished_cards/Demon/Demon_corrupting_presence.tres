@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_demon32"]
+
+[resource]
+script = ExtResource("1_demon32")
+card_name = "Corrupting Presence"
+card_type = "Field"
+faction = "Demon"
+attention_cost = 3
+description = "Field: Enemies take 1 damage at start of their turn. Corruption: Damage increases by 1 for every 10 Corruption (max +3). Pact: You take 1 damage at start of your turn. Persist."
+keywords = ["Corruption", "Pact"]
+damage_flat = 1
+damage_dice = ""
+uses_dice = false
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = true
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "enemy_take_1_start_turn, corruption_plus_1_per_10_max_3, pact_self_take_1_start_turn"
+trap_cast_cost = 3
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Demon/Demon_corrupting_presence.png"
+frame_texture_path = "res://assets/sprites/cards/demon_frame.png"

@@ -1,0 +1,32 @@
+"AppBuild"
+{
+	"appid" "480" // REPLACE WITH YOUR APP ID
+	"desc" "Alpha Build"
+	"buildoutput" "../builds/steam_output"
+	"contentroot" "../builds"
+	"setlive" ""
+	"preview" "0"
+	"local" ""
+
+	"depots"
+	{
+		"1001" // Windows depot ID (replace with yours)
+		{
+			"FileMapping"
+			{
+				"LocalPath" "windows/*"
+				"DepotPath" "."
+				"recursive" "1"
+			}
+		}
+		"1002" // Linux depot ID (replace with yours)
+		{
+			"FileMapping"
+			{
+				"LocalPath" "linux/*"
+				"DepotPath" "."
+				"recursive" "1"
+			}
+		}
+	}
+}

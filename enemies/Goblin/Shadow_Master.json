@@ -1,0 +1,81 @@
+{
+  "name": "Shadow Master",
+  "faction": "Goblin",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 5,
+  "pattern": ["Special", "Melee", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "True Stealth",
+    "description": "Invisible. Can attack while invisible (becomes visible for 1 turn, then recloaks). +6 damage from stealth",
+    "stealth": {
+      "permanent": true,
+      "attack_while_stealthed": true,
+      "reveal_duration": 1,
+      "auto_recloak": true
+    },
+    "stealth_bonus": {
+      "damage": 6
+    },
+    "visual_feedback": {
+      "shadow_cloak": true,
+      "reveal_brief": true,
+      "stealth_strike_vfx": "res://vfx/true_stealth_strike.tscn"
+    },
+    "sound": "sfx/true_stealth.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_master_idle.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "shadow_cloak": true,
+      "invisible": true,
+      "subtle_distortion": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_master_attack.png",
+      "frames": 10,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/master_strike.wav",
+      "reveal_flash": true,
+      "stealth_strike_vfx": "res://vfx/true_stealth_strike.tscn",
+      "shadow_blades": true,
+      "damage_bonus_show": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_master_special.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/shadow_recloak.wav",
+      "fade_to_shadow": true,
+      "cloak_restore": true,
+      "invisible_again": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_master_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "reveal_brief": true,
+      "cloak_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_master_death.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/shadow_master_die.wav",
+      "shadow_dissipate": true,
+      "final_reveal": true,
+      "fade_to_void": true
+    }
+  }
+}

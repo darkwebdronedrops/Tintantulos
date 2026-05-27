@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_demon30a"]
+
+[resource]
+script = ExtResource("1_demon30a")
+card_name = "Immolation"
+card_type = "Special"
+faction = "Demon"
+attention_cost = 2
+description = "Take 5 damage. Your next attack this turn deals +4d6 damage. Corruption: For every 5 Corruption, add +1d6 (no max)."
+keywords = ["Corruption"]
+damage_flat = 5
+damage_dice = ""
+uses_dice = false
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "self_damage_5, next_attack_plus_4d6, corruption_plus_1d6_per_5_no_max"
+trap_cast_cost = 2
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Demon/Demon_immolation.png"
+frame_texture_path = "res://assets/sprites/cards/demon_frame.png"

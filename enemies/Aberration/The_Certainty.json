@@ -1,0 +1,94 @@
+{
+  "name": "The Certainty",
+  "faction": "Aberration",
+  "tier": "Boss",
+  "floor": 10,
+  "hp": 1,
+  "max_hp": 1,
+  "attack": 10,
+  "pattern": ["Certain", "Certain", "Perfect", "Certain"],
+  "mechanic": {
+    "name": "Unquestionable",
+    "description": "Only 1 HP, but functionally unkillable. All damage reduced to 0. Must use 'Glitch' card (or any Aberration-type effect) to deal real damage. Using Glitch: Deals 10 damage per use. No Glitch? Fight continues forever.",
+    "unkillable": {
+      "all_damage_reduced": 0,
+      "functionally_immortal": true,
+      "exploit": "Glitch_cards_only"
+    },
+    "glitch_vulnerability": {
+      "glitch_cards_deal": 10,
+      "aberration_type_effective": true,
+      "must_find_exploit": true
+    },
+    "visual_feedback": {
+      "certain_form": true,
+      "unquestionable_presence": true,
+      "damage_null_vfx": "res://vfx/certain_null.tscn",
+      "glitch_weakness_glow": "res://vfx/glitch_weak.tscn",
+      "only_one_hp": true
+    },
+    "sound": "sfx/certainty_hum.wav",
+    "sound_glitch_hit": "sfx/certainty_breaks.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_certainty_idle.png",
+      "frames": 12,
+      "fps": 2,
+      "loop": true,
+      "absolute_certainty": true,
+      "perfect_form": true,
+      "unquestionable": true,
+      "one_hp_shines": true
+    },
+    "certain": {
+      "sprite": "res://assets/sprites/enemies/boss_the_certainty_certain.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/certainty_hum.wav",
+      "attack_nulls": true,
+      "damage_blocked_vfx": "res://vfx/certain_null.tscn"
+    },
+    "perfect": {
+      "sprite": "res://assets/sprites/enemies/boss_the_certainty_perfect.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/certainty_perfect.wav",
+      "flawless_attack": true,
+      "unavoidable": true
+    },
+    "glitch_damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_certainty_glitch.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/certainty_breaks.wav",
+      "glitch_vfx": "res://vfx/glitch_weak.tscn",
+      "certainty_cracks": true,
+      "real_damage_taken": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_certainty_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 1.0, 1.0, 0.5],
+      "null_flash": true,
+      "damage_blocked": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_certainty_death.png",
+      "frames": 20,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/certainty_falls.wav",
+      "question_possible": true,
+      "doubt_enters": true,
+      "perfection_shatters": true
+    }
+  }
+}

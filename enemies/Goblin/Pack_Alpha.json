@@ -1,0 +1,82 @@
+{
+  "name": "Pack Alpha",
+  "faction": "Goblin",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 19,
+  "max_hp": 19,
+  "attack": 6,
+  "pattern": ["Howl", "Melee", "Coordinate"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Pack_Tactics",
+    "description": "Howl = All nearby Goblins gain +2 damage for 2 turns. Coordinate = If 3+ Goblins present, all attack simultaneously this turn.",
+    "howl": {
+      "buff_all_goblins": true,
+      "damage_bonus": 2,
+      "duration": 2,
+      "sound": "sfx/pack_howl.wav"
+    },
+    "coordinate": {
+      "condition": "3_plus_goblins",
+      "effect": "simultaneous_attack",
+      "message": "The pack hunts as one."
+    },
+    "visual_feedback": {
+      "alpha_presence": true,
+      "howl_vfx": "res://vfx/pack_howl.tscn",
+      "coordinate_pulse": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_pack_alpha_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "alpha_stance": true,
+      "pack_aura": true
+    },
+    "howl": {
+      "sprite": "res://assets/sprites/enemies/enemy_pack_alpha_howl.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/pack_howl.wav",
+      "howl_vfx": "res://vfx/pack_howl.tscn",
+      "buff_spreads": true
+    },
+    "coordinate": {
+      "sprite": "res://assets/sprites/enemies/enemy_pack_alpha_coordinate.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/coordinate.wav",
+      "pack_attacks": true,
+      "simultaneous": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_pack_alpha_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/alpha_strike.wav",
+      "alpha_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_pack_alpha_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.4, 0.4, 0.4]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_pack_alpha_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/alpha_falls.wav",
+      "pack_scatters": true
+    }
+  }
+}

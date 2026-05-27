@@ -1,0 +1,91 @@
+{
+  "name": "Plasma Oracle",
+  "faction": "Elemental",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 50,
+  "max_hp": 50,
+  "attack": 7,
+  "pattern": ["Melee", "Special", "Melee", "Special"],
+  "weight": "Uncommon",
+  "element": "Pyre",
+  "mechanic": {
+    "name": "Fusion",
+    "description": "+2 CHARGE per turn. At 12 CHARGE, nuclear fusion (12d12 damage, irradiates terrain, player loses 1 HP/turn until leaves floor)",
+    "charge_system": {
+      "max": 12,
+      "gain_per_turn": 2,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "fusion": {
+        "damage": "12d12",
+        "irradiate_terrain": true,
+        "radiation_damage": 1,
+        "radiation_duration": "until_leave_floor"
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "plasma_aura": true,
+      "fusion_reactor": true,
+      "fusion_vfx": "res://vfx/nuclear_fusion.tscn",
+      "radiation_glow": true,
+      "green_fallout": true
+    },
+    "sound": "sfx/fusion_build.wav",
+    "sound_release": "sfx/nuclear_fusion.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_plasma_oracle_idle.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": true,
+      "plasma_form": true,
+      "fusion_core": true,
+      "reactor_glow": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_plasma_oracle_attack.png",
+      "frames": 10,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/plasma_strike.wav",
+      "fusion_blade": true,
+      "radiation_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_plasma_oracle_special.png",
+      "frames": 20,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/nuclear_fusion.wav",
+      "fusion_vfx": "res://vfx/nuclear_fusion.tscn",
+      "nuclear_burst": true,
+      "radiation_spread": true,
+      "green_fallout": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_plasma_oracle_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 1.0, 0.3, 0.5],
+      "plasma_disrupt": true,
+      "reactor_flare": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_plasma_oracle_death.png",
+      "frames": 18,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/reactor_meltdown.wav",
+      "fusion_collapse": true,
+      "radiation_spike": true
+    }
+  }
+}

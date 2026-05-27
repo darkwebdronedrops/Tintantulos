@@ -1,0 +1,135 @@
+[gd_scene load_steps=12 format=3 uid="uid://floor6undercroft001"]
+
+[ext_resource type="Script" path="res://scripts/Floor6RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/bg_undercroft.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/tile_tunnel_brick.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/steam_pipe.png" id="4_pipe"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/npc_sneak_thief.png" id="5_thief"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/item_master_key.png" id="6_key"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/banner_goblin.png" id="7_banner"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(80, 80)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(100, 100)
+
+[node name="Floor6_Undercroft" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "undercroft"
+room_display_name = "The Undercroft"
+
+; ============================================
+; MARKERS
+; ============================================
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(900, 900)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(900, 700)
+
+[node name="PortalUp" type="Marker2D" parent="."]
+position = Vector2(900, 400)
+
+; ============================================
+; INTERIOR
+; ============================================
+[node name="Interior" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(900, 600)
+texture = ExtResource("2_bg")
+
+; --- Floor tiles (tunnel brick) ---
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(500, 800)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1300, 800)
+texture = ExtResource("3_tile")
+
+[node name="Tile3" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(900, 800)
+texture = ExtResource("3_tile")
+
+; --- Steam Pipes ---
+[node name="Pipes" type="Node2D" parent="Interior"]
+
+[node name="Pipe1" type="Sprite2D" parent="Interior/Pipes"]
+position = Vector2(300, 500)
+texture = ExtResource("4_pipe")
+
+[node name="Pipe2" type="Sprite2D" parent="Interior/Pipes"]
+position = Vector2(1500, 500)
+texture = ExtResource("4_pipe")
+
+[node name="Pipe3" type="Sprite2D" parent="Interior/Pipes"]
+position = Vector2(600, 400)
+texture = ExtResource("4_pipe")
+
+[node name="Pipe4" type="Sprite2D" parent="Interior/Pipes"]
+position = Vector2(1200, 400)
+texture = ExtResource("4_pipe")
+
+; --- Sneak Thief (Goblin Janitor — NOT hostile) ---
+[node name="SneakThief" type="Sprite2D" parent="Interior"]
+position = Vector2(700, 650)
+texture = ExtResource("5_thief")
+
+[node name="ThiefLabel" type="Label" parent="Interior/SneakThief"]
+offset_left = -40.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.3, 0.9, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Sneak Thief"
+
+; --- Master Key (hidden near goblin) ---
+[node name="MasterKey" type="Sprite2D" parent="Interior"]
+position = Vector2(800, 750)
+texture = ExtResource("6_key")
+
+[node name="KeyLabel" type="Label" parent="Interior/MasterKey"]
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = -10.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Master Key"
+
+; --- Faction Banner ---
+[node name="Banner" type="Sprite2D" parent="Interior"]
+position = Vector2(300, 450)
+texture = ExtResource("7_banner")
+
+; --- Save Point ---
+[node name="SavePoint" type="Marker2D" parent="Interior"]
+position = Vector2(800, 850)
+
+; --- Interactable Areas ---
+[node name="Interactables" type="Node2D" parent="Interior"]
+
+[node name="ThiefArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(700, 650)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/ThiefArea"]
+shape = SubResource("Rect_interact")
+
+[node name="KeyArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(800, 750)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/KeyArea"]
+shape = SubResource("Rect_interact")
+
+[node name="PortalUpArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(900, 400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/PortalUpArea"]
+shape = SubResource("Rect_spawn")

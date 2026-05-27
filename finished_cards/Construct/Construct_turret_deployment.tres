@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_construct26"]
+
+[resource]
+script = ExtResource("1_construct26")
+card_name = "Turret Deployment"
+card_type = "Trap"
+faction = "Construct"
+attention_cost = 3
+description = "Trap: Cast 1, Trigger 0, Disarm 3. TRIGGER: Enemy attacks. Deal 2d6 damage to them. DISARM: Enemy Defends. Deal 1d6 damage and ignore their Shield."
+keywords = ["Machine", "Trap"]
+damage_flat = 0
+damage_dice = "2d6"
+uses_dice = true
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = "attack"
+trap_disarm_action = "defend"
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "defend_ignore_shield:1d6"
+trap_cast_cost = 1
+trap_trigger_cost = 0
+trap_disarm_cost = 3
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Construct/Construct_turret_deployment.png"
+frame_texture_path = "res://assets/sprites/cards/construct_frame.png"

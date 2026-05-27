@@ -1,0 +1,75 @@
+{
+  "name": "Compulsion Demon",
+  "faction": "Demon",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 16,
+  "max_hp": 16,
+  "attack": 4,
+  "pattern": ["Compel", "Melee", "Compel"],
+  "weight": "Uncommon",
+  "offer": "Certainty",
+  "mechanic": {
+    "name": "Compulsion",
+    "description": "Compel = Player must play the same card type as last turn. If they do: +2 damage. If they don't: -3 damage ('chaos').",
+    "compel": {
+      "force_same_type": true,
+      "reward": "plus_2_damage",
+      "punishment": "minus_3_damage",
+      "message": "You did that before. Do it again. Exactly."
+    },
+    "visual_feedback": {
+      "loop_form": true,
+      "compulsion_spiral": true,
+      "compel_glow": "res://vfx/compel.tscn",
+      "chaos_shadow": "res://vfx/chaos.tscn"
+    },
+    "sound": "sfx/compel.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_compulsion_demon_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "spiral_body": true,
+      "loops_forever": true,
+      "same_motion": true
+    },
+    "compel": {
+      "sprite": "res://assets/sprites/enemies/enemy_compulsion_demon_compel.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/compel.wav",
+      "compel_glow": "res://vfx/compel.tscn",
+      "pattern_locks": true,
+      "must_repeat": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_compulsion_demon_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/compulsion_strikes.wav",
+      "same_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_compulsion_demon_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.8, 0.9, 0.4],
+      "spiral_disrupted": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_compulsion_demon_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/compulsion_breaks.wav",
+      "spiral_unwinds": true,
+      "choice_restored": true
+    }
+  }
+}

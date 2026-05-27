@@ -1,0 +1,103 @@
+{
+  "name": "Supernova Remnant",
+  "faction": "Elemental",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 45,
+  "max_hp": 45,
+  "attack": 7,
+  "pattern": ["Melee", "Special", "Defend", "Melee"],
+  "weight": "Common",
+  "element": "Pyre",
+  "mechanic": {
+    "name": "Collapse",
+    "description": "+1 CHARGE per turn, +2 when damaged. At 10 CHARGE, becomes black hole (pulls all in, 10d10 damage, self dies)",
+    "charge_system": {
+      "max": 10,
+      "gain_per_turn": 1,
+      "gain_on_damaged": 2,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "black_hole": {
+        "pull_all": true,
+        "damage": "10d10",
+        "aoe": true,
+        "self_kill": true
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "stellar_remnant": true,
+      "gravity_well": true,
+      "black_hole_vfx": "res://vfx/black_hole.tscn",
+      "event_horizon": true,
+      "reality_distortion": true
+    },
+    "sound": "sfx/collapse_build.wav",
+    "sound_release": "sfx/black_hole.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_supernova_remnant_idle.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": true,
+      "nebula_form": true,
+      "stellar_debris": true,
+      "gravity_aura": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_supernova_remnant_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/remnant_strike.wav",
+      "gravity_slash": true,
+      "debris_impact": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_supernova_remnant_special.png",
+      "frames": 20,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/black_hole.wav",
+      "black_hole_vfx": "res://vfx/black_hole.tscn",
+      "event_horizon": true,
+      "pull_all": true,
+      "singularity_form": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_supernova_remnant_defend.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": false,
+      "shield_vfx": "res://vfx/gravity_shield.tscn",
+      "debris_orbit": true,
+      "gravity_well": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_supernova_remnant_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.8, 0.4, 0.5],
+      "nebula_disrupt": true,
+      "gravity_spike": true,
+      "charge_gain_flash": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_supernova_remnant_death.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/singularity_collapse.wav",
+      "black_hole_final": true,
+      "event_horizon_close": true,
+      "reality_restore": true
+    }
+  }
+}

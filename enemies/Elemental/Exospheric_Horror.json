@@ -1,0 +1,110 @@
+{
+  "name": "Exospheric Horror",
+  "faction": "Elemental",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 48,
+  "max_hp": 48,
+  "attack": 6,
+  "pattern": ["Special", "Flee", "Special", "Flee"],
+  "weight": "Common",
+  "element": "Stratospheric",
+  "mechanic": {
+    "name": "Escape",
+    "description": "+1 CHARGE when player plays card. At 10 CHARGE, achieves orbit (untargetable for 2 turns, then meteor strike 12d8)",
+    "charge_system": {
+      "max": 10,
+      "gain_on": "player_plays_card",
+      "gain_amount": 1
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "orbit": {
+        "untargetable_duration": 2,
+        "then_meteor_strike": true,
+        "meteor_damage": "12d8",
+        "aoe": true
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "exospheric_aura": true,
+      "orbit_indicator": true,
+      "ascent_vfx": "res://vfx/achieve_orbit.tscn",
+      "meteor_strike_vfx": "res://vfx/meteor_strike.tscn",
+      "screen_shake": true
+    },
+    "sound": "sfx/orbit_build.wav",
+    "sound_release": "sfx/meteor_strike.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_exospheric_horror_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "exospheric_form": true,
+      "upper_atmosphere": true,
+      "ion_trail": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_exospheric_horror_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/exospheric_strike.wav",
+      "ion_blade": true,
+      "upper_atmosphere_slash": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_exospheric_horror_special.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/achieve_orbit.wav",
+      "ascent_vfx": "res://vfx/achieve_orbit.tscn",
+      "orbit_achieved": true,
+      "untargetable": true,
+      "charge_gain": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_exospheric_horror_flee.png",
+      "frames": 8,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/orbit_dash.wav",
+      "ascent": true,
+      "ion_propulsion": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_exospheric_horror_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.8, 1.0, 0.3],
+      "ion_disrupt": true,
+      "atmospheric_turbulence": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_exospheric_horror_death.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/exospheric_fade.wav",
+      "atmospheric_dispersal": true,
+      "ion_dissipate": true
+    },
+    "meteor": {
+      "sprite": "res://assets/sprites/enemies/enemy_exospheric_horror_meteor.png",
+      "frames": 16,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/meteor_strike.wav",
+      "meteor_strike_vfx": "res://vfx/meteor_strike.tscn",
+      "descent_from_orbit": true,
+      "impact": true,
+      "screen_shake": true
+    }
+  }
+}

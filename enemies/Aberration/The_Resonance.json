@@ -1,0 +1,71 @@
+{
+  "name": "The Resonance",
+  "faction": "Aberration",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 0,
+  "pattern": ["Hum", "Hum", "Hum"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Frequency Memory",
+    "description": "Does nothing but hum. Post-combat: 2 cards from discard shuffled into deck as 'Resonant Echo' (different cardback). Cannot tell real from echo until played.",
+    "passive_combat": {
+      "does_nothing": true,
+      "only_hums": true
+    },
+    "post_combat": {
+      "frequency_memory": {
+        "cards_from_discard": 2,
+        "transform_to": "Resonant Echo",
+        "identical_stats": true,
+        "different_cardback": true,
+        "hidden_until_played": true
+      }
+    },
+    "visual_feedback": {
+      "translucent_membrane": true,
+      "vibration_visual": true,
+      "teeth_frequency": true,
+      "humming_aura": "res://vfx/resonance_hum.tscn"
+    },
+    "sound": "sfx/resonance_hum.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_resonance_idle.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": true,
+      "membrane_form": true,
+      "vibration": true,
+      "humming_visual": true
+    },
+    "hum": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_resonance_hum.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/resonance_hum.wav",
+      "frequency_pulse": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_resonance_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.7, 0.8, 0.3],
+      "frequency_disrupt": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_resonance_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/resonance_fade.wav",
+      "frequency_memory_vfx": "res://vfx/frequency_memory.tscn",
+      "echo_cards_spawn": true
+    }
+  }
+}

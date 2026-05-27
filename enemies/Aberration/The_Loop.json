@@ -1,0 +1,93 @@
+{
+  "name": "The Loop",
+  "faction": "Aberration",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 16,
+  "max_hp": 16,
+  "attack": 4,
+  "pattern": ["Melee", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Force Rotation",
+    "description": "Player must play cards in rotating order: Attack→Skill→Power→Attack. Playing out of order causes the Loop to heal 3 HP.",
+    "rotation_forced": {
+      "sequence": ["Attack", "Skill", "Power"],
+      "loop": true,
+      "penalty_for_wrong": {
+        "heal_loop": 3
+      }
+    },
+    "visual_feedback": {
+      "ouroboros_form": true,
+      "rotation_indicator": true,
+      "required_next_type": true,
+      "heal_on_fail": "res://vfx/loop_heal.tscn"
+    },
+    "sound": "sfx/loop_rotation.wav",
+    "sound_penalty": "sfx/loop_heal.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_loop_idle.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": true,
+      "ouroboros": true,
+      "eating_own_code": true,
+      "cycle_visual": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_loop_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/loop_strike.wav",
+      "rotation_step": "Attack"
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_loop_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/loop_shield.tscn",
+      "rotation_step": "Defend"
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_loop_special.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/loop_rotation.wav",
+      "rotation_step": "Special",
+      "cycle_complete": true
+    },
+    "heal": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_loop_heal.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/loop_heal.wav",
+      "heal_vfx": "res://vfx/loop_heal.tscn",
+      "player_fail_heal": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_loop_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.4, 0.8, 0.3],
+      "cycle_break": true,
+      "ouroboros_wince": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_loop_death.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/loop_break.wav",
+      "cycle_end": true,
+      "ouroboros_unravels": true
+    }
+  }
+}

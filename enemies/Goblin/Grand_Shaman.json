@@ -1,0 +1,92 @@
+{
+  "name": "Grand Shaman",
+  "faction": "Goblin",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 20,
+  "max_hp": 20,
+  "attack": 4,
+  "pattern": ["Special", "Special", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Grand Hex",
+    "description": "Special = Player gains 2 random debuffs. Can cast while Defending (Defend action = Special instead)",
+    "debuffs": {
+      "count": 2,
+      "random": true,
+      "options": ["attention_plus", "cost_plus", "draw_minus", "vulnerability", "weakness"]
+    },
+    "cast_while_defending": {
+      "enabled": true,
+      "defend_becomes": "Special"
+    },
+    "visual_feedback": {
+      "grand_hex_cast": "res://vfx/grand_hex.tscn",
+      "multiple_curses": true,
+      "debuff_icons_show": true,
+      "defense_cast_glow": true
+    },
+    "sound": "sfx/grand_hex.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_grand_shaman_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "float_high": true,
+      "grand_aura": "purple_gold",
+      "multiple_staffs": true,
+      "mystic_circle": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_grand_shaman_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/grand_shaman_strike.wav",
+      "staff_slam": true,
+      "hex_energy": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_grand_shaman_special.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/grand_hex.wav",
+      "grand_cast": true,
+      "multiple_curse_orbs": true,
+      "debuff_fire": true,
+      "curse_storm": "res://vfx/grand_hex.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_grand_shaman_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "aura_disrupt": true,
+      "circle_break": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_grand_shaman_death.png",
+      "frames": 14,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/grand_shaman_die.wav",
+      "hex_explosion": true,
+      "curses_release": true,
+      "all_debuffs_clear": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_grand_shaman_defend.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/grand_shield.tscn",
+      "defense_cast_glow": true,
+      "hex_while_defending": true,
+      "cast_animation": true
+    }
+  }
+}

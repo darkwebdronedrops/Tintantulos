@@ -1,0 +1,88 @@
+{
+  "name": "Recursive Loop",
+  "faction": "Construct",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 20,
+  "max_hp": 20,
+  "attack": 5,
+  "pattern": ["Melee", "Defend", "Special"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Loop",
+    "description": "When killed, returns at 50% HP once (Immortal for 1 turn)",
+    "resurrection": {
+      "trigger": "on_death",
+      "hp_percent": 0.5,
+      "once_per_combat": true,
+      "immortal_duration": 1
+    },
+    "visual_feedback": {
+      "loop_vfx": "res://vfx/recursive_loop.tscn",
+      "reform_animation": true,
+      "golden_revive": true,
+      "ouroboros_symbol": true
+    },
+    "sound_revive": "sfx/loop_reset.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_recursive_loop_idle.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": true,
+      "ouroboros_spin": true,
+      "infinite_rotation": true,
+      "self_reference": true,
+      "looping_trail": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_recursive_loop_attack.png",
+      "frames": 10,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/loop_strike.wav",
+      "self_referencing_strike": true,
+      "echo_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_recursive_loop_special.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "loop_charge": true,
+      "self_reference_intensify": true,
+      "immortal_prep": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_recursive_loop_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "loop_fracture": true,
+      "check_resurrection": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_recursive_loop_death.png",
+      "frames": 16,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/loop_reset.wav",
+      "collapse": true,
+      "golden_revive_pulse": true,
+      "reform_animation": true,
+      "immortal_glow": true,
+      "hp_restore_half": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_recursive_loop_defend.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/loop_shield.tscn",
+      "self_referencing_shield": true,
+      "infinite_defense": true
+    }
+  }
+}

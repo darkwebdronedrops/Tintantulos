@@ -1,0 +1,124 @@
+{
+  "name": "The Choice",
+  "faction": "Demon",
+  "tier": "Boss",
+  "floor": 10,
+  "hp": 300,
+  "max_hp": 300,
+  "attack": 15,
+  "pattern": ["Offer", "Counter", "Punish", "Offer"],
+  "offer": "All",
+  "mechanic": {
+    "name": "The Final Offer",
+    "description": "Offer = Presents ultimate choice: Become Demon (+100 HP, +10 attack, lose humanity) OR Remain Human (heal full, purify all demon debts) OR Refuse Both (take 50 damage, but unlock secret ending). Each choice alters ending.",
+    "offer": {
+      "choice_1": {
+        "name": "Become Demon",
+        "effect": "plus_100_max_hp",
+        "attack_boost": 10,
+        "cost": "lose_humanity_ending_changed",
+        "message": "Why fight us? Join us. Become the offer."
+      },
+      "choice_2": {
+        "name": "Remain Human",
+        "effect": "full_heal",
+        "purify": "all_demon_debts_removed",
+        "ending": "pure_human",
+        "message": "Stay as you are. Clean. Free. But limited."
+      },
+      "choice_3": {
+        "name": "Refuse Both",
+        "effect": "take_50_damage",
+        "unlock": "secret_ending",
+        "message": "You would choose... nothing?"
+      }
+    },
+    "counter": {
+      "effect": "mirror_player_choice",
+      "description": "Uses the offer the player didn't choose against them"
+    },
+    "punish": {
+      "effect": "apply_all_pending_costs",
+      "message": "You accepted so much. Time to pay."
+    },
+    "visual_feedback": {
+      "three_form_union": true,
+      "ambition_certainty_absolution": true,
+      "choice_glow": "res://vfx/final_choice.tscn",
+      "ending_branches": true
+    },
+    "sound": "sfx/the_choice.wav"
+  },
+  "is_boss": true,
+  "phases": 3,
+  "phase_transition": {
+    "phase_2_at": 200,
+    "phase_3_at": 100,
+    "intensifies": true
+  },
+  "ending_trigger": true,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_choice_idle.png",
+      "frames": 14,
+      "fps": 3,
+      "loop": true,
+      "three_as_one": true,
+      "ambition_form": true,
+      "certainty_form": true,
+      "absolution_form": true,
+      "intensity_form": true
+    },
+    "offer": {
+      "sprite": "res://assets/sprites/enemies/boss_the_choice_offer.png",
+      "frames": 18,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/the_choice.wav",
+      "choice_glow": "res://vfx/final_choice.tscn",
+      "three_paths_shown": true,
+      "ending_branches_visible": true
+    },
+    "counter": {
+      "sprite": "res://assets/sprites/enemies/boss_the_choice_counter.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/counter_choice.wav",
+      "rejected_choice_weaponized": true
+    },
+    "punish": {
+      "sprite": "res://assets/sprites/enemies/boss_the_choice_punish.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/debts_due.wav",
+      "all_costs_come": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_choice_attack.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/choice_strikes.wav",
+      "consequence_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_choice_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.6, 0.8, 0.5],
+      "forms_fracture": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_choice_death.png",
+      "frames": 24,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/choice_made.wav",
+      "forms_separate": true,
+      "ending_locked": true
+    }
+  }
+}

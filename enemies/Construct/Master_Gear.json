@@ -1,0 +1,86 @@
+{
+  "name": "Master Gear",
+  "faction": "Construct",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 5,
+  "pattern": ["Melee", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Combine",
+    "description": "Absorbs any defeated Construct, gains its max HP and pattern",
+    "absorb_target": "defeated_Constructs",
+    "hp_gain": "absorbed_unit_max_hp",
+    "pattern_add": "absorbed_unit_pattern_actions",
+    "max_hp_cap": 50,
+    "visual_feedback": {
+      "absorb_beam": "res://vfx/master_absorb.tscn",
+      "gear_assimilation": true,
+      "hp_glow": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_master_gear_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "massive_rotation": true,
+      "gravitational_pull": true,
+      "other_gears_orbit": true,
+      "crown_of_teeth": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_master_gear_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/master_strike.wav",
+      "grand_slam": true,
+      "spinning_charge": true,
+      "ground_crack": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_master_gear_special.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/master_absorb.wav",
+      "absorb_animation": true,
+      "defeated_construct_revive": true,
+      "assimilation_vfx": true,
+      "hp_gain_pulse": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_master_gear_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "spin_wobble": true,
+      "teeth_chip": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_master_gear_death.png",
+      "frames": 18,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/master_break.wav",
+      "grand_shatter": true,
+      "teeth_scatter": true,
+      "orbit_collapse": true,
+      "essence_release": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_master_gear_defend.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/heavy_metal_shield.tscn",
+      "spin_defensive": true,
+      "orbit_shield": true
+    }
+  }
+}

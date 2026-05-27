@@ -1,0 +1,96 @@
+{
+  "name": "The Shadow That Walks",
+  "faction": "Goblin",
+  "tier": "Boss",
+  "floor": 9,
+  "hp": 55,
+  "max_hp": 55,
+  "attack": 7,
+  "pattern": ["Special", "Melee", "Special", "Flee"],
+  "mechanic": {
+    "name": "Living Shadow",
+    "description": "Permanent stealth. Creates shadow copies (illusions, 1 HP) each turn. Copies deal 50% damage. Real one deals 100%",
+    "stealth": {
+      "permanent": true,
+      "never_reveals": true
+    },
+    "shadow_copies": {
+      "per_turn": 1,
+      "hp": 1,
+      "damage_multiplier": 0.5,
+      "illusion": true,
+      "dispel_on_hit": true
+    },
+    "visual_feedback": {
+      "shadow_cloak": true,
+      "copy_spawn": "res://vfx/shadow_copy.tscn",
+      "illusion_indicator": "subtle",
+      "real_one_invisible": true,
+      "shadow_army": true
+    },
+    "sound": "sfx/shadow_walks.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_shadow_that_walks_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "complete_darkness": true,
+      "void_form": true,
+      "shadow_copies_orbit": true,
+      "living_nightmare": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_shadow_that_walks_attack.png",
+      "frames": 10,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/shadow_strike.wav",
+      "void_blade": true,
+      "darkness_slash": true,
+      "real_damage": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_the_shadow_that_walks_special.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/shadow_spawn.wav",
+      "copy_spawn": "res://vfx/shadow_copy.tscn",
+      "illusion_form": true,
+      "shadow_multiply": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/boss_the_shadow_that_walks_flee.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/shadow_slip.wav",
+      "darkness_dash": true,
+      "shadow_relocate": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_shadow_that_walks_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.2, 0.2, 0.2, 0.5],
+      "darkness_flicker": true,
+      "void_distortion": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_shadow_that_walks_death.png",
+      "frames": 16,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/shadow_disperses.wav",
+      "shadows_dissipate": true,
+      "void_closes": true,
+      "darkness_recedes": true,
+      "light_returns": true
+    }
+  }
+}

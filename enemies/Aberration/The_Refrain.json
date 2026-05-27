@@ -1,0 +1,87 @@
+{
+  "name": "The Refrain",
+  "faction": "Aberration",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 22,
+  "max_hp": 22,
+  "attack": 5,
+  "pattern": ["Reflect", "Reflect", "Amplify"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Force Repetition",
+    "description": "Player must play same card type as last turn. Different type = Refrain deals damage equal to card cost. Same type 3 times = Refrain dissipates, whispers 'You learned the pattern.'",
+    "force_pattern": {
+      "must_match_last_type": true,
+      "penalty": {
+        "damage": "card_cost"
+      },
+      "reward": {
+        "condition": "same_type_3_times",
+        "effect": "refrain_dissipates",
+        "message": "You learned the pattern."
+      }
+    },
+    "visual_feedback": {
+      "sound_waves": true,
+      "repeating_pattern": true,
+      "required_type_indicator": true,
+      "amplify_glow": "res://vfx/refrain_amplify.tscn"
+    },
+    "sound": "sfx/refrain_hum.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_refrain_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "sound_waves_visible": true,
+      "repeating_cycle": true,
+      "audio_visualization": true
+    },
+    "reflect": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_refrain_reflect.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/refrain_reflect.wav",
+      "pattern_check": true,
+      "penalty_or_reward": true
+    },
+    "amplify": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_refrain_amplify.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/refrain_amplify.wav",
+      "amplify_vfx": "res://vfx/refrain_amplify.tscn",
+      "wave_intensify": true
+    },
+    "dissipate": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_refrain_dissipate.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/refrain_whisper.wav",
+      "learned_message": "You learned the pattern.",
+      "wave_fade": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_refrain_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.5, 0.9, 0.3],
+      "wave_distort": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_refrain_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/refrain_fade.wav",
+      "pattern_breaks": true
+    }
+  }
+}

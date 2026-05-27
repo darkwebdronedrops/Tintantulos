@@ -1,0 +1,72 @@
+{
+  "name": "Goblin Grunt",
+  "faction": "Goblin",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 5,
+  "max_hp": 5,
+  "attack": 3,
+  "pattern": ["Melee", "Defend", "Melee"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Mob Mentality",
+    "description": "If 3+ Goblins in combat, +2 damage and cannot Flee",
+    "threshold": 3,
+    "goblin_count": "all_goblins_in_combat",
+    "bonus": {
+      "damage": 2,
+      "prevent_flee": true
+    },
+    "visual_feedback": {
+      "mob_aura": true,
+      "aggressive_stance": true,
+      "red_eyes_glow": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_grunt_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "club_rest": true,
+      "grunt_breath": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_grunt_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/grunt_slam.wav",
+      "club_swing": true,
+      "heavy_impact": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_grunt_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "stagger": true,
+      "club_drop": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_grunt_death.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/grunt_die.wav",
+      "collapse": true,
+      "club_falls": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_goblin_grunt_defend.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/goblin_shield.tscn",
+      "club_block": true,
+      "brace": true
+    }
+  }
+}

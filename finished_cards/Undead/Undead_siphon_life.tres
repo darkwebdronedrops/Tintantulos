@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_undead29"]
+
+[resource]
+script = ExtResource("1_undead29")
+card_name = "Siphon Life"
+card_type = "Attack"
+faction = "Undead"
+attention_cost = 4
+description = "Deal 2d6 damage. Heal HP equal to damage dealt. Death: If target dies, heal 5 additional HP."
+keywords = ["Death"]
+damage_flat = 0
+damage_dice = "2d6"
+uses_dice = true
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "lifesteal_damage_dealt, death_bonus_heal:5"
+trap_cast_cost = 4
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Undead/Undead_siphon_life.png"
+frame_texture_path = "res://assets/sprites/cards/undead_frame.png"

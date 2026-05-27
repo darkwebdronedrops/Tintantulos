@@ -1,0 +1,86 @@
+{
+  "name": "Victory Broker",
+  "faction": "Demon",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 48,
+  "max_hp": 48,
+  "attack": 9,
+  "pattern": ["Win", "Melee", "Collect"],
+  "weight": "Rare",
+  "offer": "Intensity",
+  "mechanic": {
+    "name": "Guarantee Victory",
+    "description": "Win = Offer 'certain victory' (next attack deals lethal damage). If accepted, player loses 1 max HP permanently ('price of winning').",
+    "win": {
+      "offer": "lethal_damage_next_attack",
+      "cost": "permanent_minus_1_max_hp",
+      "message": "I can ensure your victory. For a small price."
+    },
+    "collect": {
+      "effect": "take_payment",
+      "message": "Victory is yours. The debt is paid."
+    },
+    "visual_feedback": {
+      "trophy_form": true,
+      "laurels": true,
+      "victory_glow": "res://vfx/victory_offer.tscn",
+      "cost_shadow": "res://vfx/victory_cost.tscn"
+    },
+    "sound": "sfx/victory.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_victory_broker_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "trophy_body": true,
+      "gold_plated": true,
+      "laurel_crown": true,
+      "success_aura": true
+    },
+    "win": {
+      "sprite": "res://assets/sprites/enemies/enemy_victory_broker_win.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/victory.wav",
+      "victory_glow": "res://vfx/victory_offer.tscn",
+      "guarantee_offered": true
+    },
+    "collect": {
+      "sprite": "res://assets/sprites/enemies/enemy_victory_broker_collect.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/victory_cost.wav",
+      "cost_shadow": "res://vfx/victory_cost.tscn",
+      "payment_taken": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_victory_broker_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/victory_strikes.wav",
+      "champion_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_victory_broker_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.8, 0.3, 0.5],
+      "gold_tarnishes": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_victory_broker_death.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/victory_hollow.wav",
+      "empty_trophy": true
+    }
+  }
+}

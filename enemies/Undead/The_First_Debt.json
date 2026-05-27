@@ -1,0 +1,121 @@
+{
+  "name": "The First Debt",
+  "faction": "Undead",
+  "tier": "Boss",
+  "floor": "Secret",
+  "hp": 200,
+  "max_hp": 200,
+  "attack": 14,
+  "pattern": ["Recall", "Compound", "Collect", "Original"],
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Original Sin",
+    "description": "Recall = Steals all Quiddity spent this run. Compound = Adds 10% interest to debt. Collect = Deals damage equal to total debt. Original = Resets player's Quiddity to 0 permanently (for this combat).",
+    "recall": {
+      "tracks_all_quiddity_spent_this_run": true,
+      "debt_accumulates": true
+    },
+    "compound": {
+      "interest": 0.1,
+      "message": "The debt grows. It always grows."
+    },
+    "collect": {
+      "damage": "total_debt",
+      "message": "Pay what you owe."
+    },
+    "original": {
+      "effect": "quiddity_to_zero",
+      "permanent_this_combat": true,
+      "message": "From nothing you came. To nothing you return."
+    },
+    "visual_feedback": {
+      "first_debt_form": true,
+      "original_creditor": true,
+      "debt_counter_visible": true,
+      "compound_glow": true,
+      "original_void": "res://vfx/original_sin.tscn"
+    },
+    "sound": "sfx/original_debt.wav"
+  },
+  "is_boss": true,
+  "phases": 2,
+  "phase_transition": {
+    "at_hp": 100,
+    "change": "reveals_original_nature",
+    "dialogue": "This debt predates your birth."
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_debt_idle.png",
+      "frames": 14,
+      "fps": 3,
+      "loop": true,
+      "ancient_creditor": true,
+      "first_debt": true,
+      "debt_counter_floats": true,
+      "origin_aura": true
+    },
+    "recall": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_debt_recall.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/original_debt.wav",
+      "all_spending_remembered": true,
+      "debt_manifests": true
+    },
+    "compound": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_debt_compound.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/compound.wav",
+      "interest_accrues": true,
+      "debt_grows": true
+    },
+    "collect": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_debt_collect.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/collect_debt.wav",
+      "debt_weaponized": true,
+      "everything_owed": true
+    },
+    "original": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_debt_original.png",
+      "frames": 18,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/original_sin.wav",
+      "original_void": "res://vfx/original_sin.tscn",
+      "quiddity_nullified": true,
+      "from_nothing": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_debt_attack.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/creditor_strike.wav",
+      "ancient_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_debt_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.6, 0.5],
+      "debt_shudders": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_debt_death.png",
+      "frames": 24,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/debt_forgiven.wav",
+      "original_debt_cleared": true,
+      "from_nothing_returns": true
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "name": "Blood Shaman",
+  "faction": "Goblin",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 16,
+  "max_hp": 16,
+  "attack": 5,
+  "pattern": ["Blood_Rite", "Melee", "Defend"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Blood_Rite",
+    "description": "Blood_Rite = Sacrifice 1 nearby Goblin (ally) to heal 8 HP and gain +2 damage for 2 turns. If no allies, deals 3 self-damage.",
+    "blood_rite": {
+      "sacrifice_ally": true,
+      "heal": 8,
+      "damage_bonus": 2,
+      "bonus_duration": 2,
+      "fallback_self_damage": 3
+    },
+    "visual_feedback": {
+      "blood_magic": true,
+      "ritual_glow": "res://vfx/blood_rite.tscn",
+      "ally_consumed": true
+    },
+    "sound": "sfx/blood_rite.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_blood_shaman_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "blood_crystals": true,
+      "ritual_aura": true
+    },
+    "blood_rite": {
+      "sprite": "res://assets/sprites/enemies/enemy_blood_shaman_blood_rite.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/blood_rite.wav",
+      "ritual_glow": "res://vfx/blood_rite.tscn",
+      "ally_sacrificed": true,
+      "power_gained": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_blood_shaman_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/blood_strike.wav",
+      "empowered": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_blood_shaman_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/blood_barrier.tscn",
+      "blood_shield": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_blood_shaman_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.3, 0.3, 0.4]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_blood_shaman_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/blood_collapse.wav",
+      "ritual_ends": true
+    }
+  }
+}

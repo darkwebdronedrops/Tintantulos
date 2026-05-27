@@ -1,0 +1,92 @@
+{
+  "name": "Creditor's Last Visit",
+  "faction": "Undead",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 55,
+  "max_hp": 55,
+  "attack": 10,
+  "pattern": ["Collect", "Melee", "Foreclose"],
+  "weight": "Rare",
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Foreclose",
+    "description": "Foreclose = If player has <3 Quiddity, all cards in hand become 'Foreclosed' (unplayable, remain after combat until debt paid).",
+    "foreclose": {
+      "condition": "player_quiddity_under_3",
+      "effect": "foreclose_hand",
+      "foreclosed": {
+        "unplayable": true,
+        "persist_after_combat": true,
+        "cure": "pay_quiddity_debt"
+      },
+      "message": "Your assets are seized."
+    },
+    "collect": {
+      "steal": 5,
+      "message": "Pay what you owe."
+    },
+    "visual_feedback": {
+      "final_collector": true,
+      "foreclosure_form": true,
+      "foreclose_vfx": "res://vfx/foreclosure.tscn",
+      "seal_of_debt": true
+    },
+    "sound": "sfx/foreclose.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_creditors_last_visit_idle.png",
+      "frames": 12,
+      "fps": 2,
+      "loop": true,
+      "final_collector": true,
+      "foreclosure_form": true,
+      "last_visit": true
+    },
+    "collect": {
+      "sprite": "res://assets/sprites/enemies/enemy_creditors_last_visit_collect.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/collect.wav",
+      "final_collection": true,
+      "quiddity_drained": true
+    },
+    "foreclose": {
+      "sprite": "res://assets/sprites/enemies/enemy_creditors_last_visit_foreclose.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/foreclose.wav",
+      "foreclose_vfx": "res://vfx/foreclosure.tscn",
+      "assets_seized": true,
+      "seal_applied": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_creditors_last_visit_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/final_strike.wav",
+      "debtor_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_creditors_last_visit_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.6, 0.5],
+      "creditor_wounded": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_creditors_last_visit_death.png",
+      "frames": 18,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/debt_paid.wav",
+      "foreclosure_lifted": true,
+      "debt_resolved": true
+    }
+  }
+}

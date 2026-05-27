@@ -1,0 +1,106 @@
+[gd_scene load_steps=11 format=3 uid="uid://floor7auditorium001"]
+
+[ext_resource type="Script" path="res://scripts/Floor7RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/bg_auditorium.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/tile_marble.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/contract_altar.png" id="4_altar"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/witness_stand.png" id="5_witness"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/summoning_circle.png" id="6_circle"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/banner_demon.png" id="7_banner"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/banner_aberration.png" id="8_banner_a"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(100, 100)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(120, 120)
+
+[node name="Floor7_Auditorium" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "auditorium"
+room_display_name = "The Auditorium"
+encounter_type = "boss"
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1300, 1200)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1300, 900)
+
+[node name="PortalNorth" type="Marker2D" parent="."]
+position = Vector2(1300, 400)
+
+[node name="PortalUp" type="Marker2D" parent="."]
+position = Vector2(1300, 300)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1300, 900)
+texture = ExtResource("2_bg")
+
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(700, 1100)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1900, 1100)
+texture = ExtResource("3_tile")
+
+[node name="Tile3" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1300, 1200)
+texture = ExtResource("3_tile")
+
+[node name="ContractAltar" type="Sprite2D" parent="Interior"]
+position = Vector2(1300, 900)
+texture = ExtResource("4_altar")
+
+[node name="AltarArea" type="Area2D" parent="Interior/ContractAltar"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/ContractAltar/AltarArea"]
+shape = SubResource("Rect_interact")
+
+[node name="WitnessStand1" type="Sprite2D" parent="Interior"]
+position = Vector2(600, 500)
+texture = ExtResource("5_witness")
+
+[node name="WitnessStand2" type="Sprite2D" parent="Interior"]
+position = Vector2(2000, 500)
+texture = ExtResource("5_witness")
+
+[node name="WitnessStand3" type="Sprite2D" parent="Interior"]
+position = Vector2(1300, 300)
+texture = ExtResource("5_witness")
+
+[node name="SummoningCircle" type="Sprite2D" parent="Interior"]
+position = Vector2(1300, 600)
+texture = ExtResource("6_circle")
+
+[node name="BannerDemon" type="Sprite2D" parent="Interior"]
+position = Vector2(300, 300)
+texture = ExtResource("7_banner")
+
+[node name="BannerAberration" type="Sprite2D" parent="Interior"]
+position = Vector2(2300, 300)
+texture = ExtResource("8_banner_a")
+
+[node name="BossLabel" type="Label" parent="Interior"]
+offset_left = 1100.0
+offset_top = 750.0
+offset_right = 1500.0
+offset_bottom = 800.0
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1.0)
+horizontal_alignment = 1
+text = "THE DENIED"
+
+[node name="Label" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 20
+text = "FLOOR 7: THE BROKEN PACT — Auditorium"

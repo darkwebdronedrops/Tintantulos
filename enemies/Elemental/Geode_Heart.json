@@ -1,0 +1,88 @@
+{
+  "name": "Geode Heart",
+  "faction": "Elemental",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 10,
+  "max_hp": 10,
+  "attack": 4,
+  "pattern": ["Special", "Melee", "Special"],
+  "weight": "Common",
+  "element": "Vitreous",
+  "mechanic": {
+    "name": "Growth",
+    "description": "Special = +1 CHARGE and heal 2 HP. At 5 CHARGE, erupts crystal spires (2d8 damage, creates obstacles)",
+    "charge_system": {
+      "max": 5,
+      "gain_on": "Special",
+      "gain_amount": 1,
+      "heal_on_gain": 2
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "damage": "2d8",
+      "create_obstacles": true,
+      "obstacle_type": "crystal_spire",
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "crystal_growth": true,
+      "geode_pulse": true,
+      "heal_glow": true,
+      "spire_erupt": "res://vfx/crystal_spire.tscn"
+    },
+    "sound": "sfx/geode_pulse.wav",
+    "sound_release": "sfx/crystal_erupt.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_geode_heart_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "geode_pulse": true,
+      "crystal_hum": true,
+      "inner_glow": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_geode_heart_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/geode_strike.wav",
+      "crystal_impact": true,
+      "shard_burst": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_geode_heart_special.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/geode_pulse.wav",
+      "charge_gain": true,
+      "heal_flash": true,
+      "crystal_expand": true,
+      "spire_erupt": "res://vfx/crystal_spire.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_geode_heart_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.9, 0.9, 1.0, 0.3],
+      "geode_crack": true,
+      "inner_light_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_geode_heart_death.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/geode_shatter.wav",
+      "shatter": true,
+      "crystal_shards_scatter": true,
+      "inner_light_extinguish": true
+    }
+  }
+}

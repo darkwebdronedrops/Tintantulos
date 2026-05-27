@@ -1,0 +1,180 @@
+[gd_scene load_steps=9 format=3 uid="uid://floor5crow001"]
+
+[ext_resource type="Script" path="res://scripts/Floor5RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/bg_crow.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/lightning_rod.png" id="3_rod"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/wind_gust.png" id="4_wind"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/anchor_point.png" id="5_anchor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/gangplank.png" id="6_gangplank"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/banner_elemental.png" id="7_banner_e"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/tile_mooring_stone.png" id="8_stone"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(80, 80)
+
+[node name="Floor5_Crow" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "crow"
+room_display_name = "The Crow's Nest"
+dominant_faction = "Elemental"
+has_lightning_rod = true
+has_anchor = true
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1000, 1200)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1000, 800)
+
+[node name="PortalDown_Breeze" type="Marker2D" parent="."]
+position = Vector2(400, 900)
+
+[node name="PortalDown_Boiler" type="Marker2D" parent="."]
+position = Vector2(1000, 1100)
+
+[node name="PortalDown_Gale" type="Marker2D" parent="."]
+position = Vector2(1600, 900)
+
+[node name="PortalUp" type="Marker2D" parent="."]
+position = Vector2(1000, 500)
+
+[node name="Interior" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1000, 800)
+texture = ExtResource("2_bg")
+
+[node name="LightningRods" type="Node2D" parent="Interior"]
+
+[node name="Rod1" type="Sprite2D" parent="Interior/LightningRods"]
+position = Vector2(850, 650)
+texture = ExtResource("3_rod")
+scale = Vector2(1.2, 1.2)
+
+[node name="Rod2" type="Sprite2D" parent="Interior/LightningRods"]
+position = Vector2(1150, 650)
+texture = ExtResource("3_rod")
+scale = Vector2(1.2, 1.2)
+
+[node name="Rod3" type="Sprite2D" parent="Interior/LightningRods"]
+position = Vector2(1000, 500)
+texture = ExtResource("3_rod")
+scale = Vector2(1.5, 1.5)
+
+[node name="RodLabel" type="Label" parent="Interior/LightningRods"]
+offset_left = -60.0
+offset_top = -40.0
+offset_right = 60.0
+offset_bottom = -20.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.6, 0.8, 1.0, 1.0)
+horizontal_alignment = 1
+text = "⚡ Lightning Rods"
+
+[node name="WindGusts" type="Node2D" parent="Interior"]
+
+[node name="Wind1" type="Sprite2D" parent="Interior/WindGusts"]
+position = Vector2(300, 700)
+texture = ExtResource("4_wind")
+scale = Vector2(3.0, 3.0)
+modulate = Color(1, 1, 1, 0.5)
+
+[node name="Wind2" type="Sprite2D" parent="Interior/WindGusts"]
+position = Vector2(1700, 700)
+texture = ExtResource("4_wind")
+scale = Vector2(3.0, 3.0)
+modulate = Color(1, 1, 1, 0.5)
+
+[node name="Wind3" type="Sprite2D" parent="Interior/WindGusts"]
+position = Vector2(1000, 600)
+texture = ExtResource("4_wind")
+scale = Vector2(4.0, 4.0)
+modulate = Color(1, 1, 1, 0.4)
+
+[node name="AnchorPoints" type="Node2D" parent="Interior"]
+
+[node name="Anchor1" type="Sprite2D" parent="Interior/AnchorPoints"]
+position = Vector2(800, 1000)
+texture = ExtResource("5_anchor")
+scale = Vector2(1.2, 1.2)
+
+[node name="Anchor2" type="Sprite2D" parent="Interior/AnchorPoints"]
+position = Vector2(1200, 1000)
+texture = ExtResource("5_anchor")
+scale = Vector2(1.2, 1.2)
+
+[node name="Gangplank_Crow" type="Sprite2D" parent="Interior"]
+position = Vector2(1000, 700)
+texture = ExtResource("6_gangplank")
+scale = Vector2(2.0, 2.0)
+
+[node name="GangplankLabel" type="Label" parent="Interior/Gangplank_Crow"]
+offset_left = -80.0
+offset_top = -30.0
+offset_right = 80.0
+offset_bottom = -10.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Gangplank to Aetherworks"
+
+[node name="Banner_Elemental" type="Sprite2D" parent="Interior"]
+position = Vector2(200, 400)
+texture = ExtResource("7_banner_e")
+scale = Vector2(1.2, 1.2)
+
+[node name="StoneTiles" type="Node2D" parent="Interior"]
+
+[node name="Stone1" type="Sprite2D" parent="Interior/StoneTiles"]
+position = Vector2(400, 1100)
+texture = ExtResource("8_stone")
+scale = Vector2(2.0, 2.0)
+
+[node name="Stone2" type="Sprite2D" parent="Interior/StoneTiles"]
+position = Vector2(1600, 1100)
+texture = ExtResource("8_stone")
+scale = Vector2(2.0, 2.0)
+
+[node name="Stone3" type="Sprite2D" parent="Interior/StoneTiles"]
+position = Vector2(1000, 1200)
+texture = ExtResource("8_stone")
+scale = Vector2(2.0, 2.0)
+
+[node name="StormWarning" type="Label" parent="Interior"]
+offset_left = 700.0
+offset_top = 100.0
+offset_right = 1300.0
+offset_bottom = 140.0
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.6, 0.7, 0.9, 0.8)
+horizontal_alignment = 1
+text = "⛈ Storm clouds gather above..."
+
+[node name="SavePoint" type="Marker2D" parent="Interior"]
+position = Vector2(1000, 1050)
+
+[node name="Interactables" type="Node2D" parent="Interior"]
+
+[node name="RodArea1" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(850, 650)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/RodArea1"]
+shape = SubResource("Rect_interact")
+
+[node name="RodArea2" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1150, 650)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/RodArea2"]
+shape = SubResource("Rect_interact")
+
+[node name="RodArea3" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1000, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/RodArea3"]
+shape = SubResource("Rect_interact")
+
+[node name="AnchorArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(800, 1000)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/AnchorArea"]
+shape = SubResource("Rect_interact")

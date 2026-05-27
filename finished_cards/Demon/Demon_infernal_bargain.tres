@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_demon26"]
+
+[resource]
+script = ExtResource("1_demon26")
+card_name = "Infernal Bargain"
+card_type = "Field"
+faction = "Demon"
+attention_cost = 4
+description = "Field: Your attacks deal +2 damage for every 5 Corruption you have. Pact: At end of turn, take damage equal to your Corruption/5 (rounded down). Persist."
+keywords = ["Pact", "Corruption"]
+damage_flat = 0
+damage_dice = ""
+uses_dice = false
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = true
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "plus_2_damage_per_5_corruption, pact_end_turn_damage_corruption_div_5"
+trap_cast_cost = 4
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Demon/Demon_infernal_bargain.png"
+frame_texture_path = "res://assets/sprites/cards/demon_frame.png"

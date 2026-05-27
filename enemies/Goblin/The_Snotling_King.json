@@ -1,0 +1,107 @@
+{
+  "name": "The Snotling King",
+  "faction": "Goblin",
+  "tier": "Boss",
+  "floor": 3,
+  "boss_type": "Mini",
+  "hp": 35,
+  "max_hp": 35,
+  "attack": 3,
+  "pattern": ["Melee", "Summon", "Flee", "Special"],
+  "mechanic": {
+    "name": "Brood",
+    "description": "Summons 2 Snotlings each turn. When Snotling dies, gains +1 damage permanently",
+    "summon": {
+      "unit": "Snotling",
+      "count": 2,
+      "per_turn": true
+    },
+    "scaling": {
+      "trigger": "snotling_death",
+      "stat": "attack",
+      "value": 1,
+      "permanent": true,
+      "stacking": true
+    },
+    "visual_feedback": {
+      "snot_crown": true,
+      "birth_animation": "res://vfx/snot_birth.tscn",
+      "snotlings_emerge": true,
+      "damage_increase_glow": true,
+      "permanent_stack_show": true
+    },
+    "sound": "sfx/snotling_king.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_snotling_king_idle.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": true,
+      "snot_crown": true,
+      "massive_snotling": true,
+      "snotlings_crawl": true,
+      "brood_aura": true,
+      "snot_drip": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_snotling_king_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/snot_king_slam.wav",
+      "belly_flop": true,
+      "snot_splash": true
+    },
+    "summon": {
+      "sprite": "res://assets/sprites/enemies/boss_the_snotling_king_summon.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/snot_birth.wav",
+      "birth_animation": "res://vfx/snot_birth.tscn",
+      "snotlings_burst": true,
+      "snot_spawn": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_the_snotling_king_special.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/snot_command.wav",
+      "rally_snotlings": true,
+      "swarm_direct": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/boss_the_snotling_king_flee.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/snot_retreat.wav",
+      "slime_away": true,
+      "snotlings_scatter": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_snotling_king_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "snot_splash": true,
+      "snotlings_agitate": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_snotling_king_death.png",
+      "frames": 14,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/snot_king_dissolve.wav",
+      "massive_snot_explosion": true,
+      "snotlings_die": true,
+      "snot_crown_falls": true,
+      "pool_forms": true
+    }
+  }
+}

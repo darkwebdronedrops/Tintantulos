@@ -1,0 +1,86 @@
+{
+  "name": "Marrow Wisp",
+  "faction": "Undead",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 3,
+  "max_hp": 3,
+  "attack": 4,
+  "pattern": ["Special", "Melee", "Flee"],
+  "weight": "Uncommon",
+  "graft": "Marrow",
+  "mechanic": {
+    "name": "Forget",
+    "description": "Special = Player 'forgets' enemy intent for next turn (intent hidden).",
+    "memory_loss": {
+      "effect": "hide_enemy_intent",
+      "duration": 1,
+      "message": "You cannot remember what it will do."
+    },
+    "visual_feedback": {
+      "core_essence": true,
+      "soul_deep_cold": true,
+      "memory_fog": "res://vfx/marrow_fog.tscn",
+      "wisp_form": true
+    },
+    "sound": "sfx/marrow_whisper.wav"
+  },
+  "flee_behavior": {
+    "at_hp_percent": 30,
+    "message": "The Wisp remembers somewhere else it needs to be."
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_wisp_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "wisp_form": true,
+      "cold_aura": true,
+      "memory_eating": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_wisp_special.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/marrow_forget.wav",
+      "memory_fog": "res://vfx/marrow_fog.tscn",
+      "intent_hidden": true,
+      "knowledge_eaten": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_wisp_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/marrow_strike.wav",
+      "cold_touch": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_wisp_flee.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/marrow_fade.wav",
+      "memory_retreats": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_wisp_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.8, 0.9, 0.4],
+      "wisp_scatters": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_marrow_wisp_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/marrow_release.wav",
+      "memory_returns": true,
+      "knowledge_restored": true
+    }
+  }
+}

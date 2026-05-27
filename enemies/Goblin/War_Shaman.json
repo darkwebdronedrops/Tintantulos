@@ -1,0 +1,92 @@
+{
+  "name": "War Shaman",
+  "faction": "Goblin",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 16,
+  "max_hp": 16,
+  "attack": 4,
+  "pattern": ["Special", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Blood Magic",
+    "description": "Special = Sacrifice 1 Goblin within 2 hexes (it dies), heal 8 HP and gain +3 damage for 2 turns",
+    "sacrifice": {
+      "target": "goblin_within_2_hexes",
+      "effect_on_target": "death",
+      "self_heal": 8,
+      "damage_buff": {
+        "value": 3,
+        "duration": 2
+      }
+    },
+    "visual_feedback": {
+      "sacrifice_beam": "res://vfx/blood_drain.tscn",
+      "goblin_withers": true,
+      "shaman_glows": true,
+      "buff_aura": "red"
+    },
+    "sound": "sfx/blood_sacrifice.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_war_shaman_idle.png",
+      "frames": 8,
+      "fps": 5,
+      "loop": true,
+      "float": true,
+      "blood_aura": true,
+      "skull_staff": true,
+      "warcry_whisper": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_war_shaman_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/war_shaman_strike.wav",
+      "staff_slam": true,
+      "blood_magic_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_war_shaman_special.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/blood_sacrifice.wav",
+      "cast_sacrifice": true,
+      "target_goblin": true,
+      "drain_animation": "res://vfx/blood_drain.tscn",
+      "goblin_withers": true,
+      "shaman_absorb": true,
+      "heal_flash": true,
+      "buff_aura": "red"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_war_shaman_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "blood_aura_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_war_shaman_death.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/war_shaman_die.wav",
+      "blood_explosion": true,
+      "staff_falls": true,
+      "aura_dissipate": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_war_shaman_defend.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/blood_shield.tscn",
+      "blood_barrier": true
+    }
+  }
+}

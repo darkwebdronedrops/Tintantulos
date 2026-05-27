@@ -1,0 +1,84 @@
+{
+  "name": "Hollow Laughter",
+  "faction": "Undead",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 4,
+  "max_hp": 4,
+  "attack": 3,
+  "pattern": ["Melee", "Special", "Defend"],
+  "weight": "Common",
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Echo Tax",
+    "description": "Special = Steal 1 Quiddity. If player has 0 Quiddity, deals 3 bonus damage.",
+    "steal": {
+      "target": "quiddity",
+      "amount": 1,
+      "bonus_damage": {
+        "condition": "player_quiddity_0",
+        "damage": 3
+      }
+    },
+    "visual_feedback": {
+      "bone_framework": true,
+      "empty_motion": true,
+      "quiddity_drain": "res://vfx/hollow_drain.tscn",
+      "echo_sound": true
+    },
+    "sound": "sfx/hollow_laugh.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_hollow_laughter_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "skeleton_form": true,
+      "jaw_clacking": true,
+      "empty_eyes": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_hollow_laughter_special.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/quiddity_drain.wav",
+      "quiddity_drain_vfx": "res://vfx/hollow_drain.tscn",
+      "bone_glow": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_hollow_laughter_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/bone_strike.wav",
+      "rattling_slash": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_hollow_laughter_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/bone_shield.tscn",
+      "rib_cage_barrier": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_hollow_laughter_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.8, 0.9, 0.3],
+      "bones_scatter": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_hollow_laughter_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/bone_collapse.wav",
+      "quiddity_drops": true,
+      "stolen_returns": true
+    }
+  }
+}

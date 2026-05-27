@@ -1,0 +1,73 @@
+{
+  "name": "The Terminal Silence",
+  "faction": "Aberration",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 55,
+  "max_hp": 55,
+  "attack": 0,
+  "pattern": ["Quiet", "Quiet", "Quiet"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Quiet",
+    "description": "Mutes all card sound effects. Disables audio cues. Post-combat: Next 3 combats: No warning sounds for high-damage attacks.",
+    "quiet": {
+      "mute_card_sounds": true,
+      "disable_audio_cues": true,
+      "silence_all": true
+    },
+    "post_combat": {
+      "deaf": {
+        "duration": 3,
+        "no_warning_sounds": true,
+        "high_damage_attacks_silent": true,
+        "must_watch_visuals": true
+      }
+    },
+    "visual_feedback": {
+      "sound_of_everything_stopping": true,
+      "frozen_ripples": true,
+      "silence_visualized": true,
+      "mute_icon": "res://vfx/mute.tscn"
+    },
+    "sound": "sfx/terminal_silence.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_terminal_silence_idle.png",
+      "frames": 8,
+      "fps": 1,
+      "loop": true,
+      "silence_form": true,
+      "frozen_ripple_visual": true,
+      "sound_stopped": true
+    },
+    "quiet": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_terminal_silence_quiet.png",
+      "frames": 8,
+      "fps": 2,
+      "loop": false,
+      "sound": "sfx/terminal_silence.wav",
+      "audio_mute": true,
+      "silence_spreads": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_terminal_silence_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.6, 0.3],
+      "silence_disrupt": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_terminal_silence_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/silence_breaks.wav",
+      "deaf_vfx": "res://vfx/deaf.tscn",
+      "sound_returns": true,
+      "warning_disabled_notice": true
+    }
+  }
+}

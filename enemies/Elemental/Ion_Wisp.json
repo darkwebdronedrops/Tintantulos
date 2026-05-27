@@ -1,0 +1,94 @@
+{
+  "name": "Ion Wisp",
+  "faction": "Elemental",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 2,
+  "max_hp": 2,
+  "attack": 2,
+  "pattern": ["Special", "Flee", "Special"],
+  "weight": "Common",
+  "element": "Stratospheric",
+  "mechanic": {
+    "name": "Ionize",
+    "description": "Special = +1 CHARGE (50% chance). At 3 CHARGE, releases lightning chain (1d6 to 3 random targets)",
+    "charge_system": {
+      "max": 3,
+      "gain_on": "Special",
+      "gain_amount": 1,
+      "chance": 0.5
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "damage": "1d6",
+      "targets": 3,
+      "chain_lightning": true,
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "ion_trail": true,
+      "electric_arc": true,
+      "chain_vfx": "res://vfx/chain_lightning.tscn",
+      "unstable_flicker": true
+    },
+    "sound": "sfx/ion_build.wav",
+    "sound_release": "sfx/chain_lightning.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_ion_wisp_idle.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": true,
+      "ion_trail": true,
+      "aurora_wisp": true,
+      "float": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_ion_wisp_attack.png",
+      "frames": 5,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/ion_strike.wav",
+      "electric_touch": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_ion_wisp_special.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/ion_build.wav",
+      "charge_attempt": true,
+      "ion_spike": true,
+      "success_glow": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_ion_wisp_flee.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/ion_dash.wav",
+      "electric_dash": true,
+      "trail_behind": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_ion_wisp_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.8, 1.0, 0.3],
+      "ion_disperse": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_ion_wisp_death.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/ion_fade.wav",
+      "dissipate": true,
+      "ion_scatter": true,
+      "aurora_fade": true
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "name": "The Consumption",
+  "faction": "Aberration",
+  "tier": "Boss",
+  "floor": 3,
+  "boss_type": "Mini",
+  "hp": 30,
+  "max_hp": 30,
+  "attack": 5,
+  "pattern": ["Consume", "Melee", "Defend"],
+  "mechanic": {
+    "name": "Devour Gear",
+    "description": "Eats 1 gear card from deck each turn, heals 5 HP. If no gear: eats random card, heals 3 HP. Post-combat: All eaten cards gone for run.",
+    "gear_consumption": {
+      "target": "gear_cards_first",
+      "then_random": true,
+      "heal_on_gear": 5,
+      "heal_on_random": 3,
+      "per_turn": true
+    },
+    "post_combat": {
+      "permanent_loss": {
+        "eaten_cards": "gone_for_run",
+        "cannot_recover": true
+      }
+    },
+    "visual_feedback": {
+      "hungry_maw": true,
+      "gear_destruction_vfx": "res://vfx/gear_eaten.tscn",
+      "heal_on_consume": true,
+      "consumption_aura": true
+    },
+    "sound": "sfx/consumption_eat.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_consumption_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "hungry_presence": true,
+      "maw_open": true,
+      "gear_hunger": true
+    },
+    "consume": {
+      "sprite": "res://assets/sprites/enemies/boss_the_consumption_consume.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/consumption_eat.wav",
+      "gear_destruction_vfx": "res://vfx/gear_eaten.tscn",
+      "card_eaten": true,
+      "heal_animation": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_consumption_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/consumption_strike.wav",
+      "hunger_slash": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_consumption_defend.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/consumption_shield.tscn",
+      "digesting": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_consumption_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.3, 0.3, 0.4],
+      "maw_bleeds": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_consumption_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/consumption_sated.wav",
+      "permanent_loss_warning": true,
+      "eaten_cards_notice": true,
+      "maw_closes": true
+    }
+  }
+}

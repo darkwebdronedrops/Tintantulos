@@ -1,0 +1,74 @@
+{
+  "name": "Flesh Crawler",
+  "faction": "Undead",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 5,
+  "max_hp": 5,
+  "attack": 2,
+  "pattern": ["Melee", "Gnaw", "Gnaw"],
+  "weight": "Common",
+  "graft": "Flesh",
+  "mechanic": {
+    "name": "Gnaw",
+    "description": "Gnaw = Mill 2 cards from deck to discard. Heals 1 HP per card milled.",
+    "mill": {
+      "count": 2,
+      "destination": "discard",
+      "heal_per_card": 1
+    },
+    "visual_feedback": {
+      "rotting_persistence": true,
+      "hunger": true,
+      "deck_mill_vfx": "res://vfx/flesh_gnaw.tscn",
+      "rotting_flesh": true
+    },
+    "sound": "sfx/flesh_gnaw.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_crawler_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "rotting_form": true,
+      "persistent_hunger": true,
+      "crawling_motion": true
+    },
+    "gnaw": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_crawler_gnaw.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/flesh_gnaw.wav",
+      "deck_mill_vfx": "res://vfx/flesh_gnaw.tscn",
+      "consumes_future": true,
+      "heal_animation": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_crawler_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/flesh_strike.wav",
+      "rotting_claws": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_crawler_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.4, 0.4, 0.4],
+      "flesh_tears": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_flesh_crawler_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/flesh_melt.wav",
+      "hunger_ends": true,
+      "rotting_remains": true
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "name": "Shroud Tax",
+  "faction": "Undead",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 13,
+  "max_hp": 13,
+  "attack": 4,
+  "pattern": ["Claim", "Melee", "Defend"],
+  "weight": "Common",
+  "graft": "Shroud",
+  "mechanic": {
+    "name": "Claim",
+    "description": "Claim = Steal 1 card from hand. If 3+ cards stolen this combat, gains +3 damage.",
+    "claim": {
+      "steal_from_hand": 1,
+      "bonus": {
+        "condition": "3_plus_stolen",
+        "damage_bonus": 3,
+        "message": "The Shroud grows heavy with your choices."
+      }
+    },
+    "visual_feedback": {
+      "shroud_form": true,
+      "tattered_tax": true,
+      "claim_vfx": "res://vfx/shroud_claim.tscn"
+    },
+    "sound": "sfx/claim.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_shroud_tax_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "ghost_tax": true,
+      "shroud_heavy": true
+    },
+    "claim": {
+      "sprite": "res://assets/sprites/enemies/enemy_shroud_tax_claim.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/claim.wav",
+      "claim_vfx": "res://vfx/shroud_claim.tscn",
+      "card_taken": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_shroud_tax_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/shroud_strike.wav"
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_shroud_tax_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/shroud_barrier.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_shroud_tax_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.6, 0.7, 0.3]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_shroud_tax_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/shroud_release.wav"
+    }
+  }
+}

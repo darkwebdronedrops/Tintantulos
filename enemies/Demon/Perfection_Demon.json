@@ -1,0 +1,86 @@
+{
+  "name": "Perfection Demon",
+  "faction": "Demon",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 40,
+  "max_hp": 40,
+  "attack": 7,
+  "pattern": ["Perfect", "Melee", "Punish"],
+  "weight": "Rare",
+  "offer": "Intensity",
+  "mechanic": {
+    "name": "Demand Perfection",
+    "description": "Perfect = Offer 'flawless' (if you play exactly 3 cards this turn, +5 damage each). If accepted and play different count, deal -50% damage ('imperfection').",
+    "perfect": {
+      "offer": "plus_5_if_exactly_3_cards",
+      "cost": "half_damage_if_wrong_count",
+      "message": "Do it perfectly. Exactly right. Or suffer."
+    },
+    "punish": {
+      "effect": "check_perfection",
+      "message": "Not good enough."
+    },
+    "visual_feedback": {
+      "crystal_perfection": true,
+      "symmetric": true,
+      "perfection_glow": "res://vfx/perfect_offer.tscn",
+      "flaw_shadow": "res://vfx/imperfection.tscn"
+    },
+    "sound": "sfx/perfect.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_perfection_demon_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "geometric_perfection": true,
+      "fractal_symmetry": true,
+      "exactly_right": true
+    },
+    "perfect": {
+      "sprite": "res://assets/sprites/enemies/enemy_perfection_demon_perfect.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/perfect.wav",
+      "perfection_glow": "res://vfx/perfect_offer.tscn",
+      "standard_set": true
+    },
+    "punish": {
+      "sprite": "res://assets/sprites/enemies/enemy_perfection_demon_punish.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/imperfection.wav",
+      "flaw_shadow": "res://vfx/imperfection.tscn",
+      "punishes": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_perfection_demon_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/perfection_strikes.wav",
+      "precise": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_perfection_demon_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.9, 1.0, 0.5],
+      "flaw_appears": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_perfection_demon_death.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/perfection_breaks.wav",
+      "flaws_multiply": true,
+      "perfection_impossible": true
+    }
+  }
+}

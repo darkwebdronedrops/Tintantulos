@@ -1,0 +1,82 @@
+{
+  "name": "Comfort Dealer",
+  "faction": "Demon",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 27,
+  "max_hp": 27,
+  "attack": 5,
+  "pattern": ["Comfort", "Melee", "Defend"],
+  "weight": "Common",
+  "offer": "Absolution",
+  "mechanic": {
+    "name": "Comfort",
+    "description": "Comfort = Offer +5 block. If accepted, player gains 'Complacent' (next turn, cannot gain block).",
+    "comfort": {
+      "offer": "plus_5_block",
+      "cost": "next_turn_no_block",
+      "message": "Here, let me shield you. You deserve comfort."
+    },
+    "visual_feedback": {
+      "soft_form": true,
+      "cushioning": true,
+      "comfort_glow": "res://vfx/comfort_offer.tscn",
+      "complacency_shadow": "res://vfx/complacent.tscn"
+    },
+    "sound": "sfx/comfort.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_comfort_dealer_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "soft_form": true,
+      "welcoming": true,
+      "motherly": true,
+      "too_comfortable": true
+    },
+    "comfort": {
+      "sprite": "res://assets/sprites/enemies/enemy_comfort_dealer_comfort.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/comfort.wav",
+      "comfort_glow": "res://vfx/comfort_offer.tscn",
+      "shield_offered": true,
+      "warmth_given": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_comfort_dealer_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/comfort_strikes.wav",
+      "harsh_awakening": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_comfort_dealer_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/comfort_barrier.tscn",
+      "soft_shield": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_comfort_dealer_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.6, 0.7, 0.4],
+      "comfort_disturbed": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_comfort_dealer_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/comfort_fades.wav",
+      "cold_returns": true
+    }
+  }
+}

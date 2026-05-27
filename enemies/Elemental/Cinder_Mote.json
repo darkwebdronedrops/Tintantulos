@@ -1,0 +1,88 @@
+{
+  "name": "Cinder Mote",
+  "faction": "Elemental",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 2,
+  "max_hp": 2,
+  "attack": 2,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Common",
+  "element": "Pyre",
+  "mechanic": {
+    "name": "Ignition",
+    "description": "Special = +1 CHARGE. At 3 CHARGE, next Melee explodes (+3d4 damage, self takes 1 damage)",
+    "charge_system": {
+      "max": 3,
+      "gain_on": "Special",
+      "gain_amount": 1
+    },
+    "release": {
+      "trigger": "melee_at_max",
+      "damage_bonus": "3d4",
+      "self_damage": 1,
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "charge_glow": true,
+      "ember_intensity": true,
+      "explosion_vfx": "res://vfx/cinder_explode.tscn",
+      "charge_indicator": "res://ui/charge_counter.tscn"
+    },
+    "sound": "sfx/charge_build.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_cinder_mote_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "ember_pulse": true,
+      "faint_glow": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_cinder_mote_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/cinder_strike.wav",
+      "ember_trail": true,
+      "check_explosion": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_cinder_mote_special.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/charge_build.wav",
+      "charge_gain": true,
+      "ember_intensify": true,
+      "glow_increase": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_cinder_mote_defend.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/fire_shield.tscn",
+      "ember_harden": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_cinder_mote_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "ember_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_cinder_mote_death.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/cinder_extinguish.wav",
+      "ember_scatter": true,
+      "smoke_puff": true
+    }
+  }
+}

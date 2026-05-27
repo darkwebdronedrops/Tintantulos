@@ -1,0 +1,87 @@
+{
+  "name": "Brass Enforcer",
+  "faction": "Construct",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 12,
+  "max_hp": 12,
+  "attack": 5,
+  "pattern": ["Melee", "Special", "Melee"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Overclock",
+    "description": "Special = Take 3 damage, next 2 attacks deal +4 damage",
+    "self_damage": 3,
+    "buff": {
+      "type": "damage_boost",
+      "value": 4,
+      "duration": 2,
+      "applies_to": "next_attacks"
+    },
+    "visual_feedback": {
+      "steam_burst": true,
+      "glow_red": true,
+      "speed_lines": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_enforcer_idle.png",
+      "frames": 6,
+      "fps": 5,
+      "loop": true,
+      "heavy_stance": true,
+      "piston_breathing": true,
+      "brass_shine": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_enforcer_attack.png",
+      "frames": 10,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/enforcer_slam.wav",
+      "heavy_impact": true,
+      "screen_shake": true,
+      "dust_kickup": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_enforcer_special.png",
+      "frames": 12,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/overclock_engaged.wav",
+      "steam_vent": true,
+      "red_glow_pulse": true,
+      "self_damage_flash": true,
+      "buff_aura": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_enforcer_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "dent_armor": true,
+      "brass_spark": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_enforcer_death.png",
+      "frames": 14,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/enforcer_shutdown.wav",
+      "brass_shatter": true,
+      "steam_final_burst": true,
+      "collapse_heavy": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_enforcer_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/brass_shield.tscn",
+      "brace_stance": true,
+      "steam_defensive": true
+    }
+  }
+}

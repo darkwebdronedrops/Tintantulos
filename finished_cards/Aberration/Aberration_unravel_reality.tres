@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_aberration26"]
+
+[resource]
+script = ExtResource("1_aberration26")
+card_name = "Unravel Reality"
+card_type = "Field"
+faction = "Aberration"
+attention_cost = 5
+description = "Field: All damage is randomized (1d6 added or subtracted). Glitch: Cards you play have 25% chance to trigger twice. Persist."
+keywords = ["Glitch", "Void"]
+damage_flat = 0
+damage_dice = "1d6"
+uses_dice = true
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = true
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "all_damage_randomized_plus_minus_1d6, glitch_25_percent_double_trigger"
+trap_cast_cost = 5
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Aberration/Aberration_unravel_reality.png"
+frame_texture_path = "res://assets/sprites/cards/aberration_frame.png"

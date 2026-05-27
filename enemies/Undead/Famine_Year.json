@@ -1,0 +1,74 @@
+{
+  "name": "Famine Year",
+  "faction": "Undead",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 38,
+  "max_hp": 38,
+  "attack": 7,
+  "pattern": ["Melee", "Melee", "Starve"],
+  "weight": "Rare",
+  "graft": "Flesh",
+  "mechanic": {
+    "name": "Starvation",
+    "description": "Starve = Mill 10 cards from deck. Reduces deck exhaustion timer by 5 (you fatigue faster).",
+    "starve": {
+      "mill": 10,
+      "exhaustion_reduction": 5,
+      "message": "Your future grows thin."
+    },
+    "visual_feedback": {
+      "famine_form": true,
+      "starving_aura": true,
+      "starvation_vfx": "res://vfx/starvation.tscn",
+      "future_fades": true
+    },
+    "sound": "sfx/starvation.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_famine_year_idle.png",
+      "frames": 10,
+      "fps": 2,
+      "loop": true,
+      "famine_form": true,
+      "starving_presence": true,
+      "hunger_grows": true
+    },
+    "starve": {
+      "sprite": "res://assets/sprites/enemies/enemy_famine_year_starve.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/starvation.wav",
+      "starvation_vfx": "res://vfx/starvation.tscn",
+      "deck_devours": true,
+      "future_consumes": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_famine_year_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/famine_strike.wav",
+      "hunger_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_famine_year_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.5, 0.5, 0.4],
+      "famine_shudders": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_famine_year_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/famine_ends.wav",
+      "harvest_comes": true,
+      "hunger_sated": true
+    }
+  }
+}

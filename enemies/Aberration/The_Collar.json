@@ -1,0 +1,90 @@
+{
+  "name": "The Collar",
+  "faction": "Aberration",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 30,
+  "max_hp": 30,
+  "attack": 5,
+  "pattern": ["Hold", "Tighten", "Release"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Limit Complexity",
+    "description": "Player can only play cards costing 1-2 Attention. Try to play 4+ = Collar tightens, take 5 damage. Play only simple cards for 3 turns = Collar loosens, heal 10 HP.",
+    "complexity_limit": {
+      "max_card_cost": 2,
+      "penalty": {
+        "damage": 5,
+        "message": "Collar tightens"
+      },
+      "reward": {
+        "condition": "3_turns_simple_only",
+        "heal": 10,
+        "message": "Collar loosens"
+      }
+    },
+    "visual_feedback": {
+      "metal_band": true,
+      "neck_height_float": true,
+      "tighten_animation": true,
+      "loosen_glow": "res://vfx/collar_loosen.tscn",
+      "cost_limit_indicator": true
+    },
+    "sound": "sfx/collar_tighten.wav",
+    "sound_loosen": "sfx/collar_loosen.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_collar_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "metal_band_float": true,
+      "tighten_loosen_cycle": true,
+      "constraint_aura": true
+    },
+    "hold": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_collar_hold.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "collar_steady": true
+    },
+    "tighten": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_collar_tighten.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/collar_tighten.wav",
+      "collar_contract": true,
+      "penalty_flash": true
+    },
+    "release": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_collar_release.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/collar_loosen.wav",
+      "loosen_vfx": "res://vfx/collar_loosen.tscn",
+      "collar_expand": true,
+      "heal_glow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_collar_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.8, 0.9, 0.3],
+      "collar_spark": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_collar_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/collar_fall.wav",
+      "collar_falls": true,
+      "constraint_release": true
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "name": "Piston Assembly",
+  "faction": "Construct",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 6,
+  "max_hp": 6,
+  "attack": 3,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Compress",
+    "description": "Special stores damage, releases on next Melee (+stored)",
+    "storage": {
+      "max_stored": 10,
+      "visual_indicator": "steam_pressure",
+      "steam_particles": true
+    },
+    "release_multiplier": 1.0,
+    "sound_charge": "sfx/piston_compress.wav",
+    "sound_release": "sfx/piston_release.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_piston_assembly_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "steam_puffs": true,
+      "piston_extend_contract": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_piston_assembly_attack.png",
+      "frames": 8,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/piston_slam.wav",
+      "extend_full": true,
+      "impact_frame": 4,
+      "shake_screen": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_piston_assembly_special.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/piston_compress.wav",
+      "compress_animation": true,
+      "steam_intensify": true,
+      "pressure_gauge_fill": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_piston_assembly_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "dent_chassis": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_piston_assembly_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/piston_rupture.wav",
+      "steam_burst": true,
+      "oil_leak": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_piston_assembly_defend.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/metal_shield.tscn",
+      "retract_defensive": true
+    }
+  }
+}

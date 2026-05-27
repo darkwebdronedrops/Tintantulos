@@ -1,0 +1,82 @@
+{
+  "name": "Truth Seeker",
+  "faction": "Demon",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 20,
+  "max_hp": 20,
+  "attack": 5,
+  "pattern": ["Reveal", "Melee", "Defend"],
+  "weight": "Common",
+  "offer": "Certainty",
+  "mechanic": {
+    "name": "Brutal Honesty",
+    "description": "Reveal = Reveal enemy's next 3 actions. For each one revealed, player must discard 1 card ('price of truth').",
+    "reveal": {
+      "show_next_actions": 3,
+      "cost_per_reveal": "discard_1",
+      "message": "Truth has a cost. Do you want to know?"
+    },
+    "visual_feedback": {
+      "crystal_form": true,
+      "perfect_clarity": true,
+      "reveal_glow": "res://vfx/truth_reveal.tscn",
+      "cost_shadow": "res://vfx/truth_cost.tscn"
+    },
+    "sound": "sfx/reveal.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_truth_seeker_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "crystal_body": true,
+      "clear_as_glass": true,
+      "no_shadows": true
+    },
+    "reveal": {
+      "sprite": "res://assets/sprites/enemies/enemy_truth_seeker_reveal.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/reveal.wav",
+      "reveal_glow": "res://vfx/truth_reveal.tscn",
+      "future_clear": true,
+      "cost_visible": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_truth_seeker_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/truth_strikes.wav",
+      "honest_blow": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_truth_seeker_defend.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/crystal_barrier.tscn",
+      "transparency": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_truth_seeker_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.9, 1.0, 0.4],
+      "crystal_fractures": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_truth_seeker_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/truth_shatters.wav",
+      "clarity_fades": true,
+      "mystery_returns": true
+    }
+  }
+}

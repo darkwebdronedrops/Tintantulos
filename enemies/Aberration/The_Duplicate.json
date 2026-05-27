@@ -1,0 +1,81 @@
+{
+  "name": "The Duplicate",
+  "faction": "Aberration",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 15,
+  "max_hp": 15,
+  "attack": 4,
+  "pattern": ["Melee", "Defend", "Special"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Attention Cap",
+    "description": "Player's Attention cannot exceed 15 while Duplicate lives. Duplicate gains +1 damage for each point of Attention the player is missing from max.",
+    "attention_drain": {
+      "max_attention_cap": 15,
+      "damage_bonus_per_missing_attention": 1
+    },
+    "visual_feedback": {
+      "perfect_copy": true,
+      "mirrored_movements": true,
+      "attention_cap_indicator": true,
+      "damage_bonus_glow": true
+    },
+    "sound": "sfx/duplicate_hum.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_duplicate_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "player_mirror": true,
+      "wrong_handed": true,
+      "uncanny_valley": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_duplicate_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/duplicate_strike.wav",
+      "mirror_attack": true,
+      "bonus_damage_glow": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_duplicate_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/duplicate_cap.wav",
+      "attention_cap_vfx": true,
+      "constraint_aura": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_duplicate_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/duplicate_shield.tscn",
+      "mirror_defend": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_duplicate_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.5, 0.9, 0.3],
+      "copy_glitch": true,
+      "mirror_crack": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_duplicate_death.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/duplicate_dissolve.wav",
+      "copy_fade": true,
+      "attention_release": true
+    }
+  }
+}

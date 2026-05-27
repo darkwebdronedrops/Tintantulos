@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_clockwork_tick"]
+
+[resource]
+script = ExtResource("1_clockwork_tick")
+card_name = "Clockwork Tick"
+faction = "Construct"
+card_type = "Summon"
+attention_cost = 2
+quiddity_gain = 0
+damage_dice = ""
+damage_flat = 0
+uses_dice = true
+shield_amount = 0
+heal_amount = 0
+summon_attack = 1
+summon_hp = 1
+summon_count = 2
+summon_growth_atk = 0
+summon_growth_hp = 0
+attack_type = ""
+attack_roll = ""
+keywords = PackedStringArray("Machine", "Fast")
+trap_cast_cost = 0
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+range_type = ""
+aoe_radius = 0
+targets_all = false
+special_effect = ""
+requires_condition = ""
+corruption_gain = 0
+is_overlay = false
+overlay_type = ""
+gem_cost = 0
+description = "Summon TWO 1/1 Clockwork Ticks. Fast. They expire after 3 turns."
+frame_texture_path = "res://assets/sprites/cards/construct_frame.png"
+sprite_texture_path = "res://assets/sprites/cards/Construct/Construct_clockwork_tick.png"

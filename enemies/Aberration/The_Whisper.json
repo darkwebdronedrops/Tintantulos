@@ -1,0 +1,93 @@
+{
+  "name": "The Whisper",
+  "faction": "Aberration",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 20,
+  "max_hp": 20,
+  "attack": 4,
+  "pattern": ["Speak", "Speak", "Command"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Specific Attention",
+    "description": "Describes player state: 'You're saving the heal. You don't trust me.' Applies 'Exposed' (1 stack). At 5 stacks: Must 'Acknowledge' (0-cost Defend, does nothing). Acknowledge = stacks clear. Ignore = Whisper deals damage = stacks × 2.",
+    "exposure": {
+      "stack_gain_per_speak": 1,
+      "max_stacks": 5,
+      "at_max": {
+        "require_acknowledge": true,
+        "acknowledge_card": {
+          "cost": 0,
+          "type": "Defend",
+          "effect": "none",
+          "clears_stacks": true
+        },
+        "ignore_penalty": {
+          "damage": "stacks × 2"
+        }
+      }
+    },
+    "visual_feedback": {
+      "shadow_lips": true,
+      "whisper_text": true,
+      "exposed_stacks": true,
+      "acknowledge_glow": "res://vfx/acknowledge.tscn"
+    },
+    "sound": "sfx/whisper_speak.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_whisper_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "lips_of_shadow": true,
+      "speaking_truths": true,
+      "exposure_aura": true
+    },
+    "speak": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_whisper_speak.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/whisper_speak.wav",
+      "truth_reveal": true,
+      "exposed_stack_add": true
+    },
+    "command": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_whisper_command.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/whisper_command.wav",
+      "acknowledge_demand": true,
+      "penalty_threat": true
+    },
+    "acknowledge": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_whisper_acknowledge.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/whisper_accept.wav",
+      "stacks_clear": true,
+      "acknowledge_vfx": "res://vfx/acknowledge.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_whisper_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.4, 0.3, 0.5, 0.3],
+      "lips_fade": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_whisper_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/whisper_silence.wav",
+      "lips_close": true,
+      "silence_falls": true
+    }
+  }
+}

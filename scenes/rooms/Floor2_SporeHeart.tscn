@@ -1,0 +1,638 @@
+[gd_scene load_steps=7 format=3 uid="uid://floor2_spore_heart"]
+
+[ext_resource type="Script" path="res://scripts/Floor2RoomBase.gd" id="1_floor2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/bg_spore_heart.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/portal_fungal.png" id="3_portal"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/arena_glow.png" id="4_arena_glow"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/boss_arena_f2.png" id="5_boss_arena"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor2/spore_cloud.png" id="6_spore_cloud"]
+
+[node name="Floor2_SporeHeart" type="Node2D"]
+script = ExtResource("1_floor2")
+room_id = "spore_heart"
+room_display_name = "The Spore Heart"
+dominant_faction = ""
+auto_spawn = false
+
+[node name="PortalEntrance" type="Marker2D" parent="."]
+position = Vector2(960, 1150)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(960, 1050)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(960, 800)
+texture = ExtResource("2_bg")
+scale = Vector2(8, 8)
+
+[node name="ArenaGlow" type="Sprite2D" parent="Interior"]
+position = Vector2(960, 800)
+texture = ExtResource("4_arena_glow")
+scale = Vector2(2.0, 2.0)
+modulate = Color(1, 1, 1, 0.5)
+
+[node name="BossArena" type="Sprite2D" parent="Interior"]
+position = Vector2(960, 600)
+texture = ExtResource("5_boss_arena")
+scale = Vector2(1.5, 1.5)
+
+[node name="SporeHeart" type="Sprite2D" parent="Interior"]
+position = Vector2(960, 400)
+texture = ExtResource("6_spore_cloud")
+scale = Vector2(3.0, 3.0)
+modulate = Color(0.8, 0.4, 0.8, 0.8)
+
+[node name="PortalReturn" type="Sprite2D" parent="Interior"]
+position = Vector2(960, 1050)
+texture = ExtResource("3_portal")
+scale = Vector2(0.8, 0.8)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(960, 800)
+
+[node name="Walls" type="StaticBody2D" parent="."]
+
+[node name="Wall_001" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(363.8, 1844.6, 435.8, 1812.6, 460.2, 1867.4, 388.2, 1899.4)
+
+[node name="Wall_002" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(418.9, 1832.7, 426.9, 1800.7, 485.1, 1815.3, 477.1, 1847.3)
+
+[node name="Wall_003" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(428.1, 1819.1, 412.1, 1779.1, 467.9, 1756.9, 483.9, 1796.9)
+
+[node name="Wall_004" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(423.4, 1793.0, 303.4, 1713.0, 336.6, 1663.0, 456.6, 1743.0)
+
+[node name="Wall_005" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(300.5, 1710.8, 244.5, 1662.8, 283.5, 1617.2, 339.5, 1665.2)
+
+[node name="Wall_006" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(261.4, 1610.1, 445.4, 1594.1, 450.6, 1653.9, 266.6, 1669.9)
+
+[node name="Wall_007" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(418.0, 1624.0, 418.0, 1560.0, 478.0, 1560.0, 478.0, 1624.0)
+
+[node name="Wall_008" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(431.0, 1584.7, 303.0, 1496.7, 337.0, 1447.3, 465.0, 1535.3)
+
+[node name="Wall_009" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(296.0, 1490.0, 248.0, 1426.0, 296.0, 1390.0, 344.0, 1454.0)
+
+[node name="Wall_010" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(263.8, 1379.2, 319.8, 1363.2, 336.2, 1420.8, 280.2, 1436.8)
+
+[node name="Wall_011" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(298.0, 1392.0, 298.0, 1352.0, 358.0, 1352.0, 358.0, 1392.0)
+
+[node name="Wall_012" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(318.5, 1323.5, 390.5, 1299.5, 409.5, 1356.5, 337.5, 1380.5)
+
+[node name="Wall_013" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(370.1, 1331.0, 362.1, 1251.0, 421.9, 1245.0, 429.9, 1325.0)
+
+[node name="Wall_014" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(399.7, 1219.0, 519.7, 1251.0, 504.3, 1309.0, 384.3, 1277.0)
+
+[node name="Wall_015" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(488.7, 1298.9, 352.7, 1130.9, 399.3, 1093.1, 535.3, 1261.1)
+
+[node name="Wall_016" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(355.3, 1133.7, 179.3, 965.7, 220.7, 922.3, 396.7, 1090.3)
+
+[node name="Wall_017" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(205.2, 914.5, 341.2, 938.5, 330.8, 997.5, 194.8, 973.5)
+
+[node name="Wall_018" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(343.9, 939.1, 431.9, 963.1, 416.1, 1020.9, 328.1, 996.9)
+
+[node name="Wall_019" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(424.0, 962.0, 568.0, 962.0, 568.0, 1022.0, 424.0, 1022.0)
+
+[node name="Wall_020" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(541.2, 1005.4, 501.2, 925.4, 554.8, 898.6, 594.8, 978.6)
+
+[node name="Wall_021" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(516.2, 884.4, 572.2, 860.4, 595.8, 915.6, 539.8, 939.6)
+
+[node name="Wall_022" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(561.4, 907.7, 177.4, 467.7, 222.6, 428.3, 606.6, 868.3)
+
+[node name="Wall_023" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(218.2, 424.2, 522.2, 656.2, 485.8, 703.8, 181.8, 471.8)
+
+[node name="Wall_024" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(499.1, 650.4, 547.1, 642.4, 556.9, 701.6, 508.9, 709.6)
+
+[node name="Wall_025" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(569.3, 647.5, 761.3, 783.5, 726.7, 832.5, 534.7, 696.5)
+
+[node name="Wall_026" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(714.6, 802.1, 722.6, 762.1, 781.4, 773.9, 773.4, 813.9)
+
+[node name="Wall_027" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(723.8, 778.3, 659.8, 602.3, 716.2, 581.7, 780.2, 757.7)
+
+[node name="Wall_028" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(706.5, 568.4, 818.5, 656.4, 781.5, 703.6, 669.5, 615.6)
+
+[node name="Wall_029" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(772.5, 692.0, 636.5, 380.0, 691.5, 356.0, 827.5, 668.0)
+
+[node name="Wall_030" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(685.2, 346.8, 797.2, 458.8, 754.8, 501.2, 642.8, 389.2)
+
+[node name="Wall_031" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(781.9, 450.6, 821.9, 458.6, 810.1, 517.4, 770.1, 509.4)
+
+[node name="Wall_032" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(841.7, 472.5, 1169.7, 1016.5, 1118.3, 1047.5, 790.3, 503.5)
+
+[node name="Wall_033" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1115.5, 1041.5, 955.5, 561.5, 1012.5, 542.5, 1172.5, 1022.5)
+
+[node name="Wall_034" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(966.0, 528.0, 998.0, 504.0, 1034.0, 552.0, 1002.0, 576.0)
+
+[node name="Wall_035" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1011.8, 498.3, 1067.8, 490.3, 1076.2, 549.7, 1020.2, 557.7)
+
+[node name="Wall_036" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1047.6, 502.6, 1087.6, 446.6, 1136.4, 481.4, 1096.4, 537.4)
+
+[node name="Wall_037" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1082.1, 461.5, 1090.1, 365.5, 1149.9, 370.5, 1141.9, 466.5)
+
+[node name="Wall_038" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1143.0, 348.8, 1223.0, 444.8, 1177.0, 483.2, 1097.0, 387.2)
+
+[node name="Wall_039" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1202.7, 434.1, 1290.7, 442.1, 1285.3, 501.9, 1197.3, 493.9)
+
+[node name="Wall_040" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1274.6, 445.2, 1354.6, 405.2, 1381.4, 458.8, 1301.4, 498.8)
+
+[node name="Wall_041" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1346.8, 410.8, 1394.8, 362.8, 1437.2, 405.2, 1389.2, 453.2)
+
+[node name="Wall_042" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1429.4, 357.2, 1541.4, 413.2, 1514.6, 466.8, 1402.6, 410.8)
+
+[node name="Wall_043" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1526.6, 410.0, 1702.6, 402.0, 1705.4, 462.0, 1529.4, 470.0)
+
+[node name="Wall_044" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1679.0, 415.4, 1711.0, 367.4, 1761.0, 400.6, 1729.0, 448.6)
+
+[node name="Wall_045" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1739.0, 354.1, 1819.0, 362.1, 1813.0, 421.9, 1733.0, 413.9)
+
+[node name="Wall_046" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1845.4, 386.1, 1853.4, 426.1, 1794.6, 437.9, 1786.6, 397.9)
+
+[node name="Wall_047" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1828.5, 402.3, 1988.5, 426.3, 1979.5, 485.7, 1819.5, 461.7)
+
+[node name="Wall_048" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2013.4, 462.1, 1909.4, 966.1, 1850.6, 953.9, 1954.6, 449.9)
+
+[node name="Wall_049" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1856.7, 941.0, 2280.7, 421.0, 2327.3, 459.0, 1903.3, 979.0)
+
+[node name="Wall_050" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2327.4, 421.3, 2359.4, 461.3, 2312.6, 498.7, 2280.6, 458.7)
+
+[node name="Wall_051" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2365.3, 486.5, 2333.3, 630.5, 2274.7, 617.5, 2306.7, 473.5)
+
+[node name="Wall_052" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2290.6, 597.2, 2450.6, 517.2, 2477.4, 570.8, 2317.4, 650.8)
+
+[node name="Wall_053" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2442.8, 522.8, 2562.8, 402.8, 2605.2, 445.2, 2485.2, 565.2)
+
+[node name="Wall_054" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2611.7, 435.6, 2467.7, 779.6, 2412.3, 756.4, 2556.3, 412.4)
+
+[node name="Wall_055" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2467.9, 756.9, 2483.9, 796.9, 2428.1, 819.1, 2412.1, 779.1)
+
+[node name="Wall_056" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2442.6, 781.2, 2554.6, 725.2, 2581.4, 778.8, 2469.4, 834.8)
+
+[node name="Wall_057" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2568.0, 722.0, 2624.0, 722.0, 2624.0, 782.0, 2568.0, 782.0)
+
+[node name="Wall_058" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2603.0, 730.6, 2971.0, 370.6, 3013.0, 413.4, 2645.0, 773.4)
+
+[node name="Wall_059" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(3016.7, 409.0, 2824.7, 689.0, 2775.3, 655.0, 2967.3, 375.0)
+
+[node name="Wall_060" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2829.7, 676.2, 2821.7, 732.2, 2762.3, 723.8, 2770.3, 667.8)
+
+[node name="Wall_061" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2816.0, 746.0, 2648.0, 970.0, 2600.0, 934.0, 2768.0, 710.0)
+
+[node name="Wall_062" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2650.4, 937.8, 2706.4, 1041.8, 2653.6, 1070.2, 2597.6, 966.2)
+
+[node name="Wall_063" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2669.5, 1027.9, 2861.5, 955.9, 2882.5, 1012.1, 2690.5, 1084.1)
+
+[node name="Wall_064" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2891.5, 1006.8, 2675.5, 1190.8, 2636.5, 1145.2, 2852.5, 961.2)
+
+[node name="Wall_065" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2644.5, 1140.3, 3012.5, 988.3, 3035.5, 1043.7, 2667.5, 1195.7)
+
+[node name="Wall_066" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(3046.1, 1036.3, 2774.1, 1332.3, 2729.9, 1291.7, 3001.9, 995.7)
+
+[node name="Wall_067" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2745.7, 1282.7, 2857.7, 1258.7, 2870.3, 1317.3, 2758.3, 1341.3)
+
+[node name="Wall_068" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2888.4, 1305.4, 2848.4, 1361.4, 2799.6, 1326.6, 2839.6, 1270.6)
+
+[node name="Wall_069" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2821.7, 1314.1, 3029.7, 1298.1, 3034.3, 1357.9, 2826.3, 1373.9)
+
+[node name="Wall_070" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(3050.5, 1351.6, 2938.5, 1439.6, 2901.5, 1392.4, 3013.5, 1304.4)
+
+[node name="Wall_071" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2936.3, 1441.2, 2800.3, 1529.2, 2767.7, 1478.8, 2903.7, 1390.8)
+
+[node name="Wall_072" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2784.0, 1474.0, 2896.0, 1474.0, 2896.0, 1534.0, 2784.0, 1534.0)
+
+[node name="Wall_073" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2922.8, 1490.6, 2938.8, 1522.6, 2885.2, 1549.4, 2869.2, 1517.4)
+
+[node name="Wall_074" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2941.1, 1528.7, 2949.1, 1560.7, 2890.9, 1575.3, 2882.9, 1543.3)
+
+[node name="Wall_075" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2942.6, 1587.8, 2886.6, 1651.8, 2841.4, 1612.2, 2897.4, 1548.2)
+
+[node name="Wall_076" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2865.4, 1602.0, 3033.4, 1610.0, 3030.6, 1670.0, 2862.6, 1662.0)
+
+[node name="Wall_077" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(3051.4, 1662.9, 2947.4, 1750.9, 2908.6, 1705.1, 3012.6, 1617.1)
+
+[node name="Wall_078" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2953.7, 1743.4, 2929.7, 1783.4, 2878.3, 1752.6, 2902.3, 1712.6)
+
+[node name="Wall_079" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2907.8, 1797.8, 2347.8, 1869.8, 2340.2, 1810.2, 2900.2, 1738.2)
+
+[node name="Wall_080" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2353.5, 1811.5, 2905.5, 1995.5, 2886.5, 2052.5, 2334.5, 1868.5)
+
+[node name="Wall_081" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2914.7, 2047.4, 2874.7, 2079.4, 2837.3, 2032.6, 2877.3, 2000.6)
+
+[node name="Wall_082" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2857.5, 2086.0, 2697.5, 2094.0, 2694.5, 2034.0, 2854.5, 2026.0)
+
+[node name="Wall_083" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2715.6, 2041.3, 2835.6, 2145.3, 2796.4, 2190.7, 2676.4, 2086.7)
+
+[node name="Wall_084" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2814.4, 2198.0, 2662.4, 2190.0, 2665.6, 2130.0, 2817.6, 2138.0)
+
+[node name="Wall_085" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2681.4, 2135.6, 2961.4, 2335.6, 2926.6, 2384.4, 2646.6, 2184.4)
+
+[node name="Wall_086" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2964.2, 2337.8, 3052.2, 2417.8, 3011.8, 2462.2, 2923.8, 2382.2)
+
+[node name="Wall_087" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(3030.3, 2470.0, 2886.3, 2462.0, 2889.7, 2402.0, 3033.7, 2410.0)
+
+[node name="Wall_088" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2882.8, 2461.5, 2746.8, 2437.5, 2757.2, 2378.5, 2893.2, 2402.5)
+
+[node name="Wall_089" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2780.8, 2399.8, 2796.8, 2455.8, 2739.2, 2472.2, 2723.2, 2416.2)
+
+[node name="Wall_090" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2757.0, 2491.9, 2493.0, 2387.9, 2515.0, 2332.1, 2779.0, 2436.1)
+
+[node name="Wall_091" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2523.4, 2337.1, 2731.4, 2513.1, 2692.6, 2558.9, 2484.6, 2382.9)
+
+[node name="Wall_092" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2716.2, 2565.7, 2660.2, 2573.7, 2651.8, 2514.3, 2707.8, 2506.3)
+
+[node name="Wall_093" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2675.5, 2521.2, 3003.5, 2801.2, 2964.5, 2846.8, 2636.5, 2566.8)
+
+[node name="Wall_094" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2969.8, 2850.4, 2761.8, 2738.4, 2790.2, 2685.6, 2998.2, 2797.6)
+
+[node name="Wall_095" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2762.6, 2738.8, 2570.6, 2642.8, 2597.4, 2589.2, 2789.4, 2685.2)
+
+[node name="Wall_096" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2604.4, 2594.0, 3052.4, 3010.0, 3011.6, 3054.0, 2563.6, 2638.0)
+
+[node name="Wall_097" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(3017.0, 3058.0, 2409.0, 2706.0, 2439.0, 2654.0, 3047.0, 3006.0)
+
+[node name="Wall_098" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2453.7, 2675.4, 2469.7, 2779.4, 2410.3, 2788.6, 2394.3, 2684.6)
+
+[node name="Wall_099" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2464.4, 2766.5, 2648.4, 3022.5, 2599.6, 3057.5, 2415.6, 2801.5)
+
+[node name="Wall_100" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2603.2, 3061.6, 2371.2, 2837.6, 2412.8, 2794.4, 2644.8, 3018.4)
+
+[node name="Wall_101" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2372.2, 2838.6, 2244.2, 2726.6, 2283.8, 2681.4, 2411.8, 2793.4)
+
+[node name="Wall_102" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2250.6, 2730.8, 2170.6, 2690.8, 2197.4, 2637.2, 2277.4, 2677.2)
+
+[node name="Wall_103" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2205.2, 2685.2, 2181.2, 2709.2, 2138.8, 2666.8, 2162.8, 2642.8)
+
+[node name="Wall_104" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2155.1, 2717.6, 2107.1, 2709.6, 2116.9, 2650.4, 2164.9, 2658.4)
+
+[node name="Wall_105" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2140.1, 2669.5, 2212.1, 2861.5, 2155.9, 2882.5, 2083.9, 2690.5)
+
+[node name="Wall_106" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2162.0, 2892.3, 2066.0, 2788.3, 2110.0, 2747.7, 2206.0, 2851.7)
+
+[node name="Wall_107" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2117.0, 2760.4, 2165.0, 2944.4, 2107.0, 2959.6, 2059.0, 2775.6)
+
+[node name="Wall_108" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2147.1, 2979.9, 2107.1, 2995.9, 2084.9, 2940.1, 2124.9, 2924.1)
+
+[node name="Wall_109" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2082.6, 2994.8, 2034.6, 2970.8, 2061.4, 2917.2, 2109.4, 2941.2)
+
+[node name="Wall_110" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2052.9, 2973.6, 2004.9, 2981.6, 1995.1, 2922.4, 2043.1, 2914.4)
+
+[node name="Wall_111" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(2005.9, 2981.4, 1965.9, 2989.4, 1954.1, 2930.6, 1994.1, 2922.6)
+
+[node name="Wall_112" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1936.2, 2978.3, 1856.2, 2874.3, 1903.8, 2837.7, 1983.8, 2941.7)
+
+[node name="Wall_113" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1853.6, 2870.2, 1797.6, 2766.2, 1850.4, 2737.8, 1906.4, 2841.8)
+
+[node name="Wall_114" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1850.8, 2765.4, 1730.8, 3005.4, 1677.2, 2978.6, 1797.2, 2738.6)
+
+[node name="Wall_115" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1676.8, 3004.6, 1628.8, 2900.6, 1683.2, 2875.4, 1731.2, 2979.4)
+
+[node name="Wall_116" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1670.9, 2914.0, 1614.9, 2946.0, 1585.1, 2894.0, 1641.1, 2862.0)
+
+[node name="Wall_117" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1570.6, 2926.2, 1538.6, 2774.2, 1597.4, 2761.8, 1629.4, 2913.8)
+
+[node name="Wall_118" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1594.8, 2781.4, 1538.8, 2893.4, 1485.2, 2866.6, 1541.2, 2754.6)
+
+[node name="Wall_119" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1537.2, 2896.3, 1433.2, 3056.3, 1382.8, 3023.7, 1486.8, 2863.7)
+
+[node name="Wall_120" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1378.8, 3046.7, 1354.8, 2942.7, 1413.2, 2929.3, 1437.2, 3033.3)
+
+[node name="Wall_121" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1354.1, 2933.5, 1370.1, 2741.5, 1429.9, 2746.5, 1413.9, 2938.5)
+
+[node name="Wall_122" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1424.7, 2761.0, 1336.7, 2889.0, 1287.3, 2855.0, 1375.3, 2727.0)
+
+[node name="Wall_123" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1335.2, 2891.0, 1263.2, 2979.0, 1216.8, 2941.0, 1288.8, 2853.0)
+
+[node name="Wall_124" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1212.6, 2972.2, 1180.6, 2900.2, 1235.4, 2875.8, 1267.4, 2947.8)
+
+[node name="Wall_125" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1232.8, 2904.9, 1128.8, 3056.9, 1079.2, 3023.1, 1183.2, 2871.1)
+
+[node name="Wall_126" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1074.1, 3037.9, 1082.1, 2925.9, 1141.9, 2930.1, 1133.9, 3042.1)
+
+[node name="Wall_127" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1116.9, 2957.6, 1068.9, 2965.6, 1059.1, 2906.4, 1107.1, 2898.4)
+
+[node name="Wall_128" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1036.1, 2925.0, 1124.1, 2701.0, 1179.9, 2723.0, 1091.9, 2947.0)
+
+[node name="Wall_129" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1173.2, 2733.2, 1005.2, 2901.2, 962.8, 2858.8, 1130.8, 2690.8)
+
+[node name="Wall_130" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(954.2, 2883.3, 946.2, 2811.3, 1005.8, 2804.7, 1013.8, 2876.7)
+
+[node name="Wall_131" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(946.3, 2804.0, 962.3, 2684.0, 1021.7, 2692.0, 1005.7, 2812.0)
+
+[node name="Wall_132" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1013.2, 2709.2, 661.2, 3061.2, 618.8, 3018.8, 970.8, 2666.8)
+
+[node name="Wall_133" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(616.6, 3058.7, 584.6, 3018.7, 631.4, 2981.3, 663.4, 3021.3)
+
+[node name="Wall_134" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(581.9, 2985.3, 725.9, 2729.3, 778.1, 2758.7, 634.1, 3014.7)
+
+[node name="Wall_135" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(728.5, 2725.4, 880.5, 2533.4, 927.5, 2570.6, 775.5, 2762.6)
+
+[node name="Wall_136" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(882.1, 2531.5, 1130.1, 2267.5, 1173.9, 2308.5, 925.9, 2572.5)
+
+[node name="Wall_137" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(1167.6, 2313.6, 719.6, 2585.6, 688.4, 2534.4, 1136.4, 2262.4)
+
+[node name="Wall_138" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(682.0, 2539.7, 778.0, 2435.7, 822.0, 2476.3, 726.0, 2580.3)
+
+[node name="Wall_139" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(804.4, 2485.7, 588.4, 2517.7, 579.6, 2458.3, 795.6, 2426.3)
+
+[node name="Wall_140" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(588.9, 2517.6, 492.9, 2533.6, 483.1, 2474.4, 579.1, 2458.4)
+
+[node name="Wall_141" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(464.6, 2485.3, 560.6, 2365.3, 607.4, 2402.7, 511.4, 2522.7)
+
+[node name="Wall_142" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(561.4, 2364.2, 617.4, 2300.2, 662.6, 2339.8, 606.6, 2403.8)
+
+[node name="Wall_143" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(630.5, 2348.5, 582.5, 2332.5, 601.5, 2275.5, 649.5, 2291.5)
+
+[node name="Wall_144" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(592.0, 2334.0, 472.0, 2334.0, 472.0, 2274.0, 592.0, 2274.0)
+
+[node name="Wall_145" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(454.9, 2279.3, 558.9, 2207.3, 593.1, 2256.7, 489.1, 2328.7)
+
+[node name="Wall_146" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(573.2, 2261.9, 405.2, 2245.9, 410.8, 2186.1, 578.8, 2202.1)
+
+[node name="Wall_147" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(393.4, 2189.8, 537.4, 2109.8, 566.6, 2162.2, 422.6, 2242.2)
+
+[node name="Wall_148" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(550.5, 2166.0, 390.5, 2158.0, 393.5, 2098.0, 553.5, 2106.0)
+
+[node name="Wall_149" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(370.8, 2106.8, 434.8, 2042.8, 477.2, 2085.2, 413.2, 2149.2)
+
+[node name="Wall_150" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(452.3, 2093.8, 196.3, 2061.8, 203.7, 2002.2, 459.7, 2034.2)
+
+[node name="Wall_151" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(189.6, 2003.8, 341.6, 1947.8, 362.4, 2004.2, 210.4, 2060.2)
+
+[node name="Wall_152" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(339.4, 1948.8, 443.4, 1900.8, 468.6, 1955.2, 364.6, 2003.2)
+
+[node name="Wall_153" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(438.8, 1952.6, 358.8, 1896.6, 393.2, 1847.4, 473.2, 1903.4)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,85 @@
+{
+  "name": "Promise Keeper",
+  "faction": "Demon",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 6,
+  "max_hp": 6,
+  "attack": 3,
+  "pattern": ["Promise", "Melee", "Collect"],
+  "weight": "Common",
+  "offer": "Ambition",
+  "mechanic": {
+    "name": "Promise",
+    "description": "Promise = Offer +3 damage next turn. If accepted, after dealing that damage, player takes 5 damage ('payment due').",
+    "promise": {
+      "offer": "+3_damage_next_turn",
+      "cost_trigger": "after_damage_dealt",
+      "cost": "self_damage_5",
+      "message": "I can make you stronger. For a price."
+    },
+    "collect": {
+      "effect": "trigger_payment",
+      "message": "Payment is due."
+    },
+    "visual_feedback": {
+      "contract_form": true,
+      "golden_promises": true,
+      "promise_glow": "res://vfx/promise_offer.tscn",
+      "payment_shadow": "res://vfx/payment_due.tscn"
+    },
+    "sound": "sfx/promise.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_promise_keeper_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "contract_scrolls": true,
+      "golden_aura": true,
+      "fine_print_hidden": true
+    },
+    "promise": {
+      "sprite": "res://assets/sprites/enemies/enemy_promise_keeper_promise.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/promise.wav",
+      "promise_glow": "res://vfx/promise_offer.tscn",
+      "contract_shown": true
+    },
+    "collect": {
+      "sprite": "res://assets/sprites/enemies/enemy_promise_keeper_collect.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/payment_due.wav",
+      "payment_shadow": "res://vfx/payment_due.tscn",
+      "fine_print_revealed": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_promise_keeper_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/contract_strike.wav"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_promise_keeper_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.6, 0.5, 0.4],
+      "contract_tears": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_promise_keeper_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/contract_void.wav",
+      "promises_broken": true
+    }
+  }
+}

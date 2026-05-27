@@ -1,0 +1,130 @@
+{
+  "name": "The Geometric",
+  "faction": "Elemental",
+  "tier": "Boss",
+  "floor": 9,
+  "hp": 150,
+  "max_hp": 150,
+  "attack": 9,
+  "pattern": ["Special", "Melee", "Defend", "Special", "Melee"],
+  "mechanic": {
+    "name": "Perfect Form",
+    "description": "Gains +1 CHARGE per turn, +2 when player deals damage. At 20 CHARGE: Perfection — Becomes immune to all damage for 2 turns, then releases 12d12 shard storm. Dealing damage when boss at 19 CHARGE causes Fracture — boss takes 50% of damage dealt as bonus, loses all CHARGE (exploitable).",
+    "charge_system": {
+      "max": 20,
+      "gain_per_turn": 1,
+      "gain_on_damaged": 2,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "perfection": {
+        "immune_duration": 2,
+        "then_release": {
+          "damage": "12d12",
+          "aoe": true,
+          "shard_storm": true
+        }
+      },
+      "reset_after": true
+    },
+    "exploitable": {
+      "condition": "damage_at_19_charge",
+      "effect": "fracture",
+      "bonus_damage_to_boss": 0.5,
+      "charge_reset": true,
+      "note": "Trigger Fracture to prevent Perfection"
+    },
+    "hard_counter": {
+      "name": "Reflection",
+      "trigger": "player_even_cost_card",
+      "effect": "reflect_100_percent_damage"
+    },
+    "visual_feedback": {
+      "shifting_polyhedra": true,
+      "perfection_approaching": true,
+      "flaws_visible_at_high_charge": true,
+      "perfection_vfx": "res://vfx/perfection.tscn",
+      "fracture_vfx": "res://vfx/fracture.tscn",
+      "shard_storm": "res://vfx/shard_storm.tscn",
+      "even_cost_warning": true
+    },
+    "sound": "sfx/geometric_hum.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_geometric_idle.png",
+      "frames": 14,
+      "fps": 3,
+      "loop": true,
+      "crystal_polyhedra": true,
+      "shifting_forms": true,
+      "geometric_perfection": true,
+      "flaws_visible": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_geometric_attack.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/geometric_strike.wav",
+      "crystal_edge": true,
+      "perfect_slice": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_the_geometric_special.png",
+      "frames": 20,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/perfection.wav",
+      "perfection_vfx": "res://vfx/perfection.tscn",
+      "immune_glow": true,
+      "shard_storm": "res://vfx/shard_storm.tscn",
+      "perfection_release": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_geometric_defend.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/geometric_shield.tscn",
+      "crystal_barrier": true,
+      "perfect_defense": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_geometric_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.9, 0.95, 1.0, 0.3],
+      "polyhedra_crack": true,
+      "fracture_check": true,
+      "charge_gain_flash": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_geometric_death.png",
+      "frames": 22,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/geometric_shatter.wav",
+      "perfection_breaks": true,
+      "crystal_collapse": true,
+      "flaws_conquer": true
+    },
+    "fracture": {
+      "sprite": "res://assets/sprites/enemies/boss_the_geometric_fracture.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/fracture.wav",
+      "fracture_vfx": "res://vfx/fracture.tscn",
+      "perfection_prevented": true,
+      "charge_reset_visual": true,
+      "bonus_damage_show": true
+    }
+  }
+}

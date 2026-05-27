@@ -1,0 +1,90 @@
+{
+  "name": "The Sight from Beyond",
+  "faction": "Aberration",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 4,
+  "pattern": ["Watch", "Watch", "Release"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Witness",
+    "description": "Gains 1 'Attention' per turn. Each Attention = 10% chance player cards echo (trigger twice). At 10 Attention: Player can only 'Surrender' (Defend that does nothing). Surrender = clear all Attention, heal 5 HP.",
+    "witness": {
+      "attention_gain_per_turn": 1,
+      "echo_chance_per_attention": 0.1,
+      "max_attention": 10,
+      "at_max": {
+        "player_lock": "Surrender_only",
+        "surrender_effect": {
+          "clear_attention": true,
+          "heal": 5
+        }
+      }
+    },
+    "visual_feedback": {
+      "single_eye": true,
+      "static_field": true,
+      "attention_counter": true,
+      "echo_indicator": "res://vfx/echo_trigger.tscn",
+      "surrender_glow": true
+    },
+    "sound": "sfx/witness_watch.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_sight_from_beyond_idle.png",
+      "frames": 10,
+      "fps": 2,
+      "loop": true,
+      "unblinking_eye": true,
+      "static_background": true,
+      "attention_build": true
+    },
+    "watch": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_sight_watch.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/witness_watch.wav",
+      "eye_focus": true,
+      "attention_gain": true
+    },
+    "release": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_sight_release.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/witness_release.wav",
+      "echo_burst": "res://vfx/echo_trigger.tscn",
+      "attention_spike": true
+    },
+    "surrender": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_sight_surrender.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/witness_accept.wav",
+      "attention_clear": true,
+      "heal_vfx": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_sight_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.3, 0.8, 0.3],
+      "eye_blink": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_sight_death.png",
+      "frames": 14,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/witness_close.wav",
+      "eye_closes": true,
+      "no_longer_watching": true
+    }
+  }
+}

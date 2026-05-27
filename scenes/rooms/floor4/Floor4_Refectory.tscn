@@ -1,0 +1,144 @@
+[gd_scene load_steps=7 format=3 uid="uid://floor4_refectory_001"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/refectory_floor.png" id="1_refectory_floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/food_station_stew.png" id="2_food_stew"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/food_station_bread.png" id="3_food_bread"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/food_station_meat.png" id="4_food_meat"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/pipe_v.png" id="5_pipe_v"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/pipe_h.png" id="6_pipe_h"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/balcony_railing.png" id="7_railing"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/stairs_down.png" id="8_stairs_down"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/dumbwaiter.png" id="9_dumbwaiter"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_transition"]
+radius = 60.0
+
+[node name="Floor4_Refectory" type="Node2D"]
+
+; ============================================
+; BACKGROUND
+; ============================================
+[node name="RefectoryFloor" type="Sprite2D" parent="."]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("1_refectory_floor")
+
+; --- Dining Alcoves ---
+[node name="Alcove1" type="Sprite2D" parent="."]
+position = Vector2(-200, -100)
+texture = ExtResource("2_food_stew")
+
+[node name="FoodLabel" type="Label" parent="Alcove1"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.6, 0.5, 0.45, 1.0)
+horizontal_alignment = 1
+text = "Memory Stew"
+
+[node name="Alcove2" type="Sprite2D" parent="."]
+position = Vector2(200, 100)
+texture = ExtResource("3_food_bread")
+
+[node name="FoodLabel" type="Label" parent="Alcove2"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.6, 0.5, 0.45, 1.0)
+horizontal_alignment = 1
+text = "Nostalgia Bread"
+
+[node name="Alcove3" type="Sprite2D" parent="."]
+position = Vector2(0, 200)
+texture = ExtResource("4_food_meat")
+
+[node name="FoodLabel" type="Label" parent="Alcove3"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.6, 0.5, 0.45, 1.0)
+horizontal_alignment = 1
+text = "Phantom Meat"
+
+; --- Steam Pipes (voices of past customers) ---
+[node name="SteamPipe1" type="Sprite2D" parent="."]
+position = Vector2(-400, -300)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("5_pipe_v")
+
+[node name="SteamPipe2" type="Sprite2D" parent="."]
+position = Vector2(400, -200)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("5_pipe_v")
+
+[node name="SteamPipe3" type="Sprite2D" parent="."]
+position = Vector2(0, 400)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("6_pipe_h")
+
+; --- Balcony Railing (overlooking main floor) ---
+[node name="BalconyRailing" type="Sprite2D" parent="."]
+position = Vector2(0, -500)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("7_railing")
+
+; --- EXITS back to Main ---
+[node name="StairsDown1" type="Sprite2D" parent="."]
+position = Vector2(-400, 0)
+texture = ExtResource("8_stairs_down")
+
+[node name="Label" type="Label" parent="StairsDown1"]
+offset_left = -30.0
+offset_top = -50.0
+offset_right = 30.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.6, 0.55, 0.45, 1.0)
+horizontal_alignment = 1
+text = "⇓ Stairs"
+
+[node name="StairsDown2" type="Sprite2D" parent="."]
+position = Vector2(500, 200)
+texture = ExtResource("8_stairs_down")
+
+[node name="Dumbwaiter" type="Sprite2D" parent="."]
+position = Vector2(0, -300)
+texture = ExtResource("9_dumbwaiter")
+
+[node name="Label" type="Label" parent="Dumbwaiter"]
+offset_left = -35.0
+offset_top = -45.0
+offset_right = 35.0
+offset_bottom = -25.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.55, 0.5, 0.45, 1.0)
+horizontal_alignment = 1
+text = "⇓ Dumbwaiter"
+
+; --- PLAYER SPAWN ---
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(0, 0)
+
+; --- PORTAL AREAS ---
+[node name="PortalToMain1" type="Area2D" parent="."]
+position = Vector2(-400, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToMain1"]
+shape = SubResource("CircleShape2D_transition")
+
+[node name="PortalToMain2" type="Area2D" parent="."]
+position = Vector2(500, 200)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToMain2"]
+shape = SubResource("CircleShape2D_transition")
+
+[node name="PortalToMain3" type="Area2D" parent="."]
+position = Vector2(0, -300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToMain3"]
+shape = SubResource("CircleShape2D_transition")

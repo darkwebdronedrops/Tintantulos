@@ -1,0 +1,107 @@
+{
+  "name": "The First Temptation",
+  "faction": "Demon",
+  "tier": "Boss",
+  "floor": "Secret",
+  "hp": 250,
+  "max_hp": 250,
+  "attack": 12,
+  "pattern": ["Original_Offer", "Tempt", "Punish", "Tempt"],
+  "offer": "All",
+  "mechanic": {
+    "name": "Original Sin",
+    "description": "Original_Offer = The first deal ever offered. Player sees their 'true desire' based on playstyle. Accept: gain that exact power permanently. Refuse: lose ability to accept ANY future demon offers ('immune to temptation').",
+    "original_offer": {
+      "reads_playstyle": true,
+      "offers_true_desire": "based_on_most_used_cards",
+      "accept": "gain_perfect_power",
+      "refuse": "immune_to_all_demon_offers"
+    },
+    "tempt": {
+      "effect": "show_what_could_have_been",
+      "message": "Look at what you could have had."
+    },
+    "visual_feedback": {
+      "original_form": true,
+      "before_offers": true,
+      "pure_temptation": true,
+      "offer_glow": "res://vfx/original_sin.tscn"
+    },
+    "sound": "sfx/original_temptation.wav"
+  },
+  "is_boss": true,
+  "is_secret": true,
+  "unlock_condition": "refuse_all_demon_offers_in_run",
+  "phases": 2,
+  "phase_transition": {
+    "at_hp": 125,
+    "intensifies": true,
+    "message": "You have refused so much. Why?"
+  },
+  "special_reward": {
+    "if_defeated": "unlock_purity_ending",
+    "if_accepted": "unlock_demon_lord_ending"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_temptation_idle.png",
+      "frames": 14,
+      "fps": 3,
+      "loop": true,
+      "original_form": true,
+      "before_time": true,
+      "pure_temptation": true,
+      "serpent_and_fruit": true
+    },
+    "original_offer": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_temptation_original_offer.png",
+      "frames": 18,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/original_temptation.wav",
+      "offer_glow": "res://vfx/original_sin.tscn",
+      "true_desire_shown": true
+    },
+    "tempt": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_temptation_tempt.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/tempt.wav",
+      "shows_alternatives": true
+    },
+    "punish": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_temptation_punish.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/punish_refusal.wav",
+      "frustration": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_temptation_attack.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/temptation_strikes.wav",
+      "ancient_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_temptation_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.9, 0.7, 0.8, 0.5],
+      "original_pain": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_temptation_death.png",
+      "frames": 24,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/temptation_ends.wav",
+      "first_temptation_falls": true,
+      "purity_unlocked": true
+    }
+  }
+}

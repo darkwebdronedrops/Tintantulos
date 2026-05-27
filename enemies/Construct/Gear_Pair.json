@@ -1,0 +1,81 @@
+{
+  "name": "Gear Pair",
+  "faction": "Construct",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 4,
+  "max_hp": 4,
+  "attack": 2,
+  "pattern": ["Melee", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Combine",
+    "description": "Merge with another Gear Pair into Gear Quartet after 3 turns",
+    "merge_target": "Gear Quartet",
+    "turns_to_merge": 3,
+    "visual_feedback": {
+      "sparks": true,
+      "clicking_intensity": "increasing",
+      "merge_animation": "interlock_glow_resize"
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_pair_idle.png",
+      "frames": 4,
+      "fps": 5,
+      "loop": true,
+      "dual_rotation": true,
+      "synced_spin": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_pair_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/gears_clash.wav",
+      "dual_strike": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_pair_special.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "charge_sparks": true,
+      "merge_prep": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_pair_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "desync_briefly": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_pair_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/gears_break.wav",
+      "split_apart": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_pair_defend.png",
+      "frames": 5,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/metal_shield.tscn",
+      "interlock_tighter": true
+    },
+    "combine": {
+      "sprite": "res://assets/sprites/enemies/enemy_gear_pair_combine.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/gears_fusing.wav",
+      "particles": "sparks_and_shards",
+      "transform_into": "Gear Quartet"
+    }
+  }
+}

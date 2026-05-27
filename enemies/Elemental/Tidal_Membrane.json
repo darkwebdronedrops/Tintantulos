@@ -1,0 +1,96 @@
+{
+  "name": "Tidal Membrane",
+  "faction": "Elemental",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 12,
+  "max_hp": 12,
+  "attack": 4,
+  "pattern": ["Defend", "Special", "Melee"],
+  "weight": "Common",
+  "element": "Abyss",
+  "mechanic": {
+    "name": "Surge",
+    "description": "+1 CHARGE per turn. At 4 CHARGE, creates whirlpool (pulls player 2 hexes toward it)",
+    "charge_system": {
+      "max": 4,
+      "gain_per_turn": 1,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "whirlpool": {
+        "pull_distance": 2,
+        "toward_self": true
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "tidal_pulse": true,
+      "membrane_stretch": true,
+      "whirlpool_vfx": "res://vfx/whirlpool.tscn",
+      "current_pull": true
+    },
+    "sound": "sfx/tidal_surge.wav",
+    "sound_release": "sfx/whirlpool.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_tidal_membrane_idle.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": true,
+      "membrane_pulse": true,
+      "tidal_breath": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_tidal_membrane_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/tidal_strike.wav",
+      "membrane_slash": true,
+      "pressure_wave": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_tidal_membrane_special.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/whirlpool.wav",
+      "whirlpool_vfx": "res://vfx/whirlpool.tscn",
+      "pull_current": true,
+      "membrane_expand": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_tidal_membrane_defend.png",
+      "frames": 6,
+      "fps": 5,
+      "loop": false,
+      "shield_vfx": "res://vfx/tidal_shield.tscn",
+      "membrane_harden": true,
+      "pressure_contain": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_tidal_membrane_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.2, 0.4, 0.8, 0.3],
+      "membrane_ripple": true,
+      "tidal_disrupt": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_tidal_membrane_death.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/tidal_collapse.wav",
+      "membrane_burst": true,
+      "tidal_release": true,
+      "water_dissipate": true
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "name": "The Collector",
+  "faction": "Demon",
+  "tier": "Boss",
+  "floor": 6,
+  "hp": 120,
+  "max_hp": 120,
+  "attack": 8,
+  "pattern": ["Collect", "Melee", "Collect", "Punish"],
+  "offer": "All",
+  "mechanic": {
+    "name": "Debt Collection",
+    "description": "Collect = Steal 1 card from deck. Punish = Deal damage equal to cards stolen this combat × 3 ('interest'). If player has no cards left: instant kill ('bankruptcy').",
+    "collect": {
+      "steal_from_deck": 1,
+      "tracks_total": true
+    },
+    "punish": {
+      "damage": "cards_stolen_times_3",
+      "message": "Your debts come due."
+    },
+    "bankruptcy": {
+      "condition": "deck_empty",
+      "effect": "instant_kill",
+      "message": "You have nothing left to pay with."
+    },
+    "visual_feedback": {
+      "debt_collector_form": true,
+      "ledger_visible": true,
+      "debt_counter": true,
+      "collection_glow": "res://vfx/collect_debt.tscn"
+    },
+    "sound": "sfx/collect.wav"
+  },
+  "is_boss": true,
+  "phases": 2,
+  "phase_transition": {
+    "at_hp": 60,
+    "change": "collection_intensifies",
+    "effect": "steal_2_cards_instead_of_1"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_collector_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "debt_collector": true,
+      "ledger_floating": true,
+      "debt_counter_visible": true
+    },
+    "collect": {
+      "sprite": "res://assets/sprites/enemies/boss_the_collector_collect.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/collect.wav",
+      "collection_glow": "res://vfx/collect_debt.tscn",
+      "card_taken": true,
+      "debt_grows": true
+    },
+    "punish": {
+      "sprite": "res://assets/sprites/enemies/boss_the_collector_punish.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/debt_due.wav",
+      "debt_weaponized": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_collector_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/collector_strikes.wav",
+      "penalty_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_collector_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.5, 0.6, 0.4],
+      "ledger_tears": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_collector_death.png",
+      "frames": 20,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/debts_cleared.wav",
+      "cards_return": true,
+      "ledger_closes": true
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "name": "Shortcut Maker",
+  "faction": "Demon",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 4,
+  "max_hp": 4,
+  "attack": 2,
+  "pattern": ["Shortcut", "Melee", "Flee"],
+  "weight": "Common",
+  "offer": "Ambition",
+  "mechanic": {
+    "name": "Shortcut",
+    "description": "Shortcut = Offer skip enemy turn (they don't act). If accepted, next turn player draws 2 fewer cards ('cut corners').",
+    "shortcut": {
+      "offer": "skip_enemy_turn",
+      "cost_trigger": "next_turn",
+      "cost": "minus_2_draw",
+      "message": "I know a faster way. Trust me."
+    },
+    "flee": {
+      "trigger": "hp_below_25_percent",
+      "message": "The shortcut leads away..."
+    },
+    "visual_feedback": {
+      "path_form": true,
+      "forking_roads": true,
+      "shortcut_glow": "res://vfx/shortcut.tscn",
+      "dead_end_shadow": "res://vfx/dead_end.tscn"
+    },
+    "sound": "sfx/shortcut.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_shortcut_maker_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "path_form": true,
+      "fork_visible": true,
+      "points_down_wrong_path": true
+    },
+    "shortcut": {
+      "sprite": "res://assets/sprites/enemies/enemy_shortcut_maker_shortcut.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/shortcut.wav",
+      "shortcut_glow": "res://vfx/shortcut.tscn",
+      "easy_path_shown": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_shortcut_maker_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/shortcut_strike.wav",
+      "detour_damage": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_shortcut_maker_flee.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/flee.wav",
+      "takes_shortcut_away": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_shortcut_maker_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.5, 0.4, 0.4],
+      "path_crumbles": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_shortcut_maker_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/path_closes.wav",
+      "no_way_out": true
+    }
+  }
+}

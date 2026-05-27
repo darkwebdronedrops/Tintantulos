@@ -1,0 +1,83 @@
+{
+  "name": "The Rollback",
+  "faction": "Aberration",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 25,
+  "max_hp": 25,
+  "attack": 5,
+  "pattern": ["Defend", "Special", "Melee"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Revert",
+    "description": "At 50% HP, reverts player to state at start of combat (HP, hand, deck position). 'Your progress has not been saved.'",
+    "rollback": {
+      "trigger": "hp_50_percent",
+      "revert": {
+        "hp": "start_of_combat",
+        "hand": "start_of_combat",
+        "deck_position": "start_of_combat"
+      },
+      "one_time": true
+    },
+    "visual_feedback": {
+      "hourglass_form": true,
+      "broken_code_sand": true,
+      "sand_flows_up": true,
+      "rollback_vfx": "res://vfx/rollback.tscn",
+      "progress_lost_text": true
+    },
+    "sound": "sfx/rollback_trigger.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_rollback_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "hourglass_form": true,
+      "broken_code": true,
+      "sand_upward": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_rollback_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/rollback_strike.wav"
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_rollback_special.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/rollback_trigger.wav",
+      "rollback_vfx": "res://vfx/rollback.tscn",
+      "time_rewind": true,
+      "state_revert": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_rollback_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/rollback_shield.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_rollback_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.7, 0.8, 0.3],
+      "hourglass_crack": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_rollback_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/rollback_fade.wav",
+      "sand_scatters": true
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "name": "Coronal Archon",
+  "faction": "Elemental",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 30,
+  "max_hp": 30,
+  "attack": 6,
+  "pattern": ["Melee", "Special", "Defend"],
+  "weight": "Common",
+  "element": "Pyre",
+  "mechanic": {
+    "name": "Solar",
+    "description": "+1 CHARGE per turn, +1 when player plays Fire card. At 8 CHARGE, supernova (blinds player 2 turns, 6d6 damage)",
+    "charge_system": {
+      "max": 8,
+      "gain_per_turn": 1,
+      "gain_on_fire_card": 1,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "supernova": {
+        "damage": "6d6",
+        "blind_duration": 2,
+        "aoe": true
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "solar_corona": true,
+      "sun_glow": true,
+      "supernova_vfx": "res://vfx/supernova.tscn",
+      "blind_flash": true
+    },
+    "sound": "sfx/solar_build.wav",
+    "sound_release": "sfx/supernova.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_coronal_archon_idle.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": true,
+      "solar_form": true,
+      "corona_flare": true,
+      "sun_presence": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_coronal_archon_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/solar_strike.wav",
+      "flare_sword": true,
+      "burn_arc": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_coronal_archon_special.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/supernova.wav",
+      "supernova_vfx": "res://vfx/supernova.tscn",
+      "nova_burst": true,
+      "blind_flash": true,
+      "screen_whiteout": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_coronal_archon_defend.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": false,
+      "shield_vfx": "res://vfx/solar_shield.tscn",
+      "corona_barrier": true,
+      "sun_wall": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_coronal_archon_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.9, 0.3, 0.5],
+      "solar_flare": true,
+      "corona_distort": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_coronal_archon_death.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/solar_collapse.wav",
+      "nova_collapse": true,
+      "sun_die": true
+    }
+  }
+}

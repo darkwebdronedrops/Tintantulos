@@ -1,0 +1,81 @@
+{
+  "name": "Obsession Demon",
+  "faction": "Demon",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 45,
+  "max_hp": 45,
+  "attack": 6,
+  "pattern": ["Obsess", "Melee", "Defend"],
+  "weight": "Uncommon",
+  "offer": "Intensity",
+  "mechanic": {
+    "name": "Obsession",
+    "description": "Obsess = Offer 'focus' (all damage to this enemy is doubled). If accepted, player cannot target other enemies while this one lives ('fixation').",
+    "obsess": {
+      "offer": "double_damage_to_this_enemy",
+      "cost": "cannot_target_others",
+      "message": "Focus on me. Only me. Nothing else matters."
+    },
+    "visual_feedback": {
+      "eye_form": true,
+      "unblinking": true,
+      "obsession_glow": "res://vfx/obsess_offer.tscn",
+      "tunnel_vision_shadow": "res://vfx/tunnel_vision.tscn"
+    },
+    "sound": "sfx/obsess.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsession_demon_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "single_giant_eye": true,
+      "unblinking": true,
+      "always_watching": true
+    },
+    "obsess": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsession_demon_obsess.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/obsess.wav",
+      "obsession_glow": "res://vfx/obsess_offer.tscn",
+      "focus_demanded": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsession_demon_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/obsession_strikes.wav",
+      "eye_beam": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsession_demon_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/eye_barrier.tscn",
+      "gaze_protects": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsession_demon_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.9, 0.5, 0.6, 0.5],
+      "eye_bleeds": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_obsession_demon_death.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/obsession_breaks.wav",
+      "eye_closes": true,
+      "focus_released": true
+    }
+  }
+}

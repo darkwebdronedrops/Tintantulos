@@ -1,0 +1,85 @@
+{
+  "name": "The Replacement",
+  "faction": "Aberration",
+  "tier": "Boss",
+  "floor": 9,
+  "hp": 80,
+  "max_hp": 80,
+  "attack": 8,
+  "pattern": ["Colonize", "Colonize", "Assimilate", "Colonize"],
+  "mechanic": {
+    "name": "Colonization",
+    "description": "Gains 1 Colonization Tick per turn. Each Tick: 1 card in deck becomes 'Assimilated' (Aberration type, effects reversed). At 20 Ticks: Game over. You ARE the Aberration now.",
+    "colonization": {
+      "ticks_per_turn": 1,
+      "assimilation": {
+        "cards_per_tick": 1,
+        "type_change": "Aberration",
+        "effect_reversal": true
+      },
+      "game_over": {
+        "at_ticks": 20,
+        "message": "You ARE the Aberration now.",
+        "player_assimilated": true
+      }
+    },
+    "visual_feedback": {
+      "colonization_counter": true,
+      "tick_glow": true,
+      "assimilation_progress": "res://vfx/colonize_progress.tscn",
+      "infection_spread": true
+    },
+    "sound": "sfx/colonization_tick.wav",
+    "sound_game_over": "sfx/you_are_aberration.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_replacement_idle.png",
+      "frames": 14,
+      "fps": 3,
+      "loop": true,
+      "colonization_aura": true,
+      "tick_counter_visible": true,
+      "infection_pulses": true
+    },
+    "colonize": {
+      "sprite": "res://assets/sprites/enemies/boss_the_replacement_colonize.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/colonization_tick.wav",
+      "tick_gained": true,
+      "card_assimilated": true,
+      "assimilation_vfx": "res://vfx/assimilate.tscn"
+    },
+    "assimilate": {
+      "sprite": "res://assets/sprites/enemies/boss_the_replacement_assimilate.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/assimilation_burst.wav",
+      "mass_conversion": true,
+      "player_deck_corrupted": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_replacement_damage.png",
+      "frames": 7,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.3, 0.8, 0.4],
+      "colonization_disrupt": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_replacement_death.png",
+      "frames": 20,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/colonization_breaks.wav",
+      "colonization_ends": true,
+      "assimilated_cards_purged": true,
+      "you_remain_you": true
+    }
+  }
+}

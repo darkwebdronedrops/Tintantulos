@@ -1,0 +1,84 @@
+{
+  "name": "Engine Block",
+  "faction": "Construct",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 15,
+  "max_hp": 15,
+  "attack": 6,
+  "pattern": ["Melee", "Melee", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Summon Defend",
+    "description": "Summon Gear Train when HP drops below 50%",
+    "summon": {
+      "unit": "Gear Train",
+      "trigger": "hp_below_50",
+      "once_per_combat": true
+    },
+    "visual_feedback": {
+      "emergency_light": true,
+      "alarm_sound": "sfx/engine_alarm.wav",
+      "smoke_emit": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_engine_block_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "massive_pistons": true,
+      "constant_steam": true,
+      "vibration": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_engine_block_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/engine_strike.wav",
+      "piston_slam": true,
+      "ground_crack": true,
+      "screen_shake_intense": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_engine_block_special.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/emergency_deploy.wav",
+      "hatch_open": true,
+      "gear_train_emerge": true,
+      "emergency_lights": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_engine_block_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "oil_leak": true,
+      "dent_chassis": true,
+      "check_trigger": "hp_below_50"
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_engine_block_death.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/engine_explosion.wav",
+      "explosion": true,
+      "parts_fly": true,
+      "fire_burst": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_engine_block_defend.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/heavy_metal_shield.tscn",
+      "armor_plates_lock": true
+    }
+  }
+}

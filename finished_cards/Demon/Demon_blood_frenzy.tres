@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_demon31"]
+
+[resource]
+script = ExtResource("1_demon31")
+card_name = "Blood Frenzy"
+card_type = "Attack"
+faction = "Demon"
+attention_cost = 3
+description = "Deal 3d6 damage. Corruption: For every 4 Corruption, this attack has +1 crit chance (max +25%). Pact: After attacking, take 2 damage."
+keywords = ["Corruption", "Pact"]
+damage_flat = 0
+damage_dice = "3d6"
+uses_dice = true
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "corruption_plus_crit_per_4_max_25, pact_self_damage_2_after"
+trap_cast_cost = 3
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Demon/Demon_blood_frenzy.png"
+frame_texture_path = "res://assets/sprites/cards/demon_frame.png"

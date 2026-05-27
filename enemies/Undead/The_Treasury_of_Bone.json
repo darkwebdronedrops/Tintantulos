@@ -1,0 +1,108 @@
+{
+  "name": "The Treasury of Bone",
+  "faction": "Undead",
+  "tier": "Boss",
+  "floor": 6,
+  "hp": 140,
+  "max_hp": 140,
+  "attack": 8,
+  "pattern": ["Collect", "Melee", "Armor", "Spend"],
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Compound Interest",
+    "description": "Collect = Steal 3 Quiddity. Armor = Gains Shield equal to Quiddity stolen this combat. Spend = Deals damage equal to Quiddity in Treasury (resets Treasury to 0).",
+    "collect": {
+      "steal": 3,
+      "treasury_tracks": true
+    },
+    "armor": {
+      "shield_amount": "treasury_total",
+      "message": "Your poverty protects it."
+    },
+    "spend": {
+      "damage": "treasury_total",
+      "resets_treasury": true,
+      "message": "Your wealth, weaponized against you."
+    },
+    "visual_feedback": {
+      "treasury_form": true,
+      "vault_of_bone": true,
+      "quiddity_count": true,
+      "armor_grows": "res://vfx/bone_armor.tscn",
+      "spend_attack": "res://vfx/wealth_weapon.tscn"
+    },
+    "sound": "sfx/collect.wav",
+    "sound_spend": "sfx/wealth_strikes.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_treasury_of_bone_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "vault_form": true,
+      "bone_architecture": true,
+      "quiddity_glows_inside": true,
+      "treasury_count_visible": true
+    },
+    "collect": {
+      "sprite": "res://assets/sprites/enemies/boss_the_treasury_of_bone_collect.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/collect.wav",
+      "quiddity_flows_in": true,
+      "vault_fills": true,
+      "counter_climbs": true
+    },
+    "armor": {
+      "sprite": "res://assets/sprites/enemies/boss_the_treasury_of_bone_armor.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/bone_armor.tscn",
+      "wealth_becomes_wall": true,
+      "poverty_shields": true
+    },
+    "spend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_treasury_of_bone_spend.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/wealth_strikes.wav",
+      "spend_attack": "res://vfx/wealth_weapon.tscn",
+      "quiddity_explodes_out": true,
+      "your_wealth_against_you": true,
+      "vault_empties": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_treasury_of_bone_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/bone_strike.wav",
+      "vault_edge": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_treasury_of_bone_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.8, 0.9, 0.3],
+      "vault_cracks": true,
+      "wealth_leaks": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_treasury_of_bone_death.png",
+      "frames": 20,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/vault_bursts.wav",
+      "quiddity_returns": true,
+      "treasury_distributed": true,
+      "wealth_redistributed": true
+    }
+  }
+}

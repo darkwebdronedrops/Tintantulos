@@ -1,0 +1,88 @@
+{
+  "name": "System Architect",
+  "faction": "Construct",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 14,
+  "max_hp": 14,
+  "attack": 4,
+  "pattern": ["Special", "Special", "Melee"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Rewrite",
+    "description": "Special changes one of player's card costs (+2 or -2) for 2 turns",
+    "target": "random_card_in_hand",
+    "cost_change": {
+      "options": [2, -2],
+      "random": true,
+      "duration": 2
+    },
+    "ui_feedback": {
+      "highlight_target_card": true,
+      "show_cost_change": true,
+      "duration_counter": true
+    },
+    "sound": "sfx/system_rewrite.wav",
+    "visual": "code_stream_card"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_system_architect_idle.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": true,
+      "float": true,
+      "holographic_blueprint": true,
+      "code_stream": true,
+      "architectural_lines_pulse": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_system_architect_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/architect_strike.wav",
+      "blueprint_projectile": true,
+      "design_becomes_real": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_system_architect_special.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/system_rewrite.wav",
+      "code_fingers_type": true,
+      "card_target_highlight": true,
+      "cost_numbers_shift": true,
+      "rewrite_vfx": "res://vfx/code_rewrite.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_system_architect_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "blueprint_corrupt": true,
+      "glitch_lines": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_system_architect_death.png",
+      "frames": 16,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/architect_delete.wav",
+      "blueprint_erase": true,
+      "code_scramble": true,
+      "fade_to_void": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_system_architect_defend.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/data_shield.tscn",
+      "blueprint_shield": true,
+      "design_defensive": true
+    }
+  }
+}

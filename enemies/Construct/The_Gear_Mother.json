@@ -1,0 +1,100 @@
+{
+  "name": "The Gear Mother",
+  "faction": "Construct",
+  "tier": "Boss",
+  "floor": 3,
+  "boss_type": "Mini",
+  "hp": 30,
+  "max_hp": 30,
+  "attack": 4,
+  "pattern": ["Melee", "Summon", "Defend", "Special"],
+  "mechanic": {
+    "name": "Birth",
+    "description": "Summon 2 Loose Gears each turn. Combine into stronger forms.",
+    "summon": {
+      "unit": "Loose Gear",
+      "count": 2,
+      "per_trigger": "each_turn",
+      "auto_combine": true
+    },
+    "visual_feedback": {
+      "spawn_animation": true,
+      "assembly_vfx": true,
+      "gear_creation": true,
+      "mother_glow": true
+    },
+    "sound_spawn": "sfx/birth_gear.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_gear_mother_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "womb_glow": true,
+      "gears_orbit": true,
+      "creation_aura": true,
+      "mother_presence": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_gear_mother_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/mother_strike.wav",
+      "protective_strike": true,
+      "gear_fist": true
+    },
+    "summon": {
+      "sprite": "res://assets/sprites/enemies/boss_gear_mother_summon.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/birth_gear.wav",
+      "creation_animation": true,
+      "loose_gears_form": true,
+      "womb_open": true,
+      "gear_birth": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_gear_mother_special.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/mother_command.wav",
+      "combine_trigger": true,
+      "assembly_pulse": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_gear_mother_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "womb_pain": true,
+      "gear_shield": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_gear_mother_death.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/mmother_falls.wav",
+      "creation_stops": true,
+      "gears_scatter": true,
+      "womb_close": true,
+      "essence_release": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_gear_mother_defend.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/mother_shield.tscn",
+      "protective_aura": true,
+      "gear_shield_wall": true
+    }
+  }
+}

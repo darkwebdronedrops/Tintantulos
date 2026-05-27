@@ -1,0 +1,81 @@
+{
+  "name": "Silence Merchant",
+  "faction": "Demon",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 25,
+  "max_hp": 25,
+  "attack": 5,
+  "pattern": ["Silence", "Melee", "Defend"],
+  "weight": "Uncommon",
+  "offer": "Absolution",
+  "mechanic": {
+    "name": "Silence",
+    "description": "Silence = Offer 'quiet mind' (no enemy intent shown, but +2 draw). If accepted, player cannot see enemy HP for 3 turns ('ignorance').",
+    "silence": {
+      "offer": "plus_2_draw_but_hide_intent",
+      "cost": "cannot_see_enemy_hp_3_turns",
+      "message": "The noise of battle... let me quiet it for you."
+    },
+    "visual_feedback": {
+      "ear_form": true,
+      "listening": true,
+      "silence_glow": "res://vfx/silence_offer.tscn",
+      "deafness_shadow": "res://vfx/deafness.tscn"
+    },
+    "sound": "sfx/silence.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_silence_merchant_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "ear_form": true,
+      "listening": true,
+      "silent_world": true
+    },
+    "silence": {
+      "sprite": "res://assets/sprites/enemies/enemy_silence_merchant_silence.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/silence.wav",
+      "silence_glow": "res://vfx/silence_offer.tscn",
+      "quiet_falls": true,
+      "noise_stops": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_silence_merchant_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/silent_strike.wav",
+      "noiseless_blow": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_silence_merchant_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/silence_barrier.tscn",
+      "quiet_protects": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_silence_merchant_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.7, 0.8, 0.4],
+      "silence_broken": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_silence_merchant_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/silence_ends.wav",
+      "noise_returns": true
+    }
+  }
+}

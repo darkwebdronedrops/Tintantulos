@@ -1,0 +1,85 @@
+{
+  "name": "Ultimate Passion",
+  "faction": "Demon",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 52,
+  "max_hp": 52,
+  "attack": 8,
+  "pattern": ["Burn", "Melee", "Intensify"],
+  "weight": "Uncommon",
+  "offer": "Intensity",
+  "mechanic": {
+    "name": "Eternal Flame",
+    "description": "Burn = Offer 'never fade' (all damage +3 for rest of run). If accepted, take 3 damage every turn permanently ('passion burns forever').",
+    "burn": {
+      "offer": "plus_3_damage_run",
+      "cost": "self_damage_3_per_turn_permanent",
+      "message": "Feel this forever. Never dim. Never rest."
+    },
+    "intensify": {
+      "effect": "flame_grows",
+      "message": "The fire spreads."
+    },
+    "visual_feedback": {
+      "inferno_form": true,
+      "constant_burn": true,
+      "passion_glow": "res://vfx/eternal_flame_offer.tscn",
+      "burn_cost": "res://vfx/self_burn.tscn"
+    },
+    "sound": "sfx/burn.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_passion_idle.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": true,
+      "inferno_body": true,
+      "never_dimming": true,
+      "eternal_flame": true
+    },
+    "burn": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_passion_burn.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/burn.wav",
+      "passion_glow": "res://vfx/eternal_flame_offer.tscn",
+      "fire_offered": true
+    },
+    "intensify": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_passion_intensify.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/intensify.wav",
+      "flame_grows": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_passion_attack.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/passion_strikes.wav",
+      "burning_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_passion_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.4, 0.3, 0.6],
+      "fire_dampens": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_ultimate_passion_death.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/passion_extinguished.wav",
+      "flame_out": true,
+      "cold_returns": true
+    }
+  }
+}

@@ -1,0 +1,141 @@
+[gd_scene load_steps=9 format=3 uid="uid://floor5cargo001"]
+
+[ext_resource type="Script" path="res://scripts/Floor5RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/bg_cargo.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/cargo_crate.png" id="3_crate"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/steam_vent.png" id="4_vent"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/aether_lens.png" id="5_lens"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/banner_aberration.png" id="6_banner_a"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/mooring_valve.png" id="7_valve"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/aberrant_glow.png" id="8_glow"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(80, 80)
+
+[node name="Floor5_Cargo" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "cargo"
+room_display_name = "The Cargo Hold"
+dominant_faction = "Aberration"
+has_secret_door = true
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(800, 900)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(800, 700)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(1400, 900)
+
+[node name="Interior" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(800, 600)
+texture = ExtResource("2_bg")
+
+[node name="Crates" type="Node2D" parent="Interior"]
+
+[node name="Crate1" type="Sprite2D" parent="Interior/Crates"]
+position = Vector2(200, 800)
+texture = ExtResource("3_crate")
+scale = Vector2(1.2, 1.2)
+
+[node name="Crate2" type="Sprite2D" parent="Interior/Crates"]
+position = Vector2(400, 800)
+texture = ExtResource("3_crate")
+scale = Vector2(1.1, 1.1)
+
+[node name="Crate3" type="Sprite2D" parent="Interior/Crates"]
+position = Vector2(600, 800)
+texture = ExtResource("3_crate")
+scale = Vector2(1.0, 1.0)
+
+[node name="Crate4" type="Sprite2D" parent="Interior/Crates"]
+position = Vector2(300, 700)
+texture = ExtResource("3_crate")
+scale = Vector2(1.1, 1.1)
+
+[node name="Crate5" type="Sprite2D" parent="Interior/Crates"]
+position = Vector2(500, 700)
+texture = ExtResource("3_crate")
+scale = Vector2(1.2, 1.2)
+
+[node name="SteamTanks" type="Node2D" parent="Interior"]
+
+[node name="Tank1" type="Sprite2D" parent="Interior/SteamTanks"]
+position = Vector2(200, 500)
+texture = ExtResource("4_vent")
+scale = Vector2(1.5, 1.5)
+
+[node name="Tank2" type="Sprite2D" parent="Interior/SteamTanks"]
+position = Vector2(500, 500)
+texture = ExtResource("4_vent")
+scale = Vector2(1.5, 1.5)
+
+[node name="AetherLens" type="Sprite2D" parent="Interior"]
+position = Vector2(800, 500)
+texture = ExtResource("5_lens")
+scale = Vector2(1.5, 1.5)
+
+[node name="LensLabel" type="Label" parent="Interior/AetherLens"]
+offset_left = -50.0
+offset_top = -40.0
+offset_right = 50.0
+offset_bottom = -20.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.8, 0.5, 1.0, 1.0)
+horizontal_alignment = 1
+text = "Aether Lens"
+
+[node name="Banner_Aberration" type="Sprite2D" parent="Interior"]
+position = Vector2(100, 200)
+texture = ExtResource("6_banner_a")
+scale = Vector2(1.2, 1.2)
+
+[node name="SecretValve" type="Sprite2D" parent="Interior"]
+position = Vector2(1300, 700)
+texture = ExtResource("7_valve")
+scale = Vector2(1.0, 1.0)
+
+[node name="ValveLabel" type="Label" parent="Interior/SecretValve"]
+offset_left = -40.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Drain Valve"
+
+; ============================================
+; ABERRANT GLOW — Replaced Polygon2D with Sprite2D
+; ============================================
+[node name="AberrantGlow" type="Node2D" parent="Interior"]
+
+[node name="Glow1" type="Sprite2D" parent="Interior/AberrantGlow"]
+position = Vector2(800, 600)
+texture = ExtResource("8_glow")
+modulate = Color(1, 1, 1, 0.2)
+
+[node name="Glow2" type="Sprite2D" parent="Interior/AberrantGlow"]
+position = Vector2(700, 500)
+texture = ExtResource("8_glow")
+modulate = Color(1, 1, 1, 0.15)
+
+[node name="SavePoint" type="Marker2D" parent="Interior"]
+position = Vector2(800, 850)
+
+[node name="Interactables" type="Node2D" parent="Interior"]
+
+[node name="LensArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(800, 500)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/LensArea"]
+shape = SubResource("Rect_interact")
+
+[node name="ExitArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1400, 900)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/ExitArea"]
+shape = SubResource("Rect_interact")

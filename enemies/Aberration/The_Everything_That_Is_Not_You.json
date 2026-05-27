@@ -1,0 +1,101 @@
+{
+  "name": "The Everything That Is Not You",
+  "faction": "Aberration",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 60,
+  "max_hp": 60,
+  "attack": 9,
+  "pattern": ["Mirror", "Reflect", "Not"],
+  "weight": "Boss-like",
+  "mechanic": {
+    "name": "Not",
+    "description": "Copies entire deck, hand, HP. Perfect mirror. Cannot damage with cards it also has (damage negated if card names match). Post-combat: For each card Banished during combat, gain 'Void-touched' copy (same stats, purple/black cardback). These cards count as your type AND Aberration for synergy.",
+    "perfect_mirror": {
+      "copies_deck": true,
+      "copies_hand": true,
+      "copies_hp": true,
+      "damage_negation": {
+        "condition": "card_names_match",
+        "effect": "damage_negated"
+      }
+    },
+    "post_combat": {
+      "reflection": {
+        "condition": "cards_banished_this_combat",
+        "gain_copies": true,
+        "void_touched": {
+          "same_stats": true,
+          "purple_black_cardback": true,
+          "dual_type": ["player_type", "Aberration"]
+        }
+      }
+    },
+    "visual_feedback": {
+      "void_wearing_your_shape": true,
+      "perfect_mimicry": true,
+      "negative_space_you": true,
+      "match_negation_vfx": "res://vfx/not_negate.tscn"
+    },
+    "sound": "sfx/everything_not_you.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_everything_that_is_not_you_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "void_form": true,
+      "your_shape_negative": true,
+      "perfect_mimicry": true
+    },
+    "mirror": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_everything_that_is_not_you_mirror.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/not_mirror.wav",
+      "deck_copy": true,
+      "hand_copy": true,
+      "hp_sync": true
+    },
+    "reflect": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_everything_that_is_not_you_reflect.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/not_reflect.wav",
+      "card_match_check": true,
+      "negation_warning": true
+    },
+    "not": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_everything_that_is_not_you_not.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/not_negate.wav",
+      "negation_vfx": "res://vfx/not_negate.tscn",
+      "damage_null": true,
+      "otherness": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_everything_that_is_not_you_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.1, 0.1, 0.1, 0.5],
+      "void_disrupt": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_everything_that_is_not_you_death.png",
+      "frames": 18,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/not_fade.wav",
+      "reflection_vfx": "res://vfx/reflection.tscn",
+      "void_touched_cards_spawn": true,
+      "purple_black_cardback": true,
+      "not_you_dissolves": true
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "Brass Knuckle",
+  "faction": "Construct",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 4,
+  "max_hp": 4,
+  "attack": 3,
+  "pattern": ["Melee", "Melee", "Melee"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Relentless",
+    "description": "Enemies within 2 hexes skip Defend actions (execute next action instead)"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_knuckle_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_knuckle_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/construct_punch.wav"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_knuckle_damage.png",
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_knuckle_death.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/construct_shatter.wav",
+      "shatter": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_brass_knuckle_defend.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/brass_shield.tscn"
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "name": "Wolf Pup",
+  "faction": "Goblin",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 4,
+  "max_hp": 4,
+  "attack": 3,
+  "pattern": ["Melee", "Flee", "Melee"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Pack",
+    "description": "+1 damage per other Wolf within 3 hexes. Howl = Summon 1 Wolf Pup (max 2)",
+    "pack_bonus": {
+      "per_wolf_within": 3,
+      "damage_add": 1,
+      "max_bonus": 999
+    },
+    "summon": {
+      "action": "Howl",
+      "unit": "Wolf Pup",
+      "max_summons": 2,
+      "range_check": 3
+    },
+    "visual_feedback": {
+      "howl_animation": true,
+      "summon_vfx": "res://vfx/wolf_summon.tscn",
+      "pack_aura": true
+    }
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_pup_idle.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": true,
+      "tail_wag": true,
+      "pant": true,
+      "ears_twitch": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_pup_attack.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/wolf_bite.wav",
+      "lunge": true,
+      "bite": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_pup_flee.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/wolf_whine.wav",
+      "retreat_whimper": true,
+      "tail_between_legs": true
+    },
+    "howl": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_pup_howl.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/wolf_howl.wav",
+      "head_tilt_back": true,
+      "summon_pulse": true,
+      "summon_vfx": "res://vfx/wolf_summon.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_pup_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "yelp": true,
+      "whimper_sound": "sfx/wolf_yelp.wav"
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_wolf_pup_death.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/wolf_die.wav",
+      "final_whimper": true,
+      "collapse": true
+    }
+  }
+}

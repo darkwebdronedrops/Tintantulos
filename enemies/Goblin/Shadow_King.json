@@ -1,0 +1,101 @@
+{
+  "name": "Shadow King",
+  "faction": "Goblin",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 25,
+  "max_hp": 25,
+  "attack": 6,
+  "pattern": ["Special", "Melee", "Special", "Flee"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "King of Shadows",
+    "description": "Permanent stealth. Can attack 3 times before becoming visible. All Shadow Goblins gain +4 damage",
+    "stealth": {
+      "permanent": true,
+      "attacks_before_reveal": 3,
+      "countdown": true
+    },
+    "shadow_aura": {
+      "affects": "all_shadow_goblins",
+      "damage_bonus": 4
+    },
+    "visual_feedback": {
+      "shadow_crown": true,
+      "attack_counter": true,
+      "king_presence": "res://vfx/shadow_king_aura.tscn",
+      "reveal_on_third": true
+    },
+    "sound": "sfx/shadow_king.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_king_idle.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": true,
+      "shadow_crown": true,
+      "king_presence": "res://vfx/shadow_king_aura.tscn",
+      "invisible_throne": true,
+      "darkness_emit": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_king_attack.png",
+      "frames": 10,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/king_strike.wav",
+      "shadow_blade": true,
+      "attack_counter_decrement": true,
+      "stealth_strike_vfx": "res://vfx/king_strike.tscn"
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_king_special.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/shadow_king.wav",
+      "recloak": true,
+      "shadow_restore": true,
+      "reset_counter": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_king_flee.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/king_retreat.wav",
+      "shadow_dash": true,
+      "re_stealth": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_king_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "crown_flicker": true,
+      "reveal_brief": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_king_death.png",
+      "frames": 16,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/king_fall.wav",
+      "shadow_realm_closes": true,
+      "crown_shatter": true,
+      "darkness_dissipate": true
+    },
+    "reveal": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_king_reveal.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/king_reveal.wav",
+      "third_attack_reveal": true,
+      "full_form_show": true,
+      "vulnerable_window": true
+    }
+  }
+}

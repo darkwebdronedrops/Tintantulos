@@ -1,0 +1,96 @@
+{
+  "name": "Jetstream Shepherd",
+  "faction": "Elemental",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 16,
+  "max_hp": 16,
+  "attack": 5,
+  "pattern": ["Special", "Flee", "Special"],
+  "weight": "Common",
+  "element": "Stratospheric",
+  "mechanic": {
+    "name": "Shear",
+    "description": "+1 CHARGE when player moves. At 5 CHARGE, creates wind wall (projectiles deflected, melee pushback)",
+    "charge_system": {
+      "max": 5,
+      "gain_on": "player_moves",
+      "gain_amount": 1
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "wind_wall": {
+        "projectile_deflect": true,
+        "melee_pushback": true,
+        "duration": 2
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "jet_trail": true,
+      "shear_lines": true,
+      "wind_wall_vfx": "res://vfx/wind_wall.tscn",
+      "air_currents": true
+    },
+    "sound": "sfx/jetstream_build.wav",
+    "sound_release": "sfx/wind_wall.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_jetstream_shepherd_idle.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": true,
+      "jetstream_trail": true,
+      "cloud_form": true,
+      "wind_shear": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_jetstream_shepherd_attack.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/jet_strike.wav",
+      "shear_slash": true,
+      "wind_blade": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_jetstream_shepherd_special.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/wind_wall.wav",
+      "charge_gain": true,
+      "wind_wall_vfx": "res://vfx/wind_wall.tscn",
+      "shear_intensify": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_jetstream_shepherd_flee.png",
+      "frames": 6,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/jet_dash.wav",
+      "jet_dash": true,
+      "wind_boost": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_jetstream_shepherd_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.9, 1.0, 0.3],
+      "jet_disrupt": true,
+      "cloud_scatter": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_jetstream_shepherd_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/jetstream_fade.wav",
+      "wind_dissipate": true,
+      "jetstream_collapse": true
+    }
+  }
+}

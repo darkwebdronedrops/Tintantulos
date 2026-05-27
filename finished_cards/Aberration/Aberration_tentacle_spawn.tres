@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_aberration28"]
+
+[resource]
+script = ExtResource("1_aberration28")
+card_name = "Tentacle Spawn"
+card_type = "Summon"
+faction = "Aberration"
+attention_cost = 3
+description = "Summon 1/3 Tentacle. Glitch: When summoned, 50% chance to summon a second 1/3 Tentacle. Void: Tentacles ignore Shield."
+keywords = ["Glitch", "Void"]
+damage_flat = 0
+damage_dice = ""
+uses_dice = false
+shield_amount = 0
+summon_count = 1
+summon_attack = 1
+summon_hp = 3
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "glitch_50_percent_double_summon, void_ignore_shield"
+trap_cast_cost = 3
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Aberration/Aberration_tentacle_spawn.png"
+frame_texture_path = "res://assets/sprites/cards/aberration_frame.png"

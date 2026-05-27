@@ -1,0 +1,90 @@
+{
+  "name": "Phosphor Titan",
+  "faction": "Elemental",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 32,
+  "max_hp": 32,
+  "attack": 7,
+  "pattern": ["Melee", "Special", "Melee"],
+  "weight": "Uncommon",
+  "element": "Pyre",
+  "mechanic": {
+    "name": "White Fire",
+    "description": "+2 CHARGE per turn. At 9 CHARGE, white phosphorus (burn ignores defense, spreads to adjacent, 4d6/turn)",
+    "charge_system": {
+      "max": 9,
+      "gain_per_turn": 2,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "white_fire": {
+        "burn_damage": "4d6",
+        "ignore_defense": true,
+        "spread_radius": 1,
+        "duration": "until_extinguished"
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "white_fire_glow": true,
+      "phosphorus_aura": true,
+      "white_burn_vfx": "res://vfx/white_fire.tscn",
+      "spread_indicator": true
+    },
+    "sound": "sfx/phosphor_build.wav",
+    "sound_release": "sfx/white_fire.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_phosphor_titan_idle.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": true,
+      "white_fire_form": true,
+      "phosphorus_glow": true,
+      "intense_heat": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_phosphor_titan_attack.png",
+      "frames": 10,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/phosphor_strike.wav",
+      "white_fire_sword": true,
+      "burn_spread": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_phosphor_titan_special.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/white_fire.wav",
+      "white_fire_vfx": "res://vfx/white_fire.tscn",
+      "phosphorus_burst": true,
+      "spread_animation": true,
+      "intense_glow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_phosphor_titan_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 1.0, 0.9, 0.5],
+      "white_fire_intensify": true,
+      "phosphorus_reaction": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_phosphor_titan_death.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/phosphor_extinguish.wav",
+      "white_fire_fade": true,
+      "phosphorus_burn_out": true
+    }
+  }
+}

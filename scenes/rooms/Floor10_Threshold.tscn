@@ -1,0 +1,74 @@
+[gd_scene load_steps=5 format=3 uid="uid://floor10moment01threshold"]
+
+[ext_resource type="Script" path="res://scripts/Floor10RoomBase.gd" id="1_room_base"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/bg_threshold.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/ghost_boss_f1.png" id="3_ghost"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor10/stone_pillar.png" id="4_pillar"]
+
+[node name="Floor10_Threshold" type="Node2D"]
+script = ExtResource("1_room_base")
+room_id = "moment_01_threshold"
+room_display_name = "The Threshold"
+moment_type = "ghost"
+ghost_boss_id = 1
+
+[node name="Floor" type="Sprite2D" parent="."]
+texture = ExtResource("2_bg")
+scale = Vector2(2.0, 2.0)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="GhostBoss" type="Sprite2D" parent="Interior"]
+position = Vector2(0, -80)
+texture = ExtResource("3_ghost")
+
+[node name="GhostLabel" type="Label" parent="Interior/GhostBoss"]
+offset_left = -60.0
+offset_top = 30.0
+offset_right = 60.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.7, 0.7, 0.9, 1.0)
+horizontal_alignment = 1
+text = "Ghost of Floor 1"
+
+[node name="GhostDialogue" type="Label" parent="Interior"]
+position = Vector2(-300, -150)
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.8, 0.8, 0.9, 1.0)
+text = "I was the first thing you fought.
+I taught you to block and strike.
+You have come far since then.
+...I am proud of you."
+
+[node name="StonePillar1" type="Sprite2D" parent="Interior"]
+position = Vector2(-200, 50)
+texture = ExtResource("4_pillar")
+
+[node name="StonePillar2" type="Sprite2D" parent="Interior"]
+position = Vector2(200, 50)
+texture = ExtResource("4_pillar")
+
+[node name="PortalEntrance" type="Marker2D" parent="."]
+position = Vector2(-180, 0)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(-150, 0)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(0, 0)
+
+[node name="RoomWalls" type="StaticBody2D" parent="."]
+
+[node name="Wall_North" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(-256, -256, 256, -256, 256, -240, -256, -240)
+
+[node name="Wall_South" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(-256, 240, 256, 240, 256, 256, -256, 256)
+
+[node name="Wall_West" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(-256, -256, -240, -256, -240, 256, -256, 256)
+
+[node name="Wall_East" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(240, -256, 256, -256, 256, 256, 240, 256)

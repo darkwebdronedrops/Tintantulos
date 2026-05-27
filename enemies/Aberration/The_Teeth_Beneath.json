@@ -1,0 +1,76 @@
+{
+  "name": "The Teeth Beneath",
+  "faction": "Aberration",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 32,
+  "max_hp": 32,
+  "attack": 7,
+  "pattern": ["Grin", "Grin", "Grin"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Doubt",
+    "description": "Displays fake enemy intent (shows 'Attack 10' but actually Defends). Post-combat: Next floor, 25% chance enemy intents are lies. No visual tell.",
+    "deception": {
+      "fake_intent": true,
+      "always_wrong": true,
+      "examples": {
+        "shows": "Attack 10",
+        "actually": "Defend"
+      }
+    },
+    "post_combat": {
+      "doubt": {
+        "duration": "next_floor",
+        "lie_chance": 0.25,
+        "no_tell": true,
+        "paranoia": true
+      }
+    },
+    "visual_feedback": {
+      "smiling": true,
+      "too_many_meanings": true,
+      "false_intent_display": true,
+      "grin_deceives": true
+    },
+    "sound": "sfx/teeth_grin.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_teeth_beneath_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "smile": true,
+      "too_many_teeth": true,
+      "ambiguous_expression": true
+    },
+    "grin": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_teeth_beneath_grin.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/teeth_grin.wav",
+      "false_intent_show": true,
+      "real_intent_hidden": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_teeth_beneath_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.7, 0.8, 0.3],
+      "smile_cracks": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_teeth_beneath_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/teeth_fade.wav",
+      "doubt_vfx": "res://vfx/doubt.tscn",
+      "smile_fades": true,
+      "paranoia_remains": true
+    }
+  }
+}

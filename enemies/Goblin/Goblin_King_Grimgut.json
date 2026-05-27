@@ -1,0 +1,108 @@
+{
+  "name": "Goblin King Grimgut",
+  "faction": "Goblin",
+  "tier": "Boss",
+  "floor": 10,
+  "alt_for": "Dragon",
+  "hp": 65,
+  "max_hp": 65,
+  "attack": 8,
+  "pattern": ["Melee", "Special", "Defend", "Special", "Melee"],
+  "mechanic": {
+    "name": "King of All Goblins",
+    "description": "Summons 2 random Goblins each turn. Can use any Goblin Special ability. Gains +1 to all stats per Goblin ally",
+    "summon": {
+      "count": 2,
+      "random_from": "all_goblin_types",
+      "per_turn": true
+    },
+    "ability_mimic": {
+      "can_use": "any_goblin_special",
+      "random": true
+    },
+    "scaling": {
+      "per_goblin_ally": {
+        "attack": 1,
+        "hp": 1,
+        "defense": 1
+      }
+    },
+    "visual_feedback": {
+      "crown_glow": "gold",
+      "king_aura": "res://vfx/king_aura.tscn",
+      "summon_vfx": "res://vfx/king_summon.tscn",
+      "mimic_indicator": true,
+      "stat_increase_show": true
+    },
+    "sound": "sfx/king_grimgut.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_goblin_king_grimgut_idle.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": true,
+      "king_crown": true,
+      "throne_form": true,
+      "crown_aura": "gold",
+      "king_aura": "res://vfx/king_aura.tscn",
+      "goblins_kneel": true,
+      "royal_presence": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_goblin_king_grimgut_attack.png",
+      "frames": 14,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/king_strike.wav",
+      "royal_scepter_slam": true,
+      "crown_glow_impact": true,
+      "king_wave": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_goblin_king_grimgut_special.png",
+      "frames": 18,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/king_command.wav",
+      "summon_vfx": "res://vfx/king_summon.tscn",
+      "goblins_emerge": true,
+      "mimic_ability": true,
+      "random_goblin_special": true,
+      "king_decree": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_goblin_king_grimgut_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "crown_dent": true,
+      "king_anger": true,
+      "royal_pain": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_goblin_king_grimgut_death.png",
+      "frames": 20,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/king_falls.wav",
+      "kingdom_falls": true,
+      "crown_shatter": true,
+      "goblins_flee": true,
+      "royalty_ends": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_goblin_king_grimgut_defend.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/king_shield.tscn",
+      "royal_guard": true,
+      "goblins_protect": true,
+      "crown_shield": true
+    }
+  }
+}

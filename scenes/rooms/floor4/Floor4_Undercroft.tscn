@@ -1,0 +1,125 @@
+[gd_scene load_steps=8 format=3 uid="uid://floor4_undercroft_001"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/undercroft_floor.png" id="1_undercroft_floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/aether_slick.png" id="2_aether_slick"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/pipe_v.png" id="3_pipe_v"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/pipe_h.png" id="4_pipe_h"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/gear_cellar.png" id="5_gear_cellar"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/ladder.png" id="6_ladder"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/steam_vent.png" id="7_steam_vent"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/stairs_up.png" id="8_stairs_up"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_transition"]
+radius = 60.0
+
+[node name="Floor4_Undercroft" type="Node2D"]
+
+; ============================================
+; BACKGROUND
+; ============================================
+[node name="UndercroftFloor" type="Sprite2D" parent="."]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("1_undercroft_floor")
+
+; --- Aether Slick Zones ---
+[node name="AetherSlick1" type="Sprite2D" parent="."]
+position = Vector2(-150, 100)
+scale = Vector2(2.0, 2.0)
+texture = ExtResource("2_aether_slick")
+
+[node name="AetherSlick2" type="Sprite2D" parent="."]
+position = Vector2(250, -150)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_aether_slick")
+
+[node name="AetherSlick3" type="Sprite2D" parent="."]
+position = Vector2(0, 300)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_aether_slick")
+
+; --- Pipe decorations ---
+[node name="Pipe1" type="Sprite2D" parent="."]
+position = Vector2(-500, -400)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("3_pipe_v")
+
+[node name="Pipe2" type="Sprite2D" parent="."]
+position = Vector2(500, 300)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("3_pipe_v")
+
+[node name="Pipe3" type="Sprite2D" parent="."]
+position = Vector2(0, -500)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_pipe_h")
+
+; --- Gear Cellar decorations ---
+[node name="GearCellar" type="Sprite2D" parent="."]
+position = Vector2(300, 400)
+texture = ExtResource("5_gear_cellar")
+
+[node name="Label" type="Label" parent="GearCellar"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.5, 0.45, 0.35, 1.0)
+horizontal_alignment = 1
+text = "Gear Cellar"
+
+; --- EXITS back to Main ---
+[node name="Ladder1" type="Sprite2D" parent="."]
+position = Vector2(-200, 300)
+texture = ExtResource("6_ladder")
+
+[node name="Label" type="Label" parent="Ladder1"]
+offset_left = -30.0
+offset_top = -55.0
+offset_right = 30.0
+offset_bottom = -35.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.6, 0.55, 0.45, 1.0)
+horizontal_alignment = 1
+text = "⇑ Ladder"
+
+[node name="Ladder2" type="Sprite2D" parent="."]
+position = Vector2(300, -200)
+texture = ExtResource("6_ladder")
+
+[node name="SteamVentUp" type="Sprite2D" parent="."]
+position = Vector2(0, -400)
+texture = ExtResource("7_steam_vent")
+
+[node name="Label" type="Label" parent="SteamVentUp"]
+offset_left = -40.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1.0)
+horizontal_alignment = 1
+text = "⇑ Steam Vent"
+
+; --- PLAYER SPAWN ---
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(0, 0)
+
+; --- PORTAL AREAS ---
+[node name="PortalToMain1" type="Area2D" parent="."]
+position = Vector2(-200, 300)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToMain1"]
+shape = SubResource("CircleShape2D_transition")
+
+[node name="PortalToMain2" type="Area2D" parent="."]
+position = Vector2(300, -200)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToMain2"]
+shape = SubResource("CircleShape2D_transition")
+
+[node name="PortalToMain3" type="Area2D" parent="."]
+position = Vector2(0, -400)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortalToMain3"]
+shape = SubResource("CircleShape2D_transition")

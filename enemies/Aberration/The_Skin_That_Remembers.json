@@ -1,0 +1,82 @@
+{
+  "name": "The Skin That Remembers",
+  "faction": "Aberration",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 28,
+  "max_hp": 28,
+  "attack": 6,
+  "pattern": ["Borrow", "Borrow", "Consume"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Identity Theft",
+    "description": "Steals most-played card, plays it against you with your stats. Post-combat: Card removed from deck until this enemy defeated again. Never defeated? Gone for run.",
+    "borrow": {
+      "target": "most_played_card",
+      "uses_against_player": true,
+      "uses_player_stats": true
+    },
+    "post_combat": {
+      "identity_theft": {
+        "card_removed": "most_played",
+        "return_condition": "defeat_this_enemy_again",
+        "if_never_defeated": "gone_for_run",
+        "permanent_loss": true
+      }
+    },
+    "visual_feedback": {
+      "wearing_face": true,
+      "almost_recognize": true,
+      "card_borrow_vfx": "res://vfx/identity_borrow.tscn",
+      "identity_theft_indicator": true
+    },
+    "sound": "sfx/skin_remember.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_skin_that_remembers_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "familiar_face": true,
+      "almost_recognized": true,
+      "skin_suit": true
+    },
+    "borrow": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_skin_that_remembers_borrow.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/skin_borrow.wav",
+      "card_steal": true,
+      "identity_wear": true
+    },
+    "consume": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_skin_that_remembers_consume.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/skin_consume.wav",
+      "borrowed_attack": true,
+      "your_stats_against_you": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_skin_that_remembers_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.6, 0.7, 0.3],
+      "skin_tear": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_skin_that_remembers_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/skin_fade.wav",
+      "identity_theft_vfx": "res://vfx/identity_theft.tscn",
+      "card_removed_warning": true,
+      "face_sloughs": true
+    }
+  }
+}

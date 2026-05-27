@@ -1,0 +1,78 @@
+{
+  "name": "Chieftain's Enforcer",
+  "faction": "Goblin",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 17,
+  "max_hp": 17,
+  "attack": 5,
+  "pattern": ["Melee", "Melee", "Special"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Execute",
+    "description": "Special = If target below 25% HP, instant kill. Otherwise, 2d8 damage",
+    "execute_threshold": 0.25,
+    "execute": {
+      "condition": "target_hp_below_25_percent",
+      "effect": "instant_kill"
+    },
+    "fallback": {
+      "damage": "2d8"
+    },
+    "visual_feedback": {
+      "execute_indicator": true,
+      "skull_icon": true,
+      "massive_damage_vfx": "res://vfx/execute_strike.tscn"
+    },
+    "sound": "sfx/execute.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_enforcer_idle.png",
+      "frames": 6,
+      "fps": 5,
+      "loop": true,
+      "massive_club": true,
+      "executioner_stance": true,
+      "chieftain_mark": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_enforcer_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/enforcer_slam.wav",
+      "club_heavy_swing": true,
+      "ground_crack": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_enforcer_special.png",
+      "frames": 14,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/execute.wav",
+      "execute_stance": true,
+      "skull_flash": true,
+      "check_execute": true,
+      "execute_vfx": "res://vfx/execute_strike.tscn",
+      "massive_impact": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_enforcer_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "club_shake": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_chieftains_enforcer_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/enforcer_fall.wav",
+      "club_falls": true,
+      "executioner_falls": true
+    }
+  }
+}

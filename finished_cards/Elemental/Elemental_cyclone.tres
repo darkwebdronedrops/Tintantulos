@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_elemental28"]
+
+[resource]
+script = ExtResource("1_elemental28")
+card_name = "Cyclone"
+card_type = "Special"
+faction = "Elemental"
+attention_cost = 3
+description = "Deal 1d6 damage to all enemies. Flow: Consume all CHARGE stacks. Each stack adds +1d6 damage (no max)."
+keywords = ["Flow"]
+damage_flat = 0
+damage_dice = "1d6"
+uses_dice = true
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "aoe_all_enemies, consume_all_charge_plus_1d6_per_stack"
+trap_cast_cost = 3
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Elemental/Elemental_cyclone.png"
+frame_texture_path = "res://assets/sprites/cards/elemental_frame.png"

@@ -1,0 +1,79 @@
+{
+  "name": "The Bug",
+  "faction": "Aberration",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 22,
+  "max_hp": 22,
+  "attack": 5,
+  "pattern": ["Special", "Special", "Melee"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Clutter Hand",
+    "description": "Each turn, adds 1 'Error' card to player's hand (0 cost, does nothing, takes up space). Bug dies: All Errors become 'Debug' (draw 1 card each).",
+    "clutter": {
+      "add_per_turn": "Error",
+      "error_card": {
+        "cost": 0,
+        "effect": "none",
+        "description": "An error in your hand. Takes up space."
+      },
+      "on_death": {
+        "transform_to": "Debug",
+        "debug_effect": "draw_1"
+      }
+    },
+    "visual_feedback": {
+      "glitch_pixels": true,
+      "error_messages": true,
+      "error_card_add": "res://vfx/error_add.tscn",
+      "swarm_effect": true
+    },
+    "sound": "sfx/bug_buzz.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_bug_idle.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": true,
+      "pixel_swarm": true,
+      "glitch_particles": true,
+      "error_text_float": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_bug_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/bug_strike.wav",
+      "pixel_burst": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_bug_special.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/error_add.wav",
+      "error_card_vfx": "res://vfx/error_add.tscn",
+      "clutter_hand": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_bug_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.2, 0.8, 0.3],
+      "pixel_scatter": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_bug_death.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/bug_resolve.wav",
+      "debug_transform": true,
+      "errors_fix": true
+    }
+  }
+}

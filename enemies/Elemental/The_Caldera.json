@@ -1,0 +1,116 @@
+{
+  "name": "The Caldera",
+  "faction": "Elemental",
+  "tier": "Boss",
+  "floor": 3,
+  "boss_type": "Mini",
+  "hp": 80,
+  "max_hp": 80,
+  "attack": 7,
+  "pattern": ["Melee", "Special", "Defend", "Special"],
+  "mechanic": {
+    "name": "Thermal Runaway",
+    "description": "Gains +2 CHARGE per turn. At 10 CHARGE: Meltdown — 8d8 damage to all, terrain becomes lava for 3 turns. Water cards reduce CHARGE by 2 (exploitable).",
+    "charge_system": {
+      "max": 10,
+      "gain_per_turn": 2,
+      "auto_gain": true
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "meltdown": {
+        "damage": "8d8",
+        "aoe": true,
+        "terrain_change": "lava",
+        "duration": 3
+      },
+      "reset_after": true
+    },
+    "exploitable": {
+      "condition": "player_uses_water_card",
+      "charge_reduction": 2,
+      "note": "Cooling the boss prevents meltdown"
+    },
+    "hard_counter": {
+      "name": "Flash Freeze",
+      "trigger": "player_3_plus_fire_cards_one_turn",
+      "effect": "boss_gains_5_charge",
+      "bonus": "attacks_twice_next_turn"
+    },
+    "visual_feedback": {
+      "living_volcano": true,
+      "magma_veins": true,
+      "charge_pulse": true,
+      "meltdown_vfx": "res://vfx/meltdown.tscn",
+      "lava_terrain": "res://vfx/lava_terrain.tscn",
+      "water_cool_effect": true
+    },
+    "sound": "sfx/caldera_rumble.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_caldera_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "volcano_form": true,
+      "magma_veins_pulse": true,
+      "obsidian_shell": true,
+      "heat_shimmer": true,
+      "charge_auto_build": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_caldera_attack.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/caldera_slam.wav",
+      "magma_splash": true,
+      "volcanic_impact": true,
+      "screen_shake": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_the_caldera_special.png",
+      "frames": 18,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/meltdown.wav",
+      "meltdown_vfx": "res://vfx/meltdown.tscn",
+      "lava_erupt": true,
+      "terrain_melt": true,
+      "heat_wave": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_caldera_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/volcano_shield.tscn",
+      "crust_harden": true,
+      "magma_armor": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_caldera_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.3, 0.0, 0.3],
+      "obsidian_crack": true,
+      "magma_leak": true,
+      "water_cool_check": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_caldera_death.png",
+      "frames": 20,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/volcano_extinguish.wav",
+      "magma_cool": true,
+      "obsidian_collapse": true,
+      "volcano_dormant": true
+    }
+  }
+}

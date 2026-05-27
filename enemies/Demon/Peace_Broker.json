@@ -1,0 +1,74 @@
+{
+  "name": "Peace Broker",
+  "faction": "Demon",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 32,
+  "max_hp": 32,
+  "attack": 4,
+  "pattern": ["Negotiate", "Defend", "Defend"],
+  "weight": "Common",
+  "offer": "Absolution",
+  "mechanic": {
+    "name": "Peace Deal",
+    "description": "Negotiate = Offer 'truce' (enemy stops attacking for 3 turns). If accepted, player cannot Attack for 3 turns ('peace kept').",
+    "negotiate": {
+      "offer": "enemy_stops_attacking_3_turns",
+      "cost": "player_cannot_attack_3_turns",
+      "message": "Why fight? We can have peace. Just... stop."
+    },
+    "visual_feedback": {
+      "diplomat_form": true,
+      "open_hands": true,
+      "peace_glow": "res://vfx/peace_offer.tscn",
+      "handshake_shadow": "res://vfx/truce_bound.tscn"
+    },
+    "sound": "sfx/negotiate.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_peace_broker_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "diplomat": true,
+      "open_hands": true,
+      "reasonable": true,
+      "negotiating": true
+    },
+    "negotiate": {
+      "sprite": "res://assets/sprites/enemies/enemy_peace_broker_negotiate.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/negotiate.wav",
+      "peace_glow": "res://vfx/peace_offer.tscn",
+      "hand_extended": true,
+      "deal_offered": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_peace_broker_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/truce_barrier.tscn",
+      "peaceful_defense": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_peace_broker_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.7, 0.6, 0.4],
+      "diplomacy_fails": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_peace_broker_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/peace_broken.wav",
+      "war_returns": true
+    }
+  }
+}

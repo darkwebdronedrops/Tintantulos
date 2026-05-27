@@ -1,0 +1,84 @@
+{
+  "name": "The Drifter",
+  "faction": "Demon",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 30,
+  "max_hp": 30,
+  "attack": 6,
+  "pattern": ["Drift", "Defend", "Melee"],
+  "weight": "Uncommon",
+  "offer": "Absolution",
+  "mechanic": {
+    "name": "Surrender",
+    "description": "Drift = Offer 'let go' (auto-win this combat, no rewards). If accepted, player loses 10 max HP permanently ('freedom from flesh').",
+    "drift": {
+      "offer": "auto_win_combat",
+      "no_rewards": true,
+      "cost": "permanent_minus_10_max_hp",
+      "message": "Why struggle? Let go. Be free."
+    },
+    "visual_feedback": {
+      "weightless_form": true,
+      "floating": true,
+      "peace_glow": "res://vfx/drift_offer.tscn",
+      "loss_shadow": "res://vfx/freedom_cost.tscn"
+    },
+    "sound": "sfx/drift.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_drifter_idle.png",
+      "frames": 10,
+      "fps": 2,
+      "loop": true,
+      "weightless": true,
+      "floating": true,
+      "no_gravity": true,
+      "peace_aura": true
+    },
+    "drift": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_drifter_drift.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/drift.wav",
+      "peace_glow": "res://vfx/drift_offer.tscn",
+      "offer_shown": true,
+      "surrender_beckons": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_drifter_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/drift_strikes.wav",
+      "weightless_blow": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_drifter_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/peace_barrier.tscn",
+      "effortless": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_drifter_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.7, 0.8, 0.4],
+      "peace_disturbed": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_drifter_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/drift_fades.wav",
+      "drifts_away": true,
+      "freedom_claimed": true
+    }
+  }
+}

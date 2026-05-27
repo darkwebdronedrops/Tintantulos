@@ -1,0 +1,90 @@
+{
+  "name": "The Punishment",
+  "faction": "Demon",
+  "tier": "Boss",
+  "floor": 9,
+  "hp": 160,
+  "max_hp": 160,
+  "attack": 10,
+  "pattern": ["Judge", "Melee", "Execute"],
+  "offer": "Certainty",
+  "mechanic": {
+    "name": "Final Judgment",
+    "description": "Judge = Reviews all choices player made this run. For each accepted demon offer: +5 damage to Punishment. For each refused: +3 HP healed when Punishment dies. Execute = Deals judgment damage.",
+    "judge": {
+      "reviews_choices": true,
+      "damage_per_accept": 5,
+      "heal_per_refuse": 3,
+      "message": "I see every deal you made. Every refusal."
+    },
+    "execute": {
+      "damage": "judgment_total",
+      "message": "Your judgment is delivered."
+    },
+    "visual_feedback": {
+      "judge_form": true,
+      "scales_of_justice": true,
+      "judgment_glow": "res://vfx/judgment.tscn",
+      "verdict_visible": true
+    },
+    "sound": "sfx/judge.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_punishment_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "judge": true,
+      "robes_of_judgment": true,
+      "scales_floating": true,
+      "verdict_written": true
+    },
+    "judge": {
+      "sprite": "res://assets/sprites/enemies/boss_the_punishment_judge.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/judge.wav",
+      "judgment_glow": "res://vfx/judgment.tscn",
+      "reviews_life": true,
+      "scales_weigh": true
+    },
+    "execute": {
+      "sprite": "res://assets/sprites/enemies/boss_the_punishment_execute.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/execute.wav",
+      "judgment_delivered": true,
+      "verdict_executed": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_punishment_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/judgment_strikes.wav",
+      "gavel_falls": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_punishment_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.6, 0.7, 0.5],
+      "judgment_questioned": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_punishment_death.png",
+      "frames": 20,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/judgment_complete.wav",
+      "verdict_final": true,
+      "judgment_ends": true
+    }
+  }
+}

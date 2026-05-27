@@ -1,0 +1,87 @@
+{
+  "name": "Bankruptcy",
+  "faction": "Undead",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 32,
+  "max_hp": 32,
+  "attack": 6,
+  "pattern": ["Seize", "Melee", "Liquidate"],
+  "weight": "Rare",
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Seize Assets",
+    "description": "Seize = Steal all Quiddity. Liquidate = Deals damage equal to Quiddity seized (max 20).",
+    "seize": {
+      "target": "all_quiddity",
+      "message": "Everything you have. Is ours."
+    },
+    "liquidate": {
+      "damage": "quiddity_seized",
+      "max": 20,
+      "resets_seized": true
+    },
+    "visual_feedback": {
+      "bankruptcy_form": true,
+      "asset_seizure": true,
+      "seize_vfx": "res://vfx/asset_seizure.tscn",
+      "liquidation_burst": "res://vfx/liquidation.tscn"
+    },
+    "sound": "sfx/seize.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_bankruptcy_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "empty_vault": true,
+      "liquidation_form": true,
+      "creditor_aura": true
+    },
+    "seize": {
+      "sprite": "res://assets/sprites/enemies/enemy_bankruptcy_seize.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/seize.wav",
+      "seize_vfx": "res://vfx/asset_seizure.tscn",
+      "quiddity_drained": true,
+      "everything_taken": true
+    },
+    "liquidate": {
+      "sprite": "res://assets/sprites/enemies/enemy_bankruptcy_liquidate.png",
+      "frames": 14,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/liquidation.wav",
+      "liquidation_burst": "res://vfx/liquidation.tscn",
+      "assets_weaponized": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_bankruptcy_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/bankruptcy_strike.wav",
+      "debtor_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_bankruptcy_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.6, 0.4],
+      "creditor_wounded": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_bankruptcy_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/bankruptcy_resolved.wav",
+      "assets_freed": true,
+      "debt_cleared": true
+    }
+  }
+}

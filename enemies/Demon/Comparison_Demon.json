@@ -1,0 +1,83 @@
+{
+  "name": "Comparison Demon",
+  "faction": "Demon",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 6,
+  "max_hp": 6,
+  "attack": 2,
+  "pattern": ["Compare", "Melee", "Defend"],
+  "weight": "Uncommon",
+  "offer": "Ambition",
+  "mechanic": {
+    "name": "Compare",
+    "description": "Compare = Offer +2 damage if you have more cards than enemy. If accepted, if you EVER have fewer cards, take 4 damage ('inadequacy').",
+    "compare": {
+      "offer": "plus_2_if_card_advantage",
+      "cost_trigger": "ongoing_condition",
+      "condition": "fewer_cards_than_enemy",
+      "cost": "damage_4",
+      "message": "You're better than them. Prove it."
+    },
+    "visual_feedback": {
+      "scale_form": true,
+      "always_weighing": true,
+      "comparison_glow": "res://vfx/compare.tscn",
+      "inadequacy_shadow": "res://vfx/inadequacy.tscn"
+    },
+    "sound": "sfx/compare.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_comparison_demon_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "scale_form": true,
+      "weighing_you": true,
+      "finding_you_lacking": true
+    },
+    "compare": {
+      "sprite": "res://assets/sprites/enemies/enemy_comparison_demon_compare.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/compare.wav",
+      "comparison_glow": "res://vfx/compare.tscn",
+      "you_win_for_now": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_comparison_demon_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/comparison_strike.wav",
+      "measuring_blow": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_comparison_demon_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/scale_barrier.tscn",
+      "they_are_better": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_comparison_demon_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.7, 0.7, 0.4],
+      "balance_tips": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_comparison_demon_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/comparison_ends.wav",
+      "scales_break": true,
+      "good_enough": true
+    }
+  }
+}

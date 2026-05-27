@@ -1,0 +1,75 @@
+{
+  "name": "Rage Merchant",
+  "faction": "Demon",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 42,
+  "max_hp": 42,
+  "attack": 8,
+  "pattern": ["Intensify", "Melee", "Melee"],
+  "weight": "Common",
+  "offer": "Intensity",
+  "mechanic": {
+    "name": "Channel Rage",
+    "description": "Intensify = Offer +5 damage this turn. If accepted, player takes 3 damage per card played ('passion burns').",
+    "intensify": {
+      "offer": "plus_5_damage",
+      "cost": "self_damage_3_per_card",
+      "message": "Feel it. The fire. Let it burn through you."
+    },
+    "visual_feedback": {
+      "flame_form": true,
+      "burning": true,
+      "intensity_glow": "res://vfx/rage_offer.tscn",
+      "burn_shadow": "res://vfx/self_burn.tscn"
+    },
+    "sound": "sfx/intensify.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_rage_merchant_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "flame_body": true,
+      "constant_burn": true,
+      "heat_shimmer": true
+    },
+    "intensify": {
+      "sprite": "res://assets/sprites/enemies/enemy_rage_merchant_intensify.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/intensify.wav",
+      "intensity_glow": "res://vfx/rage_offer.tscn",
+      "rage_offered": true,
+      "fire_grows": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_rage_merchant_attack.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/rage_strikes.wav",
+      "furious_blow": true,
+      "burning_impact": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_rage_merchant_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.4, 0.3, 0.5],
+      "flame_dampens": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_rage_merchant_death.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/rage_extinguished.wav",
+      "flame_consumed": true,
+      "cold_returns": true
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "name": "The First Offer",
+  "faction": "Demon",
+  "tier": "Boss",
+  "floor": 3,
+  "hp": 80,
+  "max_hp": 80,
+  "attack": 7,
+  "pattern": ["Present", "Melee", "Defend", "Collect"],
+  "offer": "Ambition",
+  "mechanic": {
+    "name": "First Temptation",
+    "description": "Present = Offers 3 cards: Ambition (+draw, cost discard), Certainty (+damage, cost pattern lock), Absolution (+heal, cost skip turn). Player must choose one or take 10 damage ('refusal').",
+    "present": {
+      "offers_3_cards": ["Ambition", "Certainty", "Absolution"],
+      "refusal_punishment": 10,
+      "message": "Your first real choice. Choose wisely."
+    },
+    "collect": {
+      "effect": "apply_chosen_cost",
+      "message": "The deal is struck."
+    },
+    "visual_feedback": {
+      "three_faces": true,
+      "offers_glow": "res://vfx/three_offers.tscn",
+      "choice_highlight": true
+    },
+    "sound": "sfx/choose.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_offer_idle.png",
+      "frames": 12,
+      "fps": 3,
+      "loop": true,
+      "three_faced": true,
+      "ambition_face": true,
+      "certainty_face": true,
+      "absolution_face": true
+    },
+    "present": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_offer_present.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/choose.wav",
+      "offers_glow": "res://vfx/three_offers.tscn",
+      "cards_shown": true
+    },
+    "collect": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_offer_collect.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/deal_struck.wav",
+      "deal_complete": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_offer_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/offer_strikes.wav",
+      "rejection_blow": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_offer_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/offer_barrier.tscn",
+      "waiting": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_offer_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.8, 0.6, 0.8, 0.4],
+      "faces_shift": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_first_offer_death.png",
+      "frames": 18,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/offer_expires.wav",
+      "faces_fade": true,
+      "choice_made": true
+    }
+  }
+}

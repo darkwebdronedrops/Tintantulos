@@ -1,0 +1,83 @@
+{
+  "name": "The Forgotten",
+  "faction": "Aberration",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 14,
+  "max_hp": 14,
+  "attack": 3,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Memory Loss",
+    "description": "Special = Remove player's highest-cost card from hand. Returns after combat IF player wins. If player loses: Permanent loss.",
+    "memory_steal": {
+      "target": "highest_cost_card_in_hand",
+      "removal_duration": "combat",
+      "return_condition": "player_wins",
+      "permanent_if_loss": true
+    },
+    "visual_feedback": {
+      "fading_figure": true,
+      "trying_to_hand_something": true,
+      "card_fade_vfx": "res://vfx/memory_loss.tscn",
+      "ghostly_edges": true
+    },
+    "sound": "sfx/forgotten_whisper.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_forgotten_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "ghostly_figure": true,
+      "fading_edges": true,
+      "reaching_out": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_forgotten_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/forgotten_strike.wav",
+      "desperate_grab": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_forgotten_special.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/memory_loss.wav",
+      "card_fade_vfx": "res://vfx/memory_loss.tscn",
+      "memory_drain": true,
+      "card_vanish": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_forgotten_defend.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/forgotten_shield.tscn",
+      "fading_defense": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_forgotten_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.6, 0.3],
+      "memory_flicker": true,
+      "almost_remembered": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_forgotten_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/forgotten_fade.wav",
+      "finally_forgotten": true,
+      "memory_release": true
+    }
+  }
+}

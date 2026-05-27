@@ -1,0 +1,75 @@
+{
+  "name": "Reclamation",
+  "faction": "Undead",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 14,
+  "max_hp": 14,
+  "attack": 4,
+  "pattern": ["Reclaim", "Melee", "Reclaim"],
+  "weight": "Uncommon",
+  "graft": "Shroud",
+  "mechanic": {
+    "name": "Reclaim",
+    "description": "Reclaim = Return 1 card from discard to enemy hand. Deals damage equal to card's cost.",
+    "reclaim": {
+      "source": "player_discard",
+      "destination": "enemy_hand",
+      "damage_per_cost": 1,
+      "message": "What you discarded, it takes back."
+    },
+    "visual_feedback": {
+      "returning_form": true,
+      "trash_becoming_treasure": true,
+      "reclaim_vfx": "res://vfx/reclamation.tscn",
+      "trash_aura": true
+    },
+    "sound": "sfx/reclaim.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_reclamation_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "trash_form": true,
+      "discarded_things": true,
+      "returning": true
+    },
+    "reclaim": {
+      "sprite": "res://assets/sprites/enemies/enemy_reclamation_reclaim.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/reclaim.wav",
+      "reclaim_vfx": "res://vfx/reclamation.tscn",
+      "card_returns": true,
+      "trash_reborn": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_reclamation_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/trash_strike.wav",
+      "discarded_blow": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_reclamation_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.4, 0.4],
+      "trash_scatters": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_reclamation_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/reclamation_fade.wav",
+      "returns_to_discard": true,
+      "trash_stays": true
+    }
+  }
+}

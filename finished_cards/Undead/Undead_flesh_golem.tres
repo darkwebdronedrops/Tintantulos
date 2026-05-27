@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_undead26"]
+
+[resource]
+script = ExtResource("1_undead26")
+card_name = "Flesh Golem"
+card_type = "Summon"
+faction = "Undead"
+attention_cost = 6
+description = "Summon 5/6 Bone Golem. Bone: When this takes damage, gain 1 GRASP stack. Death: At 0 HP, deal 2d6 damage to all enemies."
+keywords = ["Bone", "Death"]
+damage_flat = 0
+damage_dice = "2d6"
+uses_dice = true
+shield_amount = 0
+summon_count = 1
+summon_attack = 5
+summon_hp = 6
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "bone_gain_grasp_on_damage, death_death_blow_aoe:2d6"
+trap_cast_cost = 6
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Undead/Undead_flesh_golem.png"
+frame_texture_path = "res://assets/sprites/cards/undead_frame.png"

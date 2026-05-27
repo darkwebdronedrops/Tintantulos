@@ -1,0 +1,91 @@
+{
+  "name": "Unsaid Thing",
+  "faction": "Undead",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 3,
+  "max_hp": 3,
+  "attack": 2,
+  "pattern": ["Special", "Melee", "Flee"],
+  "weight": "Common",
+  "graft": "Shroud",
+  "mechanic": {
+    "name": "Regret",
+    "description": "Special = Steal 1 random card from hand → discard. If hand empty, steal 2 HP instead.",
+    "steal": {
+      "target": "random_card_from_hand",
+      "destination": "discard",
+      "count": 1,
+      "fallback": {
+        "condition": "hand_empty",
+        "effect": "steal_hp",
+        "amount": 2
+      }
+    },
+    "visual_feedback": {
+      "tattered_memory": true,
+      "translucent_regret": true,
+      "card_steal_vfx": "res://vfx/shroud_steal.tscn",
+      "ghostly_aura": true
+    },
+    "sound": "sfx/regret_whisper.wav"
+  },
+  "flee_behavior": {
+    "at_hp_percent": 25,
+    "message": "The Unsaid Thing fades, still unspoken."
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_unsaid_thing_idle.png",
+      "frames": 6,
+      "fps": 2,
+      "loop": true,
+      "translucent": true,
+      "fading_edges": true,
+      "unfinished_presence": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_unsaid_thing_special.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/regret_whisper.wav",
+      "card_steal": true,
+      "shroud_grasp": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_unsaid_thing_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/shroud_strike.wav",
+      "ghostly_slash": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_unsaid_thing_flee.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/shroud_fade.wav",
+      "fades_unspoken": true,
+      "returns_to_void": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_unsaid_thing_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.6, 0.7, 0.3],
+      "translucent_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_unsaid_thing_death.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/shroud_release.wav",
+      "unfinished_business": true,
+      "silence_remains": true
+    }
+  }
+}

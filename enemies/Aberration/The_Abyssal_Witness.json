@@ -1,0 +1,74 @@
+{
+  "name": "The Abyssal Witness",
+  "faction": "Aberration",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 25,
+  "max_hp": 25,
+  "attack": 0,
+  "pattern": ["Watch", "Watch", "Watch"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Performance Anxiety",
+    "description": "Does nothing. Just watches. Post-combat: If combat took >60 seconds, lose 2 max HP permanently. It judges efficiency.",
+    "passive_combat": {
+      "does_nothing": true,
+      "only_watches": true,
+      "eyes_on_surfaces": true
+    },
+    "post_combat": {
+      "judgment": {
+        "condition": "combat_duration_>60s",
+        "punishment": {
+          "max_hp_loss": 2,
+          "permanent": true
+        },
+        "message": "It judges efficiency."
+      }
+    },
+    "visual_feedback": {
+      "eyes_on_surfaces": true,
+      "walls_have_eyes": true,
+      "ceiling_watches": true,
+      "judgment_aura": true,
+      "timer_hidden": true
+    },
+    "sound": "sfx/witness_gaze.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_abyssal_witness_idle.png",
+      "frames": 8,
+      "fps": 2,
+      "loop": true,
+      "eyes_opening": true,
+      "surfaces_watch": true,
+      "unblinking_gaze": true
+    },
+    "watch": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_abyssal_witness_watch.png",
+      "frames": 6,
+      "fps": 2,
+      "loop": false,
+      "sound": "sfx/witness_gaze.wav",
+      "gaze_intensifies": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_abyssal_witness_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.3, 0.3, 0.4, 0.3],
+      "eyes_blink": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_abyssal_witness_death.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/witness_close.wav",
+      "eyes_close": true,
+      "judgment_ends": true
+    }
+  }
+}

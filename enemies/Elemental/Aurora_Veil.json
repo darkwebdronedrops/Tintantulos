@@ -1,0 +1,96 @@
+{
+  "name": "Aurora Veil",
+  "faction": "Elemental",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 9,
+  "max_hp": 9,
+  "attack": 3,
+  "pattern": ["Special", "Flee", "Special"],
+  "weight": "Common",
+  "element": "Stratospheric",
+  "mechanic": {
+    "name": "Borealis",
+    "description": "+1 CHARGE when player plays card. At 4 CHARGE, scrambles player's hand (randomizes card costs)",
+    "charge_system": {
+      "max": 4,
+      "gain_on": "player_plays_card",
+      "gain_amount": 1
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "hand_scramble": {
+        "randomize_costs": true,
+        "duration": 1
+      },
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "aurora_shimmer": true,
+      "ribbon_dance": true,
+      "hand_scramble_vfx": "res://vfx/hand_scramble.tscn",
+      "cost_shuffle": true
+    },
+    "sound": "sfx/aurora_hum.wav",
+    "sound_release": "sfx/hand_scramble.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_aurora_veil_idle.png",
+      "frames": 10,
+      "fps": 5,
+      "loop": true,
+      "aurora_ribbon": true,
+      "color_shift": true,
+      "borealis_flow": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_aurora_veil_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/aurora_touch.wav",
+      "ribbon_strike": true,
+      "ionized_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_aurora_veil_special.png",
+      "frames": 10,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/aurora_pulse.wav",
+      "charge_gain": true,
+      "aurora_intensify": true,
+      "hand_scramble_vfx": "res://vfx/hand_scramble.tscn"
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_aurora_veil_flee.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/aurora_drift.wav",
+      "ribbon_drift": true,
+      "fade_away": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_aurora_veil_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.8, 1.0, 0.3],
+      "ribbon_fray": true,
+      "color_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_aurora_veil_death.png",
+      "frames": 12,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/aurora_fade.wav",
+      "aurora_dissipate": true,
+      "ribbons_scatter": true,
+      "color_bleed": true
+    }
+  }
+}

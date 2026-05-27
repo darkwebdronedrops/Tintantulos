@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_young_drake"]
+
+[resource]
+script = ExtResource("1_young_drake")
+card_name = "Young Drake"
+faction = "Dragon"
+card_type = "Summon"
+attention_cost = 6
+quiddity_gain = 0
+damage_dice = ""
+damage_flat = 0
+uses_dice = true
+shield_amount = 0
+heal_amount = 0
+summon_attack = 4
+summon_hp = 6
+summon_count = 1
+summon_growth_atk = 1
+summon_growth_hp = 1
+attack_type = "rolled"
+attack_roll = "2d6"
+keywords = PackedStringArray("First Strike")
+trap_cast_cost = 0
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+range_type = ""
+aoe_radius = 0
+targets_all = false
+special_effect = ""
+requires_condition = ""
+corruption_gain = 0
+is_overlay = false
+overlay_type = ""
+gem_cost = 0
+description = "4/6 with Growth and First Strike. Attacks for 2d6. Gain 1 Quiddity when attacking."
+frame_texture_path = "res://assets/sprites/cards/dragon_frame.png"
+
+sprite_texture_path = "res://assets/sprites/cards/Dragon/Dragon_young_drake.png"

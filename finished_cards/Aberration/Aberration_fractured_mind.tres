@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://d17eib7xsesug" path="res://scripts/CardData.gd" id="1_aberration29"]
+
+[resource]
+script = ExtResource("1_aberration29")
+card_name = "Fractured Mind"
+card_type = "Special"
+faction = "Aberration"
+attention_cost = 2
+description = "Draw 3 cards. Glitch: 50% chance to draw 1 extra card. Void: Discard 1 random card at end of turn."
+keywords = ["Glitch", "Void"]
+damage_flat = 0
+damage_dice = ""
+uses_dice = false
+shield_amount = 0
+summon_count = 0
+summon_attack = 0
+summon_hp = 0
+trap_trigger_action = ""
+trap_disarm_action = ""
+field_persist = false
+aoe_radius = 0
+heal_amount = 0
+quiddity_gain = 0
+special_effect = "glitch_50_percent_extra_draw, void_discard_1_end_turn"
+trap_cast_cost = 2
+trap_trigger_cost = 0
+trap_disarm_cost = 0
+is_overlay = false
+overlay_type = ""
+sprite_texture_path = "res://assets/sprites/cards/Aberration/Aberration_fractured_mind.png"
+frame_texture_path = "res://assets/sprites/cards/aberration_frame.png"

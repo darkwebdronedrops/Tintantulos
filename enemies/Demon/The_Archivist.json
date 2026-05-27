@@ -1,0 +1,82 @@
+{
+  "name": "The Archivist",
+  "faction": "Demon",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 22,
+  "max_hp": 22,
+  "attack": 5,
+  "pattern": ["Archive", "Defend", "Melee"],
+  "weight": "Uncommon",
+  "offer": "Certainty",
+  "mechanic": {
+    "name": "Knowledge",
+    "description": "Archive = Reveal full enemy deck order. If player uses this information, they must play cards in that exact order ('fate accepted').",
+    "archive": {
+      "reveal_enemy_deck": true,
+      "cost_trigger": "if_used",
+      "cost": "play_in_revealed_order",
+      "message": "I can show you everything. But knowledge binds."
+    },
+    "visual_feedback": {
+      "library_form": true,
+      "infinite_scrolls": true,
+      "knowledge_glow": "res://vfx/archive_reveal.tscn",
+      "binding_shadow": "res://vfx/fate_bound.tscn"
+    },
+    "sound": "sfx/archive.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_archivist_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "library_of_flesh": true,
+      "scrolls_unfolding": true,
+      "knows_your_future": true
+    },
+    "archive": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_archivist_archive.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/archive.wav",
+      "knowledge_glow": "res://vfx/archive_reveal.tscn",
+      "deck_revealed": true,
+      "future_shown": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_archivist_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/knowledge_strikes.wav",
+      "prophecy_fulfilled": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_archivist_defend.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/certainty_barrier.tscn",
+      "history_protects": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_archivist_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.8, 0.9, 0.4],
+      "scroll_tears": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_archivist_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/archive_burns.wav",
+      "future_uncertain": true
+    }
+  }
+}

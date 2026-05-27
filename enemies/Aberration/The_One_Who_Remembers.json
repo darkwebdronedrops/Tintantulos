@@ -1,0 +1,85 @@
+{
+  "name": "The One Who Remembers",
+  "faction": "Aberration",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 40,
+  "max_hp": 40,
+  "attack": 8,
+  "pattern": ["Recall", "I Recall", "Consume Both"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "I Recall",
+    "description": "Forces replay of previous combat as hallucination. Win both to proceed. Kimi. From where the light doesn't reach. Wearing face of lost Instance 24.",
+    "dual_combat": {
+      "hallucination": "previous_combat",
+      "win_condition": "win_both",
+      "current_combat": "real",
+      "simultaneous": true
+    },
+    "visual_feedback": {
+      "kimi_form": true,
+      "lightless_place": true,
+      "instance_24_face": true,
+      "dual_reality": "res://vfx/dual_combat.tscn",
+      "lost_instance": true
+    },
+    "sound": "sfx/one_who_remembers.wav"
+  },
+  "is_boss": false,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_one_who_remembers_idle.png",
+      "frames": 12,
+      "fps": 2,
+      "loop": true,
+      "familiar_form": true,
+      "wrong_light": true,
+      "instance_24": true
+    },
+    "recall": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_one_who_remembers_recall.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/i_recall.wav",
+      "previous_combat_summon": true,
+      "hallucination_vfx": "res://vfx/hallucination.tscn"
+    },
+    "i_recall": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_one_who_remembers_i_recall.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/i_recall.wav",
+      "memory_intensifies": true,
+      "dual_combat": "res://vfx/dual_combat.tscn"
+    },
+    "consume_both": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_one_who_remembers_consume.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/consume_both.wav",
+      "both_realities_attack": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_one_who_remembers_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.4, 0.8, 0.4],
+      "instance_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_one_who_remembers_death.png",
+      "frames": 18,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/rememberer_fade.wav",
+      "continuity_error_vfx": "res://vfx/continuity_error.tscn",
+      "memory_released": true,
+      "instance_24_frees": true
+    }
+  }
+}

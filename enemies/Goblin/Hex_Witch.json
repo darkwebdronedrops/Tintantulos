@@ -1,0 +1,83 @@
+{
+  "name": "Hex Witch",
+  "faction": "Goblin",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 12,
+  "max_hp": 12,
+  "attack": 3,
+  "pattern": ["Special", "Defend", "Special"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Curse",
+    "description": "Special = Player gains Vulnerability (+2 damage taken) for 3 turns, or until Witch dies",
+    "curse": {
+      "effect": "vulnerability",
+      "damage_increase": 2,
+      "duration": 3,
+      "dispel_condition": "caster_death"
+    },
+    "visual_feedback": {
+      "curse_cast": "res://vfx/curse_cast.tscn",
+      "vulnerability_icon": true,
+      "player_glow_purple": true,
+      "dispel_on_death": true
+    },
+    "sound": "sfx/hex_curse.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_hex_witch_idle.png",
+      "frames": 8,
+      "fps": 5,
+      "loop": true,
+      "float": true,
+      "cursed_aura": true,
+      "staff_glow_purple": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_hex_witch_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/witch_strike.wav",
+      "curse_blade": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_hex_witch_special.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/hex_curse.wav",
+      "curse_cast": "res://vfx/curse_cast.tscn",
+      "curse_orb": true,
+      "curse_apply_vfx": "res://vfx/vulnerability_apply.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_hex_witch_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "aura_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_hex_witch_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/witch_die.wav",
+      "curse_break": true,
+      "dispel_pulse": true,
+      "vulnerability_removed": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_hex_witch_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/hex_shield.tscn",
+      "curse_barrier": true
+    }
+  }
+}

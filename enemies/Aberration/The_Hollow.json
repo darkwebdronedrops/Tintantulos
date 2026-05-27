@@ -1,0 +1,69 @@
+{
+  "name": "The Hollow",
+  "faction": "Aberration",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 15,
+  "max_hp": 15,
+  "attack": 0,
+  "pattern": ["Nothing", "Nothing", "Nothing"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Face Theft",
+    "description": "Does nothing during combat. Post-combat: Character portrait featureless for 3 combats. Cannot target enemies by name.",
+    "passive_combat": {
+      "does_nothing": true,
+      "zero_actions": true
+    },
+    "post_combat": {
+      "face_theft": {
+        "duration": 3,
+        "effect": "featureless_portrait",
+        "targeting_penalty": "cannot_target_by_name"
+      }
+    },
+    "visual_feedback": {
+      "wears_your_face": true,
+      "smooth_where_eyes_should_be": true,
+      "uncanny_presence": true,
+      "post_theft_indicator": "res://vfx/face_theft.tscn"
+    },
+    "sound": "sfx/hollow_silence.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_hollow_idle.png",
+      "frames": 6,
+      "fps": 1,
+      "loop": true,
+      "your_face": true,
+      "no_eyes": true,
+      "absolute_stillness": true
+    },
+    "nothing": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_hollow_nothing.png",
+      "frames": 4,
+      "fps": 1,
+      "loop": false,
+      "absence": true,
+      "void_of_action": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_hollow_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.3, 0.3, 0.3, 0.3],
+      "face_crack": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_the_hollow_death.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/hollow_release.wav",
+      "face_theft_vfx": "res://vfx/face_theft.tscn",
+      "face_returns": true
+    }
+  }
+}

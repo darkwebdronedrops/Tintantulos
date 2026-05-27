@@ -1,0 +1,93 @@
+{
+  "name": "Pressure Knot",
+  "faction": "Elemental",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 5,
+  "max_hp": 5,
+  "attack": 2,
+  "pattern": ["Defend", "Defend", "Special"],
+  "weight": "Rare",
+  "element": "Abyss",
+  "mechanic": {
+    "name": "Crush",
+    "description": "Special = +2 CHARGE. At 3 CHARGE, releases pressure wave (3d6 to all in 2 hex radius)",
+    "charge_system": {
+      "max": 3,
+      "gain_on": "Special",
+      "gain_amount": 2
+    },
+    "release": {
+      "trigger": "at_max",
+      "auto_release": true,
+      "aoe": true,
+      "radius": 2,
+      "damage": "3d6",
+      "reset_after": true
+    },
+    "visual_feedback": {
+      "pressure_sphere": true,
+      "tightening_knot": true,
+      "wave_burst": "res://vfx/pressure_wave.tscn",
+      "crush_indicator": true
+    },
+    "sound": "sfx/pressure_build.wav",
+    "sound_release": "sfx/pressure_burst.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressure_knot_idle.png",
+      "frames": 6,
+      "fps": 4,
+      "loop": true,
+      "knot_pulses": true,
+      "pressure_sphere": true,
+      "tighten_loosen": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressure_knot_attack.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/pressure_strike.wav",
+      "compressed_impact": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressure_knot_special.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/pressure_build.wav",
+      "charge_gain": true,
+      "knot_tighten": true,
+      "sphere_shrink": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressure_knot_defend.png",
+      "frames": 5,
+      "fps": 5,
+      "loop": false,
+      "shield_vfx": "res://vfx/pressure_shield.tscn",
+      "harden_shell": true,
+      "pressure_contain": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressure_knot_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.3, 0.3, 0.6, 0.3],
+      "shell_crack": true,
+      "pressure_leak": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_pressure_knot_death.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/pressure_release.wav",
+      "knot_unravels": true,
+      "pressure_release_burst": true
+    }
+  }
+}

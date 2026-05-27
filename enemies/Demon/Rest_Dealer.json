@@ -1,0 +1,81 @@
+{
+  "name": "Rest Dealer",
+  "faction": "Demon",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 28,
+  "max_hp": 28,
+  "attack": 5,
+  "pattern": ["Rest", "Melee", "Defend"],
+  "weight": "Common",
+  "offer": "Absolution",
+  "mechanic": {
+    "name": "Rest Now",
+    "description": "Rest = Offer full heal. If accepted, player skips next 2 turns ('deep rest').",
+    "rest": {
+      "offer": "full_heal",
+      "cost": "skip_2_turns",
+      "message": "You are so tired. Rest. I will watch over you."
+    },
+    "visual_feedback": {
+      "bed_form": true,
+      "comforting": true,
+      "rest_glow": "res://vfx/rest_offer.tscn",
+      "sleep_shadow": "res://vfx/sleep.tscn"
+    },
+    "sound": "sfx/rest.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_rest_dealer_idle.png",
+      "frames": 10,
+      "fps": 3,
+      "loop": true,
+      "comforting_form": true,
+      "soft_edges": true,
+      "inviting": true
+    },
+    "rest": {
+      "sprite": "res://assets/sprites/enemies/enemy_rest_dealer_rest.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/rest.wav",
+      "rest_glow": "res://vfx/rest_offer.tscn",
+      "heal_offered": true,
+      "comfort_promised": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_rest_dealer_attack.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/rest_strikes.wav",
+      "gentle_awakening": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_rest_dealer_defend.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/comfort_barrier.tscn",
+      "protective": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_rest_dealer_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.6, 0.6, 0.7, 0.4],
+      "comfort_disturbed": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_rest_dealer_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/rest_ends.wav",
+      "comfort_fades": true
+    }
+  }
+}

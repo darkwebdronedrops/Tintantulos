@@ -1,0 +1,87 @@
+{
+  "name": "Tax Collector",
+  "faction": "Undead",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 15,
+  "max_hp": 15,
+  "attack": 4,
+  "pattern": ["Defend", "Special", "Melee"],
+  "weight": "Common",
+  "graft": "Hollow",
+  "mechanic": {
+    "name": "Levy",
+    "description": "Special = Steals 2 Quiddity. If player has <5 Quiddity, all player attacks deal -1 damage (weakness).",
+    "steal": {
+      "target": "quiddity",
+      "amount": 2,
+      "weakness": {
+        "condition": "player_quiddity_under_5",
+        "effect": "attack_damage_reduction",
+        "reduction": 1
+      }
+    },
+    "visual_feedback": {
+      "official_form": true,
+      "bureaucratic_aura": true,
+      "levy_vfx": "res://vfx/tax_levy.tscn",
+      "authority": true
+    },
+    "sound": "sfx/tax_demand.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_tax_collector_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "skeleton_official": true,
+      "bureaucratic_posture": true,
+      "official_seal": true
+    },
+    "levy": {
+      "sprite": "res://assets/sprites/enemies/enemy_tax_collector_levy.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/tax_demand.wav",
+      "levy_vfx": "res://vfx/tax_levy.tscn",
+      "quiddity_seized": true,
+      "paperwork": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_tax_collector_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/tax_penalty.wav",
+      "official_strike": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_tax_collector_defend.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/bureaucratic_barrier.tscn",
+      "regulations": true,
+      "red_tape": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_tax_collector_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.7, 0.8, 0.3],
+      "bureaucracy_disrupt": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_tax_collector_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/tax_final.wav",
+      "levies_end": true,
+      "authority_dissolves": true
+    }
+  }
+}

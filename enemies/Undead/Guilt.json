@@ -1,0 +1,85 @@
+{
+  "name": "Guilt",
+  "faction": "Undead",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 24,
+  "max_hp": 24,
+  "attack": 0,
+  "pattern": ["Accuse", "Accuse", "Weigh"],
+  "weight": "Uncommon",
+  "graft": "Marrow",
+  "mechanic": {
+    "name": "Accuse",
+    "description": "Accuse = Player 'remembers' wrong play. Must 'Apologize' (0-cost Defend, ends turn) or take 10 damage. Guilt stacks (max 3).",
+    "accuse": {
+      "effect": "force_apologize",
+      "apologize_card": {
+        "name": "Apologize",
+        "cost": 0,
+        "type": "Defend",
+        "effect": "ends_turn"
+      },
+      "damage_if_refused": 10,
+      "stacking": true,
+      "max_stacks": 3
+    },
+    "weigh": {
+      "damage_per_stack": 5,
+      "message": "The weight of what you did."
+    },
+    "visual_feedback": {
+      "heavy_form": true,
+      "shoulders_bent": true,
+      "accuse_vfx": "res://vfx/accusation.tscn",
+      "guilt_aura": true
+    },
+    "sound": "sfx/accuse.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_guilt_idle.png",
+      "frames": 10,
+      "fps": 2,
+      "loop": true,
+      "heavy_presence": true,
+      "shoulders_bent": true,
+      "weight_visible": true
+    },
+    "accuse": {
+      "sprite": "res://assets/sprites/enemies/enemy_guilt_accuse.png",
+      "frames": 12,
+      "fps": 4,
+      "loop": false,
+      "sound": "sfx/accuse.wav",
+      "accuse_vfx": "res://vfx/accusation.tscn",
+      "memory_twists": true,
+      "guilt_grows": true
+    },
+    "weigh": {
+      "sprite": "res://assets/sprites/enemies/enemy_guilt_weigh.png",
+      "frames": 12,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/weight_of_guilt.wav",
+      "damage_by_remembrance": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_guilt_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.5, 0.5, 0.6, 0.4],
+      "guilt_shifts": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_guilt_death.png",
+      "frames": 16,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/guilt_forgiven.wav",
+      "weight_lifts": true,
+      "forgiveness": true
+    }
+  }
+}

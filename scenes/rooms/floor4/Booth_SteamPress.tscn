@@ -1,0 +1,73 @@
+[gd_scene load_steps=4 format=3 uid="uid://booth_steampress_001"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/vendor_steampress_interior.png" id="1_interior"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/npc_vendor_steampress.png" id="2_npc"]
+
+[sub_resource type="RectangleShape2D" id="Rect_npc"]
+size = Vector2(100, 100)
+
+[sub_resource type="RectangleShape2D" id="Rect_counter"]
+size = Vector2(200, 60)
+
+[node name="Booth_SteamPress" type="Node2D"]
+
+; ============================================
+; BACKGROUND
+; ============================================
+[node name="Background" type="Sprite2D" parent="."]
+scale = Vector2(2.0, 2.0)
+texture = ExtResource("1_interior")
+
+; ============================================
+; NPC VENDOR
+; ============================================
+[node name="VendorNPC" type="Sprite2D" parent="."]
+position = Vector2(0, -20)
+texture = ExtResource("2_npc")
+
+[node name="InteractArea" type="Area2D" parent="VendorNPC"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VendorNPC/InteractArea"]
+shape = SubResource("Rect_npc")
+
+; ============================================
+; COUNTER / DESK AREA
+; ============================================
+[node name="CounterArea" type="Area2D" parent="."]
+position = Vector2(0, 40)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CounterArea"]
+shape = SubResource("Rect_counter")
+
+; ============================================
+; UI LABELS
+; ============================================
+[node name="VendorLabel" type="Label" parent="."]
+offset_left = -100.0
+offset_top = -160.0
+offset_right = 100.0
+offset_bottom = -130.0
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.8, 0.4, 1.0)
+horizontal_alignment = 1
+text = "⚗ THE STEAM-PRESS"
+
+[node name="Description" type="Label" parent="."]
+offset_left = -200.0
+offset_top = 100.0
+offset_right = 200.0
+offset_bottom = 140.0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.6, 0.55, 0.4, 1.0)
+horizontal_alignment = 1
+text = "Tonics, healing brews, and steam consumables.\nApproach vendor to browse."
+
+[node name="ExitHint" type="Label" parent="."]
+offset_left = -100.0
+offset_top = 150.0
+offset_right = 100.0
+offset_bottom = 170.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 0.8)
+horizontal_alignment = 1
+text = "[E] Leave Booth"

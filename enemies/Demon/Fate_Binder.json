@@ -1,0 +1,84 @@
+{
+  "name": "Fate Binder",
+  "faction": "Demon",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 18,
+  "max_hp": 18,
+  "attack": 6,
+  "pattern": ["Bind", "Melee", "Defend"],
+  "weight": "Common",
+  "offer": "Certainty",
+  "mechanic": {
+    "name": "Bind Fate",
+    "description": "Bind = Player declares next card type they will play (Attack/Skill/Power). If they play that type: +3 damage. If they play different type: -5 damage ('broken promise').",
+    "bind": {
+      "force_declaration": true,
+      "reward": "plus_3_damage",
+      "punishment": "minus_5_damage",
+      "message": "Swear your next move. I will hold you to it."
+    },
+    "visual_feedback": {
+      "chain_form": true,
+      "fate_threads": true,
+      "bind_glow": "res://vfx/fate_bind.tscn",
+      "promise_kept": "res://vfx/promise_kept.tscn",
+      "promise_broken": "res://vfx/promise_broken.tscn"
+    },
+    "sound": "sfx/bind.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_fate_binder_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "chain_body": true,
+      "threads_of_fate": true,
+      "weaving": true
+    },
+    "bind": {
+      "sprite": "res://assets/sprites/enemies/enemy_fate_binder_bind.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/bind.wav",
+      "bind_glow": "res://vfx/fate_bind.tscn",
+      "chains_wrap": true,
+      "oath_taken": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_fate_binder_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/fate_strikes.wav",
+      "reward_or_punishment": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_fate_binder_defend.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/fate_barrier.tscn",
+      "chains_armor": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_fate_binder_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.8, 0.9, 0.4],
+      "chains_break": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_fate_binder_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/fate_severed.wav",
+      "chains_fall": true,
+      "fate_unbound": true
+    }
+  }
+}

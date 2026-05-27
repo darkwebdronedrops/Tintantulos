@@ -1,0 +1,101 @@
+[gd_scene load_steps=6 format=3 uid="uid://floor1east001"]
+
+[ext_resource type="Script" path="res://scripts/Floor1RoomBase.gd" id="1_room_base"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/floor1_east_warren.png" id="2_floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/portal_west.png" id="3_portal"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/debris_cluster.png" id="4_debris"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor1/breakable_wall.png" id="5_wall"]
+
+[node name="Floor1_East_Warren" type="Node2D"]
+script = ExtResource("1_room_base")
+room_id = "east"
+room_display_name = "The Construct Warren"
+transit_token_name = "East Pass"
+
+; ============================================
+; FLOOR
+; ============================================
+[node name="Floor" type="Sprite2D" parent="."]
+texture = ExtResource("2_floor")
+scale = Vector2(2.0, 2.0)
+
+; ============================================
+; INTERIOR
+; ============================================
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+; --- Debris and Cover ---
+[node name="Debris1" type="Sprite2D" parent="Interior"]
+position = Vector2(-120, -80)
+texture = ExtResource("4_debris")
+scale = Vector2(0.8, 0.8)
+
+[node name="Debris2" type="Sprite2D" parent="Interior"]
+position = Vector2(100, 60)
+texture = ExtResource("4_debris")
+scale = Vector2(0.6, 0.6)
+flip_h = true
+
+; --- Breakable Wall ---
+[node name="BreakableWall" type="Sprite2D" parent="Interior"]
+position = Vector2(0, -120)
+texture = ExtResource("5_wall")
+scale = Vector2(0.8, 0.4)
+
+[node name="WallCracks" type="Sprite2D" parent="Interior"]
+modulate = Color(1, 1, 1, 0.6)
+position = Vector2(0, -120)
+texture = ExtResource("5_wall")
+scale = Vector2(0.85, 0.45)
+
+; --- West portal back to center ---
+[node name="ReturnPortal" type="Sprite2D" parent="Interior"]
+position = Vector2(-200, 0)
+texture = ExtResource("3_portal")
+scale = Vector2(0.5, 0.5)
+
+[node name="ReturnLabel" type="Label" parent="Interior/ReturnPortal"]
+offset_left = -40.0
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 0.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.8, 0.8, 0.9, 1.0)
+horizontal_alignment = 1
+text = "RETURN"
+
+; ============================================
+; PORTAL MARKERS
+; ============================================
+; ============================================
+; WALLS (U-shaped, west exit open)
+; ============================================
+[node name="RoomWalls" type="StaticBody2D" parent="."]
+
+[node name="Wall_North" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(-256, -256, 256, -256, 256, -240, -256, -240)
+
+[node name="Wall_South" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(-256, 240, 256, 240, 256, 256, -256, 256)
+
+[node name="Wall_East" type="CollisionPolygon2D" parent="RoomWalls"]
+polygon = PackedVector2Array(240, -256, 256, -256, 256, 256, 240, 256)
+
+[node name="PortalEntrance" type="Marker2D" parent="."]
+position = Vector2(180, 0)
+
+[node name="PortalExit" type="Marker2D" parent="."]
+position = Vector2(150, 0)
+
+; ============================================
+; ENEMY SPAWN
+; ============================================
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(-50, -50)
+
+; ============================================
+; CENTER MARKER
+; ============================================
+[node name="CenterMarker" type="Marker2D" parent="."]
+position = Vector2(0, 0)

@@ -1,0 +1,87 @@
+{
+  "name": "Beastmaster",
+  "faction": "Goblin",
+  "tier": "End",
+  "floor_range": [9, 10],
+  "hp": 23,
+  "max_hp": 23,
+  "attack": 5,
+  "pattern": ["Special", "Melee", "Defend", "Special"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Call Beast",
+    "description": "Special = Summon random: Wolf (50%), Dire Wolf (30%), or custom beast (20%). Max 3 beasts",
+    "summon": {
+      "options": [
+        {"unit": "Wolf", "weight": 0.5},
+        {"unit": "Dire Wolf", "weight": 0.3},
+        {"unit": "Custom Beast", "weight": 0.2}
+      ],
+      "max_beasts": 3
+    },
+    "visual_feedback": {
+      "whistle_call": true,
+      "beast_emerge": "res://vfx/beast_summon.tscn",
+      "random_beast_vfx": true
+    },
+    "sound": "sfx/beast_call.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_beastmaster_idle.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": true,
+      "whip_coil": true,
+      "beast_pelt_cape": true,
+      "predator_aura": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_beastmaster_attack.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/beastmaster_whip.wav",
+      "whip_crack": true,
+      "lash_strike": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_beastmaster_special.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/beast_call.wav",
+      "whistle_animation": true,
+      "beast_emerge": "res://vfx/beast_summon.tscn",
+      "random_beast_appear": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_beastmaster_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "whip_drop": true,
+      "beasts_agitate": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_beastmaster_death.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/beastmaster_fall.wav",
+      "beasts_scatter": true,
+      "control_lost": true,
+      "beasts_flee": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_beastmaster_defend.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/goblin_shield.tscn",
+      "beasts_protect": true,
+      "whip_block": true
+    }
+  }
+}

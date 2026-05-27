@@ -1,0 +1,93 @@
+{
+  "name": "Kinetic Battery",
+  "faction": "Construct",
+  "tier": "High",
+  "floor_range": [7, 8],
+  "hp": 15,
+  "max_hp": 15,
+  "attack": 3,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Store/Release",
+    "description": "Special absorbs next attack, Melee releases stored damage ×2",
+    "store": {
+      "absorb_next_attack": true,
+      "visual_charge": true,
+      "max_stored": 999,
+      "sound": "sfx/kinetic_store.wav"
+    },
+    "release": {
+      "multiplier": 2,
+      "add_to_base_attack": true,
+      "clear_storage": true,
+      "sound": "sfx/kinetic_release.wav"
+    },
+    "visual_feedback": {
+      "charge_orbs": true,
+      "glow_intensify": true,
+      "energy_swirl": "res://vfx/kinetic_charge.tscn"
+    },
+    "ui_indicator": "stored_damage_counter"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_kinetic_battery_idle.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "energy_pulse": true,
+      "charge_orbs_float": true,
+      "hum_low": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_kinetic_battery_attack.png",
+      "frames": 10,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/kinetic_release.wav",
+      "energy_burst": true,
+      "charge_orbs_release": true,
+      "impact_shockwave": true,
+      "screen_shake": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_kinetic_battery_special.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/kinetic_store.wav",
+      "absorb_animation": true,
+      "charge_orbs_form": true,
+      "energy_converge": true,
+      "stored_number_appear": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_kinetic_battery_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "charge_disrupt": true,
+      "energy_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_kinetic_battery_death.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/kinetic_explode.wav",
+      "energy_unleash": true,
+      "charge_orbs_scatter": true,
+      "explosion": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_kinetic_battery_defend.png",
+      "frames": 6,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/energy_shield.tscn",
+      "charge_stabilize": true
+    }
+  }
+}

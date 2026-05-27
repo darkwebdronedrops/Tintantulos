@@ -1,0 +1,160 @@
+[gd_scene load_steps=13 format=3 uid="uid://floor6echoes001"]
+
+[ext_resource type="Script" path="res://scripts/Floor6RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/bg_echoes.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/tile_library_carpet.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/book_stack.png" id="4_book"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/ink_vat.png" id="5_ink"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/lecture_desk.png" id="6_desk"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor6/banner_undead.png" id="7_banner"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(80, 80)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(100, 100)
+
+[node name="Floor6_Echoes" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "echoes"
+room_display_name = "College of Echoes"
+
+; ============================================
+; MARKERS
+; ============================================
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1100, 1200)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1100, 900)
+
+[node name="PortalWest" type="Marker2D" parent="."]
+position = Vector2(400, 800)
+
+[node name="PortalShortcut" type="Marker2D" parent="."]
+position = Vector2(2000, 800)
+
+; ============================================
+; INTERIOR
+; ============================================
+[node name="Interior" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 800)
+texture = ExtResource("2_bg")
+
+; --- Floor tiles (library carpet) ---
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(600, 1100)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1600, 1100)
+texture = ExtResource("3_tile")
+
+[node name="Tile3" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1100, 1100)
+texture = ExtResource("3_tile")
+
+; --- Book Stacks ---
+[node name="Books" type="Node2D" parent="Interior"]
+
+[node name="Book1" type="Sprite2D" parent="Interior/Books"]
+position = Vector2(300, 800)
+texture = ExtResource("4_book")
+
+[node name="Book2" type="Sprite2D" parent="Interior/Books"]
+position = Vector2(1900, 800)
+texture = ExtResource("4_book")
+
+[node name="Book3" type="Sprite2D" parent="Interior/Books"]
+position = Vector2(800, 700)
+texture = ExtResource("4_book")
+
+[node name="Book4" type="Sprite2D" parent="Interior/Books"]
+position = Vector2(1400, 700)
+texture = ExtResource("4_book")
+
+[node name="Book5" type="Sprite2D" parent="Interior/Books"]
+position = Vector2(600, 650)
+texture = ExtResource("4_book")
+
+; --- Toxic Ink Vats ---
+[node name="InkVats" type="Node2D" parent="Interior"]
+
+[node name="Ink1" type="Sprite2D" parent="Interior/InkVats"]
+position = Vector2(200, 1000)
+texture = ExtResource("5_ink")
+
+[node name="Ink2" type="Sprite2D" parent="Interior/InkVats"]
+position = Vector2(2000, 1000)
+texture = ExtResource("5_ink")
+
+[node name="InkLabel1" type="Label" parent="Interior/InkVats/Ink1"]
+offset_left = -30.0
+offset_top = -50.0
+offset_right = 30.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.3, 0.8, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Toxic Ink"
+
+; --- Thesis Defense Area ---
+[node name="ThesisDesk" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 600)
+texture = ExtResource("6_desk")
+
+[node name="ThesisLabel" type="Label" parent="Interior/ThesisDesk"]
+offset_left = -50.0
+offset_top = -60.0
+offset_right = 50.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.7, 0.7, 0.9, 1.0)
+horizontal_alignment = 1
+text = "Thesis Defense"
+
+; --- Faction Banner ---
+[node name="Banner" type="Sprite2D" parent="Interior"]
+position = Vector2(400, 500)
+texture = ExtResource("7_banner")
+
+; --- Save Point ---
+[node name="SavePoint" type="Marker2D" parent="Interior"]
+position = Vector2(1000, 1050)
+
+; --- Interactable Areas ---
+[node name="Interactables" type="Node2D" parent="Interior"]
+
+[node name="BookArea1" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(300, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/BookArea1"]
+shape = SubResource("Rect_interact")
+
+[node name="BookArea2" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1900, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/BookArea2"]
+shape = SubResource("Rect_interact")
+
+[node name="ThesisArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1100, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/ThesisArea"]
+shape = SubResource("Rect_interact")
+
+[node name="PortalWestArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(400, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/PortalWestArea"]
+shape = SubResource("Rect_spawn")
+
+[node name="PortalShortcutArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(2000, 800)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/PortalShortcutArea"]
+shape = SubResource("Rect_spawn")

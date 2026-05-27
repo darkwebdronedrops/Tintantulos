@@ -1,0 +1,111 @@
+{
+  "name": "The Devouring Past",
+  "faction": "Undead",
+  "tier": "Boss",
+  "floor": 9,
+  "hp": 180,
+  "max_hp": 180,
+  "attack": 10,
+  "pattern": ["Remember", "Use", "Devour", "Melee"],
+  "graft": "Marrow",
+  "mechanic": {
+    "name": "Nostalgia",
+    "description": "Remember = Steal 3 cards from deck. Use = Plays stolen cards against you with their full effects. Devour = Mill 5 cards, heals 10 HP.",
+    "remember": {
+      "steal_from_deck": 3,
+      "stores_in_nostalgia": true
+    },
+    "use": {
+      "plays_stolen_cards": true,
+      "against_player": true,
+      "message": "Your own power, turned against you."
+    },
+    "devour": {
+      "mill": 5,
+      "heal": 10,
+      "message": "The past consumes your future."
+    },
+    "visual_feedback": {
+      "past_form": true,
+      "memory_creature": true,
+      "nostalgia_deck": true,
+      "stolen_cards_visible": true,
+      "uses_your_stuff": "res://vfx/nostalgia_use.tscn"
+    },
+    "sound": "sfx/remember.wav",
+    "sound_use": "sfx/your_cards_against_you.wav"
+  },
+  "is_boss": true,
+  "phases": 2,
+  "phase_transition": {
+    "at_hp": 90,
+    "change": "remembers_deeper",
+    "effect": "steal_5_cards_instead_of_3"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_devouring_past_idle.png",
+      "frames": 14,
+      "fps": 3,
+      "loop": true,
+      "memory_form": true,
+      "past_made_flesh": true,
+      "nostalgia_deck_visible": true
+    },
+    "remember": {
+      "sprite": "res://assets/sprites/enemies/boss_the_devouring_past_remember.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/remember.wav",
+      "cards_stolen": true,
+      "memory_takes": true,
+      "nostalgia_grows": true
+    },
+    "use": {
+      "sprite": "res://assets/sprites/enemies/boss_the_devouring_past_use.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/your_cards_against_you.wav",
+      "plays_your_cards": true,
+      "your_power_turned": true,
+      "nostalgia_weapon": "res://vfx/nostalgia_use.tscn"
+    },
+    "devour": {
+      "sprite": "res://assets/sprites/enemies/boss_the_devouring_past_devour.png",
+      "frames": 16,
+      "fps": 8,
+      "loop": false,
+      "sound": "sfx/past_devours.wav",
+      "future_consumed": true,
+      "heals_from_memory": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_devouring_past_attack.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/past_strike.wav",
+      "history_hits": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_devouring_past_damage.png",
+      "frames": 10,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.7, 0.8, 0.4],
+      "memory_flickers": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_devouring_past_death.png",
+      "frames": 22,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/past_fades.wav",
+      "stolen_cards_return": true,
+      "memory_released": true,
+      "past_loses_hold": true
+    }
+  }
+}

@@ -1,0 +1,75 @@
+[gd_scene load_steps=9 format=3 uid="uid://floor7corridor001"]
+
+[ext_resource type="Script" path="res://scripts/Floor7RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/bg_corridor.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/tile_void.png" id="3_tile"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/void_crack.png" id="4_crack"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor7/banner_aberration.png" id="5_banner"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(80, 80)
+
+[sub_resource type="RectangleShape2D" id="Rect_spawn"]
+size = Vector2(100, 100)
+
+[node name="Floor7_Corridor" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "corridor"
+room_display_name = "The Corridor"
+void_crack_present = true
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1200, 1200)
+
+[node name="PortalNortheast" type="Marker2D" parent="."]
+position = Vector2(1800, 500)
+
+[node name="PortalNorthwest" type="Marker2D" parent="."]
+position = Vector2(600, 500)
+
+[node name="PortalWest" type="Marker2D" parent="."]
+position = Vector2(400, 800)
+
+[node name="PortalSouth" type="Marker2D" parent="."]
+position = Vector2(1200, 1400)
+
+[node name="Interior" type="Node2D" parent="."]
+visible = false
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 600)
+texture = ExtResource("2_bg")
+
+[node name="FloorTiles" type="Node2D" parent="Interior"]
+
+[node name="Tile1" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(500, 800)
+texture = ExtResource("3_tile")
+
+[node name="Tile2" type="Sprite2D" parent="Interior/FloorTiles"]
+position = Vector2(1700, 800)
+texture = ExtResource("3_tile")
+
+[node name="VoidCrack1" type="Sprite2D" parent="Interior"]
+position = Vector2(400, 600)
+texture = ExtResource("4_crack")
+
+[node name="VoidCrack2" type="Sprite2D" parent="Interior"]
+position = Vector2(1600, 900)
+texture = ExtResource("4_crack")
+
+[node name="VoidCrack3" type="Sprite2D" parent="Interior"]
+position = Vector2(900, 400)
+texture = ExtResource("4_crack")
+
+[node name="Banner" type="Sprite2D" parent="Interior"]
+position = Vector2(200, 300)
+texture = ExtResource("5_banner")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 20
+text = "FLOOR 7: THE BROKEN PACT — Corridor"

@@ -1,0 +1,86 @@
+{
+  "name": "Sneak Thief",
+  "faction": "Goblin",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 4,
+  "max_hp": 4,
+  "attack": 2,
+  "pattern": ["Special", "Melee", "Flee"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Pickpocket",
+    "description": "Special = Steal 1 Quiddity. If player has 0 Quiddity, steal 1 HP instead",
+    "steal": {
+      "primary": "quiddity",
+      "amount": 1,
+      "fallback": {
+        "if_zero": "hp",
+        "amount": 1
+      }
+    },
+    "visual_feedback": {
+      "steal_animation": true,
+      "quiddity_snatch": "res://vfx/quiddity_snatch.tscn",
+      "hp_drain_vfx": "res://vfx/life_drain.tscn"
+    },
+    "sound": "sfx/pickpocket.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_sneak_thief_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "crouch": true,
+      "hand_in_pocket": true,
+      "shifty_eyes": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_sneak_thief_attack.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/thief_slash.wav",
+      "dagger_stab": true,
+      "quick_strike": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_sneak_thief_special.png",
+      "frames": 10,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/pickpocket.wav",
+      "lunge_steal": true,
+      "hand_to_player": true,
+      "quiddity_snatch": "res://vfx/quiddity_snatch.tscn",
+      "hp_drain_fallback": "res://vfx/life_drain.tscn"
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_sneak_thief_flee.png",
+      "frames": 6,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/thief_escape.wav",
+      "dash_away": true,
+      "smoke_puff": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_sneak_thief_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "stagger": true,
+      "loot_spill": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_sneak_thief_death.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/thief_die.wav",
+      "loot_scatter": true
+    }
+  }
+}

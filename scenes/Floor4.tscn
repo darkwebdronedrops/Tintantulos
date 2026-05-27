@@ -1,0 +1,450 @@
+[gd_scene load_steps=4 format=3 uid="uid://floor4main001"]
+
+[ext_resource type="Script" path="res://scripts/Floor4Controller.gd" id="1_controller"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/bazaar_floor.png" id="2_bazaar_floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/undercroft_floor.png" id="3_undercroft_floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/refectory_floor.png" id="4_refectory_floor"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/great_lifter.png" id="5_great_lifter"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_gearwright.png" id="6_booth_gearwright"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_steampress.png" id="7_booth_steampress"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_curio.png" id="8_booth_curio"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_1.png" id="9_trap1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_2.png" id="10_trap2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_3.png" id="11_trap3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_4.png" id="12_trap4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_5.png" id="13_trap5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_6.png" id="14_trap6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_7.png" id="15_trap7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_8.png" id="16_trap8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/booth_trap_9.png" id="17_trap9"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/grate.png" id="18_grate"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/stairs_up.png" id="19_stairs_up"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/stairs_down.png" id="20_stairs_down"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/aether_slick.png" id="21_aether_slick"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/pipe_v.png" id="22_pipe_v"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/pipe_h.png" id="23_pipe_h"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/gear_cellar.png" id="24_gear_cellar"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/ladder.png" id="25_ladder"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/steam_vent.png" id="26_steam_vent"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/food_station_stew.png" id="27_food_stew"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/food_station_bread.png" id="28_food_bread"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/food_station_meat.png" id="29_food_meat"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/balcony_railing.png" id="30_railing"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor4/dumbwaiter.png" id="31_dumbwaiter"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lifter"]
+radius = 100.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_transition"]
+radius = 60.0
+
+[node name="Floor4" type="Node2D"]
+script = ExtResource("1_controller")
+
+; ============================================
+; MAIN LEVEL — The Circular Bazaar
+; ============================================
+[node name="MainLevel" type="Node2D" parent="."]
+
+[node name="BazaarFloor" type="Sprite2D" parent="MainLevel"]
+scale = Vector2(3.0, 3.0)
+texture = ExtResource("2_bazaar_floor")
+
+; --- GREAT LIFTER (center) ---
+[node name="GreatLifter" type="Sprite2D" parent="MainLevel"]
+texture = ExtResource("5_great_lifter")
+
+[node name="LifterLabel" type="Label" parent="MainLevel/GreatLifter"]
+offset_left = -60.0
+offset_top = -50.0
+offset_right = 60.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.7, 0.6, 0.4, 1.0)
+horizontal_alignment = 1
+text = "GREAT LIFTER"
+
+[node name="StatusLabel" type="Label" parent="MainLevel/GreatLifter"]
+offset_left = -60.0
+offset_top = 70.0
+offset_right = 60.0
+offset_bottom = 90.0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.8, 0.3, 0.2, 1.0)
+horizontal_alignment = 1
+text = "BROKEN"
+
+[node name="InteractArea" type="Area2D" parent="MainLevel/GreatLifter"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MainLevel/GreatLifter/InteractArea"]
+shape = SubResource("CircleShape2D_lifter")
+
+; --- BOOTH MARKERS (12 positions) ---
+[node name="BoothMarkers" type="Node2D" parent="MainLevel"]
+
+[node name="BoothMarker_12" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(0, -900)
+texture = ExtResource("6_booth_gearwright")
+
+[node name="BoothLabel" type="Label" parent="MainLevel/BoothMarkers/BoothMarker_12"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.7, 0.6, 0.4, 1.0)
+horizontal_alignment = 1
+text = "Gearwright"
+
+[node name="BoothMarker_1" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(450, -779)
+texture = ExtResource("9_trap1")
+
+[node name="BoothMarker_2" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(779, -450)
+texture = ExtResource("10_trap2")
+
+[node name="BoothMarker_3" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(900, 0)
+texture = ExtResource("11_trap3")
+
+[node name="BoothMarker_4" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(779, 450)
+texture = ExtResource("7_booth_steampress")
+
+[node name="BoothLabel" type="Label" parent="MainLevel/BoothMarkers/BoothMarker_4"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.6, 0.5, 0.4, 1.0)
+horizontal_alignment = 1
+text = "Steam-Press"
+
+[node name="BoothMarker_5" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(450, 779)
+texture = ExtResource("12_trap4")
+
+[node name="BoothMarker_6" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(0, 900)
+texture = ExtResource("13_trap5")
+
+[node name="BoothMarker_7" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(-450, 779)
+texture = ExtResource("14_trap6")
+
+[node name="BoothMarker_8" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(-779, 450)
+texture = ExtResource("8_booth_curio")
+
+[node name="BoothLabel" type="Label" parent="MainLevel/BoothMarkers/BoothMarker_8"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.45, 0.6, 1.0)
+horizontal_alignment = 1
+text = "Curio Collector"
+
+[node name="BoothMarker_9" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(-900, 0)
+texture = ExtResource("15_trap7")
+
+[node name="BoothMarker_10" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(-779, -450)
+texture = ExtResource("16_trap8")
+
+[node name="BoothMarker_11" type="Sprite2D" parent="MainLevel/BoothMarkers"]
+position = Vector2(-450, -779)
+texture = ExtResource("17_trap9")
+
+; --- LEVEL TRANSITIONS ---
+; Grates to Undercroft
+[node name="UndercroftGrate1" type="Sprite2D" parent="MainLevel"]
+position = Vector2(-400, 400)
+texture = ExtResource("18_grate")
+
+[node name="Label" type="Label" parent="MainLevel/UndercroftGrate1"]
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = -20.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1.0)
+horizontal_alignment = 1
+text = "⇓ Undercroft"
+
+[node name="UndercroftGrate2" type="Sprite2D" parent="MainLevel"]
+position = Vector2(400, -300)
+texture = ExtResource("18_grate")
+
+[node name="UndercroftGrate3" type="Sprite2D" parent="MainLevel"]
+position = Vector2(0, 800)
+texture = ExtResource("18_grate")
+
+; Stairs/Lifts to Refectory
+[node name="RefectoryStairs1" type="Sprite2D" parent="MainLevel"]
+position = Vector2(-700, 0)
+texture = ExtResource("19_stairs_up")
+
+[node name="Label" type="Label" parent="MainLevel/RefectoryStairs1"]
+offset_left = -40.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.7, 0.65, 0.5, 1.0)
+horizontal_alignment = 1
+text = "⇑ Refectory"
+
+[node name="RefectoryStairs2" type="Sprite2D" parent="MainLevel"]
+position = Vector2(700, 200)
+texture = ExtResource("19_stairs_up")
+
+[node name="RefectoryLift" type="Sprite2D" parent="MainLevel"]
+position = Vector2(200, -600)
+texture = ExtResource("19_stairs_up")
+
+[node name="Label" type="Label" parent="MainLevel/RefectoryLift"]
+offset_left = -30.0
+offset_top = -40.0
+offset_right = 30.0
+offset_bottom = -20.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.6, 0.55, 0.45, 1.0)
+horizontal_alignment = 1
+text = "⇑ Lift"
+
+; --- PLAYER SPAWN ---
+[node name="PlayerSpawn" type="Marker2D" parent="MainLevel"]
+position = Vector2(0, -700)
+
+; --- CAMERA ---
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -700)
+zoom = Vector2(0.8, 0.8)
+
+; ============================================
+; UNDERCROFT — Pipe Tunnels Below
+; ============================================
+[node name="Undercroft" type="Node2D" parent="."]
+visible = false
+
+[node name="UndercroftFloor" type="Sprite2D" parent="Undercroft"]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("3_undercroft_floor")
+
+; --- Aether Slick Zones ---
+[node name="AetherSlick1" type="Sprite2D" parent="Undercroft"]
+position = Vector2(-150, 100)
+scale = Vector2(2.0, 2.0)
+texture = ExtResource("21_aether_slick")
+
+[node name="AetherSlick2" type="Sprite2D" parent="Undercroft"]
+position = Vector2(250, -150)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("21_aether_slick")
+
+[node name="AetherSlick3" type="Sprite2D" parent="Undercroft"]
+position = Vector2(0, 300)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("21_aether_slick")
+
+; --- Pipe decorations ---
+[node name="Pipe1" type="Sprite2D" parent="Undercroft"]
+position = Vector2(-500, -400)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("22_pipe_v")
+
+[node name="Pipe2" type="Sprite2D" parent="Undercroft"]
+position = Vector2(500, 300)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("22_pipe_v")
+
+[node name="Pipe3" type="Sprite2D" parent="Undercroft"]
+position = Vector2(0, -500)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("23_pipe_h")
+
+; --- Gear Cellar decorations ---
+[node name="GearCellar" type="Sprite2D" parent="Undercroft"]
+position = Vector2(300, 400)
+texture = ExtResource("24_gear_cellar")
+
+[node name="Label" type="Label" parent="Undercroft/GearCellar"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.5, 0.45, 0.35, 1.0)
+horizontal_alignment = 1
+text = "Gear Cellar"
+
+; --- EXITS back to Main ---
+[node name="Ladder1" type="Sprite2D" parent="Undercroft"]
+position = Vector2(-200, 300)
+texture = ExtResource("25_ladder")
+
+[node name="Label" type="Label" parent="Undercroft/Ladder1"]
+offset_left = -30.0
+offset_top = -55.0
+offset_right = 30.0
+offset_bottom = -35.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.6, 0.55, 0.45, 1.0)
+horizontal_alignment = 1
+text = "⇑ Ladder"
+
+[node name="Ladder2" type="Sprite2D" parent="Undercroft"]
+position = Vector2(300, -200)
+texture = ExtResource("25_ladder")
+
+[node name="SteamVentUp" type="Sprite2D" parent="Undercroft"]
+position = Vector2(0, -400)
+texture = ExtResource("26_steam_vent")
+
+[node name="Label" type="Label" parent="Undercroft/SteamVentUp"]
+offset_left = -40.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1.0)
+horizontal_alignment = 1
+text = "⇑ Steam Vent"
+
+; --- PLAYER SPAWN ---
+[node name="PlayerSpawn" type="Marker2D" parent="Undercroft"]
+position = Vector2(0, 0)
+
+; ============================================
+; REFECTORY — Brass Dining Balconies Above
+; ============================================
+[node name="Refectory" type="Node2D" parent="."]
+visible = false
+
+[node name="RefectoryFloor" type="Sprite2D" parent="Refectory"]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("4_refectory_floor")
+
+; --- Dining Alcoves ---
+[node name="Alcove1" type="Sprite2D" parent="Refectory"]
+position = Vector2(-200, -100)
+texture = ExtResource("27_food_stew")
+
+[node name="FoodLabel" type="Label" parent="Refectory/Alcove1"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.6, 0.5, 0.45, 1.0)
+horizontal_alignment = 1
+text = "Memory Stew"
+
+[node name="Alcove2" type="Sprite2D" parent="Refectory"]
+position = Vector2(200, 100)
+texture = ExtResource("28_food_bread")
+
+[node name="FoodLabel" type="Label" parent="Refectory/Alcove2"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.6, 0.5, 0.45, 1.0)
+horizontal_alignment = 1
+text = "Nostalgia Bread"
+
+[node name="Alcove3" type="Sprite2D" parent="Refectory"]
+position = Vector2(0, 200)
+texture = ExtResource("29_food_meat")
+
+[node name="FoodLabel" type="Label" parent="Refectory/Alcove3"]
+offset_left = -40.0
+offset_top = -60.0
+offset_right = 40.0
+offset_bottom = -40.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.6, 0.5, 0.45, 1.0)
+horizontal_alignment = 1
+text = "Phantom Meat"
+
+; --- Steam Pipes (voices of past customers) ---
+[node name="SteamPipe1" type="Sprite2D" parent="Refectory"]
+position = Vector2(-400, -300)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("22_pipe_v")
+
+[node name="SteamPipe2" type="Sprite2D" parent="Refectory"]
+position = Vector2(400, -200)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("22_pipe_v")
+
+[node name="SteamPipe3" type="Sprite2D" parent="Refectory"]
+position = Vector2(0, 400)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("23_pipe_h")
+
+; --- Balcony Railing (overlooking main floor) ---
+[node name="BalconyRailing" type="Sprite2D" parent="Refectory"]
+position = Vector2(0, -500)
+scale = Vector2(1.0, 1.0)
+texture = ExtResource("30_railing")
+
+; --- EXITS back to Main ---
+[node name="StairsDown1" type="Sprite2D" parent="Refectory"]
+position = Vector2(-400, 0)
+texture = ExtResource("20_stairs_down")
+
+[node name="Label" type="Label" parent="Refectory/StairsDown1"]
+offset_left = -30.0
+offset_top = -50.0
+offset_right = 30.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.6, 0.55, 0.45, 1.0)
+horizontal_alignment = 1
+text = "⇓ Stairs"
+
+[node name="StairsDown2" type="Sprite2D" parent="Refectory"]
+position = Vector2(500, 200)
+texture = ExtResource("20_stairs_down")
+
+[node name="Dumbwaiter" type="Sprite2D" parent="Refectory"]
+position = Vector2(0, -300)
+texture = ExtResource("31_dumbwaiter")
+
+[node name="Label" type="Label" parent="Refectory/Dumbwaiter"]
+offset_left = -35.0
+offset_top = -45.0
+offset_right = 35.0
+offset_bottom = -25.0
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.55, 0.5, 0.45, 1.0)
+horizontal_alignment = 1
+text = "⇓ Dumbwaiter"
+
+; --- PLAYER SPAWN ---
+[node name="PlayerSpawn" type="Marker2D" parent="Refectory"]
+position = Vector2(0, 0)
+
+; ============================================
+; COMBAT MANAGER (shared, persistent)
+; ============================================
+[node name="CombatManager" type="Node2D" parent="."]
+
+; ============================================
+; COMBAT UI (shared, persistent)
+; ============================================
+[node name="CombatUI" type="Node2D" parent="."]

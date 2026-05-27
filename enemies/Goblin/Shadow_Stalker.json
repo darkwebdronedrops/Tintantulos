@@ -1,0 +1,84 @@
+{
+  "name": "Shadow Stalker",
+  "faction": "Goblin",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 10,
+  "max_hp": 10,
+  "attack": 4,
+  "pattern": ["Special", "Melee", "Flee"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Stealth",
+    "description": "Invisible until attacks or adjacent to player. First attack from stealth deals +4 damage",
+    "stealth": {
+      "permanent": true,
+      "break_conditions": ["attacks", "adjacent_to_player"],
+      "first_attack_bonus": 4
+    },
+    "visual_feedback": {
+      "stealth_shimmer": "subtle_distortion",
+      "reveal_flash": true,
+      "critical_backstab_vfx": "res://vfx/stealth_strike.tscn"
+    },
+    "sound_reveal": "sfx/stealth_break.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_stalker_idle.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": true,
+      "stealth_shimmer": "subtle_distortion",
+      "shadow_cloak": true,
+      "barely_visible": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_stalker_attack.png",
+      "frames": 8,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/stealth_strike.wav",
+      "reveal_flash": true,
+      "critical_vfx": "res://vfx/stealth_strike.tscn",
+      "dagger_appear": true,
+      "strike_fast": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_stalker_special.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/stealth_fade.wav",
+      "fade_to_stealth": true,
+      "shadow_cloak": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_stalker_flee.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/shadow_retreat.wav",
+      "fade_while_running": true,
+      "re_stealth": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_stalker_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "stealth_break": true,
+      "visible_briefly": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_shadow_stalker_death.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/shadow_die.wav",
+      "shadow_dissipate": true,
+      "fade_to_nothing": true
+    }
+  }
+}

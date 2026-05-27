@@ -1,0 +1,65 @@
+{
+  "name": "Winding Spring",
+  "faction": "Construct",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 2,
+  "max_hp": 2,
+  "attack": 2,
+  "pattern": ["Special", "Melee", "Defend"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Wind Up",
+    "description": "Special charges next Melee (+2 damage)",
+    "buff_visual": "coil_tightening",
+    "buff_sound": "sfx/spring_wind.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_winding_spring_idle.png",
+      "frames": 4,
+      "fps": 8,
+      "loop": true,
+      "compress_expand": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_winding_spring_attack.png",
+      "frames": 8,
+      "fps": 16,
+      "loop": false,
+      "sound": "sfx/spring_unleash.wav",
+      "lunge": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_winding_spring_special.png",
+      "frames": 6,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/spring_wind.wav",
+      "charge_vfx": "res://vfx/wind_up.tscn"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_winding_spring_damage.png",
+      "frames": 3,
+      "fps": 8,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3]
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_winding_spring_death.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/spring_break.wav",
+      "unravel_animation": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_winding_spring_defend.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/metal_shield.tscn",
+      "coil_tighter": true
+    }
+  }
+}

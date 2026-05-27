@@ -1,0 +1,145 @@
+[gd_scene load_steps=10 format=3 uid="uid://floor5gale001"]
+
+[ext_resource type="Script" path="res://scripts/Floor5RoomBase.gd" id="1_roombase"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/bg_gale.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/wind_gust.png" id="3_wind"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/steam_vent.png" id="4_vent"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/gangplank.png" id="5_gangplank"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/mooring_valve.png" id="6_valve"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/banner_elemental.png" id="7_banner_e"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/banner_undead.png" id="8_banner_u"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/airship_tether.png" id="9_tether"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor5/storm_cloud.png" id="10_cloud"]
+
+[sub_resource type="RectangleShape2D" id="Rect_interact"]
+size = Vector2(80, 80)
+
+[node name="Floor5_Gale" type="Node2D"]
+script = ExtResource("1_roombase")
+room_id = "gale"
+room_display_name = "The Gale"
+dominant_faction = "Elemental"
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1100, 1200)
+
+[node name="EnemySpawn" type="Marker2D" parent="."]
+position = Vector2(1100, 1000)
+
+[node name="PortalDown" type="Marker2D" parent="."]
+position = Vector2(1100, 1300)
+
+[node name="PortalUp" type="Marker2D" parent="."]
+position = Vector2(1100, 400)
+
+[node name="PortalLeft" type="Marker2D" parent="."]
+position = Vector2(200, 800)
+
+[node name="Interior" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 800)
+texture = ExtResource("2_bg")
+
+[node name="WindGusts" type="Node2D" parent="Interior"]
+
+[node name="Wind1" type="Sprite2D" parent="Interior/WindGusts"]
+position = Vector2(400, 600)
+texture = ExtResource("3_wind")
+scale = Vector2(3.0, 3.0)
+modulate = Color(1, 1, 1, 0.5)
+
+[node name="Wind2" type="Sprite2D" parent="Interior/WindGusts"]
+position = Vector2(1800, 600)
+texture = ExtResource("3_wind")
+scale = Vector2(3.0, 3.0)
+modulate = Color(1, 1, 1, 0.5)
+
+[node name="Wind3" type="Sprite2D" parent="Interior/WindGusts"]
+position = Vector2(1100, 500)
+texture = ExtResource("3_wind")
+scale = Vector2(4.0, 4.0)
+modulate = Color(1, 1, 1, 0.4)
+
+[node name="SteamVents" type="Node2D" parent="Interior"]
+
+[node name="Vent1" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(600, 900)
+texture = ExtResource("4_vent")
+scale = Vector2(1.2, 1.2)
+
+[node name="Vent2" type="Sprite2D" parent="Interior/SteamVents"]
+position = Vector2(1600, 900)
+texture = ExtResource("4_vent")
+scale = Vector2(1.2, 1.2)
+
+[node name="Gangplank_Gale" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 700)
+texture = ExtResource("5_gangplank")
+scale = Vector2(2.0, 2.0)
+
+[node name="GangplankLabel" type="Label" parent="Interior/Gangplank_Gale"]
+offset_left = -80.0
+offset_top = -30.0
+offset_right = 80.0
+offset_bottom = -10.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Gangplank (max 3)"
+
+[node name="SteamValve_Gale" type="Sprite2D" parent="Interior"]
+position = Vector2(1100, 850)
+texture = ExtResource("6_valve")
+scale = Vector2(1.2, 1.2)
+
+[node name="ValveLabel" type="Label" parent="Interior/SteamValve_Gale"]
+offset_left = -40.0
+offset_top = -50.0
+offset_right = 40.0
+offset_bottom = -30.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1.0)
+horizontal_alignment = 1
+text = "Steam Valve"
+
+[node name="Banner_Elemental" type="Sprite2D" parent="Interior"]
+position = Vector2(400, 400)
+texture = ExtResource("7_banner_e")
+scale = Vector2(1.2, 1.2)
+
+[node name="Banner_Undead" type="Sprite2D" parent="Interior"]
+position = Vector2(1800, 400)
+texture = ExtResource("8_banner_u")
+scale = Vector2(1.2, 1.2)
+
+[node name="Tether" type="Sprite2D" parent="Interior"]
+position = Vector2(500, 500)
+texture = ExtResource("9_tether")
+scale = Vector2(1.0, 1.0)
+
+; ============================================
+; STORM CLOUDS — Replaced Polygon2D with Sprite2D
+; ============================================
+[node name="StormClouds" type="Node2D" parent="Interior"]
+
+[node name="Cloud1" type="Sprite2D" parent="Interior/StormClouds"]
+position = Vector2(500, 150)
+texture = ExtResource("10_cloud")
+modulate = Color(1, 1, 1, 0.7)
+
+[node name="Cloud2" type="Sprite2D" parent="Interior/StormClouds"]
+position = Vector2(1600, 120)
+texture = ExtResource("10_cloud")
+modulate = Color(1, 1, 1, 0.6)
+
+[node name="SavePoint" type="Marker2D" parent="Interior"]
+position = Vector2(1100, 1050)
+
+[node name="Interactables" type="Node2D" parent="Interior"]
+
+[node name="ValveArea" type="Area2D" parent="Interior/Interactables"]
+position = Vector2(1100, 850)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interior/Interactables/ValveArea"]
+shape = SubResource("Rect_interact")

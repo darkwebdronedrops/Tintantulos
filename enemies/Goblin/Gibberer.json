@@ -1,0 +1,77 @@
+{
+  "name": "Gibberer",
+  "faction": "Goblin",
+  "tier": "Starter",
+  "floor_range": [1, 2],
+  "hp": 2,
+  "max_hp": 2,
+  "attack": 1,
+  "pattern": ["Special", "Melee", "Flee"],
+  "weight": "Common",
+  "mechanic": {
+    "name": "Shriek",
+    "description": "Special = Reduce player Attention by 2 (fear effect)",
+    "effect": {
+      "attention_reduce": 2,
+      "duration": 1
+    },
+    "visual_feedback": {
+      "sound_wave": true,
+      "player_shake": true,
+      "fear_vfx": "res://vfx/fear_wave.tscn"
+    },
+    "sound": "sfx/gibberer_shriek.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_gibberer_idle.png",
+      "frames": 4,
+      "fps": 6,
+      "loop": true,
+      "twitch": true,
+      "mumble": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_gibberer_attack.png",
+      "frames": 5,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/gibberer_scratch.wav",
+      "claw": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_gibberer_special.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/gibberer_shriek.wav",
+      "mouth_open_wide": true,
+      "sound_wave_vfx": "res://vfx/shriek_wave.tscn",
+      "fear_debuff_apply": true
+    },
+    "flee": {
+      "sprite": "res://assets/sprites/enemies/enemy_gibberer_flee.png",
+      "frames": 6,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/gibberer_flee.wav",
+      "scramble_away": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_gibberer_damage.png",
+      "frames": 3,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "shriek_interrupt": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_gibberer_death.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/gibberer_die.wav",
+      "final_shriek": true
+    }
+  }
+}

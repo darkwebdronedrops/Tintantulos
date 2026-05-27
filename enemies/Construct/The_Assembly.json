@@ -1,0 +1,105 @@
+{
+  "name": "The Assembly",
+  "faction": "Construct",
+  "tier": "Boss",
+  "floor": 6,
+  "hp": 40,
+  "max_hp": 40,
+  "attack": 5,
+  "pattern": ["Melee", "Melee", "Special", "Defend"],
+  "mechanic": {
+    "name": "Collective",
+    "description": "Starts with 5 Gear Pairs. Each killed empowers remaining (+2 damage)",
+    "minion_count": 5,
+    "minion_type": "Gear Pair",
+    "empowerment": {
+      "trigger": "minion_death",
+      "stat": "attack",
+      "value": 2,
+      "stacking": true,
+      "max_stacks": 5
+    },
+    "visual_feedback": {
+      "empower_pulse": true,
+      "damage_numbers_grow": true,
+      "red_intensity": true
+    },
+    "sound_empower": "sfx/collective_anger.wav"
+  },
+  "is_boss": true,
+  "phases": 1,
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/boss_the_assembly_idle.png",
+      "frames": 10,
+      "fps": 4,
+      "loop": true,
+      "massive_presence": true,
+      "gears_spin_all": true,
+      "steam_grand": true,
+      "minions_orbit": true,
+      "collective_pulse": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/boss_the_assembly_attack.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/assembly_slam.wav",
+      "grand_strike": true,
+      "collective_fury": true,
+      "ground_shatter": true,
+      "screen_shake_heavy": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/boss_the_assembly_special.png",
+      "frames": 16,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/assembly_command.wav",
+      "minion_command": true,
+      "empower_pulse": true,
+      "collective_sync": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/boss_the_assembly_damage.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "gear_wobble": true,
+      "collective_rage": true,
+      "steam_burst": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/boss_the_assembly_death.png",
+      "frames": 20,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/assembly_collapse.wav",
+      "grand_shutdown": true,
+      "parts_cascade": true,
+      "minions_scatter": true,
+      "steam_final": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/boss_the_assembly_defend.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "shield_vfx": "res://vfx/boss_shield.tscn",
+      "fortress_formation": true,
+      "minions_shield": true
+    },
+    "empower": {
+      "sprite": "res://assets/sprites/enemies/boss_the_assembly_empower.png",
+      "frames": 10,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/collective_anger.wav",
+      "red_pulse": true,
+      "damage_glow": true,
+      "collective_intensify": true
+    }
+  }
+}

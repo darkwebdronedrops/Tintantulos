@@ -1,0 +1,79 @@
+{
+  "name": "Dire Wolf Packlord",
+  "faction": "Goblin",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 20,
+  "max_hp": 20,
+  "attack": 6,
+  "pattern": ["Melee", "Special", "Melee"],
+  "weight": "Uncommon",
+  "mechanic": {
+    "name": "Packlord",
+    "description": "Summons 2 Wolves each turn (max 4). All Wolves gain Pack +3",
+    "summon": {
+      "unit": "Wolf",
+      "count": 2,
+      "per_trigger": "each_turn",
+      "max_wolves": 4
+    },
+    "pack_aura": {
+      "affects": "all_wolves",
+      "bonus": 3
+    },
+    "visual_feedback": {
+      "howl_summon": true,
+      "summon_vfx": "res://vfx/wolf_pack_summon.tscn",
+      "pack_aura_field": "res://vfx/packlord_aura.tscn"
+    },
+    "sound": "sfx/packlord_howl.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_dire_wolf_packlord_idle.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": true,
+      "massive_presence": true,
+      "alpha_stance": true,
+      "pack_aura_emit": "res://vfx/packlord_aura.tscn"
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_dire_wolf_packlord_attack.png",
+      "frames": 8,
+      "fps": 14,
+      "loop": false,
+      "sound": "sfx/packlord_bite.wav",
+      "savage_bite": true,
+      "blood_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_dire_wolf_packlord_special.png",
+      "frames": 14,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/packlord_howl.wav",
+      "howl_summon": true,
+      "wolves_emerge": "res://vfx/wolf_pack_summon.tscn",
+      "aura_pulse": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_dire_wolf_packlord_damage.png",
+      "frames": 5,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "snarl": true,
+      "rage_build": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_dire_wolf_packlord_death.png",
+      "frames": 12,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/packlord_fall.wav",
+      "pack_scatters": true,
+      "alpha_falls": true
+    }
+  }
+}

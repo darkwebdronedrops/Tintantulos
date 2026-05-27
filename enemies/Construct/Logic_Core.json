@@ -1,0 +1,91 @@
+{
+  "name": "Logic Core",
+  "faction": "Construct",
+  "tier": "Mid",
+  "floor_range": [5, 6],
+  "hp": 8,
+  "max_hp": 8,
+  "attack": 2,
+  "pattern": ["Special", "Defend", "Special"],
+  "weight": "Rare",
+  "mechanic": {
+    "name": "Calculate",
+    "description": "Special predicts player's next card type (80% accuracy). If correct, gain +2 damage next turn",
+    "prediction_accuracy": 0.8,
+    "correct_bonus": {
+      "type": "damage",
+      "value": 2,
+      "duration": 1
+    },
+    "ui_indicator": "prediction_display",
+    "sound_predict": "sfx/logic_calculate.wav",
+    "sound_correct": "sfx/prediction_confirmed.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_logic_core_idle.png",
+      "frames": 8,
+      "fps": 6,
+      "loop": true,
+      "float": true,
+      "data_stream": true,
+      "holographic_flicker": true,
+      "circuit_pulse": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_logic_core_attack.png",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/data_strike.wav",
+      "data_projectile": true,
+      "binary_trail": true
+    },
+    "special": {
+      "sprite": "res://assets/sprites/enemies/enemy_logic_core_special.png",
+      "frames": 12,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/logic_calculate.wav",
+      "prediction_ring": true,
+      "data_analysis": true,
+      "ui_popup": "predicted_card_type"
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_logic_core_damage.png",
+      "frames": 4,
+      "fps": 10,
+      "loop": false,
+      "flash": [1.0, 0.2, 0.2, 0.3],
+      "data_corruption": true,
+      "glitch_flicker": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_logic_core_death.png",
+      "frames": 14,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/core_dump.wav",
+      "data_scramble": true,
+      "hologram_fade": true,
+      "error_messages": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_logic_core_defend.png",
+      "frames": 8,
+      "fps": 8,
+      "loop": false,
+      "shield_vfx": "res://vfx/data_shield.tscn",
+      "firewall_visual": true
+    },
+    "predict_correct": {
+      "sprite": "res://assets/sprites/enemies/enemy_logic_core_predict_correct.png",
+      "frames": 8,
+      "fps": 12,
+      "loop": false,
+      "sound": "sfx/prediction_confirmed.wav",
+      "green_pulse": true,
+      "buff_aura": true
+    }
+  }
+}

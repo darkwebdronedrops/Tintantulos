@@ -1,0 +1,82 @@
+{
+  "name": "Pattern Maker",
+  "faction": "Demon",
+  "tier": "Early",
+  "floor_range": [3, 4],
+  "hp": 17,
+  "max_hp": 17,
+  "attack": 5,
+  "pattern": ["Pattern", "Melee", "Defend"],
+  "weight": "Common",
+  "offer": "Certainty",
+  "mechanic": {
+    "name": "Enforce Pattern",
+    "description": "Pattern = Establishes sequence (Attack→Skill→Power→Attack). Following sequence: +2 damage. Breaking sequence: enemy heals 5 ('order disrupted').",
+    "pattern": {
+      "establishes_sequence": ["Attack", "Skill", "Power"],
+      "reward": "plus_2_damage",
+      "punishment": "enemy_heals_5",
+      "message": "There is a pattern to all things. Obey it."
+    },
+    "visual_feedback": {
+      "grid_form": true,
+      "pattern_visible": true,
+      "sequence_glow": "res://vfx/pattern.tscn",
+      "disruption_shadow": "res://vfx/disruption.tscn"
+    },
+    "sound": "sfx/pattern.wav"
+  },
+  "animations": {
+    "idle": {
+      "sprite": "res://assets/sprites/enemies/enemy_pattern_maker_idle.png",
+      "frames": 8,
+      "fps": 3,
+      "loop": true,
+      "geometric_grid": true,
+      "patterns_shifting": true,
+      "order_visible": true
+    },
+    "pattern": {
+      "sprite": "res://assets/sprites/enemies/enemy_pattern_maker_pattern.png",
+      "frames": 10,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/pattern.wav",
+      "sequence_glow": "res://vfx/pattern.tscn",
+      "sequence_established": true
+    },
+    "attack": {
+      "sprite": "res://assets/sprites/enemies/enemy_pattern_maker_attack.png",
+      "frames": 8,
+      "fps": 10,
+      "loop": false,
+      "sound": "sfx/pattern_strikes.wav",
+      "reward_or_punishment": true
+    },
+    "defend": {
+      "sprite": "res://assets/sprites/enemies/enemy_pattern_maker_defend.png",
+      "frames": 8,
+      "fps": 4,
+      "loop": false,
+      "shield_vfx": "res://vfx/grid_barrier.tscn",
+      "order_protects": true
+    },
+    "damage": {
+      "sprite": "res://assets/sprites/enemies/enemy_pattern_maker_damage.png",
+      "frames": 6,
+      "fps": 10,
+      "loop": false,
+      "flash": [0.7, 0.8, 0.9, 0.4],
+      "grid_fractures": true
+    },
+    "death": {
+      "sprite": "res://assets/sprites/enemies/enemy_pattern_maker_death.png",
+      "frames": 14,
+      "fps": 6,
+      "loop": false,
+      "sound": "sfx/pattern_breaks.wav",
+      "grid_collapses": true,
+      "chaos_reigns": true
+    }
+  }
+}
