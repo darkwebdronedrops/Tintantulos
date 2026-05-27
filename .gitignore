@@ -1,0 +1,11 @@
+.godot/
+*.tmp
+*.log
+builds/
+export_presets.cfg
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Keep .import files — they store Godot asset import settings
