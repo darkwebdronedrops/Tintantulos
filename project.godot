@@ -14,5 +14,9 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/size/resizable=true
 
+[autoload]
+AudioManager="*res://scripts/AudioManager.gd"
+GameState="*res://scripts/GameState.gd"
+
 [rendering]
 renderer/rendering_method="forward_plus"
