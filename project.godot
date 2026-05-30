@@ -6,7 +6,7 @@
 config/name="Tintantulos"
 config/description="A card-based dungeon crawler"
 run/main_scene="res://scenes/TitleScreen.tscn"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
@@ -16,6 +16,7 @@ window/size/resizable=true
 
 [autoload]
 AudioManager="*res://scripts/AudioManager.gd"
+CardDB="*res://scripts/CardDB.gd"
 GameState="*res://scripts/GameState.gd"
 
 [rendering]
