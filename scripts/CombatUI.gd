@@ -34,6 +34,10 @@ var potion_slots: Array[TextureButton] = []
 var equip_panel: NinePatchRect
 var equip_slots: Array[TextureRect] = []
 
+# Card play mist effect
+var card_play_effect: CardPlayEffect
+var mist_overlay: ColorRect
+
 var selected_card_index: int = -1
 
 func _ready():
@@ -356,6 +360,30 @@ func _create_ui():
 	enemy_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	enemy_container.add_theme_constant_override("separation", 40)
 	add_child(enemy_container)
+	
+	# ============================================
+	# CARD PLAY MIST EFFECT (full screen overlay)
+	# ============================================
+	mist_overlay = ColorRect.new()
+	mist_overlay.name = "MistOverlay"
+	mist_overlay.anchor_right = 1.0
+	mist_overlay.anchor_bottom = 1.0
+	mist_overlay.offset_right = 1920.0
+	mist_overlay.offset_bottom = 1080.0
+	mist_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	mist_overlay.visible = false
+	
+	var mist_material = ShaderMaterial.new()
+	var mist_shader = load("res://assets/shaders/card_mist.gdshader")
+	if mist_shader:
+		mist_material.shader = mist_shader
+		mist_overlay.material = mist_material
+	add_child(mist_overlay)
+	
+	card_play_effect = CardPlayEffect.new()
+	card_play_effect.name = "CardPlayEffect"
+	card_play_effect.effect_rect = mist_overlay
+	add_child(card_play_effect)
 
 func _get_attention_color(state: CombatManager.AttentionState) -> Color:
 	match state:
@@ -474,11 +502,15 @@ func _on_card_drawn(_card: CardData):
 	_update_hand_display()
 	_update_deck_count()
 
-func _on_card_played(_card: CardData):
+func _on_card_played(card: CardData):
 	_update_hand_display()
 	_update_player_display(0)
 	selected_card_index = -1
 	_update_deck_count()
+	
+	# Trigger faction-colored mist effect
+	if card_play_effect and card:
+		card_play_effect.trigger_effect(card.faction)
 
 func _update_player_display(_amount: int = 0):
 	var hp_percent = float(combat_manager.player_hp) / combat_manager.player_max_hp
