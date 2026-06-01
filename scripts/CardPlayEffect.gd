@@ -1,4 +1,5 @@
 extends Node
+class_name CardPlayEffect
 
 # CardPlayEffect - Visual mist burst when a card is played
 # Attach to CombatUI or root of combat scene
