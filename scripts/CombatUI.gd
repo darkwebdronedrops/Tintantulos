@@ -42,14 +42,25 @@ func _ready():
 
 func setup(cm: CombatManager):
 	combat_manager = cm
-	combat_manager.combat_started.connect(_on_combat_started)
-	combat_manager.combat_ended.connect(_on_combat_ended)
-	combat_manager.turn_started.connect(_on_turn_started)
-	combat_manager.player_damaged.connect(_update_player_display)
-	combat_manager.enemy_damaged.connect(_update_enemy_display)
-	combat_manager.card_drawn.connect(_on_card_drawn)
-	combat_manager.card_played.connect(_on_card_played)
-	combat_manager.attention_changed.connect(_update_attention_display)
+	
+	# Only connect if not already connected (idempotent for multiple setup calls)
+	if not combat_manager.combat_started.is_connected(_on_combat_started):
+		combat_manager.combat_started.connect(_on_combat_started)
+	if not combat_manager.combat_ended.is_connected(_on_combat_ended):
+		combat_manager.combat_ended.connect(_on_combat_ended)
+	if not combat_manager.turn_started.is_connected(_on_turn_started):
+		combat_manager.turn_started.connect(_on_turn_started)
+	if not combat_manager.player_damaged.is_connected(_update_player_display):
+		combat_manager.player_damaged.connect(_update_player_display)
+	if not combat_manager.enemy_damaged.is_connected(_update_enemy_display):
+		combat_manager.enemy_damaged.connect(_update_enemy_display)
+	if not combat_manager.card_drawn.is_connected(_on_card_drawn):
+		combat_manager.card_drawn.connect(_on_card_drawn)
+	if not combat_manager.card_played.is_connected(_on_card_played):
+		combat_manager.card_played.connect(_on_card_played)
+	if not combat_manager.attention_changed.is_connected(_update_attention_display):
+		combat_manager.attention_changed.connect(_update_attention_display)
+	
 	_create_ui()
 
 func _create_ui():
