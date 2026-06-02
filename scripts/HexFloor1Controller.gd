@@ -187,7 +187,7 @@ func _start_combat(encounter_type: String):
 	var combat_manager = get_node_or_null("CombatManager")
 	if combat_manager:
 		combat_manager.start_combat(enemies, GameState.player_deck)
-		AudioManager.play_combat()
+		AudioManager.play_combat(1)
 		print("[Floor1-Hex] Combat started: %s" % encounter_type)
 
 func _get_encounter_enemies(encounter_type: String) -> Array[CombatManager.EnemyData]:
