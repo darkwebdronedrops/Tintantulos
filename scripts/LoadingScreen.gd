@@ -164,8 +164,12 @@ func transition_to(scene_path: String, hold_time: float = 2.0):
 	get_tree().change_scene_to_file(scene_path)
 	
 	# Fade out after brief delay (let new scene render)
+	# Safety: check if still in tree after scene change
+	if not is_inside_tree():
+		return
 	await get_tree().create_timer(0.5).timeout
-	_fade_out()
+	if is_inside_tree():
+		_fade_out()
 
 func dismiss():
 	if _is_loading:

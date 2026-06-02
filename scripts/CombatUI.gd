@@ -498,7 +498,6 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	var target_btn = TextureButton.new()
 	target_btn.name = "TargetButton"
 	target_btn.anchor_right = 1.0; target_btn.anchor_bottom = 1.0
-	target_btn.flat = true
 	target_btn.modulate = Color(1, 1, 1, 0.0)
 	var btn_normal = load("res://assets/sprites/ui/ui_target_button.png")
 	var btn_pressed = load("res://assets/sprites/ui/ui_target_button_pressed.png")
