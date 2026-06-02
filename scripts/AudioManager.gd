@@ -196,41 +196,38 @@ func _setup_buses():
 # ===================================================================
 
 func _load_all_streams():
-	# Load music streams
-	var music_dir = DirAccess.open(MUSIC_PATH)
-	if music_dir:
-		music_dir.list_dir_begin()
-		var file_name = music_dir.get_next()
-		while file_name != "":
-			if file_name.ends_with(".mp3") or file_name.ends_with(".ogg") or file_name.ends_with(".wav"):
-				var key = file_name.get_basename()
-				var full_path = MUSIC_PATH + file_name
-				if ResourceLoader.exists(full_path):
-					_music_streams[key] = load(full_path)
-				else:
-					push_warning("[AudioManager] Music file not found: %s" % full_path)
-			file_name = music_dir.get_next()
-		music_dir.list_dir_end()
-	else:
-		push_warning("[AudioManager] Could not open music directory: %s" % MUSIC_PATH)
+	# Load music streams explicitly from known maps (DirAccess doesn't work reliably in exported builds)
+	var all_music_keys = {}
+	for data in floor_music.values():
+		if data.get("ambient"): all_music_keys[data.ambient] = true
+		if data.get("combat"): all_music_keys[data.combat] = true
+		if data.get("boss"): all_music_keys[data.boss] = true
+	for key in boss_music.values():
+		all_music_keys[key] = true
+	for key in special_music.values():
+		all_music_keys[key] = true
 	
-	# Load SFX streams
-	var sfx_dir = DirAccess.open(SFX_PATH)
-	if sfx_dir:
-		sfx_dir.list_dir_begin()
-		var sfx_name = sfx_dir.get_next()
-		while sfx_name != "":
-			if sfx_name.ends_with(".mp3") or sfx_name.ends_with(".ogg") or sfx_name.ends_with(".wav"):
-				var key = sfx_name.get_basename()
-				var full_path = SFX_PATH + sfx_name
-				if ResourceLoader.exists(full_path):
-					_sfx_streams[key] = load(full_path)
-				else:
-					push_warning("[AudioManager] SFX file not found: %s" % full_path)
-			sfx_name = sfx_dir.get_next()
-		sfx_dir.list_dir_end()
-	else:
-		push_warning("[AudioManager] Could not open SFX directory: %s" % SFX_PATH)
+	for track_key in all_music_keys.keys():
+		for ext in [".mp3", ".ogg", ".wav"]:
+			var full_path = MUSIC_PATH + track_key + ext
+			if ResourceLoader.exists(full_path):
+				_music_streams[track_key] = load(full_path)
+				break
+		if not _music_streams.has(track_key):
+			push_warning("[AudioManager] Music file not found: %s" % track_key)
+	
+	# Load SFX streams (also explicit — no DirAccess)
+	var sfx_files = [
+		"room_enter", "card_draw", "card_play", "attack_hit", "damage_taken",
+		"enemy_attack", "victory", "defeat", "level_up", "item_get",
+		"shop_open", "shop_buy", "portal_use", "save_game", "ui_click"
+	]
+	for sfx_name in sfx_files:
+		for ext in [".mp3", ".ogg", ".wav"]:
+			var full_path = SFX_PATH + sfx_name + ext
+			if ResourceLoader.exists(full_path):
+				_sfx_streams[sfx_name] = load(full_path)
+				break
 	
 	print("[AudioManager] Loaded %d music streams, %d SFX streams" % [_music_streams.size(), _sfx_streams.size()])
 
