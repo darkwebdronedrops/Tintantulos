@@ -149,6 +149,22 @@ func find_path(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
 static func _hex_distance(a: Vector2i, b: Vector2i) -> int:
 	return (abs(a.x - b.x) + abs(a.x + a.y - b.x - b.y) + abs(a.y - b.y)) / 2
 
+static func _hex_line(a: Vector2i, b: Vector2i) -> Array[Vector2i]:
+	"""Get all hexes in a line from a to b"""
+	var N = _hex_distance(a, b)
+	if N == 0:
+		return [a]
+	
+	var results: Array[Vector2i] = []
+	for i in range(N + 1):
+		var t = float(i) / N
+		var interpolated = Vector2(
+			lerp(a.x, b.x, t),
+			lerp(a.y, b.y, t)
+		)
+		results.append(_hex_round(interpolated))
+	return results
+
 static func _reconstruct_path(came_from: Dictionary, end: Vector2i) -> Array[Vector2i]:
 	var path = [end]
 	var current = end
@@ -336,25 +352,6 @@ func _generate_room(room_id: String, center: Vector2i, radius: int, portal_posit
 				else:
 					set_tile(hex, TILE_WALL)
 			# Don't override corridors that extend beyond room radius
-
-static func _hex_distance(a: Vector2i, b: Vector2i) -> int:
-	return (abs(a.x - b.x) + abs(a.x + a.y - b.x - b.y) + abs(a.y - b.y)) / 2
-
-static func _hex_line(a: Vector2i, b: Vector2i) -> Array[Vector2i]:
-	"""Get all hexes in a line from a to b"""
-	var N = _hex_distance(a, b)
-	if N == 0:
-		return [a]
-	
-	var results: Array[Vector2i] = []
-	for i in range(N + 1):
-		var t = float(i) / N
-		var interpolated = Vector2(
-			lerp(a.x, b.x, t),
-			lerp(a.y, b.y, t)
-		)
-		results.append(_hex_round(interpolated))
-	return results
 
 # ===================================================================
 # PORTAL / ROOM TRANSITION HELPERS
