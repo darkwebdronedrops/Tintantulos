@@ -335,4 +335,3 @@ func _on_floor_selected(floor_num: int):
 	else:
 		# Direct scene change for other floors
 		get_tree().change_scene_to_file(data.scene)
-
