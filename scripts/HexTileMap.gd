@@ -15,6 +15,16 @@ const TILE_OBJECT: int = 2
 const TILE_VOID: int = 3
 const TILE_PORTAL: int = 4
 
+# Directions for pointy-top hexes
+const DIRECTIONS = [
+	Vector2i(0, -1),   # NW
+	Vector2i(1, -1),   # NE
+	Vector2i(-1, 0),   # W
+	Vector2i(1, 0),    # E
+	Vector2i(-1, 1),   # SW
+	Vector2i(0, 1),    # SE
+]
+
 # Tile colors/textures
 @export var tile_texture_floor: Texture2D
 @export var tile_texture_wall: Texture2D
