@@ -245,11 +245,21 @@ func _hex_step(move_vec: Vector2):
 	if not player_node:
 		return
 	
-	var step = floor_template.hex_step_size if floor_template else 60.0
-	# Use move_and_slide for collision-aware movement instead of teleport
-	player_node.velocity = move_vec * step * 60
-	player_node.move_and_slide()
-	player_node.velocity = Vector2.ZERO
+	# Convert current position to hex, then move one hex in the direction
+	var current_hex = HexTileMap.world_to_hex(player_node.global_position)
+	var direction = _vector_to_hex_dir(move_vec)
+	var dirs = HexGrid.DIRECTIONS
+	var target_hex = current_hex + dirs[direction]
+	
+	# Check if target hex is walkable
+	var hex_map = get_node_or_null("HexTileMap")
+	if hex_map and hex_map.is_wall(target_hex):
+		# Can't move into wall - play bump animation?
+		return
+	
+	# Snap to hex center
+	var target_world = HexTileMap.hex_to_world(target_hex)
+	player_node.global_position = target_world
 	
 	var animator = player_node.get_node_or_null("PlayerAnimator")
 	if animator:
@@ -271,6 +281,22 @@ func _velocity_to_direction(velocity: Vector2) -> String:
 	elif degrees >= -157.5 and degrees < -112.5: return "nw"
 	elif degrees >= -112.5 and degrees < -67.5:  return "n"
 	else:                                         return "ne"
+
+func _vector_to_hex_dir(velocity: Vector2) -> int:
+	"""Convert a movement vector to hex direction index (0-5)"""
+	var angle = velocity.angle()
+	var degrees = rad_to_deg(angle)
+	
+	# Match with WEADZX directions
+	# E (NE): 30°, W (NW): 150°, A (W): 180°, D (E): 0°, Z (SW): -150°, X (SE): -30°
+	if degrees >= -15 and degrees < 15:         return 3    # E (East) -> D
+	elif degrees >= 15 and degrees < 75:        return 1    # NE -> E
+	elif degrees >= 75 and degrees < 135:       return 0    # N -> W (closest)
+	elif degrees >= 135 and degrees < 180:      return 2    # NW -> A
+	elif degrees >= -180 and degrees < -135:    return 4    # W -> Z (closest)
+	elif degrees >= -135 and degrees < -75:     return 4    # SW -> Z
+	elif degrees >= -75 and degrees < -15:      return 5    # SE -> X
+	else:                                        return 3    # default E
 
 func _physics_process(_delta: float):
 	if in_combat or in_transition or in_ui or not player_node:

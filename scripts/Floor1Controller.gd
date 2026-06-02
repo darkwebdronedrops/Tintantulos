@@ -27,12 +27,25 @@ var shop_ui_container: Control
 func _ready():
 	floor_template = floor1_template
 	super._ready()
+	
+	# Initialize hex tile map
+	var hex_map = get_node_or_null("HexTileMap")
+	if hex_map:
+		hex_map.generate_floor1_layout()
+		print("[Floor1] Hex tile map generated")
 
 # -------------------------------------------------------------------
 # Floor-Specific Setup (override)
 # -------------------------------------------------------------------
 
 func _setup_floor_specific():
+	# Snap player to hex center on spawn
+	var hex_map = get_node_or_null("HexTileMap")
+	if hex_map and player_node:
+		var spawn_hex = hex_map.get_room_center("entry")
+		player_node.global_position = hex_map.hex_to_world(spawn_hex)
+		print("[Floor1] Player snapped to hex center: %s" % str(spawn_hex))
+	
 	if GameState.is_first_run:
 		print("[Floor1] First run — tutorial mode")
 		_lock_portals_except(["north"])

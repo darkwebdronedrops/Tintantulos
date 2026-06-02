@@ -1,11 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://floor1main001"]
+[gd_scene load_steps=11 format=3 uid="uid://floor1main001"]
 
 [ext_resource type="Script" path="res://scripts/Floor1Controller.gd" id="1_controller"]
 [ext_resource type="Script" path="res://scripts/CombatManager.gd" id="2_combat"]
 [ext_resource type="Script" path="res://scripts/CombatUI.gd" id="3_ui"]
-[ext_resource type="Texture2D" path="res://assets/sprites/floor1/floor1_main_bg.png" id="4_bg"]
-[ext_resource type="Texture2D" path="res://assets/sprites/floor1/wall_corridor_h.png" id="5_wall_h"]
-[ext_resource type="Texture2D" path="res://assets/sprites/floor1/wall_corridor_v.png" id="6_wall_v"]
+[ext_resource type="Script" path="res://scripts/HexTileMap.gd" id="4_hexmap"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hex/hex_floor.png" id="5_hexfloor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hex/hex_wall.png" id="6_hexwall"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hex/hex_object.png" id="7_hexobj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hex/hex_void.png" id="8_hexvoid"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_overworld"]
 vertices = PackedVector2Array(-3000, -3000, 3000, -3000, 3000, 3000, -3000, 3000)
@@ -14,6 +16,13 @@ outlines = [PackedVector2Array(-3000, -3000, 3000, -3000, 3000, 3000, -3000, 300
 
 [node name="Floor1" type="Node2D"]
 script = ExtResource("1_controller")
+
+[node name="HexTileMap" type="Node2D" parent="."]
+script = ExtResource("4_hexmap")
+tile_texture_floor = ExtResource("5_hexfloor")
+tile_texture_wall = ExtResource("6_hexwall")
+tile_texture_object = ExtResource("7_hexobj")
+tile_texture_void = ExtResource("8_hexvoid")
 
 [node name="OverworldNavigation" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("NavigationPolygon_overworld")
@@ -28,50 +37,6 @@ script = ExtResource("3_ui")
 position = Vector2(960, 540)
 zoom = Vector2(0.8, 0.8)
 
-[node name="BackgroundUI" type="CanvasLayer" parent="."]
-layer = -2
-
-[node name="Background" type="Sprite2D" parent="BackgroundUI"]
-position = Vector2(960, 540)
-texture = ExtResource("4_bg")
-
-[node name="FloorTiles" type="ColorRect" parent="BackgroundUI"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color(0.2, 0.17, 0.25, 0.15)
-
-[node name="OuterBoundary" type="StaticBody2D" parent="."]
-
-[node name="Wall_North" type="CollisionPolygon2D" parent="OuterBoundary"]
-polygon = PackedVector2Array(-1200, -1200, 1200, -1200, 1200, -1180, -1200, -1180)
-
-[node name="Wall_South" type="CollisionPolygon2D" parent="OuterBoundary"]
-polygon = PackedVector2Array(-1200, 1180, 1200, 1180, 1200, 1200, -1200, 1200)
-
-[node name="Wall_East" type="CollisionPolygon2D" parent="OuterBoundary"]
-polygon = PackedVector2Array(1180, -1200, 1200, -1200, 1200, 1200, 1180, 1200)
-
-[node name="Wall_West" type="CollisionPolygon2D" parent="OuterBoundary"]
-polygon = PackedVector2Array(-1200, -1200, -1180, -1200, -1180, 1200, -1200, 1200)
-
 [node name="MainUI" type="CanvasLayer" parent="."]
 
 [node name="Title" type="Label" parent="MainUI"]
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 400.0
-offset_bottom = 60.0
-theme_override_font_sizes/font_size = 28
-text = "FLOOR 1: THE PORTAL ROOM"
-
-[node name="Controls" type="Label" parent="MainUI"]
-offset_left = 20.0
-offset_top = 80.0
-offset_right = 300.0
-offset_bottom = 250.0
-theme_override_font_sizes/font_size = 12
-text = "KEY_E: NE | W: NW | A: W | D: E | Z: SW | X: SE
-S: Interact
-Click: Interact with nearby object
-ESC: Menu"
