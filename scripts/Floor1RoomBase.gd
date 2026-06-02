@@ -25,7 +25,7 @@ class_name Floor1RoomBase
 
 # Interior (shown when player enters)
 @onready var interior: Node2D = $Interior
-@onready var enemy_spawn: Marker2D = $EnemySpawn
+@onready var enemy_spawn: Marker2D = get_node_or_null("EnemySpawn")
 
 # State
 var is_cleared: bool = false
