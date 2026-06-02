@@ -110,6 +110,13 @@ func _build_floor():
 	
 	# Floor-specific initialization (child override)
 	_setup_floor_specific()
+	
+	# Trigger room entry AFTER floor-specific setup is complete
+	# This ensures the player is in the correct position before combat starts
+	var start_room = rooms.get(current_room_id)
+	if start_room and start_room.has_method("on_player_entered"):
+		start_room.on_player_entered()
+		print("[FloorController] Player entered room: %s" % current_room_id)
 
 
 # -------------------------------------------------------------------
@@ -164,10 +171,9 @@ func _setup_player():
 	if start_room and start_room.has_method("get_player_spawn_position"):
 		player_node.global_position = start_room.get_player_spawn_position()
 		current_room_id = floor_template.starting_room_id
-		# Trigger room entry to show interior and spawn enemies
-		if start_room.has_method("on_player_entered"):
-			start_room.on_player_entered()
-			print("[FloorController] Player entered starting room: %s" % current_room_id)
+		print("[FloorController] Player placed at starting room: %s" % current_room_id)
+		# NOTE: on_player_entered() is called in _build_floor() AFTER _setup_floor_specific()
+		# to ensure floor-specific setup (like Floor 3's Room 12 placement) is done first
 
 # -------------------------------------------------------------------
 # Combat Setup
@@ -193,7 +199,7 @@ func _setup_combat():
 func _setup_ui():
 	interact_prompt = Label.new()
 	interact_prompt.name = "InteractPrompt"
-	interact_prompt.position = Vector2(860, 750)
+	interact_prompt.position = Vector2(540, 620)
 	interact_prompt.size = Vector2(200, 30)
 	interact_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	interact_prompt.add_theme_font_size_override("font_size", 14)
@@ -249,9 +255,10 @@ func _hex_step(move_vec: Vector2):
 	if animator:
 		var dir_str = _velocity_to_direction(move_vec)
 		animator.play_walk(dir_str)
-		await get_tree().create_timer(0.15).timeout
-		if is_instance_valid(animator):
-			animator.play_idle()
+		# Movement timer: reset on each step, only play idle after 0.2s of no movement
+		if not animator.has_meta("move_timer"):
+			animator.set_meta("move_timer", 0.0)
+		animator.set_meta("move_timer", 0.2)
 
 func _velocity_to_direction(velocity: Vector2) -> String:
 	var angle = velocity.angle()
@@ -276,6 +283,16 @@ func _process(_delta: float):
 		var camera = get_node_or_null("Camera2D")
 		if camera:
 			camera.global_position = player_node.global_position
+	
+	# Movement idle timer - only play idle when no movement for 0.2s
+	var animator = player_node.get_node_or_null("PlayerAnimator") if player_node else null
+	if animator and animator.has_meta("move_timer"):
+		var timer = animator.get_meta("move_timer") - _delta
+		if timer <= 0:
+			animator.play_idle()
+			animator.set_meta("move_timer", 0.0)
+		else:
+			animator.set_meta("move_timer", timer)
 
 # -------------------------------------------------------------------
 # Interaction System
