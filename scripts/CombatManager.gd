@@ -6,6 +6,7 @@ enum EnemyAction {ATTACK, DEFEND, SPECIAL}
 
 class EnemyData:
 	var name: String
+	var enemy_name: String  # Alias for CombatUI compatibility
 	var max_hp: int
 	var hp: int
 	var attack: int
@@ -14,9 +15,12 @@ class EnemyData:
 	var current_action_index: int = 0
 	var keywords: PackedStringArray = []
 	var active_dots: Array[DoTData] = []
+	var sprite_texture_path: String = ""  # CombatUI compatibility
+	var faction: String = "Unknown"  # CombatUI compatibility
 
 	func _init(n: String, mhp: int, atk: int, def_: int = 0, pattern: Array = [], kw: PackedStringArray = []):
 		name = n
+		enemy_name = n
 		max_hp = mhp
 		hp = mhp
 		attack = atk
@@ -26,6 +30,26 @@ class EnemyData:
 			action_pattern = pattern
 		else:
 			action_pattern = [EnemyAction.ATTACK]
+		
+		# Try to infer sprite from enemy name
+		var base_name = n.to_lower().replace(" ", "_").replace("-", "_")
+		for suffix in ["_idle", "_attack", "_damage", "_death", ""]:
+			var try_path = "res://assets/sprites/enemies/enemy_" + base_name + suffix + ".png"
+			if ResourceLoader.exists(try_path):
+				sprite_texture_path = try_path
+				break
+		
+		# Try to infer faction from name
+		if "goblin" in base_name or "gear" in base_name or "tight" in base_name:
+			faction = "Construct"
+		elif "flesh" in base_name or "bone" in base_name or "undead" in base_name:
+			faction = "Undead"
+		elif "spore" in base_name or "fungal" in base_name or "mushroom" in base_name:
+			faction = "Aberration"
+		elif "flame" in base_name or "fire" in base_name or "ember" in base_name or "caldera" in base_name:
+			faction = "Elemental"
+		elif "dragon" in base_name or "boss" in base_name:
+			faction = "Boss"
 
 	func has_keyword(kw: String) -> bool:
 		for k in keywords:
