@@ -336,6 +336,7 @@ func _on_combat_started():
 	_update_deck_count()
 	_create_enemy_displays()
 	_update_hand_display()
+	_update_weapon_button()
 	selected_card_index = -1
 
 func _on_combat_ended(victory: bool):
@@ -355,6 +356,7 @@ func _on_combat_ended(victory: bool):
 
 func _on_turn_started(is_player: bool):
 	end_turn_btn.disabled = not is_player
+	_update_weapon_button()
 
 func _on_card_drawn(_card: CardData):
 	_update_hand_display()
@@ -538,6 +540,16 @@ func _update_enemy_display(index: int, _damage: int):
 			var btn_label = btn.get_node_or_null("Label")
 			if btn_label and btn_label is Label:
 				btn_label.text = "DEFEATED"
+
+func _update_weapon_button():
+	if not combat_manager or not weapon_use_btn:
+		return
+	var weapon_ready = combat_manager.equipped_weapon_id != "" and combat_manager.weapon_charge >= combat_manager.weapon_max_charge
+	weapon_use_btn.disabled = not weapon_ready
+	if weapon_ready:
+		weapon_use_btn.tooltip_text = "Weapon ready!"
+	else:
+		weapon_use_btn.tooltip_text = "Weapon not charged (%d/%d)" % [combat_manager.weapon_charge, combat_manager.weapon_max_charge]
 
 func _update_enemy_buttons():
 	for i in range(combat_manager.enemies.size()):
