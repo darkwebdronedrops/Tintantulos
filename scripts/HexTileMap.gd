@@ -212,44 +212,98 @@ func _get_hex_polygon() -> PackedVector2Array:
 # ===================================================================
 
 func generate_floor1_layout():
-	"""Generate the hex layout for Floor 1"""
+	"""Generate the hex layout for Floor 1 — expanded with corridors and patrol zones"""
 	clear_grid()
 	
-	# Entry room: roughly 7x7 hex area centered at (0,0)
-	# Let's make a roughly circular room with walls around the edges
-	_generate_room("entry", Vector2i(0, 0), 4, [
-		Vector2i(0, -4),  # Portal North
-		Vector2i(4, 0),   # Portal East
-		Vector2i(0, 4),   # Portal South
+	# Room definitions: center, radius, list of portal hexes (direction from center)
+	# All rooms have radius 5-6 with corridors connecting them
+	
+	# === ENTRY ROOM (central hub) ===
+	_generate_room("entry", Vector2i(0, 0), 6, [
+		Vector2i(0, -7),   # North portal -> upper corridor
+		Vector2i(7, 0),    # East portal -> middle corridor  
+		Vector2i(0, 7),    # South portal -> lower corridor
+		Vector2i(-4, -4),  # Northwest portal (locked initially)
 	])
 	
-	# Upper room (North of entry)
-	_generate_room("upper", Vector2i(0, -12), 4, [
-		Vector2i(0, -16), # Portal North (to boss)
-		Vector2i(0, -8),  # Portal South (back to entry)
+	# === NORTH CORRIDOR (entry to upper) ===
+	# 3-hex wide corridor, length ~10 hexes
+	_generate_corridor("north_corridor", Vector2i(0, -8), Vector2i(0, -18), 2)
+	# Patrol zone in middle of corridor
+	_generate_patrol_zone("north_patrol", Vector2i(0, -13), 3)
+	
+	# === UPPER ROOM ===
+	_generate_room("upper", Vector2i(0, -24), 6, [
+		Vector2i(0, -18),  # South portal (back to corridor)
+		Vector2i(0, -30),  # North portal (to boss, locked)
 	])
 	
-	# Middle room (East of entry)
-	_generate_room("middle", Vector2i(12, 0), 4, [
-		Vector2i(8, 0),   # Portal West (back to entry)
-		Vector2i(16, 0),  # Portal East
+	# === EAST CORRIDOR (entry to middle) ===
+	_generate_corridor("east_corridor", Vector2i(8, 0), Vector2i(18, 0), 2)
+	# Patrol zone
+	_generate_patrol_zone("east_patrol", Vector2i(13, 0), 3)
+	
+	# === MIDDLE ROOM ===
+	_generate_room("middle", Vector2i(24, 0), 6, [
+		Vector2i(18, 0),   # West portal (back to corridor)
+		Vector2i(30, 0),   # East portal (to spore corridor)
 	])
 	
-	# Lower room (South of entry)
-	_generate_room("lower", Vector2i(0, 12), 4, [
-		Vector2i(0, 8),   # Portal North (back to entry)
-		Vector2i(0, 16),  # Portal South (to secret)
+	# === SOUTH CORRIDOR (entry to lower) ===
+	_generate_corridor("south_corridor", Vector2i(0, 8), Vector2i(0, 18), 2)
+	# Patrol zone
+	_generate_patrol_zone("south_patrol", Vector2i(0, 13), 3)
+	
+	# === LOWER ROOM ===
+	_generate_room("lower", Vector2i(0, 24), 6, [
+		Vector2i(0, 18),   # North portal (back to corridor)
+		Vector2i(0, 30),   # South portal (to secret corridor)
 	])
 	
-	# Secret room (South of lower)
-	_generate_room("secret", Vector2i(0, 24), 3, [
-		Vector2i(0, 20),  # Portal North (back to lower)
+	# === SECRET CORRIDOR (lower to secret) ===
+	_generate_corridor("secret_corridor", Vector2i(0, 31), Vector2i(0, 38), 2)
+	
+	# === SECRET ROOM ===
+	_generate_room("secret", Vector2i(0, 44), 5, [
+		Vector2i(0, 38),   # North portal (back to corridor)
 	])
 	
-	# Spore heart room (East of middle)
-	_generate_room("spore_heart", Vector2i(24, 0), 3, [
-		Vector2i(20, 0),  # Portal West (back to middle)
+	# === SPORE CORRIDOR (middle to spore heart) ===
+	_generate_corridor("spore_corridor", Vector2i(31, 0), Vector2i(38, 0), 2)
+	
+	# === SPORE HEART ROOM ===
+	_generate_room("spore_heart", Vector2i(44, 0), 5, [
+		Vector2i(38, 0),   # West portal (back to corridor)
 	])
+	
+	print("[HexTileMap] Floor 1 layout generated: 6 rooms + 5 corridors + 3 patrol zones")
+
+func _generate_corridor(corridor_id: String, start: Vector2i, end: Vector2i, width: int):
+	"""Generate a corridor between two points, width in hexes"""
+	var path = _hex_line(start, end)
+	for hex in path:
+		# Create a "width" around each path hex
+		for dq in range(-width, width + 1):
+			for dr in range(-width, width + 1):
+				var check = Vector2i(hex.x + dq, hex.y + dr)
+				# Only place floor if not already occupied by a room or wall
+				var existing = get_tile(check)
+				if existing == TILE_VOID or existing == TILE_PORTAL:
+					set_tile(check, TILE_FLOOR)
+
+func _generate_patrol_zone(zone_id: String, center: Vector2i, radius: int):
+	"""Generate an open patrol zone where enemies can move"""
+	for q in range(center.x - radius, center.x + radius + 1):
+		for r in range(center.y - radius, center.y + radius + 1):
+			var hex = Vector2i(q, r)
+			var dist = _hex_distance(hex, center)
+			if dist <= radius:
+				var existing = get_tile(hex)
+				if existing == TILE_VOID:
+					set_tile(hex, TILE_FLOOR)
+				elif existing == TILE_WALL:
+					# Replace wall with floor in patrol zones
+					set_tile(hex, TILE_FLOOR)
 
 func _generate_room(room_id: String, center: Vector2i, radius: int, portal_positions: Array[Vector2i]):
 	"""Generate a roughly circular room with walls at edges"""
@@ -271,7 +325,7 @@ func _generate_room(room_id: String, center: Vector2i, radius: int, portal_posit
 				# Inner area: floor
 				set_tile(hex, TILE_FLOOR)
 			elif dist <= radius:
-				# Edge: wall (with some openings for portals)
+				# Edge: wall (with openings for portals)
 				var near_portal = false
 				for portal_hex in portal_positions:
 					if _hex_distance(hex, portal_hex) <= 1:
@@ -281,9 +335,26 @@ func _generate_room(room_id: String, center: Vector2i, radius: int, portal_posit
 					set_tile(hex, TILE_FLOOR)
 				else:
 					set_tile(hex, TILE_WALL)
-			else:
-				# Outside room: void
-				set_tile(hex, TILE_VOID)
+			# Don't override corridors that extend beyond room radius
+
+static func _hex_distance(a: Vector2i, b: Vector2i) -> int:
+	return (abs(a.x - b.x) + abs(a.x + a.y - b.x - b.y) + abs(a.y - b.y)) / 2
+
+static func _hex_line(a: Vector2i, b: Vector2i) -> Array[Vector2i]:
+	"""Get all hexes in a line from a to b"""
+	var N = _hex_distance(a, b)
+	if N == 0:
+		return [a]
+	
+	var results: Array[Vector2i] = []
+	for i in range(N + 1):
+		var t = float(i) / N
+		var interpolated = Vector2(
+			lerp(a.x, b.x, t),
+			lerp(a.y, b.y, t)
+		)
+		results.append(_hex_round(interpolated))
+	return results
 
 # ===================================================================
 # PORTAL / ROOM TRANSITION HELPERS
@@ -293,11 +364,11 @@ func get_room_center(room_id: String) -> Vector2i:
 	"""Get the center hex of a room"""
 	match room_id:
 		"entry": return Vector2i(0, 0)
-		"upper": return Vector2i(0, -12)
-		"middle": return Vector2i(12, 0)
-		"lower": return Vector2i(0, 12)
-		"secret": return Vector2i(0, 24)
-		"spore_heart": return Vector2i(24, 0)
+		"upper": return Vector2i(0, -24)
+		"middle": return Vector2i(24, 0)
+		"lower": return Vector2i(0, 24)
+		"secret": return Vector2i(0, 44)
+		"spore_heart": return Vector2i(44, 0)
 		_: return Vector2i.ZERO
 
 func get_portal_destination(from_hex: Vector2i, direction: int) -> Vector2i:
