@@ -512,8 +512,10 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	target_btn.modulate = Color(1, 1, 1, 0.0)
 	var btn_normal = load("res://assets/sprites/ui/ui_target_button.png")
 	var btn_pressed = load("res://assets/sprites/ui/ui_target_button_pressed.png")
-	if btn_normal: target_btn.texture_normal = btn_normal
-	if btn_pressed: target_btn.texture_pressed = btn_pressed
+	if btn_normal and btn_normal is Texture2D:
+		target_btn.texture_normal = btn_normal
+	if btn_pressed and btn_pressed is Texture2D:
+		target_btn.texture_pressed = btn_pressed
 	var target_label = Label.new()
 	target_label.text = "TARGET"
 	target_label.anchor_right = 1.0; target_label.anchor_bottom = 1.0
