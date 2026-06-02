@@ -247,7 +247,7 @@ func _hex_step(move_vec: Vector2):
 	
 	# Convert current position to hex, then move one hex in the direction
 	var current_hex = HexTileMap.world_to_hex(player_node.global_position)
-	var direction = _vector_to_hex_dir(move_vec)
+	var direction = _velocity_to_hex_direction(move_vec)
 	var dirs = HexGrid.DIRECTIONS
 	var target_hex = current_hex + dirs[direction]
 	
@@ -282,7 +282,7 @@ func _velocity_to_direction(velocity: Vector2) -> String:
 	elif degrees >= -112.5 and degrees < -67.5:  return "n"
 	else:                                         return "ne"
 
-func _vector_to_hex_dir(velocity: Vector2) -> int:
+func _velocity_to_hex_direction(velocity: Vector2) -> int:
 	"""Convert a movement vector to hex direction index (0-5)"""
 	var angle = velocity.angle()
 	var degrees = rad_to_deg(angle)
