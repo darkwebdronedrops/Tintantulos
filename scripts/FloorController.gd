@@ -98,17 +98,18 @@ func _build_floor():
 		print("[FloorController] Room '%s' at %s" % [room_id, room.position])
 	
 	# Setup shared systems
-	_setup_player()
 	_setup_combat()
 	_setup_ui()
 	_setup_shop()
 	
-	# Floor-specific initialization (child override)
-	_setup_floor_specific()
-	
-	# Start floor ambient music
+	# Start floor ambient music (before player placement, will be overwritten by combat if needed)
 	if floor_template and floor_template.floor_id > 0:
 		AudioManager.play_floor_ambient(floor_template.floor_id)
+	
+	_setup_player()
+	
+	# Floor-specific initialization (child override)
+	_setup_floor_specific()
 
 
 # -------------------------------------------------------------------
@@ -541,7 +542,7 @@ func _on_encounter_started(enemy_names: Array, room_id: String = ""):
 
 
 	
-	var comp = RoomEnemyDatabase.get_floor_composition(floor_template.floor_id, room_id)
+	var comp = RoomEnemyDatabase.get_floor_composition(floor_template.floor_id, rid)
 	var enemy_data = comp.get("enemies", []) if comp is Dictionary else []
 	
 	if enemy_data.is_empty():
