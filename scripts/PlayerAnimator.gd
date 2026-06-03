@@ -14,6 +14,12 @@ var frame_timer: float = 0.0
 var frame_interval: float = 0.12
 var current_frame: int = 0
 
+# Bobbing placeholder animation (when walk sprites are missing)
+var bob_timer: float = 0.0
+const BOB_SPEED: float = 8.0
+const BOB_HEIGHT: float = 4.0
+var base_sprite_position: Vector2 = Vector2.ZERO
+
 var sprite: Sprite2D = null
 
 const FRAME_COUNTS = {
@@ -35,6 +41,9 @@ func _ready():
 		push_error("PlayerAnimator: No PlayerSprite node found!")
 		return
 	
+	# Store base position for bobbing animation
+	base_sprite_position = sprite.position
+	
 	_load_frame()
 
 func _process(delta: float):
@@ -45,6 +54,16 @@ func _process(delta: float):
 			var max_frames = FRAME_COUNTS[current_action]
 			current_frame = (current_frame + 1) % max_frames
 			_load_frame()
+	
+	# Bobbing placeholder for walk animation
+	if current_action == "walk" and sprite:
+		bob_timer += delta * BOB_SPEED
+		var bob_offset = sin(bob_timer) * BOB_HEIGHT
+		sprite.position.y = base_sprite_position.y + bob_offset
+	elif sprite:
+		# Reset to base when not walking
+		sprite.position.y = base_sprite_position.y
+		bob_timer = 0.0
 
 func set_state(stance: String, action: String, direction: String = "s"):
 	var changed = (current_stance != stance) or (current_action != action)
@@ -55,6 +74,10 @@ func set_state(stance: String, action: String, direction: String = "s"):
 	if changed:
 		current_frame = 0
 		frame_timer = 0.0
+		# Reset bobbing when action changes
+		bob_timer = 0.0
+		if sprite:
+			sprite.position.y = base_sprite_position.y
 	
 	_load_frame()
 
@@ -87,6 +110,16 @@ func _load_frame():
 		if tex:
 			sprite.texture = tex
 			print("[PlayerAnimator] Fallback OK: %s" % fallback)
+			return
+	
+	# Try the idle sprite for the current stance/direction as walk fallback
+	var idle_path = SPRITE_BASE + "player_%s_idle_f0.png" % current_stance
+	print("[PlayerAnimator] Trying idle as walk fallback: %s" % idle_path)
+	if ResourceLoader.exists(idle_path):
+		var tex = load(idle_path)
+		if tex:
+			sprite.texture = tex
+			print("[PlayerAnimator] Idle walk fallback OK")
 			return
 	
 	# Use character_sprite.png as reliable fallback
