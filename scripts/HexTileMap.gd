@@ -370,14 +370,319 @@ func _generate_room(room_id: String, center: Vector2i, radius: int, portal_posit
 func get_room_center(room_id: String) -> Vector2i:
 	"""Get the center hex of a room"""
 	match room_id:
+		# Floor 1
 		"entry": return Vector2i(0, 0)
 		"upper": return Vector2i(0, -24)
 		"middle": return Vector2i(24, 0)
 		"lower": return Vector2i(0, 24)
 		"secret": return Vector2i(0, 44)
 		"spore_heart": return Vector2i(44, 0)
+		# Floor 2
+		"f2_entry": return Vector2i(0, 0)
+		"f2_upper": return Vector2i(0, -20)
+		"f2_middle": return Vector2i(18, 0)
+		"f2_lower": return Vector2i(0, 20)
+		"f2_secret": return Vector2i(8, 32)
+		"f2_spore_heart": return Vector2i(-18, 32)
+		# Floor 3
+		"f3_center": return Vector2i(0, 0)
+		"f3_r01": return Vector2i(0, -20)
+		"f3_r02": return Vector2i(10, -17)
+		"f3_r03": return Vector2i(17, -10)
+		"f3_r04": return Vector2i(20, 0)
+		"f3_r05": return Vector2i(17, 10)
+		"f3_r06": return Vector2i(10, 17)
+		"f3_r07": return Vector2i(0, 20)
+		"f3_r08": return Vector2i(-10, 17)
+		"f3_r09": return Vector2i(-17, 10)
+		"f3_r10": return Vector2i(-20, 0)
+		"f3_r11": return Vector2i(-17, -10)
+		"f3_r12": return Vector2i(-10, -17)
+		# Floor 4
+		"f4_bazaar": return Vector2i(0, 0)
+		"f4_undercroft": return Vector2i(0, 30)
+		"f4_refectory": return Vector2i(0, -30)
 		_: return Vector2i.ZERO
 
+# ===================================================================
+# FLOOR 2 LAYOUT GENERATOR — The Fungal Cavern
+# ===================================================================
+
+func generate_floor2_layout():
+	"""Generate hex layout for Floor 2 — organic cavern with fungal bridges"""
+	clear_grid()
+	
+	# === ENTRY CAVERN (starting area, slightly irregular) ===
+	_generate_irregular_room("f2_entry", Vector2i(0, 0), 7, [
+		Vector2i(0, -8),   # North portal → upper
+		Vector2i(8, 0),    # East portal → middle
+		Vector2i(0, 8),    # South portal → lower
+	])
+	
+	# === FUNGAL BRIDGE (entry to upper) ===
+	_generate_organic_corridor("f2_bridge_n", Vector2i(0, -9), Vector2i(0, -16), 2)
+	_generate_patrol_zone("f2_patrol_n", Vector2i(0, -12), 3)
+	
+	# === UPPER CAVERN (north, spore-heavy) ===
+	_generate_irregular_room("f2_upper", Vector2i(0, -24), 7, [
+		Vector2i(0, -17),   # South portal (back)
+		Vector2i(0, -31),  # North portal → spore heart
+	])
+	
+	# === FUNGAL BRIDGE (entry to middle) ===
+	_generate_organic_corridor("f2_bridge_e", Vector2i(9, 0), Vector2i(16, 0), 2)
+	_generate_patrol_zone("f2_patrol_e", Vector2i(12, 0), 3)
+	
+	# === MIDDLE CAVERN (east, fungal growth chamber) ===
+	_generate_irregular_room("f2_middle", Vector2i(24, 0), 7, [
+		Vector2i(17, 0),    # West portal (back)
+		Vector2i(31, 0),   # East portal → spore heart
+	])
+	
+	# === FUNGAL BRIDGE (entry to lower) ===
+	_generate_organic_corridor("f2_bridge_s", Vector2i(0, 9), Vector2i(0, 16), 2)
+	_generate_patrol_zone("f2_patrol_s", Vector2i(0, 12), 3)
+	
+	# === LOWER CAVERN (south, secret hidden here) ===
+	_generate_irregular_room("f2_lower", Vector2i(0, 24), 7, [
+		Vector2i(0, 17),    # North portal (back)
+		Vector2i(8, 29),    # Secret portal (hidden)
+		Vector2i(-8, 29),   # Spore heart portal
+	])
+	
+	# === SECRET ROOM (hidden off lower, small) ===
+	_generate_irregular_room("f2_secret", Vector2i(12, 34), 4, [
+		Vector2i(8, 30),    # Portal back to lower
+	])
+	
+	# === SPORE HEART (boss chamber, deep below) ===
+	_generate_irregular_room("f2_spore_heart", Vector2i(-16, 36), 8, [
+		Vector2i(-10, 28),  # Portal back to lower
+		Vector2i(-22, 28),  # Portal back to middle
+	])
+	
+	# Add some "fungal pillar" objects in caverns
+	_add_fungal_pillars("f2_entry", Vector2i(0, 0), 7, 3)
+	_add_fungal_pillars("f2_upper", Vector2i(0, -24), 7, 4)
+	_add_fungal_pillars("f2_middle", Vector2i(24, 0), 7, 4)
+	_add_fungal_pillars("f2_lower", Vector2i(0, 24), 7, 3)
+	
+	print("[HexTileMap] Floor 2 layout generated: organic caverns + fungal bridges")
+
+# ===================================================================
+# FLOOR 3 LAYOUT GENERATOR — The Gearworks
+# ===================================================================
+
+func generate_floor3_layout():
+	"""Generate hex layout for Floor 3 — 12 rooms in a ring around Kami Shrine"""
+	clear_grid()
+	
+	# === CENTRAL KAMI SHRINE (inner circle, radius 4) ===
+	_generate_room("f3_center", Vector2i(0, 0), 4, [
+		# No portals — accessed by solving water puzzle in rooms
+	])
+	# Mark center as special shrine tiles
+	for q in range(-2, 3):
+		for r in range(-2, 3):
+			var hex = Vector2i(q, r)
+			if _hex_distance(hex, Vector2i(0, 0)) <= 2:
+				set_tile(hex, TILE_OBJECT)  # Shrine platform
+	
+	# === OUTER RING — 12 rooms ===
+	# Ring radius: 20 hexes from center
+	# Room 12 at top (12 o'clock), then 1-11 clockwise
+	var ring_radius = 20
+	var room_centers = [
+		Vector2i(0, -ring_radius),      # 12: The Quench (start)
+		Vector2i(10, -17),             # 1: The Reservoir
+		Vector2i(17, -10),             # 2: The Spark
+		Vector2i(20, 0),               # 3: The Governor
+		Vector2i(17, 10),              # 4: The Draft
+		Vector2i(10, 17),              # 5: The Temper
+		Vector2i(0, ring_radius),       # 6: The Beacon (boss room)
+		Vector2i(-10, 17),             # 7: The Escapement
+		Vector2i(-17, 10),             # 8: The Bearing
+		Vector2i(-20, 0),              # 9: The Flywheel (boss room)
+		Vector2i(-17, -10),            # 10: The Counterweight
+		Vector2i(-10, -17),            # 11: The Oiler (boss room)
+	]
+	
+	var room_names = [
+		"f3_r12", "f3_r01", "f3_r02", "f3_r03", "f3_r04", "f3_r05",
+		"f3_r06", "f3_r07", "f3_r08", "f3_r09", "f3_r10", "f3_r11"
+	]
+	
+	for i in range(12):
+		var room_id = room_names[i]
+		var center = room_centers[i]
+		
+		# Portals: connect to adjacent rooms in ring
+		var portals = []
+		var prev_idx = (i - 1 + 12) % 12
+		var next_idx = (i + 1) % 12
+		# Portal toward previous room
+		var prev_dir = (room_centers[prev_idx] - center).normalized()
+		portals.append(center + Vector2i(round(prev_dir.x * 5), round(prev_dir.y * 5)))
+		# Portal toward next room  
+		var next_dir = (room_centers[next_idx] - center).normalized()
+		portals.append(center + Vector2i(round(next_dir.x * 5), round(next_dir.y * 5)))
+		
+		_generate_room(room_id, center, 5, portals)
+	
+	# === RING CORRIDORS ===
+	# Connect each room to its neighbors
+	for i in range(12):
+		var a = room_centers[i]
+		var b = room_centers[(i + 1) % 12]
+		_generate_corridor("f3_ring_%d" % i, a, b, 1)
+	
+	# === PATROL ZONES ===
+	# Between rooms on the ring
+	for i in range(12):
+		var mid = Vector2i((room_centers[i].x + room_centers[(i + 1) % 12].x) / 2,
+		                   (room_centers[i].y + room_centers[(i + 1) % 12].y) / 2)
+		_generate_patrol_zone("f3_patrol_%d" % i, mid, 2)
+	
+	print("[HexTileMap] Floor 3 layout generated: 12-room ring + Kami Shrine center")
+
+# ===================================================================
+# FLOOR 4 LAYOUT GENERATOR — The Curio Bazaar
+# ===================================================================
+
+func generate_floor4_layout():
+	"""Generate hex layout for Floor 4 — circular bazaar with 12 booths"""
+	clear_grid()
+	
+	# === MAIN BAZAAR (large open oval, radius 14) ===
+	_generate_room("f4_bazaar", Vector2i(0, 0), 14, [
+		Vector2i(0, -15),   # North portal → refectory
+		Vector2i(0, 15),   # South portal → undercroft
+	])
+	
+	# === UNDER CROFT (below bazaar, dungeon-like) ===
+	_generate_room("f4_undercroft", Vector2i(0, 32), 10, [
+		Vector2i(0, 22),   # Portal back to bazaar
+	])
+	
+	# === REFECTORY (above bazaar, dining hall) ===
+	_generate_room("f4_refectory", Vector2i(0, -32), 10, [
+		Vector2i(0, -22),  # Portal back to bazaar
+	])
+	
+	# === BOOTH POSITIONS (12 positions around bazaar perimeter) ===
+	# Like a clock: booth_12 at top, then 1-11 clockwise
+	var booth_radius = 10
+	var booth_positions = [
+		Vector2i(0, -booth_radius),       # 12
+		Vector2i(5, -9),                 # 1
+		Vector2i(9, -5),                 # 2
+		Vector2i(10, 0),                 # 3
+		Vector2i(9, 5),                  # 4
+		Vector2i(5, 9),                  # 5
+		Vector2i(0, booth_radius),        # 6
+		Vector2i(-5, 9),                 # 7
+		Vector2i(-9, 5),                 # 8
+		Vector2i(-10, 0),                # 9
+		Vector2i(-9, -5),                # 10
+		Vector2i(-5, -9),                # 11
+	]
+	
+	# Place booth objects (interactive, not walls)
+	for i in range(12):
+		var pos = booth_positions[i]
+		# Booth is a small 2-hex cluster
+		set_tile(pos, TILE_OBJECT)
+		# Make surrounding walkable
+		for dir in DIRECTIONS:
+			var neighbor = pos + dir
+			if get_tile(neighbor) == TILE_VOID:
+				set_tile(neighbor, TILE_FLOOR)
+	
+	# === CORRIDORS ===
+	_generate_corridor("f4_to_undercroft", Vector2i(0, 15), Vector2i(0, 22), 2)
+	_generate_corridor("f4_to_refectory", Vector2i(0, -15), Vector2i(0, -22), 2)
+	
+	# === HAZARD ZONES (Undercroft aether slicks) ===
+	# Add some danger tiles in undercroft
+	var hazard_centers = [Vector2i(-6, 32), Vector2i(6, 32), Vector2i(0, 38)]
+	for hcenter in hazard_centers:
+		for q in range(hcenter.x - 2, hcenter.x + 3):
+			for r in range(hcenter.y - 2, hcenter.y + 3):
+				var hex = Vector2i(q, r)
+				if _hex_distance(hex, hcenter) <= 2:
+					set_tile(hex, TILE_OBJECT)  # Hazard = object type
+	
+	print("[HexTileMap] Floor 4 layout generated: bazaar + 12 booths + undercroft + refectory")
+
+# ===================================================================
+# HELPER: Irregular room for organic cavern shapes (Floor 2)
+# ===================================================================
+
+func _generate_irregular_room(room_id: String, center: Vector2i, base_radius: int, portal_positions: Array[Vector2i]):
+	"""Generate an organic blob-shaped room (slightly irregular edges)"""
+	for q in range(center.x - base_radius - 2, center.x + base_radius + 3):
+		for r in range(center.y - base_radius - 2, center.y + base_radius + 3):
+			var hex = Vector2i(q, r)
+			var dist = _hex_distance(hex, center)
+			
+			# Irregularity: add noise to edge
+			var noise = randf() * 1.5 - 0.75
+			var effective_radius = base_radius + noise
+			
+			# Check portal
+			var is_portal = false
+			for portal_hex in portal_positions:
+				if hex == portal_hex:
+					is_portal = true
+					break
+			
+			if is_portal:
+				set_tile(hex, TILE_PORTAL)
+			elif dist <= effective_radius - 1.5:
+				set_tile(hex, TILE_FLOOR)
+			elif dist <= effective_radius:
+				# Irregular wall — some gaps
+				var near_portal = false
+				for portal_hex in portal_positions:
+					if _hex_distance(hex, portal_hex) <= 1:
+						near_portal = true
+						break
+				if near_portal or randf() > 0.3:  # 30% chance of gap
+					set_tile(hex, TILE_FLOOR)
+				else:
+					set_tile(hex, TILE_WALL)
+
+func _generate_organic_corridor(corridor_id: String, start: Vector2i, end: Vector2i, width: int):
+	"""Generate a winding, slightly irregular corridor"""
+	# Add some randomness to path
+	var mid1 = Vector2i((start.x + end.x) / 2 + randi() % 5 - 2, (start.y + end.y) / 2 + randi() % 5 - 2)
+	
+	# Two segments with a bend
+	var path1 = _hex_line(start, mid1)
+	var path2 = _hex_line(mid1, end)
+	
+	var all_hexes = path1.duplicate()
+	for hex in path2:
+		if hex not in all_hexes:
+			all_hexes.append(hex)
+	
+	for hex in all_hexes:
+		for dq in range(-width, width + 1):
+			for dr in range(-width, width + 1):
+				var check = Vector2i(hex.x + dq, hex.y + dr)
+				var existing = get_tile(check)
+				if existing == TILE_VOID or existing == TILE_PORTAL:
+					set_tile(check, TILE_FLOOR)
+
+func _add_fungal_pillars(room_id: String, center: Vector2i, room_radius: int, count: int):
+	"""Add mushroom-pillar objects inside a room"""
+	for i in range(count):
+		var offset_q = randi() % (room_radius * 2 + 1) - room_radius
+		var offset_r = randi() % (room_radius * 2 + 1) - room_radius
+		var hex = Vector2i(center.x + offset_q, center.y + offset_r)
+		var dist = _hex_distance(hex, center)
+		if dist <= room_radius - 2 and get_tile(hex) == TILE_FLOOR:
+			set_tile(hex, TILE_OBJECT)  # Fungal pillar = object tile
 func get_portal_destination(from_hex: Vector2i, direction: int) -> Vector2i:
 	"""Given a hex and direction, find the connected portal hex"""
 	var dirs = [
