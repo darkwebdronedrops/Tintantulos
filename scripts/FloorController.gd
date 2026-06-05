@@ -227,12 +227,12 @@ func _input(event: InputEvent):
 			KEY_ESCAPE:
 				_toggle_pause_menu()
 				return
-			KEY_E: move_vec = Vector2(0.866, -0.5)    # Northeast
-			KEY_W: move_vec = Vector2(-0.866, -0.5)   # Northwest
-			KEY_A: move_vec = Vector2(-1, 0)          # West
-			KEY_D: move_vec = Vector2(1, 0)           # East
-			KEY_Z: move_vec = Vector2(-0.866, 0.5)    # Southwest
-			KEY_X: move_vec = Vector2(0.866, 0.5)     # Southeast
+			KEY_E: move_vec = Vector2(0.5, -0.866)     # NE (angle -60°)
+			KEY_W: move_vec = Vector2(-0.5, -0.866)    # NW (angle -120°)
+			KEY_A: move_vec = Vector2(-1, 0)           # W (angle 180°)
+			KEY_D: move_vec = Vector2(1, 0)            # E (angle 0°)
+			KEY_Z: move_vec = Vector2(-0.5, 0.866)     # SW (angle 120°)
+			KEY_X: move_vec = Vector2(0.5, 0.866)      # SE (angle 60°)
 			KEY_S, KEY_SPACE:
 				_try_interact()
 				return
@@ -283,19 +283,18 @@ func _velocity_to_direction(velocity: Vector2) -> String:
 	else:                                         return "ne"
 
 func _velocity_to_hex_direction(velocity: Vector2) -> int:
-	"""Convert a movement vector to hex direction index (0-5)"""
+	"""Convert a movement vector to hex direction index (0-5) for pointy-top hexes.
+	Hex direction angles: E=0°, SE=60°, SW=120°, W=180°/-180°, NW=-120°, NE=-60°"""
 	var angle = velocity.angle()
 	var degrees = rad_to_deg(angle)
 	
-	# Match with WEADZX directions
-	# E (NE): 30°, W (NW): 150°, A (W): 180°, D (E): 0°, Z (SW): -150°, X (SE): -30°
-	if degrees >= -15 and degrees < 15:         return 3    # E (East) -> D
-	elif degrees >= 15 and degrees < 75:        return 1    # NE -> E
-	elif degrees >= 75 and degrees < 135:       return 0    # N -> W (closest)
-	elif degrees >= 135 and degrees < 180:      return 2    # NW -> A
-	elif degrees >= -180 and degrees < -135:    return 4    # W -> Z (closest)
-	elif degrees >= -135 and degrees < -75:     return 4    # SW -> Z
-	elif degrees >= -75 and degrees < -15:      return 5    # SE -> X
+	# Pointy-top hex boundary angles: 30°, 90°, 150°, -150°, -90°, -30°
+	if degrees >= -30 and degrees < 30:         return 3    # E  -> D key
+	elif degrees >= 30 and degrees < 90:          return 5    # SE -> X key
+	elif degrees >= 90 and degrees < 150:         return 4    # SW -> Z key
+	elif degrees >= 150 or degrees < -150:        return 2    # W  -> A key
+	elif degrees >= -150 and degrees < -90:       return 0    # NW -> W key
+	elif degrees >= -90 and degrees < -30:       return 1    # NE -> E key
 	else:                                        return 3    # default E
 
 func _physics_process(_delta: float):

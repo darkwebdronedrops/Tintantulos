@@ -343,17 +343,17 @@ func _input(event: InputEvent):
 				_toggle_pause_menu()
 				return
 			KEY_E:
-				_hex_move(Vector2(0.866, -0.5))    # NE
+				_hex_move(Vector2(0.5, -0.866))     # NE (angle -60°)
 			KEY_W:
-				_hex_move(Vector2(-0.866, -0.5))   # NW
+				_hex_move(Vector2(-0.5, -0.866))    # NW (angle -120°)
 			KEY_A:
-				_hex_move(Vector2(-1, 0))          # W
+				_hex_move(Vector2(-1, 0))           # W (angle 180°)
 			KEY_D:
-				_hex_move(Vector2(1, 0))           # E
+				_hex_move(Vector2(1, 0))            # E (angle 0°)
 			KEY_Z:
-				_hex_move(Vector2(-0.866, 0.5))  # SW
+				_hex_move(Vector2(-0.5, 0.866))     # SW (angle 120°)
 			KEY_X:
-				_hex_move(Vector2(0.866, 0.5))    # SE
+				_hex_move(Vector2(0.5, 0.866))      # SE (angle 60°)
 			KEY_S, KEY_SPACE:
 				_try_interact()
 				return
@@ -386,16 +386,19 @@ func _hex_move(move_vec: Vector2):
 	_check_interactables()
 
 func _vector_to_hex_dir(velocity: Vector2) -> int:
+	"""Convert a movement vector to hex direction index (0-5) for pointy-top hexes.
+	Hex direction angles: E=0°, SE=60°, SW=120°, W=180°/-180°, NW=-120°, NE=-60°"""
 	var angle = velocity.angle()
 	var degrees = rad_to_deg(angle)
-	if degrees >= -15 and degrees < 15:         return 3    # E
-	elif degrees >= 15 and degrees < 75:        return 1    # NE
-	elif degrees >= 75 and degrees < 135:       return 0    # N -> NW
-	elif degrees >= 135 and degrees < 180:      return 2    # NW
-	elif degrees >= -180 and degrees < -135:    return 4    # W -> SW
-	elif degrees >= -135 and degrees < -75:     return 4    # SW
-	elif degrees >= -75 and degrees < -15:      return 5    # SE
-	else:                                        return 3
+	
+	# Pointy-top hex boundary angles: 30°, 90°, 150°, -150°, -90°, -30°
+	if degrees >= -30 and degrees < 30:         return 3    # E  -> D key
+	elif degrees >= 30 and degrees < 90:          return 5    # SE -> X key
+	elif degrees >= 90 and degrees < 150:         return 4    # SW -> Z key
+	elif degrees >= 150 or degrees < -150:        return 2    # W  -> A key
+	elif degrees >= -150 and degrees < -90:       return 0    # NW -> W key
+	elif degrees >= -90 and degrees < -30:       return 1    # NE -> E key
+	else:                                         return 3    # default E
 
 func _velocity_to_direction(velocity: Vector2) -> String:
 	var angle = velocity.angle()
