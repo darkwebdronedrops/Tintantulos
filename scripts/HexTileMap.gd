@@ -14,6 +14,7 @@ const TILE_WALL: int = 1
 const TILE_OBJECT: int = 2
 const TILE_VOID: int = 3
 const TILE_PORTAL: int = 4
+const TILE_WATER: int = 5
 
 # Directions for pointy-top hexes
 const DIRECTIONS = [
@@ -30,6 +31,7 @@ const DIRECTIONS = [
 @export var tile_texture_wall: Texture2D
 @export var tile_texture_object: Texture2D
 @export var tile_texture_void: Texture2D
+@export var tile_texture_water: Texture2D
 
 # Grid data: Vector2i(q, r) -> tile_type
 var grid: Dictionary = {}
@@ -203,8 +205,8 @@ func _update_tile_visual(hex: Vector2i):
 	sprite.position = world_pos
 	sprite.z_index = tile_type  # Walls on top, floor on bottom
 	
-	# Add collision for walls
-	if tile_type == TILE_WALL:
+	# Add collision for walls and water
+	if tile_type == TILE_WALL or tile_type == TILE_WATER:
 		var static_body = StaticBody2D.new()
 		var collision = CollisionPolygon2D.new()
 		collision.polygon = _get_hex_polygon()
@@ -220,6 +222,7 @@ func _get_texture_for_tile(tile_type: int) -> Texture2D:
 		TILE_OBJECT: return tile_texture_object
 		TILE_VOID: return tile_texture_void
 		TILE_PORTAL: return tile_texture_floor
+		TILE_WATER: return tile_texture_water if tile_texture_water else tile_texture_void
 		_: return tile_texture_void
 
 func _get_hex_polygon() -> PackedVector2Array:
@@ -363,6 +366,28 @@ func _generate_room(room_id: String, center: Vector2i, radius: int, portal_posit
 					set_tile(hex, TILE_WALL)
 			# Don't override corridors that extend beyond room radius
 
+func _generate_water_ring(water_id: String, center: Vector2i, inner_radius: int, thickness: int):
+	"""Generate a ring of water tiles around a center point (non-walkable barrier)"""
+	for q in range(center.x - inner_radius - thickness, center.x + inner_radius + thickness + 1):
+		for r in range(center.y - inner_radius - thickness, center.y + inner_radius + thickness + 1):
+			var hex = Vector2i(q, r)
+			var dist = _hex_distance(hex, center)
+			if dist >= inner_radius and dist < inner_radius + thickness:
+				var existing = get_tile(hex)
+				# Only place water on void tiles (don't overwrite rooms/corridors)
+				if existing == TILE_VOID:
+					set_tile(hex, TILE_WATER)
+
+func _set_water_gap(center: Vector2i, radius: int):
+	"""Place water in a small area to create a gap/hazard"""
+	for q in range(center.x - radius, center.x + radius + 1):
+		for r in range(center.y - radius, center.y + radius + 1):
+			var hex = Vector2i(q, r)
+			if _hex_distance(hex, center) <= radius:
+				var existing = get_tile(hex)
+				if existing == TILE_FLOOR:
+					set_tile(hex, TILE_WATER)
+
 # ===================================================================
 # PORTAL / ROOM TRANSITION HELPERS
 # ===================================================================
@@ -467,7 +492,15 @@ func generate_floor2_layout():
 	_add_fungal_pillars("f2_middle", Vector2i(24, 0), 7, 4)
 	_add_fungal_pillars("f2_lower", Vector2i(0, 24), 7, 3)
 	
-	print("[HexTileMap] Floor 2 layout generated: organic caverns + fungal bridges")
+	# === WATER FEATURES ===
+	# Ring of water around the Lower Pool (non-walkable barrier)
+	_generate_water_ring("f2_lower_pool", Vector2i(0, 24), 9, 2)
+	# Water hazard in Spore Heart chamber (atmosphere)
+	_generate_water_ring("f2_spore_pool", Vector2i(-16, 36), 10, 1)
+	# Small water gap in east corridor (forces bridge or detour)
+	_set_water_gap(Vector2i(12, 0), 2)
+	
+	print("[HexTileMap] Floor 2 layout generated: organic caverns + fungal bridges + water hazards")
 
 # ===================================================================
 # FLOOR 3 LAYOUT GENERATOR — The Gearworks
