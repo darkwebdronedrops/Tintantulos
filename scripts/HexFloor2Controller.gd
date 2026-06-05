@@ -1,7 +1,7 @@
 extends Node2D
 
 # ===================================================================
-# FLOOR 1 CONTROLLER — Hex-Based (Full Transition)
+# FLOOR 2 CONTROLLER — Hex-Based — The Fungal Cavern
 # ===================================================================
 # Replaces room scenes with hex grid zones.
 # Rooms are defined by center hex + radius.
@@ -18,7 +18,7 @@ extends Node2D
 # State
 # -------------------------------------------------------------------
 var player_node: Node2D
-var current_room_id: String = "entry"
+var current_room_id: String = "f2_entry"
 var in_combat: bool = false
 var in_transition: bool = false
 var in_ui: bool = false
@@ -33,30 +33,33 @@ const PATH_MOVE_STEP_INTERVAL: float = 0.12
 
 # Room definitions: center hex, radius, encounter type
 var room_data: Dictionary = {
-	"entry":       {"center": Vector2i(0, 0),   "radius": 6, "encounter": "none",    "display": "The Threshold"},
-	"upper":       {"center": Vector2i(0, -24),  "radius": 6, "encounter": "standard", "display": "The Door"},
-	"middle":      {"center": Vector2i(24, 0),   "radius": 6, "encounter": "warren",   "display": "The Warren"},
-	"lower":       {"center": Vector2i(0, 24),   "radius": 6, "encounter": "shrine",   "display": "The Shrine"},
-	"secret":      {"center": Vector2i(0, 44),   "radius": 5, "encounter": "secret",   "display": "The Secret"},
-	"spore_heart": {"center": Vector2i(44, 0),   "radius": 5, "encounter": "spore",    "display": "Spore Heart"},
+	"f2_entry":       {"center": Vector2i(0, 0),   "radius": 7, "encounter": "none",    "display": "The Overlook"},
+	"f2_upper":       {"center": Vector2i(0, -20),  "radius": 7, "encounter": "standard", "display": "The Upper Spore"},
+	"f2_middle":      {"center": Vector2i(18, 0),   "radius": 7, "encounter": "warren",   "display": "The Growth Chamber"},
+	"f2_lower":       {"center": Vector2i(0, 20),   "radius": 7, "encounter": "shrine",   "display": "The Lower Pool"},
+	"f2_secret":      {"center": Vector2i(12, 34),  "radius": 4, "encounter": "secret",   "display": "The Hidden Spore"},
+	"f2_spore_heart": {"center": Vector2i(-16, 36), "radius": 8, "encounter": "spore",    "display": "Spore Heart"},
 }
 
 # Portal connections: room_id -> direction -> target room
 var portal_connections: Dictionary = {
-	"entry":  {"north": "upper",       "east": "middle",      "south": "lower"},
-	"upper":  {"south": "entry"},
-	"middle": {"west":  "entry",       "east": "spore_heart"},
-	"lower":  {"north": "entry",       "south": "secret"},
-	"secret": {"north": "lower"},
-	"spore_heart": {"west": "middle"},
+	"f2_entry":  {"north": "f2_upper",       "east": "f2_middle",      "south": "f2_lower"},
+	"f2_upper":  {"south": "f2_entry",       "down": "f2_spore_heart"},
+	"f2_middle": {"west":  "f2_entry",       "down": "f2_spore_heart"},
+	"f2_lower":  {"north": "f2_entry",       "secret": "f2_secret", "down": "f2_spore_heart"},
+	"f2_secret": {"exit": "f2_lower"},
+	"f2_spore_heart": {"exit": "f2_entry"},
 }
 
 # Portal hex offsets from room center (which direction portal faces)
 var portal_offsets: Dictionary = {
-	"north": Vector2i(0, -7),
-	"east":  Vector2i(7, 0),
-	"south": Vector2i(0, 7),
-	"west":  Vector2i(-7, 0),
+	"north": Vector2i(0, -8),
+	"east":  Vector2i(8, 0),
+	"south": Vector2i(0, 8),
+	"west":  Vector2i(-8, 0),
+	"down":  Vector2i(0, 8),
+	"secret": Vector2i(8, 4),
+	"exit":  Vector2i(0, -8),
 }
 
 # Room encounter state
@@ -72,28 +75,14 @@ var pause_menu: CanvasLayer
 # -------------------------------------------------------------------
 # Tutorial
 # -------------------------------------------------------------------
-var door_tutorial_active: bool = false
+var tutorial_active: bool = false
 var tutorial_step: int = 0
 var tutorial_prompt_label: Label
-
-# -------------------------------------------------------------------
-# Shop
-# -------------------------------------------------------------------
-var shop_stock: Array[Dictionary] = [
-	{"card_id": "Universal_counterspell", "cost": 15, "name": "Counterspell", "desc": "Negate enemy Special, they lose next action"},
-	{"card_id": "Universal_focus",        "cost": 10, "name": "Focus",        "desc": "Gain +2 Attention this turn"},
-	{"card_id": "Universal_fortify",      "cost": 12, "name": "Fortify",      "desc": "Gain 8 Shield"},
-	{"card_id": "Universal_cleanse",      "cost": 10, "name": "Cleanse",      "desc": "Remove all debuffs"},
-	{"card_id": "Universal_overcharge",   "cost": 15, "name": "Overcharge",   "desc": "Next attack deals +50% damage"}
-]
-var shop_ui_active: bool = false
-var shop_ui_container: Control
 
 # -------------------------------------------------------------------
 # Signals
 # -------------------------------------------------------------------
 signal room_changed(room_id: String, room_name: String)
-signal boss_portal_unlocked
 
 # ===================================================================
 # LIFECYCLE
@@ -105,8 +94,8 @@ func _ready():
 func _build_floor():
 	# Generate hex layout
 	if hex_map:
-		hex_map.generate_floor1_layout()
-		print("[Floor1-Hex] Hex grid generated: %d tiles" % hex_map.grid.size())
+		hex_map.generate_floor2_layout()
+		print("[Floor2-Hex] Hex grid generated: %d tiles" % hex_map.grid.size())
 	
 	# Setup systems
 	_setup_combat()
@@ -115,10 +104,10 @@ func _build_floor():
 	_setup_floor_specific()
 	
 	# Start music
-	AudioManager.play_floor_ambient(1)
+	AudioManager.play_floor_ambient(2)
 	
 	# Enter starting room
-	_enter_room("entry")
+	_enter_room("f2_entry")
 
 # ===================================================================
 # PLAYER
@@ -164,12 +153,12 @@ func _setup_player():
 		player_node.add_child(shadow)
 		
 		add_child(player_node)
-		print("[Floor1-Hex] Player created")
+		print("[Floor2-Hex] Player created")
 	
 	# Place at entry room center
-	var entry_center = room_data["entry"]["center"]
+	var entry_center = room_data["f2_entry"]["center"]
 	player_node.global_position = hex_map.hex_to_world(entry_center)
-	print("[Floor1-Hex] Player placed at entry: %s" % str(entry_center))
+	print("[Floor2-Hex] Player placed at entry: %s" % str(entry_center))
 
 # ===================================================================
 # COMBAT
@@ -179,13 +168,12 @@ func _setup_combat():
 	var combat_manager = get_node_or_null("CombatManager")
 	if combat_manager:
 		combat_manager.combat_ended.connect(_on_combat_ended)
-		print("[Floor1-Hex] CombatManager wired")
+		print("[Floor2-Hex] CombatManager wired")
 
 func _start_combat(encounter_type: String):
 	if in_combat:
 		return
 	
-	# Get enemies for this encounter
 	var enemies = _get_encounter_enemies(encounter_type)
 	if enemies.is_empty():
 		return
@@ -194,27 +182,25 @@ func _start_combat(encounter_type: String):
 	var combat_manager = get_node_or_null("CombatManager")
 	if combat_manager:
 		combat_manager.start_combat(enemies, GameState.player_deck)
-		AudioManager.play_combat(1)
-		print("[Floor1-Hex] Combat started: %s" % encounter_type)
+		AudioManager.play_combat(2)
+		print("[Floor2-Hex] Combat started: %s" % encounter_type)
 
 func _get_encounter_enemies(encounter_type: String) -> Array[CombatManager.EnemyData]:
 	var result: Array[CombatManager.EnemyData] = []
 	
 	match encounter_type:
 		"standard":
-			result = _spawn_enemies(["Piston Assembly", "Piston Assembly"])
+			result = _spawn_enemies(["Spore Walker", "Spore Walker"])
 		"warren":
 			result = _spawn_enemies(["Torch Boy", "Torch Boy", "Torch Boy"])
 		"shrine":
 			result = _spawn_enemies(["Droplet"])
 		"secret":
-			result = _spawn_enemies([" Mimic Chest"])
+			result = _spawn_enemies(["Mimic Chest"])
 		"spore":
-			result = _spawn_enemies(["Spore Walker"])
-		"boss":
-			result = _spawn_enemies(["Snotling King"])
+			result = _spawn_enemies(["Spore Queen"])
 		_:
-			result = _spawn_enemies(["Piston Assembly"])
+			result = _spawn_enemies(["Spore Walker"])
 	
 	return result
 
@@ -228,29 +214,22 @@ func _spawn_enemies(enemy_names: Array[String]) -> Array[CombatManager.EnemyData
 
 func _on_combat_ended(victory: bool):
 	in_combat = false
-	AudioManager.play_floor_ambient(1)
+	AudioManager.play_floor_ambient(2)
 	
 	if victory:
 		room_cleared[current_room_id] = true
-		print("[Floor1-Hex] Room cleared: %s" % current_room_id)
+		print("[Floor2-Hex] Room cleared: %s" % current_room_id)
 		
-		# Check boss unlock
-		if current_room_id == "upper" and not GameState.door_tutorial_completed:
-			GameState.door_tutorial_completed = true
-			_unlock_all_portals()
-			_show_dialogue("The Door", "The Door creaks open. All paths are now clear.")
-		
-		# Boss defeated
-		if current_room_id == "boss":
+		if current_room_id == "f2_spore_heart":
 			_floor_complete()
 	else:
-		print("[Floor1-Hex] Combat lost — player respawned")
+		print("[Floor2-Hex] Combat lost — player respawned")
 		GameState.player_hp = max(1, GameState.player_hp)
-		player_node.global_position = hex_map.hex_to_world(room_data["entry"]["center"])
+		player_node.global_position = hex_map.hex_to_world(room_data["f2_entry"]["center"])
 
 func _floor_complete():
-	_show_dialogue("The Tower", "The Snotling King falls. Press [S] to ascend to Floor 2.")
-	GameState.add_card_to_deck("goblin_snotling_king")
+	_show_dialogue("The Tower", "The Spore Heart falls. Press [S] to ascend to Floor 3.")
+	GameState.add_card_to_deck("spore_heart_card")
 	GameState.gems += 20
 	GameState.save_game()
 
@@ -259,7 +238,6 @@ func _floor_complete():
 # ===================================================================
 
 func _setup_ui():
-	# Interact prompt
 	interact_prompt = Label.new()
 	interact_prompt.name = "InteractPrompt"
 	interact_prompt.position = Vector2(540, 650)
@@ -270,17 +248,14 @@ func _setup_ui():
 	interact_prompt.visible = false
 	add_child(interact_prompt)
 	
-	# Pause menu
 	_pause_menu_setup()
 	
-	# Transit tokens
 	var transit_ui = Control.new()
 	transit_ui.name = "TransitTokenUI"
 	transit_ui.position = Vector2(20, 20)
 	add_child(transit_ui)
 	_update_transit_token_display()
 	
-	# Tutorial prompt
 	tutorial_prompt_label = Label.new()
 	tutorial_prompt_label.name = "TutorialPrompt"
 	tutorial_prompt_label.position = Vector2(660, 200)
@@ -302,12 +277,12 @@ func _pause_menu_setup():
 	
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.85)
-	bg.size = Vector2(1920, 1080)
+	bg.size = Vector2(1280, 720)
 	pause_menu.add_child(bg)
 	
 	var container = VBoxContainer.new()
-	container.position = Vector2(760, 400)
-	container.size = Vector2(400, 300)
+	container.position = Vector2(560, 320)
+	container.size = Vector2(160, 150)
 	pause_menu.add_child(container)
 	
 	var title = Label.new()
@@ -360,36 +335,32 @@ func _input(event: InputEvent):
 				_toggle_pause_menu()
 				return
 			KEY_E:
-				_hex_move(Vector2(0.5, -0.866))     # NE (angle -60°)
+				_hex_move(Vector2(0.5, -0.866))
 			KEY_W:
-				_hex_move(Vector2(-0.5, -0.866))    # NW (angle -120°)
+				_hex_move(Vector2(-0.5, -0.866))
 			KEY_A:
-				_hex_move(Vector2(-1, 0))           # W (angle 180°)
+				_hex_move(Vector2(-1, 0))
 			KEY_D:
-				_hex_move(Vector2(1, 0))            # E (angle 0°)
+				_hex_move(Vector2(1, 0))
 			KEY_Z:
-				_hex_move(Vector2(-0.5, 0.866))     # SW (angle 120°)
+				_hex_move(Vector2(-0.5, 0.866))
 			KEY_X:
-				_hex_move(Vector2(0.5, 0.866))      # SE (angle 60°)
+				_hex_move(Vector2(0.5, 0.866))
 			KEY_S, KEY_SPACE:
 				_try_interact()
 				return
 
 func _on_click_move(screen_pos: Vector2):
-	"""Left-click to move to a hex tile. Uses A* pathfinding."""
 	if not player_node or not hex_map:
 		return
 	
-	# Convert screen position to world position
 	var world_pos = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
 	var target_hex = hex_map.world_to_hex(world_pos)
 	
-	# Check if target is walkable
 	if not hex_map.is_walkable(target_hex):
 		_show_notification("Can't move there!")
 		return
 	
-	# Get current hex and find path
 	var current_hex = hex_map.world_to_hex(player_node.global_position)
 	if target_hex == current_hex:
 		return
@@ -399,14 +370,12 @@ func _on_click_move(screen_pos: Vector2):
 		_show_notification("No path!")
 		return
 	
-	# Start path following (skip first hex — current position)
 	path_movement_target = path.slice(1)
 	path_movement_index = 0
 	path_movement_timer = 0.0
 	path_movement_active = true
 
 func _on_click_interact(screen_pos: Vector2):
-	"""Right-click to interact with an object or NPC near the clicked hex."""
 	if not player_node or not hex_map:
 		return
 	
@@ -414,7 +383,6 @@ func _on_click_interact(screen_pos: Vector2):
 	var click_hex = hex_map.world_to_hex(world_pos)
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
 	
-	# Check distance — interactables within 1 hex
 	var dist = HexTileMap._hex_distance(player_hex, click_hex)
 	if dist <= 1:
 		_try_interact()
@@ -430,38 +398,30 @@ func _hex_move(move_vec: Vector2):
 	var dirs = HexTileMap.DIRECTIONS
 	var target_hex = current_hex + dirs[direction]
 	
-	# Check wall collision
 	if hex_map.is_wall(target_hex):
 		return
 	
-	# Move to new hex
 	player_node.global_position = hex_map.hex_to_world(target_hex)
 	
-	# Play walk animation
 	var animator = player_node.get_node_or_null("PlayerAnimator")
 	if animator:
 		var dir_str = _velocity_to_direction(move_vec)
 		animator.play_walk(dir_str)
 		animator.set_meta("move_timer", 0.2)
 	
-	# Check if we entered a new room or portal
 	_check_room_transition(target_hex)
 	_check_interactables()
 
 func _vector_to_hex_dir(velocity: Vector2) -> int:
-	"""Convert a movement vector to hex direction index (0-5) for pointy-top hexes.
-	Hex direction angles: E=0°, SE=60°, SW=120°, W=180°/-180°, NW=-120°, NE=-60°"""
 	var angle = velocity.angle()
 	var degrees = rad_to_deg(angle)
-	
-	# Pointy-top hex boundary angles: 30°, 90°, 150°, -150°, -90°, -30°
-	if degrees >= -30 and degrees < 30:         return 3    # E  -> D key
-	elif degrees >= 30 and degrees < 90:          return 5    # SE -> X key
-	elif degrees >= 90 and degrees < 150:         return 4    # SW -> Z key
-	elif degrees >= 150 or degrees < -150:        return 2    # W  -> A key
-	elif degrees >= -150 and degrees < -90:       return 0    # NW -> W key
-	elif degrees >= -90 and degrees < -30:       return 1    # NE -> E key
-	else:                                         return 3    # default E
+	if degrees >= -30 and degrees < 30:         return 3
+	elif degrees >= 30 and degrees < 90:          return 5
+	elif degrees >= 90 and degrees < 150:         return 4
+	elif degrees >= 150 or degrees < -150:        return 2
+	elif degrees >= -150 and degrees < -90:       return 0
+	elif degrees >= -90 and degrees < -30:       return 1
+	else:                                         return 3
 
 func _velocity_to_direction(velocity: Vector2) -> String:
 	var angle = velocity.angle()
@@ -480,14 +440,12 @@ func _velocity_to_direction(velocity: Vector2) -> String:
 # ===================================================================
 
 func _check_room_transition(player_hex: Vector2i):
-	# Check if player stepped on a portal hex
 	if hex_map.get_tile(player_hex) == hex_map.TILE_PORTAL:
 		var portal_dir = _get_portal_direction_from_hex(player_hex)
 		if portal_dir:
 			_try_portal_transition(portal_dir)
 			return
 	
-	# Check if player entered a new room zone
 	for room_id in room_data.keys():
 		if room_id == current_room_id:
 			continue
@@ -498,7 +456,6 @@ func _check_room_transition(player_hex: Vector2i):
 			return
 
 func _get_portal_direction_from_hex(hex: Vector2i) -> String:
-	# Check which portal this hex belongs to
 	var current_data = room_data.get(current_room_id)
 	if not current_data:
 		return ""
@@ -517,19 +474,16 @@ func _try_portal_transition(direction: String):
 	if target_room.is_empty():
 		return
 	
-	# Check if locked
 	if _is_portal_locked(direction):
 		_show_notification("Portal is locked.")
 		return
 	
-	# Transition
 	in_transition = true
 	AudioManager.play_sfx("room_enter")
 	
 	var target_data = room_data[target_room]
 	var target_hex = target_data["center"]
 	
-	# Place player just inside the target room (opposite side of portal)
 	var opposite_dir = _opposite_direction(direction)
 	var entry_offset = portal_offsets.get(opposite_dir, Vector2i.ZERO)
 	player_node.global_position = hex_map.hex_to_world(target_hex + entry_offset)
@@ -544,10 +498,9 @@ func _enter_room(room_id: String):
 	
 	current_room_id = room_id
 	var data = room_data[room_id]
-	print("[Floor1-Hex] Entered room: %s" % data["display"])
+	print("[Floor2-Hex] Entered room: %s" % data["display"])
 	room_changed.emit(room_id, data["display"])
 	
-	# Check for encounter
 	if not room_cleared.get(room_id, false) and not room_encounter_spawned.get(room_id, false):
 		if data["encounter"] != "none":
 			room_encounter_spawned[room_id] = true
@@ -559,17 +512,14 @@ func _opposite_direction(dir: String) -> String:
 		"south": return "north"
 		"east":  return "west"
 		"west":  return "east"
+		"down":  return "up"
+		"up":    return "down"
+		"secret": return "exit"
+		"exit": return "secret"
 	return ""
 
 func _is_portal_locked(direction: String) -> bool:
-	# Tutorial: only north unlocked initially
-	if GameState.is_first_run and current_room_id == "entry":
-		return direction != "north"
 	return false
-
-func _unlock_all_portals():
-	GameState.is_first_run = false
-	_show_notification("All portals unlocked!")
 
 # ===================================================================
 # INTERACTION
@@ -578,7 +528,6 @@ func _unlock_all_portals():
 func _check_interactables():
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
 	
-	# Check for nearby interactables (objects on OBJECT tiles)
 	var neighbors = hex_map.get_neighbors(player_hex)
 	neighbors.append(player_hex)
 	
@@ -595,18 +544,17 @@ func _check_interactables():
 func _try_interact():
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
 	
-	# Check current room for interactions
 	match current_room_id:
-		"entry":
-			_show_dialogue("Transit Construct", "Welcome to the Tower, Seeker. The portals lead to the four trials.")
-		"middle":
-			_open_shop()
-		"lower":
-			_receive_blessing()
-		"secret":
+		"f2_entry":
+			_show_dialogue("Fungal Guide", "The spores grow thick here. Choose your path carefully.")
+		"f2_middle":
+			_show_dialogue("Growth Pool", "The fungal growth pulses with strange energy.")
+		"f2_lower":
+			_show_dialogue("Pool Shrine", "The waters here carry ancient spores.")
+		"f2_secret":
 			_open_chest()
-		"spore_heart":
-			_make_offering()
+		"f2_spore_heart":
+			_show_dialogue("Spore Heart", "The heart of the cavern beats with living fungus.")
 
 func _show_interact_prompt(text: String):
 	if interact_prompt:
@@ -616,139 +564,6 @@ func _show_interact_prompt(text: String):
 func _hide_interact_prompt():
 	if interact_prompt:
 		interact_prompt.visible = false
-
-# ===================================================================
-# SHOP
-# ===================================================================
-
-func _open_shop():
-	if shop_ui_active:
-		return
-	shop_ui_active = true
-	in_ui = true
-	
-	shop_ui_container = Control.new()
-	shop_ui_container.name = "ShopUI"
-	add_child(shop_ui_container)
-	
-	var bg = ColorRect.new()
-	bg.color = Color(0.05, 0.05, 0.08, 0.92)
-	bg.size = Vector2(1280, 720)
-	shop_ui_container.add_child(bg)
-	
-	var panel = PanelContainer.new()
-	panel.size = Vector2(700, 550)
-	panel.position = Vector2(290, 85)
-	shop_ui_container.add_child(panel)
-	
-	var vbox = VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 16)
-	panel.add_child(vbox)
-	
-	var header = HBoxContainer.new()
-	vbox.add_child(header)
-	
-	var title = Label.new()
-	title.text = "⚙ Machinist's Card Shop ⚙"
-	title.add_theme_font_size_override("font_size", 24)
-	title.add_theme_color_override("font_color", Color(0.8, 0.7, 0.4))
-	header.add_child(title)
-	
-	var gems_label = Label.new()
-	gems_label.text = "Gems: %d💎" % GameState.gems
-	gems_label.add_theme_font_size_override("font_size", 18)
-	gems_label.add_theme_color_override("font_color", Color(0.9, 0.7, 0.3))
-	header.add_child(gems_label)
-	
-	var grid = GridContainer.new()
-	grid.columns = 2
-	vbox.add_child(grid)
-	
-	for i in range(shop_stock.size()):
-		var slot = _create_shop_slot(i, shop_stock[i], gems_label)
-		grid.add_child(slot)
-	
-	var close_btn = Button.new()
-	close_btn.text = "Leave Shop"
-	close_btn.pressed.connect(_close_shop)
-	vbox.add_child(close_btn)
-
-func _create_shop_slot(index: int, item: Dictionary, gems_label: Label) -> PanelContainer:
-	var panel = PanelContainer.new()
-	panel.custom_minimum_size = Vector2(300, 140)
-	
-	var vbox = VBoxContainer.new()
-	panel.add_child(vbox)
-	
-	var name_label = Label.new()
-	name_label.text = item["name"]
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(name_label)
-	
-	var desc = Label.new()
-	desc.text = item.get("desc", "")
-	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	vbox.add_child(desc)
-	
-	var cost = Label.new()
-	cost.text = "%d💎" % item["cost"]
-	cost.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(cost)
-	
-	var btn = Button.new()
-	btn.text = "Buy"
-	btn.disabled = GameState.gems < item["cost"]
-	btn.pressed.connect(func(): _on_buy_card(index, item, gems_label))
-	vbox.add_child(btn)
-	
-	return panel
-
-func _on_buy_card(index: int, item: Dictionary, gems_label: Label):
-	if GameState.gems < item["cost"]:
-		return
-	
-	var card = CardDB.get_card(item["card_id"])
-	if not card:
-		return
-	
-	if GameState.player_deck.size() >= 50:
-		_show_notification("Deck full!")
-		return
-	
-	GameState.gems -= item["cost"]
-	GameState.add_card_to_deck(item["card_id"])
-	gems_label.text = "Gems: %d💎" % GameState.gems
-	_show_notification("Bought %s!" % item["name"])
-
-func _close_shop():
-	shop_ui_active = false
-	in_ui = false
-	if shop_ui_container:
-		shop_ui_container.queue_free()
-	shop_ui_container = null
-
-# ===================================================================
-# OTHER INTERACTIONS
-# ===================================================================
-
-func _receive_blessing():
-	GameState.heal_player(5)
-	_show_dialogue("Droplet", "*wobble* The water elemental heals you for 5 HP.")
-
-func _open_chest():
-	GameState.add_quiddity(5)
-	_show_dialogue("Chest", "You found 5 Quiddity!")
-
-func _make_offering():
-	if GameState.inventory_offerings.is_empty():
-		_show_dialogue("Altar", "The altar awaits an offering.")
-		return
-	
-	var offering = GameState.inventory_offerings[0]
-	GameState.remove_offering(offering)
-	GameState.heal_player(5)
-	_show_dialogue("Altar", "You offer %s. The shrine grants +5 HP." % GameState.get_offering_name(offering))
 
 # ===================================================================
 # DIALOGUE / NOTIFICATIONS
@@ -784,36 +599,30 @@ func _show_notification(text: String, duration: float = 3.0):
 	tween.parallel().tween_property(notif, "modulate:a", 0.0, 1.5)
 	tween.tween_callback(notif.queue_free)
 
+func _open_chest():
+	GameState.add_quiddity(5)
+	_show_dialogue("Chest", "You found 5 Quiddity among the fungal growth!")
+
 # ===================================================================
 # TUTORIAL
 # ===================================================================
 
 func _setup_floor_specific():
-	if GameState.is_first_run:
-		print("[Floor1-Hex] First run — tutorial mode")
-		_lock_portals_except(["north"])
-	else:
-		print("[Floor1-Hex] Re-run — all portals active")
-		_unlock_all_portals()
+	print("[Floor2-Hex] Floor 2 initialized")
 
-func _lock_portals_except(allowed: Array[String]):
-	# Handled by _is_portal_locked
-	pass
-
-func _start_door_tutorial():
-	door_tutorial_active = true
+func _start_tutorial():
+	tutorial_active = true
 	tutorial_step = 0
-	_show_tutorial_prompt("The Door closes its panels.\nPlay a BLOCK card!")
+	_show_tutorial_prompt("The fungal cavern spreads before you.\nClick to move or use WEADZX.")
 
 func _advance_tutorial_step():
 	tutorial_step += 1
 	match tutorial_step:
-		1: _show_tutorial_prompt("Good! Now the Door slams forward.\nPlay an ATTACK card!")
-		2: _show_tutorial_prompt("The Door closes again.\nPlay another BLOCK card!")
-		3: _show_tutorial_prompt("Final strike! Play an ATTACK card!")
-		4:
+		1: _show_tutorial_prompt("Spores fill the air. Watch for fungal growths.")
+		2: _show_tutorial_prompt("The Spore Heart awaits below. Find the path down.")
+		3:
 			_hide_tutorial_prompt()
-			door_tutorial_active = false
+			tutorial_active = false
 
 func _show_tutorial_prompt(text: String):
 	if tutorial_prompt_label:
@@ -864,16 +673,13 @@ func _process(_delta: float):
 			if path_movement_index < path_movement_target.size():
 				var step_hex = path_movement_target[path_movement_index]
 				
-				# Check if still walkable (doors might have closed, etc.)
 				if hex_map.is_wall(step_hex):
 					path_movement_active = false
 					return
 				
-				# Move to next hex
 				var prev_pos = player_node.global_position
 				player_node.global_position = hex_map.hex_to_world(step_hex)
 				
-				# Play walk animation
 				var animator = player_node.get_node_or_null("PlayerAnimator")
 				if animator:
 					var dir_vec = player_node.global_position - prev_pos
@@ -881,20 +687,18 @@ func _process(_delta: float):
 					animator.play_walk(dir_str)
 					animator.set_meta("move_timer", 0.2)
 				
-				# Check room transition / interactables
 				_check_room_transition(step_hex)
 				_check_interactables()
 				
 				path_movement_index += 1
 			else:
-				# Path complete
 				path_movement_active = false
 				var animator = player_node.get_node_or_null("PlayerAnimator")
 				if animator:
 					animator.play_idle()
 				return
 	
-	# Movement idle timer (only when not pathing)
+	# Movement idle timer
 	if not path_movement_active:
 		var animator = player_node.get_node_or_null("PlayerAnimator") if player_node else null
 		if animator and animator.has_meta("move_timer"):
@@ -907,4 +711,4 @@ func _process(_delta: float):
 
 func _ascend_to_next_floor():
 	AudioManager.play_sfx("floor_transition")
-	get_tree().change_scene_to_file("res://scenes/Floor2.tscn")
+	get_tree().change_scene_to_file("res://scenes/Floor3.tscn")

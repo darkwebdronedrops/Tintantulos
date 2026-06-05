@@ -233,6 +233,9 @@ func _setup_floor_specific():
 			print("[Floor3] Player moved to: ", player_node.global_position)
 			print("[Floor3] Camera at: ", camera.global_position)
 		current_room_id = "12"
+		# Suppress auto combat on start room until unlocked
+		start_room.auto_spawn = false
+		print("[Floor3] Start room auto_spawn suppressed — combat locked until Room 1 or dial rotation")
 	
 	# Generate world walls
 	_generate_world_walls()
@@ -907,6 +910,7 @@ func _enter_room(room_id):
 	# Unlock combat when entering Room 1 (The Quench puzzle)
 	if room_id == 1 and not combat_unlocked:
 		combat_unlocked = true
+		_enable_combat_on_all_rooms()
 		_show_notification("⚙ The offering is taken... Combat unlocked!", Color(0.9, 0.7, 0.3))
 		print("[Floor3] Combat unlocked by Room 1 entry")
 	
@@ -931,7 +935,7 @@ func _enter_room(room_id):
 	print("[Floor3] Entering room %d" % room_id)
 	
 	# Gate combat globally until unlocked
-	if not combat_unlocked and room_id != 12:
+	if not combat_unlocked:
 		_show_notification("The constructs are dormant...\nAwaken the Gearworks first.", Color(0.7, 0.7, 0.7))
 		return
 	
@@ -1254,6 +1258,7 @@ func _rotate_dial():
 	# Unlock combat on first rotation
 	if not combat_unlocked:
 		combat_unlocked = true
+		_enable_combat_on_all_rooms()
 		_show_notification("⚙ The Gearworks awaken... Combat unlocked!", Color(0.9, 0.7, 0.3))
 		print("[Floor3] Combat unlocked by dial rotation")
 	
@@ -1702,10 +1707,25 @@ func _check_world_offering_pickups():
 	for pickup in to_remove:
 		world_offerings.erase(pickup)
 
+func _enable_combat_on_all_rooms():
+	"""Re-enable auto_spawn on all rooms when combat is unlocked."""
+	for room_id_str in rooms:
+		var room = rooms[room_id_str]
+		if room and room.has_method("set"):
+			room.auto_spawn = true
+	print("[Floor3] Combat enabled on all rooms")
+
 func _on_world_offering_collected(offering_id: String, _hex: Vector2i):
 	var data = GameState.get_offering_data(offering_id)
 	var name = data.get("name", offering_id)
 	_show_notification("🎁 Found: %s!" % name, Color(0.9, 0.7, 0.3))
+	
+	# Unlock combat on first offering pickup
+	if not combat_unlocked:
+		combat_unlocked = true
+		_show_notification("⚙ The offering awakens the Gearworks... Combat unlocked!", Color(0.9, 0.7, 0.3))
+		print("[Floor3] Combat unlocked by offering pickup")
+		_enable_combat_on_all_rooms()
 
 # -------------------------------------------------------------------
 # Save Dialog
