@@ -24,6 +24,13 @@ var in_transition: bool = false
 var in_ui: bool = false
 var is_paused: bool = false
 
+# Click-to-Move path following state
+var path_movement_active: bool = false
+var path_movement_target: Array[Vector2i] = []
+var path_movement_index: int = 0
+var path_movement_timer: float = 0.0
+const PATH_MOVE_STEP_INTERVAL: float = 0.12
+
 # Room definitions: center hex, radius, encounter type
 var room_data: Dictionary = {
 	"entry":       {"center": Vector2i(0, 0),   "radius": 6, "encounter": "none",    "display": "The Threshold"},
@@ -330,14 +337,24 @@ func _toggle_pause_menu():
 	get_tree().paused = is_paused
 
 # ===================================================================
-# MOVEMENT (WEADZX)
+# MOVEMENT (WEADZX + Click-to-Move)
 # ===================================================================
 
 func _input(event: InputEvent):
 	if in_combat or in_transition or in_ui:
 		return
 	
+	# Mouse click handling
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			_on_click_move(event.position)
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			_on_click_interact(event.position)
+		return
+	
+	# Keyboard movement — cancels any active path movement
 	if event is InputEventKey and event.pressed:
+		path_movement_active = false
 		match event.keycode:
 			KEY_ESCAPE:
 				_toggle_pause_menu()
@@ -357,6 +374,68 @@ func _input(event: InputEvent):
 			KEY_S, KEY_SPACE:
 				_try_interact()
 				return
+
+func _on_click_move(screen_pos: Vector2):
+	"""Left-click to move to a hex tile. Uses A* pathfinding."""
+	if not player_node or not hex_map:
+		return
+	
+	# Convert screen position to world position
+	var world_pos = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
+	var target_hex = hex_map.world_to_hex(world_pos)
+	
+	# Check if target is walkable
+	if not hex_map.is_walkable(target_hex):
+		_show_notification("Can't move there!")
+		return
+	
+	# Get current hex and find path
+	var current_hex = hex_map.world_to_hex(player_node.global_position)
+	if target_hex == current_hex:
+		return
+	
+	var path = hex_map.find_path(current_hex, target_hex)
+	if path.is_empty() or path.size() <= 1:
+		_show_notification("No path!")
+		return
+	
+	# Start path following (skip first hex — current position)
+	path_movement_target = path.slice(1)
+	path_movement_index = 0
+	path_movement_timer = 0.0
+	path_movement_active = true
+
+func _on_click_interact(screen_pos: Vector2):
+	"""Right-click to interact with an object or NPC near the clicked hex."""
+	if not player_node or not hex_map:
+		return
+	
+	var world_pos = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
+	var click_hex = hex_map.world_to_hex(world_pos)
+	var player_hex = hex_map.world_to_hex(player_node.global_position)
+	
+	# Check distance — interactables within 1 hex
+	var dist = HexTileMap._hex_distance(player_hex, click_hex)
+	if dist <= 1:
+		_try_interact()
+	else:
+		_show_notification("Too far to interact.")
+
+func _on_click_interact(screen_pos: Vector2):
+	"""Right-click to interact with an object or NPC near the clicked hex."""
+	if not player_node or not hex_map:
+		return
+	
+	var world_pos = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
+	var click_hex = hex_map.world_to_hex(world_pos)
+	var player_hex = hex_map.world_to_hex(player_node.global_position)
+	
+	# Check distance — interactables within 1 hex
+	var dist = HexTileMap._hex_distance(player_hex, click_hex)
+	if dist <= 1:
+		_try_interact()
+	else:
+		_show_notification("Too far to interact.")
 
 func _hex_move(move_vec: Vector2):
 	if not player_node:
@@ -793,15 +872,54 @@ func _process(_delta: float):
 		if camera:
 			camera.global_position = player_node.global_position
 	
-	# Movement idle timer
-	var animator = player_node.get_node_or_null("PlayerAnimator") if player_node else null
-	if animator and animator.has_meta("move_timer"):
-		var timer = animator.get_meta("move_timer") - _delta
-		if timer <= 0:
-			animator.play_idle()
-			animator.set_meta("move_timer", 0.0)
-		else:
-			animator.set_meta("move_timer", timer)
+	# Path movement (click-to-move)
+	if path_movement_active and player_node and not in_combat and not in_transition:
+		path_movement_timer += _delta
+		if path_movement_timer >= PATH_MOVE_STEP_INTERVAL:
+			path_movement_timer = 0.0
+			if path_movement_index < path_movement_target.size():
+				var step_hex = path_movement_target[path_movement_index]
+				
+				# Check if still walkable (doors might have closed, etc.)
+				if hex_map.is_wall(step_hex):
+					path_movement_active = false
+					return
+				
+				# Move to next hex
+				var prev_pos = player_node.global_position
+				player_node.global_position = hex_map.hex_to_world(step_hex)
+				
+				# Play walk animation
+				var animator = player_node.get_node_or_null("PlayerAnimator")
+				if animator:
+					var dir_vec = player_node.global_position - prev_pos
+					var dir_str = _velocity_to_direction(dir_vec)
+					animator.play_walk(dir_str)
+					animator.set_meta("move_timer", 0.2)
+				
+				# Check room transition / interactables
+				_check_room_transition(step_hex)
+				_check_interactables()
+				
+				path_movement_index += 1
+			else:
+				# Path complete
+				path_movement_active = false
+				var animator = player_node.get_node_or_null("PlayerAnimator")
+				if animator:
+					animator.play_idle()
+				return
+	
+	# Movement idle timer (only when not pathing)
+	if not path_movement_active:
+		var animator = player_node.get_node_or_null("PlayerAnimator") if player_node else null
+		if animator and animator.has_meta("move_timer"):
+			var timer = animator.get_meta("move_timer") - _delta
+			if timer <= 0:
+				animator.play_idle()
+				animator.set_meta("move_timer", 0.0)
+			else:
+				animator.set_meta("move_timer", timer)
 
 func _ascend_to_next_floor():
 	AudioManager.play_sfx("floor_transition")
