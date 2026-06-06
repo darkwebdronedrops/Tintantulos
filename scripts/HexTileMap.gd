@@ -424,7 +424,7 @@ func get_room_center(room_id: String) -> Vector2i:
 		"f3_r11": return Vector2i(-17, -10)
 		"f3_r12": return Vector2i(-10, -17)
 		# Floor 4
-		"f4_bazaar": return Vector2i(0, 0)
+		"f4_main": return Vector2i(0, 0)
 		"f4_undercroft": return Vector2i(0, 30)
 		"f4_refectory": return Vector2i(0, -30)
 		_: return Vector2i.ZERO
@@ -587,43 +587,63 @@ func generate_floor4_layout():
 	clear_grid()
 	
 	# === MAIN BAZAAR (large open oval, radius 14) ===
-	_generate_room("f4_bazaar", Vector2i(0, 0), 14, [
+	_generate_room("f4_main", Vector2i(0, 0), 14, [
 		Vector2i(0, -15),   # North portal → refectory
 		Vector2i(0, 15),   # South portal → undercroft
 	])
 	
-	# === UNDER CROFT (below bazaar, dungeon-like) ===
-	_generate_room("f4_undercroft", Vector2i(0, 32), 10, [
-		Vector2i(0, 22),   # Portal back to bazaar
+	# Great Lifter center object
+	set_tile(Vector2i(0, 0), TILE_OBJECT)
+	set_tile(Vector2i(1, 0), TILE_OBJECT)
+	set_tile(Vector2i(-1, 0), TILE_OBJECT)
+	set_tile(Vector2i(0, 1), TILE_OBJECT)
+	set_tile(Vector2i(0, -1), TILE_OBJECT)
+	
+	# === UNDERCOFT (below bazaar, dungeon-like) ===
+	_generate_room("f4_undercroft", Vector2i(0, 30), 10, [
+		Vector2i(0, 20),   # Portal back to bazaar
 	])
 	
+	# Aether slick zones (water tiles in undercroft)
+	for q in range(-3, 4):
+		for r in range(27, 34):
+			var hex = Vector2i(q, r)
+			var dist = _hex_distance(hex, Vector2i(0, 30))
+			if dist >= 3 and dist <= 6:
+				set_tile(hex, TILE_WATER)
+	
 	# === REFECTORY (above bazaar, dining hall) ===
-	_generate_room("f4_refectory", Vector2i(0, -32), 10, [
-		Vector2i(0, -22),  # Portal back to bazaar
+	_generate_room("f4_refectory", Vector2i(0, -30), 10, [
+		Vector2i(0, -20),  # Portal back to bazaar
 	])
+	
+	# Food station objects around refectory perimeter
+	for q in range(-8, 9):
+		for r in range(-38, -23):
+			var hex = Vector2i(q, r)
+			var dist = _hex_distance(hex, Vector2i(0, -30))
+			if dist >= 6 and dist <= 8:
+				set_tile(hex, TILE_OBJECT)
 	
 	# === BOOTH POSITIONS (12 positions around bazaar perimeter) ===
 	# Like a clock: booth_12 at top, then 1-11 clockwise
-	var booth_radius = 10
 	var booth_positions = [
-		Vector2i(0, -booth_radius),       # 12
-		Vector2i(5, -9),                 # 1
-		Vector2i(9, -5),                 # 2
-		Vector2i(10, 0),                 # 3
-		Vector2i(9, 5),                  # 4
-		Vector2i(5, 9),                  # 5
-		Vector2i(0, booth_radius),        # 6
-		Vector2i(-5, 9),                 # 7
-		Vector2i(-9, 5),                 # 8
-		Vector2i(-10, 0),                # 9
-		Vector2i(-9, -5),                # 10
-		Vector2i(-5, -9),                # 11
+		Vector2i(0, -14),    # 12
+		Vector2i(7, -12),     # 1
+		Vector2i(12, -7),     # 2
+		Vector2i(14, 0),      # 3
+		Vector2i(12, 7),      # 4
+		Vector2i(7, 12),      # 5
+		Vector2i(0, 14),      # 6
+		Vector2i(-7, 12),     # 7
+		Vector2i(-12, 7),     # 8
+		Vector2i(-14, 0),     # 9
+		Vector2i(-12, -7),    # 10
+		Vector2i(-7, -12),    # 11
 	]
 	
 	# Place booth objects (interactive, not walls)
-	for i in range(12):
-		var pos = booth_positions[i]
-		# Booth is a small 2-hex cluster
+	for pos in booth_positions:
 		set_tile(pos, TILE_OBJECT)
 		# Make surrounding walkable
 		for dir in DIRECTIONS:
@@ -632,20 +652,10 @@ func generate_floor4_layout():
 				set_tile(neighbor, TILE_FLOOR)
 	
 	# === CORRIDORS ===
-	_generate_corridor("f4_to_undercroft", Vector2i(0, 15), Vector2i(0, 22), 2)
-	_generate_corridor("f4_to_refectory", Vector2i(0, -15), Vector2i(0, -22), 2)
+	_generate_corridor("f4_to_undercroft", Vector2i(0, 15), Vector2i(0, 20), 2)
+	_generate_corridor("f4_to_refectory", Vector2i(0, -15), Vector2i(0, -20), 2)
 	
-	# === HAZARD ZONES (Undercroft aether slicks) ===
-	# Add some danger tiles in undercroft
-	var hazard_centers = [Vector2i(-6, 32), Vector2i(6, 32), Vector2i(0, 38)]
-	for hcenter in hazard_centers:
-		for q in range(hcenter.x - 2, hcenter.x + 3):
-			for r in range(hcenter.y - 2, hcenter.y + 3):
-				var hex = Vector2i(q, r)
-				if _hex_distance(hex, hcenter) <= 2:
-					set_tile(hex, TILE_OBJECT)  # Hazard = object type
-	
-	print("[HexTileMap] Floor 4 layout generated: bazaar + 12 booths + undercroft + refectory")
+	print("[HexTileMap] Floor 4 layout generated: bazaar + 12 booths + undercroft + refectory + Great Lifter + Aether Slick")
 
 # ===================================================================
 # HELPER: Irregular room for organic cavern shapes (Floor 2)
