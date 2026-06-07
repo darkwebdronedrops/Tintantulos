@@ -54,6 +54,7 @@ var boss_phase: String = ""
 
 # Secret
 var cargo_hold_discovered: bool = false
+var cargo_hold_looted: bool = false
 
 # Room data
 var room_data: Dictionary = {
@@ -529,6 +530,30 @@ func _check_interactables():
 	var neighbors = hex_map.get_neighbors(player_hex)
 	neighbors.append(player_hex)
 	
+	# Check for ship-specific interactables
+	if current_room_id == "f5_gale":
+		var gale_center = room_data["f5_gale"]["center"]
+		var rod_hexes = [gale_center + Vector2i(3, 0), gale_center + Vector2i(-3, 0)]
+		for rod_hex in rod_hexes:
+			if HexTileMap._hex_distance(player_hex, rod_hex) <= 1:
+				_show_interact_prompt("[S] Touch Lightning Rod")
+				return
+	
+	if current_room_id == "f5_boiler":
+		var boiler_center = room_data["f5_boiler"]["center"]
+		var vent_hex = boiler_center + Vector2i(0, 2)
+		if HexTileMap._hex_distance(player_hex, vent_hex) <= 1:
+			_show_interact_prompt("[S] Trigger Steam Vent")
+			return
+	
+	if current_room_id == "f5_breeze":
+		var breeze_center = room_data["f5_breeze"]["center"]
+		var catcher_hexes = [breeze_center + Vector2i(2, 0), breeze_center + Vector2i(-2, 0)]
+		for catcher_hex in catcher_hexes:
+			if HexTileMap._hex_distance(player_hex, catcher_hex) <= 1:
+				_show_interact_prompt("[S] Spin Windcatcher")
+				return
+	
 	for hex in neighbors:
 		if hex_map.get_tile(hex) == hex_map.TILE_OBJECT:
 			_show_interact_prompt("Interact")
@@ -538,11 +563,37 @@ func _check_interactables():
 func _try_interact():
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
 	
+	# Check for lightning rod (Gale Ship)
+	if current_room_id == "f5_gale":
+		var gale_center = room_data["f5_gale"]["center"]
+		var rod_hexes = [gale_center + Vector2i(3, 0), gale_center + Vector2i(-3, 0)]
+		for rod_hex in rod_hexes:
+			if HexTileMap._hex_distance(player_hex, rod_hex) <= 1:
+				_interact_lightning_rod()
+				return
+	
+	# Check for steam vent (Boiler Ship)
+	if current_room_id == "f5_boiler":
+		var boiler_center = room_data["f5_boiler"]["center"]
+		var vent_hex = boiler_center + Vector2i(0, 2)
+		if HexTileMap._hex_distance(player_hex, vent_hex) <= 1:
+			_interact_steam_vent()
+			return
+	
+	# Check for windcatcher (Breeze Ship)
+	if current_room_id == "f5_breeze":
+		var breeze_center = room_data["f5_breeze"]["center"]
+		var catcher_hexes = [breeze_center + Vector2i(2, 0), breeze_center + Vector2i(-2, 0)]
+		for catcher_hex in catcher_hexes:
+			if HexTileMap._hex_distance(player_hex, catcher_hex) <= 1:
+				_interact_windcatcher()
+				return
+	
 	match current_room_id:
 		"f5_breeze", "f5_boiler", "f5_gale":
 			_turn_valve(current_room_id.replace("f5_", ""))
 		"f5_dock":
-			_show_dialogue("Dock Master", "Turn all 3 mooring valves to extend the gangplank to Crow's Nest.")
+			_show_dialogue("Dock Master", "Three ships are moored. Turn all their valves to extend the gangplank to Crow's Nest.")
 		"f5_crow":
 			if not all_moorings_unlocked:
 				_show_dialogue("Boss Altar", "The Aetherworks is sealed. Unlock all three moorings first.")
@@ -554,7 +605,36 @@ func _try_interact():
 			else:
 				_show_dialogue("Cargo Hold", "The hidden chamber hums with wrong frequency.")
 		"f5_cargo":
-			_show_dialogue("Cargo", "Ancient mechanisms glint in the dim light.")
+			_interact_cargo_hold()
+
+func _interact_lightning_rod():
+	if in_storm_phase:
+		var damage = randi() % 6 + randi() % 6 + randi() % 6 + 3
+		_show_notification("⚡ Lightning strikes! %d damage but +3 CHARGE!" % damage, 3.0)
+		GameState.damage_player(damage)
+		_add_charge("lightning", 3)
+	else:
+		_show_notification("The lightning rod hums with potential...", 2.0)
+		_add_charge("lightning", 1)
+
+func _interact_steam_vent():
+	var damage = randi() % 6 + randi() % 6 + 2
+	_show_notification("💨 You trigger the vent! %d damage but +2 Steam CHARGE!" % damage, 3.0)
+	GameState.damage_player(damage)
+	_add_charge("steam", 2)
+
+func _interact_windcatcher():
+	_show_notification("🌪 The windcatcher spins! +1 Wind CHARGE!", 2.0)
+	_add_charge("wind", 1)
+
+func _interact_cargo_hold():
+	if not cargo_hold_looted:
+		cargo_hold_looted = true
+		GameState.add_quiddity(10)
+		GameState.gems += 15
+		_show_dialogue("Cargo", "Ancient mechanisms glint in the dim light. You find 10 Quiddity and 15 gems!")
+	else:
+		_show_dialogue("Cargo", "The hold is empty now. Whatever was here, you've taken it.")
 
 func _turn_valve(room_short: String):
 	if valves_turned.get(room_short, false):
