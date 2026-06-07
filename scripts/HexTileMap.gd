@@ -427,6 +427,13 @@ func get_room_center(room_id: String) -> Vector2i:
 		"f4_main": return Vector2i(0, 0)
 		"f4_undercroft": return Vector2i(0, 30)
 		"f4_refectory": return Vector2i(0, -30)
+		# Floor 5
+		"f5_dock": return Vector2i(0, 0)
+		"f5_breeze": return Vector2i(0, -20)
+		"f5_boiler": return Vector2i(18, 0)
+		"f5_gale": return Vector2i(0, 20)
+		"f5_crow": return Vector2i(0, -40)
+		"f5_cargo": return Vector2i(28, 0)
 		_: return Vector2i.ZERO
 
 # ===================================================================
@@ -662,6 +669,98 @@ func generate_floor4_layout():
 	_generate_corridor("f4_to_refectory", Vector2i(0, -15), Vector2i(0, -20), 2)
 	
 	print("[HexTileMap] Floor 4 layout generated: bazaar + 12 booths + undercroft + refectory + Great Lifter + Aether Slick")
+
+# ===================================================================
+# FLOOR 5 LAYOUT GENERATOR — The Airship Docks
+# ===================================================================
+
+func generate_floor5_layout():
+	"""Generate hex layout for Floor 5 — airship docks with moorings and storm"""
+	clear_grid()
+	
+	# === MAIN DOCK (center hub, radius 8) ===
+	_generate_room("f5_dock", Vector2i(0, 0), 8, [
+		Vector2i(0, -8),    # North portal → breeze
+		Vector2i(8, 0),     # East portal → boiler
+		Vector2i(0, 8),     # South portal → gale
+		Vector2i(0, -8),    # Up portal → crow (same as north, locked until valves)
+	])
+	
+	# === BREEZE MOORING (north, wind-themed) ===
+	_generate_room("f5_breeze", Vector2i(0, -20), 6, [
+		Vector2i(0, -14),   # South portal → dock
+		Vector2i(0, -26),   # Up portal → crow
+	])
+	# Wind objects
+	set_tile(Vector2i(0, -20), TILE_OBJECT)
+	set_tile(Vector2i(2, -20), TILE_OBJECT)
+	set_tile(Vector2i(-2, -20), TILE_OBJECT)
+	
+	# === BOILER MOORING (east, steam-themed) ===
+	_generate_room("f5_boiler", Vector2i(18, 0), 6, [
+		Vector2i(12, 0),    # West portal → dock
+		Vector2i(24, 0),    # Secret portal → cargo (hidden)
+	])
+	# Steam objects
+	set_tile(Vector2i(18, 0), TILE_OBJECT)
+	set_tile(Vector2i(18, 2), TILE_OBJECT)
+	set_tile(Vector2i(18, -2), TILE_OBJECT)
+	
+	# === GALE MOORING (south, storm-themed) ===
+	_generate_room("f5_gale", Vector2i(0, 20), 6, [
+		Vector2i(0, 14),    # North portal → dock
+		Vector2i(0, 26),    # Up portal → crow
+	])
+	# Lightning objects
+	set_tile(Vector2i(0, 20), TILE_OBJECT)
+	set_tile(Vector2i(3, 20), TILE_OBJECT)
+	set_tile(Vector2i(-3, 20), TILE_OBJECT)
+	
+	# === CROW'S NEST (boss arena, north high, locked until valves) ===
+	_generate_room("f5_crow", Vector2i(0, -40), 8, [
+		Vector2i(0, -32),   # Down portal → dock
+	])
+	# Boss altar objects
+	set_tile(Vector2i(0, -40), TILE_OBJECT)
+	set_tile(Vector2i(2, -40), TILE_OBJECT)
+	set_tile(Vector2i(-2, -40), TILE_OBJECT)
+	set_tile(Vector2i(0, -38), TILE_OBJECT)
+	set_tile(Vector2i(0, -42), TILE_OBJECT)
+	
+	# === SECRET CARGO HOLD (hidden off boiler, small) ===
+	_generate_room("f5_cargo", Vector2i(28, 0), 4, [
+		Vector2i(22, 0),    # Exit portal → boiler
+	])
+	# Cargo objects
+	set_tile(Vector2i(28, 0), TILE_OBJECT)
+	set_tile(Vector2i(28, 2), TILE_OBJECT)
+	
+	# === CORRIDORS ===
+	_generate_corridor("f5_dock_breeze", Vector2i(0, -8), Vector2i(0, -14), 2)
+	_generate_corridor("f5_dock_boiler", Vector2i(8, 0), Vector2i(12, 0), 2)
+	_generate_corridor("f5_dock_gale", Vector2i(0, 8), Vector2i(0, 14), 2)
+	_generate_corridor("f5_breeze_crow", Vector2i(0, -26), Vector2i(0, -32), 2)
+	_generate_corridor("f5_gale_crow", Vector2i(0, 26), Vector2i(0, 32), 2)
+	_generate_corridor("f5_boiler_cargo", Vector2i(24, 0), Vector2i(22, 0), 2)
+	
+	# === HAZARD ZONES ===
+	# Storm hazard tiles near gale mooring
+	for q in range(-3, 4):
+		for r in range(22, 28):
+			var hex = Vector2i(q, r)
+			var dist = _hex_distance(hex, Vector2i(0, 20))
+			if dist >= 4 and dist <= 6:
+				set_tile(hex, TILE_WATER)  # Storm hazard = water
+	
+	# Wind hazard tiles near breeze mooring
+	for q in range(-3, 4):
+		for r in range(-28, -22):
+			var hex = Vector2i(q, r)
+			var dist = _hex_distance(hex, Vector2i(0, -20))
+			if dist >= 4 and dist <= 6:
+				set_tile(hex, TILE_WATER)
+	
+	print("[HexTileMap] Floor 5 layout generated: dock + 3 moorings + boss arena + cargo hold")
 
 # ===================================================================
 # HELPER: Irregular room for organic cavern shapes (Floor 2)
