@@ -678,7 +678,7 @@ func _show_notification(text: String, duration: float = 3.0):
 	tween.tween_callback(notif.queue_free)
 
 func _setup_floor_specific():
-	print("[Floor5-Hex] Floor 5 initialized — CHARGE system, mooring puzzle, Elemental Core")
+	print("[Floor5-Hex] Floor 5 initialized — CHARGE system, 3 ships with wooden bridges, Elemental Core")
 
 func _process(_delta: float):
 	if player_node:

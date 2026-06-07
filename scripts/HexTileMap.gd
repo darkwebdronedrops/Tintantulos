@@ -680,87 +680,113 @@ func generate_floor5_layout():
 	
 	# === MAIN DOCK (center hub, radius 8) ===
 	_generate_room("f5_dock", Vector2i(0, 0), 8, [
-		Vector2i(0, -8),    # North portal → breeze
-		Vector2i(8, 0),     # East portal → boiler
-		Vector2i(0, 8),     # South portal → gale
-		Vector2i(0, -8),    # Up portal → crow (same as north, locked until valves)
+		Vector2i(0, -8),    # North bridge start
+		Vector2i(8, 0),     # East bridge start
+		Vector2i(0, 8),     # South bridge start
 	])
 	
-	# === BREEZE MOORING (north, wind-themed) ===
-	_generate_room("f5_breeze", Vector2i(0, -20), 6, [
-		Vector2i(0, -14),   # South portal → dock
-		Vector2i(0, -26),   # Up portal → crow
-	])
-	# Wind objects
-	set_tile(Vector2i(0, -20), TILE_OBJECT)
-	set_tile(Vector2i(2, -20), TILE_OBJECT)
-	set_tile(Vector2i(-2, -20), TILE_OBJECT)
+	# === WOODEN BRIDGES (walkable, not portals) ===
+	# Bridge to Breeze (north)
+	_generate_bridge("f5_bridge_n", Vector2i(0, -8), Vector2i(0, -14), TILE_FLOOR)
+	# Bridge to Boiler (east)
+	_generate_bridge("f5_bridge_e", Vector2i(8, 0), Vector2i(12, 0), TILE_FLOOR)
+	# Bridge to Gale (south)
+	_generate_bridge("f5_bridge_s", Vector2i(0, 8), Vector2i(0, 14), TILE_FLOOR)
+	# Bridge to Crow's Nest (north-high, locked)
+	_generate_bridge("f5_bridge_crow", Vector2i(0, -26), Vector2i(0, -32), TILE_FLOOR)
 	
-	# === BOILER MOORING (east, steam-themed) ===
-	_generate_room("f5_boiler", Vector2i(18, 0), 6, [
-		Vector2i(12, 0),    # West portal → dock
-		Vector2i(24, 0),    # Secret portal → cargo (hidden)
-	])
-	# Steam objects
-	set_tile(Vector2i(18, 0), TILE_OBJECT)
-	set_tile(Vector2i(18, 2), TILE_OBJECT)
-	set_tile(Vector2i(18, -2), TILE_OBJECT)
+	# === BREEZE SHIP (north, wind-themed) ===
+	_generate_ship("f5_breeze", Vector2i(0, -20), 6, "wind")
+	# Portals at ship edge
+	set_tile(Vector2i(0, -14), TILE_PORTAL)  # Back to bridge
+	set_tile(Vector2i(0, -26), TILE_PORTAL)  # Up to crow (locked)
 	
-	# === GALE MOORING (south, storm-themed) ===
-	_generate_room("f5_gale", Vector2i(0, 20), 6, [
-		Vector2i(0, 14),    # North portal → dock
-		Vector2i(0, 26),    # Up portal → crow
-	])
-	# Lightning objects
-	set_tile(Vector2i(0, 20), TILE_OBJECT)
-	set_tile(Vector2i(3, 20), TILE_OBJECT)
-	set_tile(Vector2i(-3, 20), TILE_OBJECT)
+	# === BOILER SHIP (east, steam-themed) ===
+	_generate_ship("f5_boiler", Vector2i(18, 0), 6, "steam")
+	set_tile(Vector2i(12, 0), TILE_PORTAL)   # Back to bridge
+	set_tile(Vector2i(24, 0), TILE_PORTAL)   # Secret → cargo
+	
+	# === GALE SHIP (south, storm-themed) ===
+	_generate_ship("f5_gale", Vector2i(0, 20), 6, "storm")
+	set_tile(Vector2i(0, 14), TILE_PORTAL)   # Back to bridge
+	set_tile(Vector2i(0, 26), TILE_PORTAL)   # Up to crow
 	
 	# === CROW'S NEST (boss arena, north high, locked until valves) ===
 	_generate_room("f5_crow", Vector2i(0, -40), 8, [
-		Vector2i(0, -32),   # Down portal → dock
+		Vector2i(0, -32),   # Down to bridge
 	])
 	# Boss altar objects
-	set_tile(Vector2i(0, -40), TILE_OBJECT)
-	set_tile(Vector2i(2, -40), TILE_OBJECT)
-	set_tile(Vector2i(-2, -40), TILE_OBJECT)
-	set_tile(Vector2i(0, -38), TILE_OBJECT)
-	set_tile(Vector2i(0, -42), TILE_OBJECT)
+	for offset in [Vector2i(0, 0), Vector2i(2, 0), Vector2i(-2, 0), Vector2i(0, 2), Vector2i(0, -2)]:
+		set_tile(Vector2i(0, -40) + offset, TILE_OBJECT)
 	
-	# === SECRET CARGO HOLD (hidden off boiler, small) ===
+	# === SECRET CARGO HOLD (hidden off boiler ship) ===
 	_generate_room("f5_cargo", Vector2i(28, 0), 4, [
-		Vector2i(22, 0),    # Exit portal → boiler
+		Vector2i(22, 0),    # Exit to boiler
 	])
 	# Cargo objects
 	set_tile(Vector2i(28, 0), TILE_OBJECT)
 	set_tile(Vector2i(28, 2), TILE_OBJECT)
 	
-	# === CORRIDORS ===
-	_generate_corridor("f5_dock_breeze", Vector2i(0, -8), Vector2i(0, -14), 2)
-	_generate_corridor("f5_dock_boiler", Vector2i(8, 0), Vector2i(12, 0), 2)
-	_generate_corridor("f5_dock_gale", Vector2i(0, 8), Vector2i(0, 14), 2)
-	_generate_corridor("f5_breeze_crow", Vector2i(0, -26), Vector2i(0, -32), 2)
-	_generate_corridor("f5_gale_crow", Vector2i(0, 26), Vector2i(0, 32), 2)
-	_generate_corridor("f5_boiler_cargo", Vector2i(24, 0), Vector2i(22, 0), 2)
-	
-	# === HAZARD ZONES ===
-	# Storm hazard tiles near gale mooring
-	for q in range(-3, 4):
+	# === HAZARD ZONES (storm tiles around ships) ===
+	# Storm around Gale ship
+	for q in range(-4, 5):
 		for r in range(22, 28):
 			var hex = Vector2i(q, r)
 			var dist = _hex_distance(hex, Vector2i(0, 20))
-			if dist >= 4 and dist <= 6:
-				set_tile(hex, TILE_WATER)  # Storm hazard = water
-	
-	# Wind hazard tiles near breeze mooring
-	for q in range(-3, 4):
+			if dist >= 5 and dist <= 7:
+				set_tile(hex, TILE_WATER)
+	# Wind around Breeze ship
+	for q in range(-4, 5):
 		for r in range(-28, -22):
 			var hex = Vector2i(q, r)
 			var dist = _hex_distance(hex, Vector2i(0, -20))
-			if dist >= 4 and dist <= 6:
+			if dist >= 5 and dist <= 7:
 				set_tile(hex, TILE_WATER)
 	
-	print("[HexTileMap] Floor 5 layout generated: dock + 3 moorings + boss arena + cargo hold")
+	print("[HexTileMap] Floor 5 layout generated: dock + 3 ships + wooden bridges + boss arena + cargo hold")
+
+func _generate_bridge(bridge_id: String, start: Vector2i, end: Vector2i, tile_type: int = TILE_FLOOR):
+	"""Generate a straight bridge between two points. Walkable (not portals)."""
+	var path = _hex_line(start, end)
+	for hex in path:
+		if get_tile(hex) == TILE_VOID or get_tile(hex) == TILE_WATER:
+			set_tile(hex, tile_type)
+		# Add 1-hex width on either side for stability
+		for dir in DIRECTIONS:
+			var neighbor = hex + dir
+			if get_tile(neighbor) == TILE_VOID:
+				set_tile(neighbor, tile_type)
+
+func _generate_ship(ship_id: String, center: Vector2i, radius: int, ship_type: String):
+	"""Generate a ship deck with thematic objects."""
+	# Ship deck is walkable floor
+	for q in range(center.x - radius, center.x + radius + 1):
+		for r in range(center.y - radius, center.y + radius + 1):
+			var hex = Vector2i(q, r)
+			var dist = _hex_distance(hex, center)
+			if dist <= radius - 1:
+				set_tile(hex, TILE_FLOOR)
+			elif dist <= radius:
+				# Ship edge (railings)
+				set_tile(hex, TILE_OBJECT)
+	
+	# Ship-specific objects
+	match ship_type:
+		"wind":
+			# Sail masts and windcatchers
+			set_tile(center + Vector2i(0, 0), TILE_OBJECT)
+			set_tile(center + Vector2i(2, 0), TILE_OBJECT)
+			set_tile(center + Vector2i(-2, 0), TILE_OBJECT)
+		"steam":
+			# Smokestacks and valves
+			set_tile(center + Vector2i(0, 0), TILE_OBJECT)
+			set_tile(center + Vector2i(0, 2), TILE_OBJECT)
+			set_tile(center + Vector2i(0, -2), TILE_OBJECT)
+		"storm":
+			# Lightning rods and coils
+			set_tile(center + Vector2i(0, 0), TILE_OBJECT)
+			set_tile(center + Vector2i(3, 0), TILE_OBJECT)
+			set_tile(center + Vector2i(-3, 0), TILE_OBJECT)
 
 # ===================================================================
 # HELPER: Irregular room for organic cavern shapes (Floor 2)
