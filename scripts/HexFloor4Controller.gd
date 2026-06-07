@@ -245,7 +245,8 @@ func _find_gear_part():
 	for part in required_parts:
 		if part not in collected_parts:
 			collected_parts.append(part)
-			_show_notification("Found %s!" % part)
+			GameState.collect_lifter_part(part)
+			_show_notification("Found %s! (%d/3)" % [part, collected_parts.size()])
 			_update_lifter_ui()
 			break
 
@@ -557,6 +558,14 @@ func _enter_level(level_name: String, room_id: String):
 	
 	_update_level_indicator()
 	
+	# Show level-specific message
+	match level_name:
+		"undercroft":
+			if not _has_all_parts():
+				_show_notification("Undercroft: Search for gear parts! (%d/3 found)" % collected_parts.size(), 4.0)
+		"refectory":
+			_show_notification("Refectory: Memory-food heals but brings Nostalgia...", 3.0)
+	
 	# Spawn encounter if not cleared
 	if not level_cleared.get(room_id, false) and not level_encounter_spawned.get(room_id, false):
 		if data["encounter"] != "none":
@@ -605,11 +614,11 @@ func _check_interactables_main(player_hex: Vector2i, player_pos: Vector2):
 	_hide_interact_prompt()
 
 func _check_interactables_undercroft(player_hex: Vector2i):
-	# Check for gear parts (simplified: near center)
+	# Check for gear parts anywhere in the undercroft (radius 10 room)
 	var undercroft_center = level_data["f4_undercroft"]["center"]
 	var dist = HexTileMap._hex_distance(player_hex, undercroft_center)
-	if dist <= 2 and not _has_all_parts():
-		_show_interact_prompt("[S] Search for parts")
+	if dist <= 8 and not _has_all_parts():
+		_show_interact_prompt("[S] Search for parts (%d/3 found)" % collected_parts.size())
 		return
 	
 	_hide_interact_prompt()
@@ -666,7 +675,7 @@ func _interact_great_lifter():
 		for part in required_parts:
 			if part not in collected_parts:
 				missing.append(part)
-		_show_dialogue("Great Lifter", "Broken. Missing: %s" % ", ".join(missing))
+		_show_dialogue("Great Lifter", "Broken. Need %d more parts: %s. Search the Undercroft!" % [missing.size(), ", ".join(missing)])
 
 func _repair_great_lifter():
 	if lifter_repaired:
@@ -687,7 +696,7 @@ func _has_all_parts() -> bool:
 func _try_interact_undercroft(player_hex: Vector2i):
 	var undercroft_center = level_data["f4_undercroft"]["center"]
 	var dist = HexTileMap._hex_distance(player_hex, undercroft_center)
-	if dist <= 2 and not _has_all_parts():
+	if dist <= 8 and not _has_all_parts():
 		_find_gear_part()
 		return
 	

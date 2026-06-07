@@ -604,6 +604,12 @@ func generate_floor4_layout():
 		Vector2i(0, 20),   # Portal back to bazaar
 	])
 	
+	# === PART OBJECTS (visible gear parts in undercroft) ===
+	# Place 3 part objects as visible tiles
+	var part_positions = [Vector2i(-4, 28), Vector2i(4, 32), Vector2i(0, 36)]
+	for part_hex in part_positions:
+		set_tile(part_hex, TILE_OBJECT)
+	
 	# Aether slick zones (water tiles in undercroft)
 	for q in range(-3, 4):
 		for r in range(27, 34):
