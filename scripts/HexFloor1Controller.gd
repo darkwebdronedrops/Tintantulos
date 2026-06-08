@@ -63,6 +63,13 @@ var portal_offsets: Dictionary = {
 var room_cleared: Dictionary = {}
 var room_encounter_spawned: Dictionary = {}
 
+# Hex enemies on the grid
+var hex_enemies: Array[HexEnemy] = []
+var enemy_container: Node2D
+
+# Ambush state
+var ambush_bonus: bool = false
+
 # -------------------------------------------------------------------
 # UI
 # -------------------------------------------------------------------
@@ -113,6 +120,7 @@ func _build_floor():
 	_setup_ui()
 	_setup_player()
 	_setup_floor_specific()
+	_setup_enemies()  # Spawn hex enemies
 	
 	# Start music
 	AudioManager.play_floor_ambient(1)
@@ -170,6 +178,69 @@ func _setup_player():
 	var entry_center = room_data["entry"]["center"]
 	player_node.global_position = hex_map.hex_to_world(entry_center)
 	print("[Floor1-Hex] Player placed at entry: %s" % str(entry_center))
+
+func _setup_enemies():
+	"""Spawn enemies on the hex grid for each room."""
+	enemy_container = Node2D.new()
+	enemy_container.name = "EnemyContainer"
+	add_child(enemy_container)
+	
+	# Spawn enemies per room
+	var enemy_spawns = {
+		"upper": [
+			{"name": "Piston Assembly", "hex": Vector2i(-2, -22), "faction": "Construct"},
+			{"name": "Piston Assembly", "hex": Vector2i(2, -26), "faction": "Construct"},
+		],
+		"middle": [
+			{"name": "Piston Assembly", "hex": Vector2i(22, -2), "faction": "Construct"},
+			{"name": "Piston Assembly", "hex": Vector2i(26, 2), "faction": "Construct"},
+		],
+		"secret": [
+			{"name": "Mimic Chest", "hex": Vector2i(0, 46), "faction": "Aberration"},
+		],
+		"spore_heart": [
+			{"name": "Spore Heart", "hex": Vector2i(44, 0), "faction": "Elemental", "boss": true},
+		],
+	}
+	
+	for room_id in enemy_spawns.keys():
+		for spawn_data in enemy_spawns[room_id]:
+			var enemy = HexEnemy.new(
+				spawn_data["name"] + "_%d" % hex_enemies.size(),
+				spawn_data["name"],
+				spawn_data["hex"],
+				spawn_data.get("faction", "Unknown"),
+				spawn_data.get("boss", false)
+			)
+			enemy.name = "HexEnemy_%d" % hex_enemies.size()
+			
+			# Configure enemy stats based on type
+			if spawn_data.get("boss", false):
+				enemy.max_hp = 50
+				enemy.hp = 50
+				enemy.attack = 7
+				enemy.defense = 3
+			elif spawn_data["name"] == "Mimic Chest":
+				enemy.max_hp = 15
+				enemy.hp = 15
+				enemy.attack = 5
+				enemy.defense = 2
+			else:
+				enemy.max_hp = 10 + randi() % 6
+				enemy.hp = enemy.max_hp
+				enemy.attack = 2 + randi() % 3
+				enemy.defense = randi() % 2
+			
+			enemy_container.add_child(enemy)
+			enemy.set_hex_map_position(spawn_data["hex"], hex_map)
+			
+			# Connect signals
+			enemy.combat_initiated.connect(_on_enemy_combat_initiated)
+			
+			hex_enemies.append(enemy)
+			print("[Floor1-Hex] Spawned %s at %s" % [spawn_data["name"], str(spawn_data["hex"])])
+	
+	print("[Floor1-Hex] %d hex enemies spawned" % hex_enemies.size())
 
 # ===================================================================
 # COMBAT
@@ -230,6 +301,20 @@ func _on_combat_ended(victory: bool):
 	in_combat = false
 	AudioManager.play_floor_ambient(1)
 	
+	# Reset surviving enemies to unaware, clean up dead ones
+	for enemy in hex_enemies:
+		if enemy.hp > 0:
+			enemy.reset_after_combat()
+		else:
+			enemy.queue_free()
+	
+	# Remove dead enemies from array
+	var alive_enemies: Array[HexEnemy] = []
+	for enemy in hex_enemies:
+		if enemy.hp > 0:
+			alive_enemies.append(enemy)
+	hex_enemies = alive_enemies
+	
 	if victory:
 		room_cleared[current_room_id] = true
 		print("[Floor1-Hex] Room cleared: %s" % current_room_id)
@@ -247,8 +332,73 @@ func _on_combat_ended(victory: bool):
 		print("[Floor1-Hex] Combat lost — player respawned")
 		GameState.player_hp = max(1, GameState.player_hp)
 		player_node.global_position = hex_map.hex_to_world(room_data["entry"]["center"])
+		# Reset all enemies
+		for enemy in hex_enemies:
+			enemy.reset_after_combat()
 
 func _floor_complete():
+func _on_enemy_combat_initiated(ambush: bool):
+	"""Called when an enemy initiates or is ambushed into combat."""
+	if in_combat:
+		return
+	
+	ambush_bonus = ambush
+	
+	var ambush_msg = "AMBUSH! Player bonus turn!" if ambush else "Enemy spotted you!"
+	_show_notification(ambush_msg, 3.0)
+	
+	# Find all enemies in combat range
+	var player_hex = hex_map.world_to_hex(player_node.global_position)
+	var combat_enemies: Array[CombatManager.EnemyData] = []
+	
+	for enemy in hex_enemies:
+		if enemy.state == HexEnemy.State.IN_COMBAT or enemy.hp <= 0:
+			continue
+		var dist = HexTileMap._hex_distance(player_hex, enemy.hex_pos)
+		if dist <= 3:  # Combat range for all nearby enemies
+			combat_enemies.append(enemy.to_combat_data())
+			enemy._set_state(HexEnemy.State.IN_COMBAT)
+	
+	if combat_enemies.is_empty():
+		return
+	
+	# Start card combat
+	in_combat = true
+	var combat_manager = get_node_or_null("CombatManager")
+	if combat_manager:
+		combat_manager.start_combat(combat_enemies, GameState.player_deck)
+		AudioManager.play_combat(1)
+		print("[Floor1-Hex] Hex combat started! Enemies: %d, Ambush: %s" % [combat_enemies.size(), str(ambush)])
+		
+		# If ambush, grant player bonus turn
+		if ambush:
+			combat_manager.is_player_turn = true
+			combat_manager.player_shield += 2
+			print("[Floor1-Hex] Ambush bonus: +2 shield, player goes first")
+
+func _check_enemy_sight():
+	"""Check if any enemy can see the player."""
+	if in_combat or not player_node or not hex_map:
+		return
+	
+	var player_hex = hex_map.world_to_hex(player_node.global_position)
+	
+	for enemy in hex_enemies:
+		if enemy.state == HexEnemy.State.IN_COMBAT or enemy.hp <= 0:
+			continue
+		enemy.check_player_sight(player_hex)
+
+func _try_ambush_at_hex(target_hex: Vector2i) -> bool:
+	"""Check if player walked onto or adjacent to an enemy for ambush."""
+	for enemy in hex_enemies:
+		if enemy.hp <= 0 or enemy.state == HexEnemy.State.IN_COMBAT:
+			continue
+		var dist = HexTileMap._hex_distance(target_hex, enemy.hex_pos)
+		if dist <= 1:
+			# Player is adjacent to enemy — try ambush!
+			if enemy.try_ambush(target_hex):
+				return true
+	return false
 	_show_dialogue("The Tower", "The Snotling King falls. Press [S] to ascend to Floor 2.")
 	GameState.add_card_to_deck("goblin_snotling_king")
 	GameState.gems += 20
@@ -384,6 +534,14 @@ func _on_click_move(screen_pos: Vector2):
 	var world_pos = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
 	var target_hex = hex_map.world_to_hex(world_pos)
 	
+	# Check if clicked on enemy for ambush
+	for enemy in hex_enemies:
+		if enemy.hp <= 0 or enemy.state == HexEnemy.State.IN_COMBAT:
+			continue
+		if enemy.hex_pos == target_hex:
+			if enemy.try_ambush(hex_map.world_to_hex(player_node.global_position)):
+				return
+	
 	# Check if target is walkable
 	if not hex_map.is_walkable(target_hex):
 		_show_notification("Can't move there!")
@@ -399,6 +557,20 @@ func _on_click_move(screen_pos: Vector2):
 		_show_notification("No path!")
 		return
 	
+	# Check if path goes near enemy for ambush
+	for step_hex in path.slice(1):
+		for enemy in hex_enemies:
+			if enemy.hp <= 0 or enemy.state == HexEnemy.State.IN_COMBAT:
+				continue
+			if HexTileMap._hex_distance(step_hex, enemy.hex_pos) <= 1:
+					# Walk up to this hex and ambush
+					var ambush_path = path.slice(1, path.find(step_hex) + 1)
+					path_movement_target = ambush_path
+					path_movement_index = 0
+					path_movement_timer = 0.0
+					path_movement_active = true
+					return
+	
 	# Start path following (skip first hex — current position)
 	path_movement_target = path.slice(1)
 	path_movement_index = 0
@@ -413,6 +585,14 @@ func _on_click_interact(screen_pos: Vector2):
 	var world_pos = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
 	var click_hex = hex_map.world_to_hex(world_pos)
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
+	
+	# Check if clicked on/near enemy for ambush
+	for enemy in hex_enemies:
+		if enemy.hp <= 0 or enemy.state == HexEnemy.State.IN_COMBAT:
+			continue
+		if HexTileMap._hex_distance(click_hex, enemy.hex_pos) <= 1:
+			if enemy.try_ambush(player_hex):
+				return
 	
 	# Check distance — interactables within 1 hex
 	var dist = HexTileMap._hex_distance(player_hex, click_hex)
@@ -434,6 +614,10 @@ func _hex_move(move_vec: Vector2):
 	if hex_map.is_wall(target_hex):
 		return
 	
+	# Check if player walked onto/near an enemy for ambush
+	if _try_ambush_at_hex(target_hex):
+		return
+	
 	# Move to new hex
 	player_node.global_position = hex_map.hex_to_world(target_hex)
 	
@@ -447,6 +631,7 @@ func _hex_move(move_vec: Vector2):
 	# Check if we entered a new room or portal
 	_check_room_transition(target_hex)
 	_check_interactables()
+	_check_enemy_sight()  # Check sight after movement
 
 func _vector_to_hex_dir(velocity: Vector2) -> int:
 	"""Convert a movement vector to hex direction index (0-5) for pointy-top hexes.
@@ -869,6 +1054,20 @@ func _process(_delta: float):
 					path_movement_active = false
 					return
 				
+				# Check for ambush opportunity at each step
+				for enemy in hex_enemies:
+					if enemy.hp <= 0 or enemy.state == HexEnemy.State.IN_COMBAT:
+						continue
+					if HexTileMap._hex_distance(step_hex, enemy.hex_pos) <= 1:
+							# Stop at this hex and ambush
+							player_node.global_position = hex_map.hex_to_world(step_hex)
+							path_movement_active = false
+							var animator = player_node.get_node_or_null("PlayerAnimator")
+							if animator:
+								animator.play_idle()
+							_check_enemy_sight()
+							return
+				
 				# Move to next hex
 				var prev_pos = player_node.global_position
 				player_node.global_position = hex_map.hex_to_world(step_hex)
@@ -886,6 +1085,7 @@ func _process(_delta: float):
 				_check_interactables()
 				
 				path_movement_index += 1
+				_check_enemy_sight()  # Check after each step
 			else:
 				# Path complete
 				path_movement_active = false
@@ -893,6 +1093,10 @@ func _process(_delta: float):
 				if animator:
 					animator.play_idle()
 				return
+	
+	# Enemy sight check every frame (for enemies that patrol)
+	if not in_combat and not in_transition:
+		_check_enemy_sight()
 	
 	# Movement idle timer (only when not pathing)
 	if not path_movement_active:

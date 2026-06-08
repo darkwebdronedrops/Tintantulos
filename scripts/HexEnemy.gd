@@ -19,6 +19,7 @@ var max_hp: int = 10
 var hp: int = 10
 var attack: int = 3
 var defense: int = 0
+var is_boss: bool = false  # Bosses don't move, can't be ambushed
 var view_range: int = 6  # Hex distance for sight
 var combat_range: int = 1  # Hex distance to trigger combat
 var patrol_radius: int = 3
@@ -37,12 +38,16 @@ signal state_changed(new_state: State)
 signal spotted_player
 signal combat_initiated(ambush: bool)
 
-func _init(id: String, name_: String, start_hex: Vector2i, faction_: String = "Unknown"):
+func _init(id: String, name_: String, start_hex: Vector2i, faction_: String = "Unknown", boss: bool = false):
 	enemy_id = id
 	enemy_name = name_
 	hex_pos = start_hex
 	patrol_center = start_hex
 	faction = faction_
+	is_boss = boss
+	if is_boss:
+		view_range = 10
+		combat_range = 2
 
 func _ready():
 	z_index = 90
@@ -115,11 +120,13 @@ func _update_state_indicator():
 func _process(delta: float):
 	match state:
 		State.UNAWARE:
-			_patrol(delta)
+			if not is_boss:
+				_patrol(delta)
 		State.ALERT:
 			_alert_behavior(delta)
 		State.AWARE:
-			_chase(delta)
+			if not is_boss:
+				_chase(delta)
 		State.IN_COMBAT:
 			pass  # Combat manager handles this
 
@@ -145,9 +152,13 @@ func _patrol(delta: float):
 func _alert_behavior(delta: float):
 	alert_timer += delta
 	if alert_timer >= alert_duration:
-		# Transition to aware (chase)
-		_set_state(State.AWARE)
-		alert_timer = 0.0
+		if is_boss:
+			# Boss just stays alert, doesn't chase
+			alert_timer = 0.0
+		else:
+			# Transition to aware (chase)
+			_set_state(State.AWARE)
+			alert_timer = 0.0
 
 func _chase(delta: float):
 	patrol_timer += delta
@@ -210,6 +221,12 @@ func try_ambush(player_hex: Vector2i) -> bool:
 	var dist = HexTileMap._hex_distance(hex_pos, player_hex)
 	if dist > combat_range + 1:
 		return false  # Too far
+	
+	if is_boss:
+		# Boss cannot be ambushed — normal combat, no bonus
+		_set_state(State.IN_COMBAT)
+		combat_initiated.emit(false)
+		return true
 	
 	if state == State.UNAWARE:
 		# Ambush successful!

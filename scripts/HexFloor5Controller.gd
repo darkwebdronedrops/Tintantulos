@@ -157,7 +157,8 @@ func _setup_enemies():
 				spawn_data["name"] + "_%d" % hex_enemies.size(),
 				spawn_data["name"],
 				spawn_data["hex"],
-				spawn_data.get("faction", "Unknown")
+				spawn_data.get("faction", "Unknown"),
+				spawn_data.get("boss", false)
 			)
 			enemy.name = "HexEnemy_%d" % hex_enemies.size()
 			
@@ -167,8 +168,6 @@ func _setup_enemies():
 				enemy.hp = 60
 				enemy.attack = 8
 				enemy.defense = 3
-				enemy.view_range = 10
-				enemy.combat_range = 2
 			elif spawn_data["name"] == "Mimic Chest":
 				enemy.max_hp = 15
 				enemy.hp = 15
