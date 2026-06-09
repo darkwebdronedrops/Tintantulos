@@ -93,6 +93,11 @@ var gear_puzzle_total: int = 3
 var books_read: int = 0
 var thesis_defended: bool = false
 
+# Hard mode / Disciplinary state
+var hard_mode_active: bool = false
+var hard_mode_passed_trigger: bool = false
+var disciplinary_wall_hexes: Array[Vector2i] = [Vector2i(3, -18), Vector2i(3, -19), Vector2i(4, -18)]
+
 # -------------------------------------------------------------------
 # Room Data
 # -------------------------------------------------------------------
@@ -103,17 +108,19 @@ var room_data: Dictionary = {
 	"f6_aether":     {"center": Vector2i(0, 40),    "radius": 14, "encounter": "aether",    "display": "College of Aether", "level": "aether"},
 	"f6_pacts":      {"center": Vector2i(-40, 0),   "radius": 14, "encounter": "pacts",     "display": "College of Pacts", "level": "pacts"},
 	"f6_undercroft": {"center": Vector2i(10, 10),   "radius": 8,  "encounter": "none",      "display": "The Undercroft", "level": "undercroft"},
+	"f6_detention":  {"center": Vector2i(3, -40),   "radius": 8,  "encounter": "security",  "display": "Disciplinary Wing", "level": "detention"},
 	"f6_clocktower": {"center": Vector2i(0, -70),   "radius": 12, "encounter": "boss",      "display": "The Clocktower Apex", "level": "clocktower"},
 }
 
 # Portal / Stair connections
 var portal_connections: Dictionary = {
-	"f6_quadrangle": {"north": "f6_gears", "east": "f6_echoes", "south": "f6_aether", "west": "f6_pacts", "down": "f6_undercroft", "up": "f6_clocktower"},
+	"f6_quadrangle": {"north": "f6_gears", "east": "f6_echoes", "south": "f6_aether", "west": "f6_pacts", "down": "f6_undercroft", "up": "f6_clocktower", "north_detention": "f6_detention"},
 	"f6_gears":      {"south": "f6_quadrangle", "up": "f6_clocktower"},
 	"f6_echoes":     {"west": "f6_quadrangle"},
 	"f6_aether":     {"north": "f6_quadrangle"},
 	"f6_pacts":      {"east": "f6_quadrangle"},
 	"f6_undercroft": {"up": "f6_quadrangle"},
+	"f6_detention":  {"south": "f6_quadrangle"},
 	"f6_clocktower": {"down": "f6_gears"},
 }
 
@@ -214,6 +221,8 @@ func _generate_hex_layout():
 	_generate_corridor_hex(Vector2i(10, 10), Vector2i(10, 14), 2)
 	# Up corridor to Clocktower (from Gears north)
 	_generate_corridor_hex(Vector2i(0, -52), Vector2i(0, -60), 2)
+	# North corridor to Disciplinary Wing (behind Registrar, blocked until hard mode)
+	_generate_corridor_hex(Vector2i(3, -18), Vector2i(3, -28), 2)
 	
 	# === COLLEGE OF GEARS (north, radius 14) ===
 	_generate_room_hex("f6_gears", Vector2i(0, -40), 14, [
@@ -279,6 +288,19 @@ func _generate_hex_layout():
 	hex_map.set_tile(Vector2i(-28, 0), HexTileMap.TILE_OBJECT)
 	hex_map.set_tile(Vector2i(-28, 1), HexTileMap.TILE_OBJECT)
 	hex_map.set_tile(Vector2i(-28, -1), HexTileMap.TILE_OBJECT)
+	
+	# === DISCIPLINARY WING (north-east of quadrangle, behind Registrar, blocked) ===
+	_generate_room_hex("f6_detention", Vector2i(3, -40), 8, [
+		Vector2i(3, -26),   # South portal -> quadrangle corridor
+	])
+	
+	# Block the entrance with walls until hard mode triggers
+	for wall_hex in disciplinary_wall_hexes:
+		if hex_map.get_tile(wall_hex) == HexTileMap.TILE_FLOOR:
+			hex_map.set_tile(wall_hex, HexTileMap.TILE_WALL)
+	
+	# Security office desk (object)
+	hex_map.set_tile(Vector2i(3, -42), HexTileMap.TILE_OBJECT)
 	
 	# === UNDERCROFT (below quadrangle, small area radius 8) ===
 	_generate_room_hex("f6_undercroft", Vector2i(10, 10), 8, [
@@ -511,17 +533,20 @@ func _spawn_security_drones(count: int):
 			"Construct",
 			false
 		)
-		enemy.name = "HexEnemy_%d" % hex_enemies.size()
 		enemy.max_hp = 10
 		enemy.hp = 10
 		enemy.attack = 3
 		enemy.defense = 1
-		
-		enemy_container.add_child(enemy)
-		enemy.set_hex_map_position(hex, hex_map)
-		enemy.combat_initiated.connect(_on_enemy_combat_initiated)
-		hex_enemies.append(enemy)
+		_add_enemy(enemy, hex)
 		print("[Floor6-Hex] Spawned security drone at %s" % str(hex))
+
+func _add_enemy(enemy: HexEnemy, hex: Vector2i):
+	"""Add an enemy to the world with proper setup."""
+	enemy.name = "HexEnemy_%d" % hex_enemies.size()
+	enemy_container.add_child(enemy)
+	enemy.set_hex_map_position(hex, hex_map)
+	enemy.combat_initiated.connect(_on_enemy_combat_initiated)
+	hex_enemies.append(enemy)
 
 # ===================================================================
 # COMBAT
@@ -820,6 +845,7 @@ func _update_room_indicator():
 	room_indicator.text = "📍 %s" % data.get("display", "Unknown")
 	match current_room_id:
 		"f6_quadrangle": room_indicator.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7))
+		"f6_detention":  room_indicator.add_theme_color_override("font_color", Color(0.9, 0.2, 0.2))
 		"f6_gears":      room_indicator.add_theme_color_override("font_color", Color(0.7, 0.7, 0.6))
 		"f6_echoes":     room_indicator.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6))
 		"f6_aether":     room_indicator.add_theme_color_override("font_color", Color(0.6, 0.5, 0.7))
@@ -973,6 +999,7 @@ func _hex_move(move_vec: Vector2):
 	_check_interactables()
 	_check_enemy_sight()
 	_check_player_moonlight_position()
+	_check_registrar_passed()
 
 func _vector_to_hex_dir(velocity: Vector2) -> int:
 	var angle = velocity.angle()
@@ -1069,6 +1096,7 @@ func _try_portal_transition(direction: String):
 		"f6_aether":     msg = "Elemental energy crackles..."
 		"f6_pacts":      msg = "Red light spills from the sealed college..."
 		"f6_undercroft": msg = "You descend into the Undercroft..."
+		"f6_detention":  msg = "You enter the Disciplinary Wing..."
 		"f6_clocktower": msg = "The elevator rises to the Clocktower Apex..."
 		"f6_quadrangle": msg = "You return to the Quadrangle."
 	if msg != "":
@@ -1469,8 +1497,62 @@ func _audit_courses():
 
 func _refuse_courses():
 	_show_dialogue("The Registrar", "UNENROLLED. All campus security to quadrangle. DISCIPLINARY ACTION INITIATED.")
-	_spawn_security_drones(2)
+	_trigger_hard_mode()
 	_update_curriculum_display()
+
+func _trigger_hard_mode():
+	"""Open the disciplinary hallway and spawn security drones."""
+	if hard_mode_active:
+		return
+	hard_mode_active = true
+	
+	# Open the disciplinary wall — restore portal tile for the entrance
+	for wall_hex in disciplinary_wall_hexes:
+		if hex_map.get_tile(wall_hex) == HexTileMap.TILE_WALL:
+			if wall_hex == Vector2i(3, -18):
+				hex_map.set_tile(wall_hex, HexTileMap.TILE_PORTAL)
+			else:
+				hex_map.set_tile(wall_hex, HexTileMap.TILE_FLOOR)
+	
+	_show_notification("🚨 DISCIPLINARY HALLWAY OPENED! Security drones deployed!", Color(0.9, 0.2, 0.2))
+	
+	# Spawn security drones in the disciplinary wing
+	var detention_center = room_data["f6_detention"]["center"]
+	for i in range(4):
+		var offset = Vector2i(randi() % 10 - 5, randi() % 10 - 5)
+		var spawn_hex = detention_center + offset
+		if hex_map.get_tile(spawn_hex) == HexTileMap.TILE_FLOOR:
+			var enemy = HexEnemy.new("detention_drone_%d" % i, "Calibration Drone", spawn_hex, "Construct")
+			enemy.hp = 12
+			enemy.attack = 4
+			enemy.view_range = 8
+			enemy.combat_range = 1
+			enemy.patrol_radius = 5
+			_add_enemy(enemy, spawn_hex)
+	
+	# Also spawn security in quadrangle
+	_spawn_security_drones(2)
+	
+	print("[Floor6-Hex] Hard mode activated — disciplinary wing open, security deployed")
+
+func _check_registrar_passed():
+	"""Check if player walked past the Registrar (north of him) without enrolling."""
+	if not player_node or hard_mode_active or assigned_courses.size() > 0 or audit_mode or graduate_status:
+		return
+	
+	var player_hex = hex_map.world_to_hex(player_node.global_position)
+	# Registrar is at (3, 0). Walking past him means entering hexes north of him (y < 0, x near 3)
+	if player_hex.y <= -5 and player_hex.x >= 0 and player_hex.x <= 6 and current_room_id == "f6_quadrangle":
+		if not hard_mode_passed_trigger:
+			hard_mode_passed_trigger = true
+			_show_dialogue("The Registrar", "Passing by without enrolling? You think you can just WALK past the curriculum?")
+			await get_tree().create_timer(1.5).timeout
+			_trigger_hard_mode()
+	else:
+		# Reset trigger if player moves away (prevents false trigger from just being nearby)
+		if player_hex.y > -5 or player_hex.x < -2 or player_hex.x > 9:
+			hard_mode_passed_trigger = false
+
 
 func _record_enemy_defeat(faction: String, damage_taken: bool):
 	"""Record an enemy defeat for course progress."""
@@ -2015,6 +2097,7 @@ func _process(_delta: float):
 				_check_interactables()
 				path_movement_index += 1
 				_check_enemy_sight()
+				_check_registrar_passed()
 			else:
 				path_movement_active = false
 				var animator = player_node.get_node_or_null("PlayerAnimator")
