@@ -44,6 +44,11 @@ var enemy_name: String = "Patrol"
 # Combat data (for when combat triggers)
 var combat_template_name: String = "Piston Assembly"
 
+# Movement validation (set by floor controller)
+var can_move_to: Callable = func(_hex: Vector2i) -> bool: return true
+var patrol_radius: int = 5  # Max distance from patrol center for random wander
+
+
 # Signals
 signal enemy_moved(enemy_id: int, new_hex: Vector2i)
 signal enemy_spotted_player(enemy_id: int, distance: int)
@@ -197,68 +202,73 @@ func load_save_data(data: Dictionary):
 # ============================================================================
 
 func _generate_patrol_hexes():
-	"""Generate 8 hex positions in a rough circle around patrol center."""
+	"""Random walk doesn't need a pre-generated loop. Just clear any old data."""
 	patrol_hexes.clear()
-	
-	# Ring of 8 hexes at distance 2-3 from center
-	# Using hex spiral pattern for natural patrol loop
-	var ring_offsets = [
-		Vector2i(2, -1),   # NE
-		Vector2i(3, -1),   # E-NE
-		Vector2i(3, 0),    # E
-		Vector2i(2, 1),    # E-SE
-		Vector2i(1, 2),    # SE
-		Vector2i(-1, 2),   # SW
-		Vector2i(-2, 1),   # W-SW
-		Vector2i(-2, 0),   # W
-	]
-	
-	for offset in ring_offsets:
-		patrol_hexes.append(patrol_center_hex + offset)
+
 
 func _advance_patrol():
-	"""Move to next position in patrol loop."""
-	if patrol_hexes.is_empty():
+	"""Move to a random valid adjacent hex, staying within patrol radius."""
+	var valid = _get_valid_neighbors(current_hex)
+	if valid.is_empty():
 		return
 	
-	current_patrol_index = (current_patrol_index + 1) % patrol_hexes.size()
-	current_hex = patrol_hexes[current_patrol_index]
+	# Prefer hexes within patrol radius
+	var within_radius: Array[Vector2i] = []
+	for h in valid:
+		if HexGrid.hex_distance(h, patrol_center_hex) <= patrol_radius:
+			within_radius.append(h)
+	
+	var candidates = within_radius if within_radius.size() > 0 else valid
+	current_hex = candidates[randi() % candidates.size()]
 	_update_position()
 	enemy_moved.emit(enemy_id, current_hex)
 
+
+func _get_valid_neighbors(hex: Vector2i) -> Array[Vector2i]:
+	"""Return all adjacent hexes that pass the can_move_to callback."""
+	var valid: Array[Vector2i] = []
+	for dir in HexGrid.DIRECTIONS:
+		var neighbor = hex + dir
+		if can_move_to.call(neighbor):
+			valid.append(neighbor)
+	return valid
+
 func _step_toward_player():
-	"""Move one hex toward last known player position."""
+	"""Move one hex toward last known player position, respecting bounds."""
 	var dir = HexGrid.get_direction_toward(current_hex, last_known_player_hex)
 	if dir >= 0 and dir < 6:
-		current_hex = current_hex + HexGrid.DIRECTIONS[dir]
-		_update_position()
-		enemy_moved.emit(enemy_id, current_hex)
+		var next_hex = current_hex + HexGrid.DIRECTIONS[dir]
+		if can_move_to.call(next_hex):
+			current_hex = next_hex
+			_update_position()
+			enemy_moved.emit(enemy_id, current_hex)
+			return
+	# If direct path is blocked, try any valid neighbor that gets closer
+	var valid = _get_valid_neighbors(current_hex)
+	if valid.is_empty():
+		return
+	valid.sort_custom(func(a, b): return HexGrid.hex_distance(a, last_known_player_hex) < HexGrid.hex_distance(b, last_known_player_hex))
+	current_hex = valid[0]
+	_update_position()
+	enemy_moved.emit(enemy_id, current_hex)
 
 func _step_toward_patrol():
-	"""Move one hex toward nearest patrol point."""
-	# Find nearest patrol hex
-	var nearest_idx = 0
-	var nearest_dist = 999
-	for i in range(patrol_hexes.size()):
-		var d = HexGrid.hex_distance(current_hex, patrol_hexes[i])
-		if d < nearest_dist:
-			nearest_dist = d
-			nearest_idx = i
-	
-	if nearest_dist == 0:
-		# Back on patrol route
-		current_patrol_index = nearest_idx
-		state = State.PATROLLING
-		_update_visual_state()
+	"""Move one hex toward patrol center, respecting bounds."""
+	var valid = _get_valid_neighbors(current_hex)
+	if valid.is_empty():
 		return
 	
-	# Step toward nearest patrol hex
-	var target = patrol_hexes[nearest_idx]
-	var dir = HexGrid.get_direction_toward(current_hex, target)
-	if dir >= 0 and dir < 6:
-		current_hex = current_hex + HexGrid.DIRECTIONS[dir]
-		_update_position()
-		enemy_moved.emit(enemy_id, current_hex)
+	# Sort by distance to patrol center (closest first)
+	valid.sort_custom(func(a, b): return HexGrid.hex_distance(a, patrol_center_hex) < HexGrid.hex_distance(b, patrol_center_hex))
+	current_hex = valid[0]
+	_update_position()
+	enemy_moved.emit(enemy_id, current_hex)
+	
+	# If we're back within 2 hexes of center, resume patrol mode
+	if HexGrid.hex_distance(current_hex, patrol_center_hex) <= 2:
+		state = State.PATROLLING
+		_update_visual_state()
+
 
 func _update_position():
 	"""Sync visual node to current hex world position."""

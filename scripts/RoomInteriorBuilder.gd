@@ -31,6 +31,15 @@ func _place_room_enemy(room, container: Node2D, enemy_template_name: String, fac
 	
 	enemy.setup(room.id * 100, patrol_center, faction, enemy_template_name, sprite_path)
 	
+	# Add bounds checking — RoomInteriorBuilder doesn't have access to Floor3Controller's
+	# blocked_hexes, so we use a simple distance-from-room check as a fallback
+	var max_room_patrol = 4
+	enemy.can_move_to = func(hex: Vector2i) -> bool:
+		var d = HexGrid.hex_distance(hex, room_hex)
+		return d >= 1 and d <= max_room_patrol + 2
+	enemy.patrol_radius = max_room_patrol
+	
+	
 	# Connect to Floor3Controller for combat
 	# Note: enemy will be added to Floor3Controller's overworld_enemies list
 	# by the caller (Floor3Controller) when room is entered

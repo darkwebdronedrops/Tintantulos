@@ -1506,6 +1506,8 @@ func _spawn_overworld_enemies():
 		var enemy = OverworldEnemy.new()
 		enemy.name = "OverworldEnemy_%d" % next_enemy_id
 		enemy.setup(next_enemy_id, room_hex, _get_faction_for_room(meta.id), template.name, template.sprite_path)
+		enemy.patrol_radius = 5
+		enemy.can_move_to = func(hex: Vector2i) -> bool: return _can_enemy_move_to(hex)
 		enemy.enemy_name = template.name
 		enemy.enemy_spotted_player.connect(_on_enemy_spotted)
 		enemy.enemy_lost_player.connect(_on_enemy_lost)
@@ -2130,9 +2132,17 @@ func _is_hex_blocked(hex: Vector2i) -> bool:
 			return true
 	return false
 
-# -------------------------------------------------------------------
-# Visual Helpers
-# -------------------------------------------------------------------
+func _can_enemy_move_to(hex: Vector2i) -> bool:
+	"""Check if an enemy can move to a hex (not blocked, not a trap, not the Crown Cog center)."""
+	if _is_hex_blocked(hex):
+		return false
+	if trap_hex_map.has(hex):
+		return false
+	# Don't walk onto the Crown Cog hub (center hex)
+	if hex == Vector2i(0, 0):
+		return false
+	return true
+
 
 func _update_room_cleared_visual(room_id: int, cleared: bool = true):
 	var room_node = rooms.get(str(room_id))
@@ -2330,6 +2340,8 @@ func load_floor_state(data: Dictionary):
 		var enemy = OverworldEnemy.new()
 		enemy.name = "OverworldEnemy_%d" % enemy_data.get("enemy_id", 0)
 		enemy.load_save_data(enemy_data)
+		enemy.patrol_radius = 5
+		enemy.can_move_to = func(hex: Vector2i) -> bool: return _can_enemy_move_to(hex)
 		enemy.enemy_spotted_player.connect(_on_enemy_spotted)
 		enemy.enemy_lost_player.connect(_on_enemy_lost)
 		enemy.enemy_combat_triggered.connect(_on_enemy_combat)
