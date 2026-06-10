@@ -1,18 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://floor9main001"]
+[gd_scene load_steps=7 format=3 uid="uid://floor9hex001"]
 
-[ext_resource type="Script" path="res://scripts/Floor9Controller.gd" id="1_controller"]
-[ext_resource type="Script" path="res://scripts/CombatManager.gd" id="2_combat"]
-[ext_resource type="Script" path="res://scripts/CombatUI.gd" id="3_ui"]
-[ext_resource type="Texture2D" path="res://assets/sprites/floor9/bg_boneforge_main.png" id="4_bg"]
+[ext_resource type="Script" path="res://scripts/HexFloor9Controller.gd" id="1_controller"]
+[ext_resource type="Script" path="res://scripts/HexTileMap.gd" id="2_hexmap"]
+[ext_resource type="Script" path="res://scripts/CombatManager.gd" id="3_combat"]
+[ext_resource type="Script" path="res://scripts/CombatUI.gd" id="4_ui"]
+[ext_resource type="Texture2D" path="res://assets/sprites/floor9/bg_boneforge_main.png" id="5_bg"]
+[ext_resource type="Script" path="res://scripts/PlayerAnimator.gd" id="6_animator"]
 
 [node name="Floor9" type="Node2D"]
 script = ExtResource("1_controller")
 
+[node name="HexTileMap" type="Node2D" parent="."]
+script = ExtResource("2_hexmap")
+
 [node name="CombatManager" type="Node2D" parent="."]
-script = ExtResource("2_combat")
+script = ExtResource("3_combat")
 
 [node name="CombatUI" type="CanvasLayer" parent="."]
-script = ExtResource("3_ui")
+script = ExtResource("4_ui")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(960, 540)
@@ -23,7 +28,7 @@ layer = -1
 
 [node name="Background" type="Sprite2D" parent="BackgroundUI"]
 position = Vector2(960, 540)
-texture = ExtResource("4_bg")
+texture = ExtResource("5_bg")
 
 [node name="MainUI" type="CanvasLayer" parent="."]
 
@@ -46,17 +51,19 @@ theme_override_colors/font_color = Color(0.7, 0.5, 0.4, 1.0)
 text = "KEY_E: NE | W: NW | A: W | D: E | Z: SW | X: SE
 S: Interact/Enter
 Click: Move to hex
-T: End Turn (combat)
+1-4: Build Companion | R: Repair | F: Free Souls | B: Burn Souls | D: Drain Soul
 
 Salvage: Undead → Bone | Constructs → Gear
 Assembly: 2B+1G = Companion | 1B+2G = Repair
 Furnaces: Free Souls (Liberator) or Burn (Soul Debt)
 Conveyor: Ride flow or fight against it"
 
-[node name="PlayerSpawn" type="Marker2D" parent="."]
-position = Vector2(1200, 1100)
+[node name="DialogueUI" type="CanvasLayer" parent="."]
 
-[node name="RoomsContainer" type="Node2D" parent="."]
+[node name="ShopUI" type="CanvasLayer" parent="."]
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(0, 0)
 
 [node name="TransitionOverlay" type="CanvasLayer" parent="."]
 visible = false
