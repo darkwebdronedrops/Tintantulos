@@ -475,10 +475,10 @@ func _on_enemy_combat_initiated(ambush: bool):
 	var combat_manager = get_node_or_null("CombatManager")
 	if combat_manager:
 		combat_manager.start_combat(combat_enemies, GameState.player_deck)
-			var ui = get_node_or_null("CombatUI")
-			if ui:
-				ui.setup(combat_enemies, GameState.player_deck, combat_manager)
-				ui.show_combat_ui()
+		var ui = get_node_or_null("CombatUI")
+		if ui:
+			ui.setup(combat_enemies, GameState.player_deck, combat_manager)
+			ui.show_combat_ui()
 		AudioManager.play_combat(5)
 		print("[Floor5-Hex] Hex combat started! Enemies: %d, Ambush: %s" % [combat_enemies.size(), str(ambush)])
 		
