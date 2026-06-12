@@ -1000,7 +1000,7 @@ func _show_dialogue(speaker: String, text: String):
 	if is_instance_valid(dialogue):
 		dialogue.queue_free()
 
-func _show_notification(text: String, duration: float = 3.0):
+func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.9), duration: float = 3.0):
 	var notif = Label.new()
 	notif.text = text
 	notif.position = Vector2(390, 300)
