@@ -341,7 +341,7 @@ func _on_combat_ended(victory: bool):
 			enemy.reset_after_combat()
 
 func _floor_complete():
-	_show_notification("🎉 Floor 1 Complete! The portal opens...", 5.0, Color(0.3, 0.9, 0.3))
+	_show_notification("🎉 Floor 1 Complete! The portal opens...", Color(0.3, 0.9, 0.3), 5.0)
 	print("[Floor1-Hex] Floor complete!")
 
 func _on_enemy_combat_initiated(ambush: bool):
