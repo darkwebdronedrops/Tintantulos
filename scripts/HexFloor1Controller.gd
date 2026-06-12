@@ -283,7 +283,7 @@ func _get_encounter_enemies(encounter_type: String) -> Array[CombatManager.Enemy
 		"shrine":
 			result = _spawn_enemies(["Droplet"])
 		"secret":
-			result = _spawn_enemies([" Mimic Chest"])
+			result = _spawn_enemies(["Mimic Chest"])
 		"spore":
 			result = _spawn_enemies(["Spore Walker"])
 		"boss":
@@ -330,7 +330,7 @@ func _on_combat_ended(victory: bool):
 			_show_dialogue("The Door", "The Door creaks open. All paths are now clear.")
 		
 		# Boss defeated
-		if current_room_id == "boss":
+		if current_room_id == "spore_heart":
 			_floor_complete()
 	else:
 		print("[Floor1-Hex] Combat lost — player respawned")
@@ -342,6 +342,10 @@ func _on_combat_ended(victory: bool):
 
 func _floor_complete():
 	_show_notification("🎉 Floor 1 Complete! The portal opens...", Color(0.3, 0.9, 0.3), 5.0)
+	_show_dialogue("The Tower", "The Snotling King falls. Press [S] to ascend to Floor 2.")
+	GameState.add_card_to_deck("goblin_snotling_king")
+	GameState.gems += 20
+	GameState.save_game()
 	print("[Floor1-Hex] Floor complete!")
 
 func _on_enemy_combat_initiated(ambush: bool):
@@ -352,7 +356,7 @@ func _on_enemy_combat_initiated(ambush: bool):
 	ambush_bonus = ambush
 	
 	var ambush_msg = "AMBUSH! Player bonus turn!" if ambush else "Enemy spotted you!"
-	_show_notification(ambush_msg, 3.0)
+	_show_notification(ambush_msg, Color(0.9, 0.9, 0.3), 3.0)
 	
 	# Find all enemies in combat range
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
@@ -410,10 +414,6 @@ func _try_ambush_at_hex(target_hex: Vector2i) -> bool:
 			if enemy.try_ambush(target_hex):
 				return true
 	return false
-	_show_dialogue("The Tower", "The Snotling King falls. Press [S] to ascend to Floor 2.")
-	GameState.add_card_to_deck("goblin_snotling_king")
-	GameState.gems += 20
-	GameState.save_game()
 
 # ===================================================================
 # UI
@@ -463,7 +463,7 @@ func _pause_menu_setup():
 	
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.85)
-	bg.size = Vector2(1920, 1080)
+	bg.size = Vector2(1280, 720)
 	pause_menu.add_child(bg)
 	
 	var container = VBoxContainer.new()
