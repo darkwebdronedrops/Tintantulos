@@ -265,6 +265,10 @@ func _start_combat(encounter_type: String):
 	var combat_manager = get_node_or_null("CombatManager")
 	if combat_manager:
 		combat_manager.start_combat(enemies, GameState.player_deck)
+		var ui = get_node_or_null("CombatUI")
+		if ui:
+			ui.setup(enemies, GameState.player_deck, combat_manager)
+			ui.show_combat_ui()
 		AudioManager.play_combat(1)
 		print("[Floor1-Hex] Combat started: %s" % encounter_type)
 
@@ -337,6 +341,9 @@ func _on_combat_ended(victory: bool):
 			enemy.reset_after_combat()
 
 func _floor_complete():
+	_show_notification("🎉 Floor 1 Complete! The portal opens...", 5.0, Color(0.3, 0.9, 0.3))
+	print("[Floor1-Hex] Floor complete!")
+
 func _on_enemy_combat_initiated(ambush: bool):
 	"""Called when an enemy initiates or is ambushed into combat."""
 	if in_combat:
@@ -367,6 +374,10 @@ func _on_enemy_combat_initiated(ambush: bool):
 	var combat_manager = get_node_or_null("CombatManager")
 	if combat_manager:
 		combat_manager.start_combat(combat_enemies, GameState.player_deck)
+			var ui = get_node_or_null("CombatUI")
+			if ui:
+				ui.setup(combat_enemies, GameState.player_deck, combat_manager)
+				ui.show_combat_ui()
 		AudioManager.play_combat(1)
 		print("[Floor1-Hex] Hex combat started! Enemies: %d, Ambush: %s" % [combat_enemies.size(), str(ambush)])
 		

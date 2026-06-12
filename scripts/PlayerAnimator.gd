@@ -164,10 +164,28 @@ func _build_sprite_path(frame: int = -1) -> String:
 	return SPRITE_BASE + "player_%s_walk_%s_f%d.png" % [current_stance, current_direction, f]
 
 func play_idle():
-	set_state(current_stance, "idle", current_direction)
+	# Preserve current direction but switch to idle action
+	var prev_action = current_action
+	current_action = "idle"
+	current_frame = 0
+	frame_timer = 0.0
+	bob_timer = 0.0
+	if sprite:
+		sprite.position.y = base_sprite_position.y
+	
+	# Only reload sprite if a directional idle exists; otherwise keep last frame
+	var path = _build_sprite_path()
+	if ResourceLoader.exists(path):
+		_load_frame()
+	else:
+		# No directional idle sprite — keep the current walk frame
+		current_action = prev_action
+		frame_timer = 999.0  # Stop animation
 
 func play_walk(direction: String):
 	set_state(current_stance, "walk", direction)
+	frame_timer = 0.0
+	current_frame = 0
 
 func play_cast():
 	set_state(current_stance, "cast", current_direction)

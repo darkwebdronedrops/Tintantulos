@@ -32,24 +32,24 @@ func _build_title_screen():
 	if ResourceLoader.exists(TITLE_BG):
 		bg_sprite = Sprite2D.new()
 		bg_sprite.texture = load(TITLE_BG)
-		bg_sprite.position = Vector2(960, 540)  # Center for 1920x1080
+		bg_sprite.position = Vector2(640, 360)  # Center for 1280x720
 		# Scale to cover screen (bg is 400x224, need to upscale)
-		var scale_x = 1920.0 / bg_sprite.texture.get_size().x
-		var scale_y = 1080.0 / bg_sprite.texture.get_size().y
+		var scale_x = 1280.0 / bg_sprite.texture.get_size().x
+		var scale_y = 720.0 / bg_sprite.texture.get_size().y
 		bg_sprite.scale = Vector2(scale_x, scale_y)
 		add_child(bg_sprite)
 	else:
 		# Fallback: dark background
 		var bg = ColorRect.new()
 		bg.color = Color(0.05, 0.05, 0.08)
-		bg.size = Vector2(1920, 1080)
+		bg.size = Vector2(1280, 720)
 		bg.position = Vector2.ZERO
 		add_child(bg)
 	
 	# Dark overlay for text readability
 	var overlay = ColorRect.new()
 	overlay.color = Color(0.0, 0.0, 0.0, 0.4)
-	overlay.size = Vector2(1920, 1080)
+	overlay.size = Vector2(1280, 720)
 	overlay.position = Vector2.ZERO
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(overlay)
@@ -57,7 +57,7 @@ func _build_title_screen():
 	# Title
 	title_label = Label.new()
 	title_label.text = "THE TOWER OF TINTANTULOS"
-	title_label.position = Vector2(560, 200)
+	title_label.position = Vector2(240, 120)
 	title_label.size = Vector2(800, 80)
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.add_theme_font_size_override("font_size", 48)
@@ -67,7 +67,7 @@ func _build_title_screen():
 	# Subtitle
 	subtitle_label = Label.new()
 	subtitle_label.text = "A Card-Based Dungeon Ascent"
-	subtitle_label.position = Vector2(660, 290)
+	subtitle_label.position = Vector2(340, 210)
 	subtitle_label.size = Vector2(600, 30)
 	subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	subtitle_label.add_theme_font_size_override("font_size", 16)
@@ -76,7 +76,7 @@ func _build_title_screen():
 	
 	# Menu container
 	var menu_vbox = VBoxContainer.new()
-	menu_vbox.position = Vector2(810, 400)
+	menu_vbox.position = Vector2(490, 300)
 	menu_vbox.size = Vector2(300, 250)
 	menu_vbox.add_theme_constant_override("separation", 16)
 	add_child(menu_vbox)
@@ -133,7 +133,7 @@ func _build_title_screen():
 	# Version
 	var version_label = Label.new()
 	version_label.text = "v0.2.4"
-	version_label.position = Vector2(20, 1040)
+	version_label.position = Vector2(20, 680)
 	version_label.size = Vector2(100, 20)
 	version_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	version_label.add_theme_font_size_override("font_size", 10)
@@ -143,7 +143,7 @@ func _build_title_screen():
 	# Version / credits
 	var credits = Label.new()
 	credits.text = "Torespar Studios"
-	credits.position = Vector2(860, 1020)
+	credits.position = Vector2(460, 680)
 	credits.size = Vector2(200, 20)
 	credits.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	credits.add_theme_font_size_override("font_size", 10)

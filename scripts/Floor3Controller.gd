@@ -33,7 +33,8 @@ func _play_audio(sound_name: String, bus: int = 1):  # 1 = SFX bus
 	"""Play a sound effect via AudioManager"""
 	var audio_mgr = _get_audio_manager()
 	if audio_mgr:
-		audio_mgr.play_sfx(sound_name, bus)
+		var bus_name = "SFX" if bus == 1 else "Master"
+		audio_mgr.play_sfx(sound_name, bus_name)
 
 func _get_audio_manager():
 	"""Find AudioManager in the scene tree"""
