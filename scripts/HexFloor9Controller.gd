@@ -1582,7 +1582,7 @@ func _setup_floor_specific():
 		_show_notification("⚠ No power from Floor 8! Constructs slower, Foreman enraged!", Color(0.9, 0.3, 0.3))
 	
 	if GameState.get_value("floor9_radiation_debuff", false):
-		ration_active = true
+		radiation_active = true
 		_show_notification("☢ Radiation debuff active! -2 HP per room", Color(0.9, 0.5, 0.2))
 	
 	if GameState.get_value("elemental_core_held", false):
