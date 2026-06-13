@@ -453,7 +453,7 @@ func _on_enemy_combat_initiated(ambush: bool):
 	ambush_bonus = ambush
 	
 	var ambush_msg = "AMBUSH! Player bonus turn!" if ambush else "Enemy spotted you!"
-	_show_notification(ambush_msg, 3.0)
+	_show_notification(ambush_msg, Color(0.9, 0.9, 0.9), 3.0)
 	
 	# Find all enemies in combat range
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
@@ -712,7 +712,7 @@ func _is_gangplank_room(room_id: String) -> bool:
 
 func _gangplank_collapse():
 	var damage = randi() % 6 + randi() % 6 + 2
-	_show_notification("💥 GANGPLANK COLLAPSES! %d damage!" % damage, 3.0)
+	_show_notification("💥 GANGPLANK COLLAPSES! %d damage!" % damage, Color(0.9, 0.9, 0.9), 3.0)
 	GameState.damage_player(damage)
 	player_node.global_position = hex_map.hex_to_world(room_data["f5_dock"]["center"])
 	current_room_id = "f5_dock"
@@ -807,21 +807,21 @@ func _try_interact():
 func _interact_lightning_rod():
 	if in_storm_phase:
 		var damage = randi() % 6 + randi() % 6 + randi() % 6 + 3
-		_show_notification("⚡ Lightning strikes! %d damage but +3 CHARGE!" % damage, 3.0)
+		_show_notification("⚡ Lightning strikes! %d damage but +3 CHARGE!" % damage, Color(0.9, 0.9, 0.9), 3.0)
 		GameState.damage_player(damage)
 		_add_charge("lightning", 3)
 	else:
-		_show_notification("The lightning rod hums with potential...", 2.0)
+		_show_notification("The lightning rod hums with potential...", Color(0.9, 0.9, 0.9), 2.0)
 		_add_charge("lightning", 1)
 
 func _interact_steam_vent():
 	var damage = randi() % 6 + randi() % 6 + 2
-	_show_notification("💨 You trigger the vent! %d damage but +2 Steam CHARGE!" % damage, 3.0)
+	_show_notification("💨 You trigger the vent! %d damage but +2 Steam CHARGE!" % damage, Color(0.9, 0.9, 0.9), 3.0)
 	GameState.damage_player(damage)
 	_add_charge("steam", 2)
 
 func _interact_windcatcher():
-	_show_notification("🌪 The windcatcher spins! +1 Wind CHARGE!", 2.0)
+	_show_notification("🌪 The windcatcher spins! +1 Wind CHARGE!", Color(0.9, 0.9, 0.9), 2.0)
 	_add_charge("wind", 1)
 
 func _interact_cargo_hold():
@@ -888,7 +888,7 @@ func _add_charge(type: String, amount: int):
 	var total = charge["wind"] + charge["steam"] + charge["lightning"] + charge["aether"]
 	vent_ready = total >= max_charge
 	if vent_ready:
-		_show_notification("⚡ MAX CHARGE — Press [V] to VENT!", 3.0)
+		_show_notification("⚡ MAX CHARGE — Press [V] to VENT!", Color(0.9, 0.9, 0.9), 3.0)
 	_update_charge_display()
 
 func _vent_charge():
