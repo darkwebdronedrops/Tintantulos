@@ -386,19 +386,19 @@ func _on_combat_ended(victory: bool):
 	if victory:
 		room_cleared[current_room_id] = true
 		if current_room_id == "f10_moment_10":
-			_show_notification("🐉 The Dragon is defeated! Proceed to the Throne.", Color(0.9, 0.9, 0.3))
+			_show_notification("🐉 The Dragon is defeated! Proceed to the Throne.", Color(0.9, 0.9, 0.3), 3.0)
 			# Unlock Throne
 		elif current_room_id == "f10_moment_06":
 			aspects_defeated.append("time")
-			_show_notification("⏳ Aspect of Time defeated!", Color(0.3, 0.9, 0.3))
+			_show_notification("⏳ Aspect of Time defeated!", Color(0.3, 0.9, 0.3), 3.0)
 		elif current_room_id == "f10_moment_07":
 			aspects_defeated.append("greed")
-			_show_notification("💰 Aspect of Greed defeated!", Color(0.3, 0.9, 0.3))
+			_show_notification("💰 Aspect of Greed defeated!", Color(0.3, 0.9, 0.3), 3.0)
 		elif current_room_id == "f10_moment_08":
 			aspects_defeated.append("transformation")
-			_show_notification("🔄 Aspect of Transformation defeated!", Color(0.3, 0.9, 0.3))
+			_show_notification("🔄 Aspect of Transformation defeated!", Color(0.3, 0.9, 0.3), 3.0)
 		elif current_room_id == "f10_cano":
-			_show_notification("🔚 THE CANO PROTOCOL IS DEFEATED. TRUE ENDING.", Color(0.9, 0.9, 0.9))
+			_show_notification("🔚 THE CANO PROTOCOL IS DEFEATED. TRUE ENDING.", Color(0.9, 0.9, 0.9), 3.0)
 			_ending_true()
 			return
 		
@@ -415,7 +415,7 @@ func _on_combat_ended(victory: bool):
 		
 		# If all aspects defeated, unlock approach
 		if aspects_defeated.size() >= 3 and current_room_id in ["f10_moment_06", "f10_moment_07", "f10_moment_08"]:
-			_show_notification("All Aspects defeated! The Dragon awaits.", Color(0.9, 0.9, 0.3))
+			_show_notification("All Aspects defeated! The Dragon awaits.", Color(0.9, 0.9, 0.3), 3.0)
 	
 	print("[Floor10-Hex] Combat ended. Victory: %s" % victory)
 
@@ -426,8 +426,8 @@ func _on_combat_turn_started(turn_number: int):
 			# Player took a turn = they attacked
 			player_attacked_in_phase_1 = true
 			crack_revealed = true
-			_show_notification("💥 You attacked! A crack appears in the wall...", Color(0.9, 0.3, 0.3))
-			_show_notification("🔓 Hidden door revealed! (Cano Protocol accessible)", Color(0.3, 0.9, 0.3))
+			_show_notification("💥 You attacked! A crack appears in the wall...", Color(0.9, 0.3, 0.3), 3.0)
+			_show_notification("🔓 Hidden door revealed! (Cano Protocol accessible)", Color(0.3, 0.9, 0.3), 3.0)
 			dragon_phase = 2
 			_update_dragon_display()
 	
@@ -522,7 +522,7 @@ func _on_enemy_combat_initiated(ambush: bool, enemy_id: String = ""):
 		AudioManager.play_combat(10)
 		combat_manager.start_combat(combat_enemies, GameState.player_deck)
 		if ambush_bonus:
-			_show_notification("🎯 AMBUSH! Player goes first!", Color(0.3, 0.9, 0.3))
+			_show_notification("🎯 AMBUSH! Player goes first!", Color(0.3, 0.9, 0.3), 3.0)
 		var ui = get_node_or_null("CombatUI")
 		if ui:
 			ui.setup(combat_manager)
@@ -541,7 +541,7 @@ func _check_enemy_sight():
 			if enemy.state == HexEnemy.State.UNAWARE:
 				enemy._set_state(HexEnemy.State.ALERT)
 				enemy.alert_timer = 0.0
-				_show_notification("👁 %s spotted you!" % enemy.enemy_name, Color(0.9, 0.3, 0.3))
+				_show_notification("👁 %s spotted you!" % enemy.enemy_name, Color(0.9, 0.3, 0.3), 3.0)
 			elif enemy.state == HexEnemy.State.AWARE and dist <= enemy.combat_range:
 				enemy._set_state(HexEnemy.State.IN_COMBAT)
 				_on_enemy_combat_initiated(false, enemy.enemy_id)
@@ -582,7 +582,7 @@ func _interact_ghost(moment_id: String, ghost_boss: String):
 		"Gear Mother":
 			_show_dialogue("Gear Mother", "Perfectionist. The tower was built by perfectionists. Look at us now.")
 	
-	_show_notification("👻 Ghost of %s has spoken." % ghost_boss, Color(0.7, 0.7, 0.9))
+	_show_notification("👻 Ghost of %s has spoken." % ghost_boss, Color(0.7, 0.7, 0.9), 3.0)
 
 # ===================================================================
 # FLOOR 10 — HOARD
@@ -635,19 +635,19 @@ func _alter_hoard_object(object_id: String):
 	match object_id:
 		"blood_contract":
 			# Burn contract: 10 HP cost, remove pact effects
-			_show_notification("🔥 Blood Contract BURNED! -10 HP, all pacts removed.", Color(0.9, 0.3, 0.3))
+			_show_notification("🔥 Blood Contract BURNED! -10 HP, all pacts removed.", Color(0.9, 0.3, 0.3), 3.0)
 			# TODO: Apply HP damage, remove pact effects
 		"soul_gem":
 			# Shatter gem: Dragon +5 HP, free enslaved souls
-			_show_notification("💎 Soul Gem SHATTERED! Dragon gains 5 HP, souls freed.", Color(0.9, 0.9, 0.3))
+			_show_notification("💎 Soul Gem SHATTERED! Dragon gains 5 HP, souls freed.", Color(0.9, 0.9, 0.3), 3.0)
 			dragon_max_hp += 5
 			dragon_hp += 5
 		"reforged_blade":
 			# Melt blade: lose buff, keep cards
-			_show_notification("🔥 Reforged Blade MELTED! Buff lost, cards kept.", Color(0.9, 0.7, 0.3))
+			_show_notification("🔥 Reforged Blade MELTED! Buff lost, cards kept.", Color(0.9, 0.7, 0.3), 3.0)
 		"graduate_scroll":
 			# Rewrite scroll: change grade
-			_show_notification("📝 Graduate Scroll REWRITTEN! Grade changed.", Color(0.3, 0.9, 0.3))
+			_show_notification("📝 Graduate Scroll REWRITTEN! Grade changed.", Color(0.3, 0.9, 0.3), 3.0)
 	
 	hoard_objects_altered[object_id] = true
 	_update_hoard_display()
@@ -729,12 +729,12 @@ func _check_dragon_phase():
 	if dragon_phase == 1 and hp_percent <= 0.5:
 		dragon_phase = 2
 		if player_attacked_in_phase_1:
-			_show_notification("🐉 PHASE 2: The Dragon fights with FURY! (You attacked in Phase 1)", Color(0.9, 0.3, 0.3))
+			_show_notification("🐉 PHASE 2: The Dragon fights with FURY! (You attacked in Phase 1)", Color(0.9, 0.3, 0.3), 3.0)
 		else:
-			_show_notification("🐉 PHASE 2: The Dragon tests your patience. (You waited)", Color(0.3, 0.9, 0.3))
+			_show_notification("🐉 PHASE 2: The Dragon tests your patience. (You waited)", Color(0.3, 0.9, 0.3), 3.0)
 	elif dragon_phase == 2 and hp_percent <= 0.25:
 		dragon_phase = 3
-		_show_notification("🐉 PHASE 3: The Dragon offers a FINAL CHOICE.", Color(0.9, 0.9, 0.3))
+		_show_notification("🐉 PHASE 3: The Dragon offers a FINAL CHOICE.", Color(0.9, 0.9, 0.3), 3.0)
 		_show_dragon_final_choice()
 
 func _show_dragon_final_choice():
@@ -746,7 +746,7 @@ func _interact_dragon():
 			_show_dialogue("The Dragon", "You have come far. Will you attack? Or listen?")
 			# Phase 1: dragon doesn't attack, just speaks
 			# If player attacks, it triggers combat and reveals crack
-			_show_notification("The Dragon awaits your move. Attack or listen?", Color(0.9, 0.9, 0.3))
+			_show_notification("The Dragon awaits your move. Attack or listen?", Color(0.9, 0.9, 0.3), 3.0)
 		2:
 			_show_dialogue("The Dragon", "The test is underway. You cannot turn back.")
 		3:
@@ -756,8 +756,8 @@ func _interact_dragon_attack():
 	if dragon_phase == 1:
 		player_attacked_in_phase_1 = true
 		crack_revealed = true
-		_show_notification("💥 You attacked! The Dragon reveals its true form!", Color(0.9, 0.3, 0.3))
-		_show_notification("🔓 A crack appears in the wall... a hidden door.", Color(0.3, 0.9, 0.3))
+		_show_notification("💥 You attacked! The Dragon reveals its true form!", Color(0.9, 0.3, 0.3), 3.0)
+		_show_notification("🔓 A crack appears in the wall... a hidden door.", Color(0.3, 0.9, 0.3), 3.0)
 		dragon_phase = 2
 		# Start combat with Dragon
 		for enemy in hex_enemies:
@@ -772,14 +772,14 @@ func _interact_dragon_attack():
 
 func _ending_destroy_dragon():
 	ending_chosen = "destroy"
-	_show_notification("⚔️ ENDING: End the Cycle. NG+ unlocked. Knowledge only.", Color(0.9, 0.9, 0.3))
+	_show_notification("⚔️ ENDING: End the Cycle. NG+ unlocked. Knowledge only.", Color(0.9, 0.9, 0.3), 3.0)
 	GameState.set_value("ending", "destroy")
 	GameState.set_value("ng_plus_unlocked", true)
 	_show_ending_screen("END THE CYCLE", "The Dragon dies. The tower collapses. A new tower appears on the horizon.")
 
 func _ending_become_dragon():
 	ending_chosen = "become"
-	_show_notification("👑 ENDING: Become the Dragon. NG+ unlocked. Previous deck becomes Dragon.", Color(0.9, 0.3, 0.9))
+	_show_notification("👑 ENDING: Become the Dragon. NG+ unlocked. Previous deck becomes Dragon.", Color(0.9, 0.3, 0.9), 3.0)
 	GameState.set_value("ending", "become")
 	GameState.set_value("ng_plus_unlocked", true)
 	GameState.set_value("true_ending_locked", true)
@@ -791,18 +791,18 @@ func _ending_walk_away():
 	var reforged = GameState.get_value("reforging_accepted", false)
 	
 	if not liberator or pacts > 0 or reforged:
-		_show_notification("❌ Cannot walk away. You are not pure enough.", Color(0.9, 0.3, 0.3))
+		_show_notification("❌ Cannot walk away. You are not pure enough.", Color(0.9, 0.3, 0.3), 3.0)
 		return
 	
 	ending_chosen = "walk"
-	_show_notification("🚶 ENDING: Walk Away. Exile Mode unlocked.", Color(0.3, 0.9, 0.3))
+	_show_notification("🚶 ENDING: Walk Away. Exile Mode unlocked.", Color(0.3, 0.9, 0.3), 3.0)
 	GameState.set_value("ending", "walk")
 	GameState.set_value("exile_mode_unlocked", true)
 	_show_ending_screen("WALK AWAY", "You leave through the hidden door. The tower fades behind you. You are free.")
 
 func _ending_true():
 	ending_chosen = "true"
-	_show_notification("🔚 TRUE ENDING: The Cano Protocol Defeated.", Color(0.9, 0.9, 0.9))
+	_show_notification("🔚 TRUE ENDING: The Cano Protocol Defeated.", Color(0.9, 0.9, 0.9), 3.0)
 	GameState.set_value("ending", "true")
 	GameState.set_value("cano_protocol_defeated", true)
 	_show_ending_screen("THE CANO PROTOCOL DEFEATED", "The tower was never a place. It was a question. You answered.")
@@ -810,7 +810,7 @@ func _ending_true():
 func _show_ending_screen(title: String, text: String):
 	_show_dialogue("ENDING", "%s\n\n%s" % [title, text])
 	# Show portal to title screen
-	_show_notification("Portal to Title Screen active. Press S to exit.", Color(0.9, 0.9, 0.3))
+	_show_notification("Portal to Title Screen active. Press S to exit.", Color(0.9, 0.9, 0.3), 3.0)
 
 # ===================================================================
 # FLOOR 10 — CANO PROTOCOL
@@ -822,7 +822,7 @@ func _interact_cano_protocol():
 		return
 	
 	_show_dialogue("The Cano Protocol", "You have found the hidden door. The true final boss awaits. This is not a dragon. This is the system that built the dragon.")
-	_show_notification("🔓 Cano Protocol accessible! Enter the hidden door?", Color(0.9, 0.1, 0.9))
+	_show_notification("🔓 Cano Protocol accessible! Enter the hidden door?", Color(0.9, 0.1, 0.9), 3.0)
 
 func _cano_protocol_turn(turn_number: int):
 	# Cano Protocol abilities cycle: MemoryLeak, StackOverflow, GarbageCollection
@@ -831,24 +831,24 @@ func _cano_protocol_turn(turn_number: int):
 	
 	match ability:
 		"MEMORY_LEAK":
-			_show_notification("☠️ MEMORY_LEAK: Your Quiddity becomes damage!", Color(0.9, 0.1, 0.1))
+			_show_notification("☠️ MEMORY_LEAK: Your Quiddity becomes damage!", Color(0.9, 0.1, 0.1), 3.0)
 		"STACK_OVERFLOW":
-			_show_notification("☠️ STACK_OVERFLOW: Spawn process interrupt!", Color(0.9, 0.1, 0.1))
+			_show_notification("☠️ STACK_OVERFLOW: Spawn process interrupt!", Color(0.9, 0.1, 0.1), 3.0)
 		"GARBAGE_COLLECTION":
-			_show_notification("☠️ GARBAGE_COLLECTION: Remove highest cost card!", Color(0.9, 0.1, 0.1))
+			_show_notification("☠️ GARBAGE_COLLECTION: Remove highest cost card!", Color(0.9, 0.1, 0.1), 3.0)
 	
 	cano_ability_index += 1
 	
 	if cano_hp <= 0:
-		_show_notification("🔚 CONFIRM: END PROCESS?", Color(0.9, 0.9, 0.9))
-		_show_notification("YES = True Ending. NO = Reinitialize.", Color(0.9, 0.9, 0.9))
+		_show_notification("🔚 CONFIRM: END PROCESS?", Color(0.9, 0.9, 0.9), 3.0)
+		_show_notification("YES = True Ending. NO = Reinitialize.", Color(0.9, 0.9, 0.9), 3.0)
 
 func _interact_cano_choice(yes: bool):
 	if yes:
-		_show_notification("🔚 PROCESS ENDED. TRUE ENDING.", Color(0.9, 0.9, 0.9))
+		_show_notification("🔚 PROCESS ENDED. TRUE ENDING.", Color(0.9, 0.9, 0.9), 3.0)
 		_ending_true()
 	else:
-		_show_notification("🔄 REINITIALIZING...", Color(0.9, 0.9, 0.3))
+		_show_notification("🔄 REINITIALIZING...", Color(0.9, 0.9, 0.3), 3.0)
 		# Continue game
 
 # ===================================================================
@@ -1051,7 +1051,7 @@ func _update_cano_display():
 	text += "Ability: %d | Phase %d" % [cano_ability_index, cano_phase]
 	cano_ui.text = text
 
-func _show_notification(msg: String, duration: float = 2.0, color: Color = Color(0.9, 0.9, 0.9)):
+func _show_notification(msg: String, color: Color = Color(0.9, 0.9, 0.9), duration: float = 2.0):
 	var label = Label.new()
 	label.text = msg
 	label.position = Vector2(640, 100)
@@ -1077,7 +1077,7 @@ func _show_dialogue(speaker: String, text: String):
 	if dialogue_ui and dialogue_ui.has_method("show_dialogue"):
 		dialogue_ui.show_dialogue(speaker, text)
 	else:
-		_show_notification("%s: %s" % [speaker, text], 3.0)
+		_show_notification("%s: %s" % [speaker, text], Color(0.9, 0.9, 0.9), 3.0)
 
 # ===================================================================
 # MOVEMENT
@@ -1139,7 +1139,7 @@ func _on_click_move(screen_pos: Vector2):
 			if enemy.try_ambush(hex_map.world_to_hex(player_node.global_position)):
 				return
 	var current_hex = hex_map.world_to_hex(player_node.global_position)
-	var path = HexTileMap._find_path(current_hex, target_hex, hex_map)
+	var path = hex_map.find_path(current_hex, target_hex)
 	if path.size() > 1:
 		path_movement_target = path.slice(1)
 		path_movement_index = 0
@@ -1279,7 +1279,7 @@ func _try_portal_transition(direction: String):
 		"f10_moment_11": msg = "The Throne. Choose."
 		"f10_cano":      msg = "The Cano Protocol. The true final test."
 	if msg != "":
-		_show_notification(msg, 2.5)
+		_show_notification(msg, Color(0.9, 0.9, 0.9), 2.5)
 	_enter_room(target_room)
 	in_transition = false
 
