@@ -429,7 +429,7 @@ func _start_combat(encounter_type: String):
 	var ui = get_node_or_null("CombatUI")
 	if ui:
 		ui.setup(combat_manager)
-		ui.show_combat_ui()
+		ui.visible = true
 		if ui.has_signal("combat_ended") and not ui.combat_ended.is_connected(_on_combat_ended):
 			ui.combat_ended.connect(_on_combat_ended)
 	print("[Floor8-Hex] Combat started: %s" % encounter_type)
@@ -439,7 +439,7 @@ func _on_combat_ended(victory: bool):
 	AudioManager.play_floor_ambient(8)
 	var ui = get_node_or_null("CombatUI")
 	if ui:
-		ui.hide_combat_ui()
+		ui.visible = false
 	if victory:
 		room_cleared[current_room_id] = true
 		if current_room_id == "control_room":
@@ -620,7 +620,7 @@ func _on_enemy_combat_initiated(ambush: bool, enemy_id: String = ""):
 		var ui = get_node_or_null("CombatUI")
 		if ui:
 			ui.setup(combat_manager)
-			ui.show_combat_ui()
+			ui.visible = true
 	print("[Floor8-Hex] Combat initiated (ambush: %s)" % ambush)
 
 func _check_enemy_sight():
@@ -952,7 +952,7 @@ func _start_combat_with_enemies(enemy_names: Array):
 	var ui = get_node_or_null("CombatUI")
 	if ui:
 		ui.setup(combat_manager)
-		ui.show_combat_ui()
+		ui.visible = true
 
 # ===================================================================
 # GOBLIN MORALE SYSTEM

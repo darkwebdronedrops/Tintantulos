@@ -268,7 +268,7 @@ func _start_combat(encounter_type: String):
 		var ui = get_node_or_null("CombatUI")
 		if ui:
 			ui.setup(combat_manager)
-			ui.show_combat_ui()
+			ui.visible = true
 		AudioManager.play_combat(1)
 		print("[Floor1-Hex] Combat started: %s" % encounter_type)
 
@@ -381,7 +381,7 @@ func _on_enemy_combat_initiated(ambush: bool):
 		var ui = get_node_or_null("CombatUI")
 		if ui:
 			ui.setup(combat_manager)
-			ui.show_combat_ui()
+			ui.visible = true
 		AudioManager.play_combat(1)
 		print("[Floor1-Hex] Hex combat started! Enemies: %d, Ambush: %s" % [combat_enemies.size(), str(ambush)])
 		

@@ -258,7 +258,7 @@ func _start_combat(encounter_type: String):
 		var ui = get_node_or_null("CombatUI")
 		if ui:
 			ui.setup(combat_manager)
-			ui.show_combat_ui()
+			ui.visible = true
 		AudioManager.play_combat(4)
 		print("[Floor4-Hex] Combat started: %s" % encounter_type)
 
@@ -349,7 +349,7 @@ func _on_enemy_combat_initiated(ambush: bool):
 		var ui = get_node_or_null("CombatUI")
 		if ui:
 			ui.setup(combat_manager)
-			ui.show_combat_ui()
+			ui.visible = true
 		AudioManager.play_combat(4)
 		print("[Floor4-Hex] Hex combat started! Enemies: %d, Ambush: %s" % [combat_enemies.size(), str(ambush)])
 		
@@ -946,7 +946,7 @@ func _trigger_trap_combat(booth_id: String):
 		var ui = get_node_or_null("CombatUI")
 		if ui:
 			ui.setup(combat_manager)
-			ui.show_combat_ui()
+			ui.visible = true
 		print("[Floor4-Hex] Trap booth '%s' combat started" % booth_id)
 
 func _get_booth_display_name(booth_id: String) -> String:
