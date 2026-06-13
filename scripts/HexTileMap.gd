@@ -521,9 +521,8 @@ func generate_floor3_layout():
 	clear_grid()
 	
 	# === CENTRAL KAMI SHRINE (inner circle, radius 4) ===
-	_generate_room("f3_center", Vector2i(0, 0), 4, [
-		# No portals — accessed by solving water puzzle in rooms
-	])
+	var empty_portals: Array[Vector2i] = []
+	_generate_room("f3_center", Vector2i(0, 0), 4, empty_portals)
 	# Mark center as special shrine tiles
 	for q in range(-2, 3):
 		for r in range(-2, 3):
@@ -560,15 +559,21 @@ func generate_floor3_layout():
 		var center = room_centers[i]
 		
 		# Portals: connect to adjacent rooms in ring
-		var portals = []
+		var portals: Array[Vector2i] = []
 		var prev_idx = (i - 1 + 12) % 12
 		var next_idx = (i + 1) % 12
 		# Portal toward previous room
-		var prev_dir = (room_centers[prev_idx] - center).normalized()
-		portals.append(center + Vector2i(round(prev_dir.x * 5), round(prev_dir.y * 5)))
+		var prev_dir = (room_centers[prev_idx] - center)
+		var prev_len = sqrt(prev_dir.x * prev_dir.x + prev_dir.y * prev_dir.y)
+		if prev_len > 0:
+			prev_dir = Vector2i(round(prev_dir.x / prev_len * 5), round(prev_dir.y / prev_len * 5))
+		portals.append(center + prev_dir)
 		# Portal toward next room  
-		var next_dir = (room_centers[next_idx] - center).normalized()
-		portals.append(center + Vector2i(round(next_dir.x * 5), round(next_dir.y * 5)))
+		var next_dir = (room_centers[next_idx] - center)
+		var next_len = sqrt(next_dir.x * next_dir.x + next_dir.y * next_dir.y)
+		if next_len > 0:
+			next_dir = Vector2i(round(next_dir.x / next_len * 5), round(next_dir.y / next_len * 5))
+		portals.append(center + next_dir)
 		
 		_generate_room(room_id, center, 5, portals)
 	

@@ -1,12 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://floor3main001"]
+[gd_scene load_steps=9 format=3 uid="uid://c4qf7mdhq6mn8"]
 
-[ext_resource type="Script" path="res://scripts/Floor3Controller.gd" id="1_controller"]
+[ext_resource type="Script" path="res://scripts/HexFloor3Controller.gd" id="1_controller"]
 [ext_resource type="Script" path="res://scripts/CombatManager.gd" id="2_combat"]
 [ext_resource type="Script" path="res://scripts/CombatUI.gd" id="3_ui"]
-[ext_resource type="Texture2D" path="res://assets/sprites/floor3/bg_floor3_main.png" id="9_bg"]
+[ext_resource type="Script" path="res://scripts/HexTileMap.gd" id="4_hexmap"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hex/hex_floor.png" id="5_hexfloor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hex/hex_wall.png" id="6_hexwall"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hex/hex_object.png" id="7_hexobj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hex/hex_void.png" id="8_hexvoid"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hex/hex_water.png" id="9_hexwater"]
 
 [node name="Floor3" type="Node2D"]
 script = ExtResource("1_controller")
+
+[node name="HexTileMap" type="Node2D" parent="."]
+script = ExtResource("4_hexmap")
+tile_texture_floor = ExtResource("5_hexfloor")
+tile_texture_wall = ExtResource("6_hexwall")
+tile_texture_object = ExtResource("7_hexobj")
+tile_texture_void = ExtResource("8_hexvoid")
+tile_texture_water = ExtResource("9_hexwater")
 
 [node name="CombatManager" type="Node2D" parent="."]
 script = ExtResource("2_combat")
@@ -14,31 +27,23 @@ script = ExtResource("2_combat")
 [node name="CombatUI" type="CanvasLayer" parent="."]
 script = ExtResource("3_ui")
 
-[node name="BackgroundUI" type="CanvasLayer" parent="."]
-layer = -1
-
-[node name="Background" type="Sprite2D" parent="BackgroundUI"]
-position = Vector2(960, 540)
-texture = ExtResource("9_bg")
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+zoom = Vector2(0.8, 0.8)
 
 [node name="MainUI" type="CanvasLayer" parent="."]
 
 [node name="Title" type="Label" parent="MainUI"]
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 400.0
-offset_bottom = 60.0
-theme_override_font_sizes/font_size = 28
-text = "FLOOR 3: THE GEARWORKS"
+offset_right = 1280.0
+offset_bottom = 30.0
+text = "Floor 3 — The Gearworks"
+horizontal_alignment = 1
 
-[node name="Controls" type="Label" parent="MainUI"]
-offset_left = 20.0
-offset_top = 80.0
-offset_right = 300.0
-offset_bottom = 250.0
-theme_override_font_sizes/font_size = 12
-text = "W: NW | E: NE | A: W | D: E | Z: SW | X: SE
-S: Interact/Enter
-R: Rotate Dial
-Click: Move to hex
-T: End Turn (combat)"
+[node name="Subtitle" type="Label" parent="MainUI"]
+offset_top = 30.0
+offset_right = 1280.0
+offset_bottom = 55.0
+text = "WEADZX to move | R to rotate dial | S/Space to interact | ESC for menu"
+horizontal_alignment = 1
+add_theme_font_size_override("font_size", 12)
+add_theme_color_override("font_color", Color(0.5, 0.5, 0.6, 1))
