@@ -400,7 +400,7 @@ func _on_combat_ended(victory: bool):
 	if victory:
 		room_cleared[current_room_id] = true
 		if current_room_id == "f7_auditorium":
-			_show_notification("🎉 THE DENIED IS DEFEATED!", Color(0.9, 0.9, 0.3))
+			_show_notification("🎉 THE DENIED IS DEFEATED!", Color(0.9, 0.9, 0.3), 3.0)
 			GameState.add_card_to_deck("the_denied")
 			GameState.gems += 100
 			if GameState.has_signal("gems_changed"):
@@ -440,7 +440,7 @@ func _offer_pact_in_combat():
 		{"name": "Soul for Shield", "cost": 20, "effect": "+10 shield", "sin_weight": 3},
 	]
 	var pact = pact_options[randi() % pact_options.size()]
-	_show_notification("📜 PACT OFFERED: %s (Cost: %d Quiddity)" % [pact["name"], pact["cost"]], Color(0.7, 0.3, 0.9))
+	_show_notification("📜 PACT OFFERED: %s (Cost: %d Quiddity)" % [pact["name"], pact["cost"]], Color(0.7, 0.3, 0.9), 3.0)
 	# In a real implementation, this would pause combat and show a UI dialog
 	# For now, we log it
 	print("[Floor7-Hex] Pact offered: %s" % pact["name"])
@@ -449,7 +449,7 @@ func _record_enemy_defeat_for_pacts():
 	for pact in signed_pacts:
 		if pact.get("combat_trigger", false) and not pact.get("fulfilled", false):
 			pact["fulfilled"] = true
-			_show_notification("📜 Pact fulfilled: %s" % pact["name"], Color(0.7, 0.3, 0.9))
+			_show_notification("📜 Pact fulfilled: %s" % pact["name"], Color(0.7, 0.3, 0.9), 3.0)
 			print("[Floor7-Hex] Pact fulfilled: %s" % pact["name"])
 
 # ===================================================================
@@ -556,7 +556,7 @@ func _on_enemy_combat_initiated(ambush: bool, enemy_id: String = ""):
 		AudioManager.play_combat(7)
 		combat_manager.start_combat(combat_enemies, GameState.player_deck)
 		if ambush_bonus:
-			_show_notification("🎯 AMBUSH! Player goes first!", Color(0.3, 0.9, 0.3))
+			_show_notification("🎯 AMBUSH! Player goes first!", Color(0.3, 0.9, 0.3), 3.0)
 		var ui = get_node_or_null("CombatUI")
 		if ui:
 			ui.setup(combat_manager)
@@ -575,7 +575,7 @@ func _check_enemy_sight():
 			if enemy.state == HexEnemy.State.UNAWARE:
 				enemy._set_state(HexEnemy.State.ALERT)
 				enemy.alert_timer = 0.0
-				_show_notification("👁 %s spotted you!" % enemy.enemy_name, Color(0.9, 0.3, 0.3))
+				_show_notification("👁 %s spotted you!" % enemy.enemy_name, Color(0.9, 0.3, 0.3), 3.0)
 			elif enemy.state == HexEnemy.State.AWARE and dist <= enemy.combat_range:
 				enemy._set_state(HexEnemy.State.IN_COMBAT)
 				_on_enemy_combat_initiated(false, enemy.enemy_id)
@@ -609,7 +609,7 @@ func _check_void_crack_instability():
 		if not void_crack_stabilized[i]:
 			unstable_count += 1
 	if unstable_count > 5 and randf() < 0.1:
-		_show_notification("💀 Void crack instability detected!", Color(0.5, 0.2, 0.7))
+		_show_notification("💀 Void crack instability detected!", Color(0.5, 0.2, 0.7), 3.0)
 		# Spawn extra void enemy near unstable crack
 		for i in range(void_crack_hexes.size()):
 			if not void_crack_stabilized[i] and randf() < 0.2:
@@ -619,7 +619,7 @@ func _check_void_crack_instability():
 				enemy.max_hp = 8
 				enemy.attack = 3
 				_add_enemy(enemy, crack_hex)
-				_show_notification("💀 Void spawn from crack!", Color(0.5, 0.2, 0.7))
+				_show_notification("💀 Void spawn from crack!", Color(0.5, 0.2, 0.7), 3.0)
 				break
 
 func _stabilize_void_crack():
@@ -630,9 +630,9 @@ func _stabilize_void_crack():
 			if dist <= 1:
 				void_crack_stabilized[i] = true
 				stabilizers_placed += 1
-				_show_notification("🔧 Void crack stabilized! (%d/%d)" % [stabilizers_placed, void_crack_hexes.size()], Color(0.3, 0.7, 0.9))
+				_show_notification("🔧 Void crack stabilized! (%d/%d)" % [stabilizers_placed, void_crack_hexes.size()], Color(0.3, 0.7, 0.9), 3.0)
 				return
-	_show_notification("No unstable void crack nearby.", Color(0.7, 0.7, 0.7))
+	_show_notification("No unstable void crack nearby.", Color(0.7, 0.7, 0.7), 3.0)
 
 func _check_player_near_void_crack():
 	if not player_node:
@@ -647,9 +647,9 @@ func _check_player_near_void_crack():
 				near_void_crack = true
 				break
 	if near_void_crack and not was_near:
-		_show_notification("☠ Near unstable void crack! Attention draining...", Color(0.5, 0.2, 0.7))
+		_show_notification("☠ Near unstable void crack! Attention draining...", Color(0.5, 0.2, 0.7), 3.0)
 	elif not near_void_crack and was_near:
-		_show_notification("Safe from void cracks.", Color(0.3, 0.9, 0.3))
+		_show_notification("Safe from void cracks.", Color(0.3, 0.9, 0.3), 3.0)
 
 # ===================================================================
 # FLOOR 7 — DOCKET / SIN SYSTEM
@@ -675,7 +675,7 @@ func _calculate_docket():
 
 func _reduce_docket(amount: int):
 	docket_total_weight = max(0, docket_total_weight - amount)
-	_show_notification("📜 Docket reduced by %d. Current weight: %d" % [amount, docket_total_weight], Color(0.3, 0.9, 0.3))
+	_show_notification("📜 Docket reduced by %d. Current weight: %d" % [amount, docket_total_weight], Color(0.3, 0.9, 0.3), 3.0)
 	_update_docket_display()
 
 # ===================================================================
@@ -688,11 +688,11 @@ func _check_boss_phase():
 	var hp_percent = float(boss_hp) / boss_max_hp
 	if boss_phase == 1 and hp_percent <= 0.6:
 		boss_phase = 2
-		_show_notification("⚖️ PHASE 2: VERDICT — The Denied passes judgment!", Color(0.9, 0.3, 0.3))
+		_show_notification("⚖️ PHASE 2: VERDICT — The Denied passes judgment!", Color(0.9, 0.3, 0.3), 3.0)
 		_boss_verdict_effects()
 	elif boss_phase == 2 and hp_percent <= 0.3:
 		boss_phase = 3
-		_show_notification("⚖️ PHASE 3: APPEAL — All pacts are broken! Maximum damage!", Color(0.9, 0.1, 0.1))
+		_show_notification("⚖️ PHASE 3: APPEAL — All pacts are broken! Maximum damage!", Color(0.9, 0.1, 0.1), 3.0)
 		_boss_appeal_effects()
 		_offer_final_pact()
 
@@ -700,7 +700,7 @@ func _boss_verdict_effects():
 	# Void crack explosions
 	for i in range(void_crack_hexes.size()):
 		if not void_crack_stabilized[i]:
-			_show_notification("💀 Void crack explodes!", Color(0.5, 0.2, 0.7))
+			_show_notification("💀 Void crack explodes!", Color(0.5, 0.2, 0.7), 3.0)
 	# All enemies heal slightly
 	for enemy in hex_enemies:
 		if enemy.hp > 0 and not enemy.is_boss:
@@ -711,22 +711,22 @@ func _boss_appeal_effects():
 	for pact in signed_pacts:
 		pact["broken"] = true
 	all_pacts_broken = true
-	_show_notification("📜 ALL PACTS BROKEN!", Color(0.9, 0.1, 0.1))
+	_show_notification("📜 ALL PACTS BROKEN!", Color(0.9, 0.1, 0.1), 3.0)
 	# Player takes damage if they had pacts
 	if signed_pacts.size() > 0:
-		_show_notification("💔 You feel the weight of broken pacts!", Color(0.9, 0.1, 0.1))
+		_show_notification("💔 You feel the weight of broken pacts!", Color(0.9, 0.1, 0.1), 3.0)
 
 func _offer_final_pact():
 	if final_pact_offered:
 		return
 	final_pact_offered = true
-	_show_notification("📜 FINAL PACT OFFERED by The Denied!", Color(0.9, 0.1, 0.9))
+	_show_notification("📜 FINAL PACT OFFERED by The Denied!", Color(0.9, 0.1, 0.9), 3.0)
 	_show_dialogue("The Denied", "Sign the Final Pact and end this now. Or fight to the death. Your choice.")
 	# In a real implementation, this would show a dialog with Sign/Refuse options
 
 func _sign_final_pact():
 	final_pact_signed = true
-	_show_notification("📜 FINAL PACT SIGNED! Instant victory... at a cost.", Color(0.9, 0.1, 0.9))
+	_show_notification("📜 FINAL PACT SIGNED! Instant victory... at a cost.", Color(0.9, 0.1, 0.9), 3.0)
 	# Heavy cost: lose half max HP, all gems, all pacts broken
 	GameState.gems = 0
 	if GameState.has_signal("gems_changed"):
@@ -749,7 +749,7 @@ func _interact_with_goblin_forger():
 	_show_dialogue("Goblin Forger", "Hey pal! I 'borrowed' some official stamps from Floor 6. Need a forged pact? Cheaper but riskier. Or I can forge a docket reduction. Your call.")
 	# Options: Forge pact (cost 5 gems, cheaper but sin_weight +2), Forge docket (cost 10 gems, reduce docket by 3)
 	# For now, just show notification
-	_show_notification("🤝 Goblin Forger: Pact forging available!", Color(0.3, 0.9, 0.3))
+	_show_notification("🤝 Goblin Forger: Pact forging available!", Color(0.3, 0.9, 0.3), 3.0)
 
 func _forge_pact():
 	if forgery_used:
@@ -763,18 +763,18 @@ func _forge_pact():
 		"forged": true,
 	}
 	signed_pacts.append(forged_pact)
-	_show_notification("📜 Forged pact signed! +8 damage, +2 sin weight.", Color(0.9, 0.7, 0.3))
+	_show_notification("📜 Forged pact signed! +8 damage, +2 sin weight.", Color(0.9, 0.7, 0.3), 3.0)
 	_update_pact_display()
 
 func _forge_docket_reduction():
 	if GameState.gems < 10:
-		_show_notification("Not enough gems! Need 10 gems.", Color(0.9, 0.3, 0.3))
+		_show_notification("Not enough gems! Need 10 gems.", Color(0.9, 0.3, 0.3), 3.0)
 		return
 	GameState.gems -= 10
 	if GameState.has_signal("gems_changed"):
 		GameState.gems_changed.emit(GameState.gems)
 	_reduce_docket(3)
-	_show_notification("📜 Docket forged! -3 sin weight. Cost: 10 gems.", Color(0.3, 0.9, 0.3))
+	_show_notification("📜 Docket forged! -3 sin weight. Cost: 10 gems.", Color(0.3, 0.9, 0.3), 3.0)
 
 # ===================================================================
 # FLOOR 7 — PACT INTERACTIONS
@@ -799,7 +799,7 @@ func _interact_contract_station():
 		GameState.gems_changed.emit(GameState.gems)
 	signed_pacts.append(pact)
 	docket_total_weight += pact["sin_weight"]
-	_show_notification("📜 Pact signed: %s! Sin weight +%d" % [pact["name"], pact["sin_weight"]], Color(0.7, 0.3, 0.9))
+	_show_notification("📜 Pact signed: %s! Sin weight +%d" % [pact["name"], pact["sin_weight"]], Color(0.7, 0.3, 0.9), 3.0)
 	_update_pact_display()
 	_update_docket_display()
 
@@ -922,7 +922,7 @@ func _update_void_crack_display():
 		text += "☠ NEAR UNSTABLE CRACK!"
 	void_crack_ui.text = text
 
-func _show_notification(msg: String, duration: float = 2.0, color: Color = Color(0.9, 0.9, 0.9)):
+func _show_notification(msg: String, color: Color = Color(0.9, 0.9, 0.9), duration: float = 2.0):
 	var label = Label.new()
 	label.text = msg
 	label.position = Vector2(640, 100)
@@ -948,7 +948,7 @@ func _show_dialogue(speaker: String, text: String):
 	if dialogue_ui and dialogue_ui.has_method("show_dialogue"):
 		dialogue_ui.show_dialogue(speaker, text)
 	else:
-		_show_notification("%s: %s" % [speaker, text], 3.0)
+		_show_notification("%s: %s" % [speaker, text], Color(0.9, 0.9, 0.9), 3.0)
 
 func _show_floor_transition_prompt():
 	var prompt = Label.new()
@@ -1023,7 +1023,7 @@ func _on_click_move(screen_pos: Vector2):
 			if enemy.try_ambush(hex_map.world_to_hex(player_node.global_position)):
 				return
 	var current_hex = hex_map.world_to_hex(player_node.global_position)
-	var path = HexTileMap._find_path(current_hex, target_hex, hex_map)
+	var path = hex_map.find_path(current_hex, target_hex)
 	if path.size() > 1:
 		path_movement_target = path.slice(1)
 		path_movement_index = 0
@@ -1129,7 +1129,7 @@ func _try_portal_transition(direction: String):
 		"f7_antechamber":msg = "The Antechamber. The Denied is near."
 		"f7_auditorium": msg = "The Auditorium. The Denied awaits."
 	if msg != "":
-		_show_notification(msg, 2.5)
+		_show_notification(msg, Color(0.9, 0.9, 0.9), 2.5)
 	_enter_room(target_room)
 	in_transition = false
 
@@ -1228,16 +1228,16 @@ func _interact_at_hex(hex: Vector2i):
 func _setup_floor_specific():
 	# Cross-floor bleed from Floor 6
 	if GameState.get_value("floor6_graduate_status", "") == "graduate":
-		_show_notification("🎓 Alumni Discount — Pacts cost 25% less", Color(0.3, 0.9, 0.3))
+		_show_notification("🎓 Alumni Discount — Pacts cost 25% less", Color(0.3, 0.9, 0.3), 3.0)
 	if GameState.get_value("floor6_goblin_janitor_befriended", false):
 		goblin_forger_available = true
-		_show_notification("🤝 Goblin Forger available in Break Room", Color(0.3, 0.9, 0.3))
+		_show_notification("🤝 Goblin Forger available in Break Room", Color(0.3, 0.9, 0.3), 3.0)
 	if not docket_calculated:
 		_calculate_docket()
 	print("[Floor7-Hex] Setup complete. Sins: %d | Goblin: %s" % [docket_total_weight, goblin_forger_available])
 
 func _lecture_hall_panic():
-	_show_notification("⚖️ Judge defeated! Court panics!", Color(0.9, 0.9, 0.3))
+	_show_notification("⚖️ Judge defeated! Court panics!", Color(0.9, 0.9, 0.3), 3.0)
 	for enemy in hex_enemies:
 		if enemy.hp > 0 and not enemy.is_boss and enemy.current_room == current_room_id:
 			var roll = randi() % 3
