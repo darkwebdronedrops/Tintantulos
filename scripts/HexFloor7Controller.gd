@@ -385,7 +385,7 @@ func _start_combat(encounter_type: String):
 		combat_manager.turn_started.connect(_on_combat_turn_started)
 	var ui = get_node_or_null("CombatUI")
 	if ui:
-		ui.setup(combat_data, GameState.player_deck, combat_manager)
+		ui.setup(combat_manager)
 		ui.show_combat_ui()
 		if ui.has_signal("combat_ended") and not ui.combat_ended.is_connected(_on_combat_ended):
 			ui.combat_ended.connect(_on_combat_ended)
@@ -559,7 +559,7 @@ func _on_enemy_combat_initiated(ambush: bool, enemy_id: String = ""):
 			_show_notification("🎯 AMBUSH! Player goes first!", Color(0.3, 0.9, 0.3))
 		var ui = get_node_or_null("CombatUI")
 		if ui:
-			ui.setup(combat_enemies, GameState.player_deck, combat_manager)
+			ui.setup(combat_manager)
 			ui.show_combat_ui()
 	print("[Floor7-Hex] Combat initiated (ambush: %s)" % ambush)
 
