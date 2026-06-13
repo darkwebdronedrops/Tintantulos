@@ -127,7 +127,7 @@ func find_path(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
 	"""A* pathfinding between two hex coordinates"""
 	if not is_walkable(end):
 		var empty: Array[Vector2i] = []
-	return empty
+		return empty
 	
 	var open_set: Array[Vector2i] = [start]
 	var came_from = {}
@@ -168,7 +168,7 @@ static func _hex_line(a: Vector2i, b: Vector2i) -> Array[Vector2i]:
 	var N = _hex_distance(a, b)
 	if N == 0:
 		var line_result: Array[Vector2i] = [a]
-			return line_result
+		return line_result
 	
 	var results: Array[Vector2i] = []
 	for i in range(N + 1):
