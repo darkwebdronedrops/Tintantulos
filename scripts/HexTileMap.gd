@@ -126,9 +126,9 @@ func get_neighbors(hex: Vector2i) -> Array[Vector2i]:
 func find_path(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
 	"""A* pathfinding between two hex coordinates"""
 	if not is_walkable(end):
-		return []
+		return Array[Vector2i]()
 	
-	var open_set = [start]
+	var open_set: Array[Vector2i] = [start]
 	var came_from = {}
 	var g_score = {start: 0}
 	var f_score = {start: _hex_distance(start, end)}
@@ -156,7 +156,7 @@ func find_path(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
 				if neighbor not in open_set:
 					open_set.append(neighbor)
 	
-	return []
+	return Array[Vector2i]()
 
 static func _hex_distance(a: Vector2i, b: Vector2i) -> int:
 	return (abs(a.x - b.x) + abs(a.x + a.y - b.x - b.y) + abs(a.y - b.y)) / 2
@@ -165,7 +165,7 @@ static func _hex_line(a: Vector2i, b: Vector2i) -> Array[Vector2i]:
 	"""Get all hexes in a line from a to b"""
 	var N = _hex_distance(a, b)
 	if N == 0:
-		return [a]
+		return Array[Vector2i]([a])
 	
 	var results: Array[Vector2i] = []
 	for i in range(N + 1):
@@ -178,7 +178,7 @@ static func _hex_line(a: Vector2i, b: Vector2i) -> Array[Vector2i]:
 	return results
 
 static func _reconstruct_path(came_from: Dictionary, end: Vector2i) -> Array[Vector2i]:
-	var path = [end]
+	var path: Array[Vector2i] = [end]
 	var current = end
 	while current in came_from:
 		current = came_from[current]
