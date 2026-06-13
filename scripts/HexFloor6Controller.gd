@@ -662,7 +662,7 @@ func _on_enemy_combat_initiated(ambush: bool):
 	ambush_bonus = ambush
 	
 	var ambush_msg = "AMBUSH! Player bonus turn!" if ambush else "Enemy spotted you!"
-	_show_notification(ambush_msg, 3.0)
+	_show_notification(ambush_msg, Color(0.9, 0.9, 0.9), 3.0)
 	
 	# Find all enemies in combat range
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
@@ -1108,7 +1108,7 @@ func _try_portal_transition(direction: String):
 		"f6_clocktower": msg = "The elevator rises to the Clocktower Apex..."
 		"f6_quadrangle": msg = "You return to the Quadrangle."
 	if msg != "":
-		_show_notification(msg, 2.5)
+		_show_notification(msg, Color(0.9, 0.9, 0.9), 2.5)
 	
 	_enter_room(target_room)
 	in_transition = false
