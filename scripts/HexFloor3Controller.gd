@@ -151,7 +151,7 @@ func _rotate_dial():
 
     dial_position = (dial_position + 1) % 11
 
-    # Update room_data
+    # Update room_data with new positions
     for i in range(ROOM_COUNT):
         var room_id = str(i + 1)
         room_data[room_id]["hex"] = room_hex_positions[i]
@@ -159,13 +159,78 @@ func _rotate_dial():
     _show_notification("DIAL ROTATED! Rooms have shifted!", Color(0.9, 0.7, 0.3), 3.0)
     print("[Floor3-Hex] Dial rotated. New positions: %s" % str(room_hex_positions))
 
-    # Regenerate hex layout with new positions
-    if hex_map:
-        hex_map.clear_grid()
-        hex_map.generate_floor3_layout()
+    # Regenerate hex grid with new positions
+    _regenerate_hex_grid()
+    
+    # Update light beam widget positions
+    _update_widget_positions()
+    
+    # Update enemy positions to match new room positions
+    _update_enemy_positions()
 
     # Move player if they're now inside a wall
     _ensure_player_walkable()
+
+func _regenerate_hex_grid():
+    """Clear and rebuild hex grid with current room positions."""
+    if not hex_map:
+        return
+    
+    hex_map.clear_grid()
+    
+    # Regenerate center hub
+    var empty_portals: Array[Vector2i] = []
+    hex_map._generate_room("f3_center", crown_cog_hex, 4, empty_portals)
+    for q in range(-2, 3):
+        for r in range(-2, 3):
+            var hex = Vector2i(q, r)
+            if HexTileMap._hex_distance(hex, Vector2i(0, 0)) <= 2:
+                hex_map.set_tile(hex, HexTileMap.TILE_OBJECT)
+    
+    # Regenerate 12 rooms at current positions
+    for i in range(ROOM_COUNT):
+        var room_id = str(i + 1)
+        var room_hex = room_data[room_id]["hex"]
+        hex_map._generate_room("f3_room_%d" % (i + 1), room_hex, 5, empty_portals)
+    
+    # Regenerate corridors connecting adjacent rooms in the ring
+    for i in range(ROOM_COUNT):
+        var a = room_data[str(i + 1)]["hex"]
+        var next_idx = ((i + 1) % 12) + 1
+        var b = room_data[str(next_idx)]["hex"]
+        var line = HexTileMap._hex_line(a, b)
+        for hex in line:
+            if not hex_map.grid.has(hex):
+                hex_map.set_tile(hex, HexTileMap.TILE_FLOOR)
+    
+    print("[Floor3-Hex] Hex grid regenerated: %d tiles" % hex_map.grid.size())
+
+func _update_widget_positions():
+    """Update light beam widget positions after rotation."""
+    for widget in light_beam_widgets:
+        var room_id = widget["room_id"]
+        var room_hex = room_data[room_id]["hex"]
+        widget["hex"] = room_hex + Vector2i(0, 2)  # Offset toward center
+
+func _update_enemy_positions():
+    """Move enemies to match new room positions after rotation."""
+    for enemy in hex_enemies:
+        if not is_instance_valid(enemy):
+            continue
+        
+        # Find which room this enemy belongs to (by original position)
+        for room_id in room_data.keys():
+            if room_id == "12":
+                continue
+            var room = room_data[room_id]
+            # If enemy was near this room's original position, move it to new position
+            if HexTileMap._hex_distance(enemy.patrol_center, room["hex"]) <= 5:
+                # Reposition enemy relative to new room center
+                var offset = enemy.hex_pos - enemy.patrol_center
+                enemy.patrol_center = room["hex"]
+                enemy.hex_pos = room["hex"] + offset
+                break
+
 
 func _ensure_player_walkable():
     var player_hex = hex_map.world_to_hex(player_node.global_position)
