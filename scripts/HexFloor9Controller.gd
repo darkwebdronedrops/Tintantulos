@@ -1545,11 +1545,119 @@ func _show_furnace_menu():
 	_show_dialogue("Soul Furnace", text)
 
 func _open_shop():
-	var shop_ui = get_node_or_null("ShopUI")
-	if shop_ui and shop_ui.has_method("show_shop"):
-		shop_ui.show_shop(9, 1.0)
+	in_ui = true
+	
+	var shop_ui = Control.new()
+	shop_ui.name = "ShopUI"
+	shop_ui.z_index = 200
+	add_child(shop_ui)
+	
+	# Background
+	var bg = ColorRect.new()
+	bg.color = Color(0.08, 0.08, 0.02, 0.92)
+	bg.size = Vector2(1280, 720)
+	shop_ui.add_child(bg)
+	
+	var panel = PanelContainer.new()
+	panel.size = Vector2(700, 550)
+	panel.position = Vector2(290, 85)
+	shop_ui.add_child(panel)
+	
+	var vbox = VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 16)
+	panel.add_child(vbox)
+	
+	# Header
+	var header = HBoxContainer.new()
+	vbox.add_child(header)
+	
+	var title = Label.new()
+	title.text = "☀ Divine Overlay Sanctum ☀"
+	title.add_theme_font_size_override("font_size", 24)
+	title.add_theme_color_override("font_color", Color(0.9, 0.8, 0.4))
+	header.add_child(title)
+	
+	var gems_label = Label.new()
+	gems_label.name = "GemsLabel"
+	gems_label.text = "Gems: %d💎" % GameState.gems
+	gems_label.add_theme_font_size_override("font_size", 18)
+	gems_label.add_theme_color_override("font_color", Color(0.9, 0.7, 0.3))
+	header.add_child(gems_label)
+	
+	# Divine overlay stock
+	var shop_items = [
+		{"card_id": "Overlay_divine_bolt", "cost": 25, "name": "Divine Bolt", "desc": "0-cost Overlay: Deal 5 radiant damage, heal 2"},
+		{"card_id": "Overlay_divine_shield", "cost": 25, "name": "Divine Shield", "desc": "0-cost Overlay: Gain 6 shield, cleanse 1 debuff"},
+		{"card_id": "Overlay_divine_blessing", "cost": 28, "name": "Divine Blessing", "desc": "0-cost Overlay: Heal 6, draw 1"},
+		{"card_id": "Overlay_divine_favor", "cost": 30, "name": "Divine Favor", "desc": "0-cost Overlay: Next 2 cards cost -1 attention"},
+		{"card_id": "Overlay_divine_echo", "cost": 30, "name": "Divine Echo", "desc": "0-cost Overlay: Copy next card to hand"},
+		{"card_id": "Overlay_divine_resonance", "cost": 30, "name": "Divine Resonance", "desc": "0-cost Overlay: Double next healing"},
+		{"card_id": "Overlay_divine_smite", "cost": 35, "name": "Divine Smite", "desc": "0-cost Overlay: Deal 7, ignore ALL shields"},
+		{"card_id": "Overlay_divine_overload", "cost": 35, "name": "Divine Overload", "desc": "0-cost Overlay: Heal all allies 4, damage all enemies 3"},
+	]
+	
+	var grid = GridContainer.new()
+	grid.columns = 2
+	vbox.add_child(grid)
+	
+	for i in range(shop_items.size()):
+		var item = shop_items[i]
+		var slot = _create_divine_shop_slot(i, item, gems_label, shop_ui)
+		grid.add_child(slot)
+	
+	var close_btn = Button.new()
+	close_btn.text = "Leave Shop"
+	close_btn.pressed.connect(func(): _close_divine_shop(shop_ui))
+	vbox.add_child(close_btn)
+
+func _create_divine_shop_slot(index: int, item: Dictionary, gems_label: Label, shop_ui: Control) -> PanelContainer:
+	var slot = PanelContainer.new()
+	
+	var vbox = VBoxContainer.new()
+	slot.add_child(vbox)
+	
+	var name_label = Label.new()
+	name_label.text = item["name"]
+	name_label.add_theme_font_size_override("font_size", 16)
+	vbox.add_child(name_label)
+	
+	var desc_label = Label.new()
+	desc_label.text = item["desc"]
+	desc_label.add_theme_font_size_override("font_size", 12)
+	vbox.add_child(desc_label)
+	
+	var cost_label = Label.new()
+	cost_label.text = "%d💎" % item["cost"]
+	cost_label.add_theme_color_override("font_color", Color(0.9, 0.7, 0.3))
+	vbox.add_child(cost_label)
+	
+	var buy_btn = Button.new()
+	buy_btn.text = "Buy"
+	buy_btn.disabled = GameState.gems < item["cost"]
+	buy_btn.pressed.connect(func(): _on_buy_divine(item, gems_label, shop_ui))
+	vbox.add_child(buy_btn)
+	
+	return slot
+
+func _on_buy_divine(item: Dictionary, gems_label: Label, shop_ui: Control):
+	if GameState.gems < item["cost"]:
+		_show_notification("Not enough gems!", Color(0.9, 0.3, 0.3), 2.0)
+		return
+	
+	GameState.gems -= item["cost"]
+	gems_label.text = "Gems: %d💎" % GameState.gems
+	
+	var card = CardDB.get_card(item["card_id"])
+	if card:
+		GameState.player_deck.append(card)
+		AudioManager.play_sfx("buy_item")
+		_show_notification("Purchased: %s!" % item["name"], Color(0.9, 0.8, 0.4), 2.0)
 	else:
-		_show_notification("Shop (Floor 9) — Bone Forges Supplies", Color(0.9, 0.7, 0.3))
+		_show_notification("Card not found: %s" % item["card_id"], Color(0.9, 0.3, 0.3), 2.0)
+
+func _close_divine_shop(shop_ui: Control):
+	in_ui = false
+	shop_ui.queue_free()
 
 func _start_combat_with_enemies(enemy_names: Array):
 	if in_combat:
