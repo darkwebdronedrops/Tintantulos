@@ -89,6 +89,14 @@ func _create_ui():
 		player_panel.patch_margin_bottom = 20
 	add_child(player_panel)
 	
+	# Solid background behind player panel
+	var player_bg = ColorRect.new()
+	player_bg.color = Color(0.08, 0.08, 0.12, 0.9)
+	player_bg.anchor_right = 1.0
+	player_bg.anchor_bottom = 1.0
+	player_panel.add_child(player_bg)
+	player_panel.move_child(player_bg, 0)
+	
 	# HP bar
 	hp_bar = TextureProgressBar.new()
 	hp_bar.name = "HPBar"
@@ -468,6 +476,15 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 		panel.patch_margin_right = 15
 		panel.patch_margin_top = 15
 		panel.patch_margin_bottom = 15
+	
+	# Solid background (prevents checkerboard from missing textures)
+	var panel_bg = ColorRect.new()
+	panel_bg.name = "PanelBG"
+	panel_bg.color = Color(0.08, 0.08, 0.12, 0.9)
+	panel_bg.anchor_right = 1.0
+	panel_bg.anchor_bottom = 1.0
+	panel.add_child(panel_bg)
+	panel.move_child(panel_bg, 0)
 	
 	var sprite = TextureRect.new()
 	sprite.name = "Sprite"
