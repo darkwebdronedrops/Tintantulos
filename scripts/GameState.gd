@@ -13,6 +13,7 @@ signal player_died()  # Emitted when HP reaches 0
 # Transit Tokens (Floor 1)
 static var transit_tokens: Array[String] = []  # Collected tokens: "North Pass", "East Pass", "South Pass", "West Pass"
 static var is_first_run: bool = true  # First time playing Floor 1
+static var has_seen_combat_tutorial: bool = false  # First combat tutorial shown
 static var door_tutorial_completed: bool = false  # The Door tutorial done
 
 # Floor 1 progress
@@ -1465,6 +1466,7 @@ static func save_game():
 		# Floor 1 data
 		"transit_tokens": transit_tokens,
 		"is_first_run": is_first_run,
+		"has_seen_combat_tutorial": has_seen_combat_tutorial,
 		"door_tutorial_completed": door_tutorial_completed,
 		"floor1_rooms_cleared": floor1_rooms_cleared,
 		"shortcut_maker_status": shortcut_maker_status,
@@ -1625,6 +1627,7 @@ static func load_game() -> bool:
 	for item in temp_transit:
 		transit_tokens.append(str(item))
 	is_first_run = data.get("is_first_run", true)
+	has_seen_combat_tutorial = data.get("has_seen_combat_tutorial", false)
 	door_tutorial_completed = data.get("door_tutorial_completed", false)
 	var temp_f1_cleared: Array = data.get("floor1_rooms_cleared", [])
 	floor1_rooms_cleared.clear()

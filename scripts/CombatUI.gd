@@ -788,6 +788,15 @@ func _on_card_clicked(index: int):
 			combat_manager.play_card(index, i)
 			return
 
+func _on_card_hover(index: int, is_hovering: bool):
+	# Visual feedback for card hover
+	var card_root = hand_container.get_node_or_null("Card_%d" % index)
+	if card_root:
+		if is_hovering:
+			card_root.scale = Vector2(1.1, 1.1)
+		else:
+			card_root.scale = Vector2(1.0, 1.0)
+
 func _on_target_selected(enemy_index: int):
 	AudioManager.play_sfx("target_select")
 	if selected_card_index >= 0 and selected_card_index < combat_manager.hand.size():

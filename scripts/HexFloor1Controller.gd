@@ -110,6 +110,13 @@ func _ready():
 	call_deferred("_build_floor")
 
 func _build_floor():
+	if GameState.is_first_run:
+		_start_tutorial()
+		return
+	
+	_finish_floor_setup()
+
+func _finish_floor_setup():
 	# Generate hex layout
 	if hex_map:
 		hex_map.generate_floor1_layout()
@@ -991,6 +998,19 @@ func _setup_floor_specific():
 	else:
 		print("[Floor1-Hex] Re-run — all portals active")
 		_unlock_all_portals()
+
+func _start_tutorial():
+	in_ui = true
+	print("[Floor1-Hex] Starting tutorial via TutorialManager")
+	TutorialManager.start_tutorial()
+	TutorialManager.tutorial_completed.connect(_on_tutorial_completed, CONNECT_ONE_SHOT)
+
+func _on_tutorial_completed():
+	GameState.is_first_run = false
+	GameState.save_game()
+	in_ui = false
+	print("[Floor1-Hex] Tutorial complete — resuming floor setup")
+	_finish_floor_setup()
 
 func _lock_portals_except(allowed: Array[String]):
 	# Handled by _is_portal_locked
