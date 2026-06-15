@@ -31,6 +31,7 @@ class EnemyTemplate:
 	
 	func to_combat_data() -> CombatManager.EnemyData:
 		var ed = CombatManager.EnemyData.new(name, max_hp, attack, defense, action_pattern)
+		ed.sprite_texture_path = sprite_path
 		return ed
 
 # ============================================================================
