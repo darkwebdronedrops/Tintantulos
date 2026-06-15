@@ -139,6 +139,7 @@ var player_shield: int = 0
 var player_attention: int = 0
 var player_quiddity: int = 0
 var player_stake: int = 0  # 0-5, reduces card draw
+var current_stake: int = 0  # Alias for CombatUI compatibility
 
 var _player_hp: int:
 	get:
@@ -295,7 +296,8 @@ func start_combat(enemy_data: Array, p_deck: Array = []):
 	is_boss_mode = false
 	boss = null
 	player_last_damage = 10  # Reset for Eidolon tracking
-	player_stake = 0  # Reset stake each combat
+	player_stake = 0
+	current_stake = 0  # Reset stake each combat
 
 	# Load equipped weapon, shield, and trinket from GameState
 	_load_equipped_weapon()
@@ -611,6 +613,7 @@ func stake_cards(stake_amount: int):
 	if stake_amount < 0 or stake_amount > 5:
 		return
 	player_stake = stake_amount
+	current_stake = stake_amount  # Keep alias in sync
 	player_quiddity += stake_amount
 	quiddity_this_combat += stake_amount
 	print("CombatManager: Staked %d — draw %d cards, gained %d Quiddity" % [stake_amount, 5 - stake_amount, stake_amount])
