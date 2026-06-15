@@ -619,7 +619,7 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	card_bg.color.a = 0.3
 	card_root.add_child(card_bg)
 	
-	# Art - drawn on top of frame so it shows through transparent areas
+	# Art - drawn on top of frame
 	var art_rect = TextureRect.new()
 	art_rect.name = "Art"
 	art_rect.anchor_right = 1.0; art_rect.anchor_bottom = 1.0
@@ -627,10 +627,15 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	art_rect.offset_right = -2 * s; art_rect.offset_bottom = -2 * s
 	art_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	art_rect.z_index = 2  # Art on top of frame
+	art_rect.z_index = 2
 	if card.sprite_texture_path != "":
 		var art_tex = load(card.sprite_texture_path)
-		if art_tex: art_rect.texture = art_tex
+		if art_tex:
+			art_rect.texture = art_tex
+			print("Card art loaded: %s" % card.sprite_texture_path)
+		else:
+			push_warning("Card art FAILED to load: %s" % card.sprite_texture_path)
+			art_rect.modulate = _get_faction_color(card.faction)
 	else:
 		art_rect.modulate = _get_faction_color(card.faction)
 	card_root.add_child(art_rect)
@@ -657,7 +662,8 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 		crown.z_index = 4
 		card_root.add_child(crown)
 	
-	# Frame - drawn behind art (z_index 1) so art shows through transparent areas
+	# Frame - drawn FIRST (child index 0) so art shows on top by default
+	# Art rect is added after this, so it's on top by child order
 	var frame_rect = TextureRect.new()
 	frame_rect.name = "Frame"
 	frame_rect.anchor_right = 1.0; frame_rect.anchor_bottom = 1.0
@@ -667,7 +673,11 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	frame_rect.z_index = 1
 	if card.frame_texture_path != "":
 		var frame_tex = load(card.frame_texture_path)
-		if frame_tex: frame_rect.texture = frame_tex
+		if frame_tex:
+			frame_rect.texture = frame_tex
+			print("Card frame loaded: %s" % card.frame_texture_path)
+		else:
+			push_warning("Card frame FAILED to load: %s" % card.frame_texture_path)
 	card_root.add_child(frame_rect)
 	
 	if card.attention_cost > 0:
