@@ -211,7 +211,11 @@ func _load_all_streams():
 		for ext in [".mp3", ".ogg", ".wav"]:
 			var full_path = MUSIC_PATH + track_key + ext
 			if ResourceLoader.exists(full_path):
-				_music_streams[track_key] = load(full_path)
+				var stream = load(full_path)
+				# Enable looping for all music streams
+				if stream is AudioStreamOggVorbis or stream is AudioStreamMP3 or stream is AudioStreamWAV:
+					stream.loop = true
+				_music_streams[track_key] = stream
 				break
 		if not _music_streams.has(track_key):
 			push_warning("[AudioManager] Music file not found: %s" % track_key)
