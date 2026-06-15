@@ -619,6 +619,7 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	card_bg.color.a = 0.3
 	card_root.add_child(card_bg)
 	
+	# Art - drawn on top of frame so it shows through transparent areas
 	var art_rect = TextureRect.new()
 	art_rect.name = "Art"
 	art_rect.anchor_right = 1.0; art_rect.anchor_bottom = 1.0
@@ -626,6 +627,7 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	art_rect.offset_right = -2 * s; art_rect.offset_bottom = -2 * s
 	art_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	art_rect.z_index = 2  # Art on top of frame
 	if card.sprite_texture_path != "":
 		var art_tex = load(card.sprite_texture_path)
 		if art_tex: art_rect.texture = art_tex
@@ -640,6 +642,7 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 		border.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		border.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		border.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		border.z_index = 3
 		var gold_tex = load("res://assets/sprites/ui/ui_card_gold_border.png")
 		if gold_tex: border.texture = gold_tex
 		card_root.add_child(border)
@@ -651,14 +654,17 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 		if crown_tex: crown.texture = crown_tex
 		crown.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 		crown.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		crown.z_index = 4
 		card_root.add_child(crown)
 	
+	# Frame - drawn behind art (z_index 1) so art shows through transparent areas
 	var frame_rect = TextureRect.new()
 	frame_rect.name = "Frame"
 	frame_rect.anchor_right = 1.0; frame_rect.anchor_bottom = 1.0
 	frame_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	frame_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	frame_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame_rect.z_index = 1
 	if card.frame_texture_path != "":
 		var frame_tex = load(card.frame_texture_path)
 		if frame_tex: frame_rect.texture = frame_tex
@@ -674,6 +680,7 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 		badge.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		badge.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		badge.z_index = 5
 		card_root.add_child(badge)
 		var cost_label = Label.new()
 		cost_label.text = str(card.attention_cost)
@@ -682,6 +689,7 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 		cost_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		cost_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		cost_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cost_label.z_index = 6
 		card_root.add_child(cost_label)
 	
 	var name_bg = TextureRect.new()
@@ -693,6 +701,7 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	name_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	name_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	name_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	name_bg.z_index = 5
 	card_root.add_child(name_bg)
 	
 	var name_label = Label.new()
@@ -702,6 +711,7 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.add_theme_color_override("font_color", Color(1, 1, 1))
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	name_label.z_index = 6
 	card_root.add_child(name_label)
 	
 	var effect_parts = []
@@ -724,6 +734,7 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 		effect_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		effect_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		effect_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		effect_bg.z_index = 5
 		card_root.add_child(effect_bg)
 		var effect_label = Label.new()
 		effect_label.text = effect_text
@@ -732,48 +743,21 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 		effect_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		effect_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
 		effect_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		effect_label.z_index = 6
 		card_root.add_child(effect_label)
 	
-	if card.keywords.size() > 0:
-		var keywords_bg = TextureRect.new()
-		keywords_bg.name = "KeywordsBG"
-		keywords_bg.position = Vector2(4, 184) * s
-		keywords_bg.size = Vector2(132, 12) * s
-		var kw_tex = load("res://assets/sprites/ui/ui_card_keywords_strip.png")
-		if kw_tex: keywords_bg.texture = kw_tex
-		keywords_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		keywords_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		keywords_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		card_root.add_child(keywords_bg)
-		var keywords_label = Label.new()
-		keywords_label.text = ", ".join(card.keywords)
-		keywords_label.position = Vector2(4, 184) * s
-		keywords_label.size = Vector2(132, 12) * s
-		keywords_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		keywords_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.5))
-		keywords_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		card_root.add_child(keywords_label)
-	
-	var would_exceed = (combat_manager.player_attention + card.attention_cost) > 20
-	if would_exceed:
-		card_root.modulate = Color(0.4, 0.4, 0.4)
-	else:
-		if index == selected_card_index:
-			card_root.modulate = Color(1.3, 1.3, 1.3)
-		else:
-			card_root.modulate = Color(1, 1, 1)
-	
-	if not would_exceed:
-		var click_area = Button.new()
-		click_area.name = "ClickArea"
-		click_area.anchor_right = 1.0; click_area.anchor_bottom = 1.0
-		click_area.flat = true
-		click_area.modulate = Color(1, 1, 1, 0.0)
-		click_area.pressed.connect(func(): _on_card_clicked(index))
-		card_root.add_child(click_area)
+	# Click handler
+	var click_handler = TextureButton.new()
+	click_handler.name = "ClickHandler"
+	click_handler.anchor_right = 1.0; click_handler.anchor_bottom = 1.0
+	click_handler.modulate = Color(1, 1, 1, 0.0)
+	click_handler.pressed.connect(func(): _on_card_clicked(index))
+	click_handler.mouse_entered.connect(func(): _on_card_hover(index, true))
+	click_handler.mouse_exited.connect(func(): _on_card_hover(index, false))
+	click_handler.z_index = 10
+	card_root.add_child(click_handler)
 	
 	return card_root
-
 func _get_faction_color(faction: String) -> Color:
 	match faction:
 		"Construct": return Color(0.7, 0.75, 0.8)
