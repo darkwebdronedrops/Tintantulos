@@ -66,6 +66,15 @@ func setup(cm: CombatManager):
 func _create_ui():
 	var s = S
 	
+	# Solid background behind entire combat UI (hides checkerboard from missing textures)
+	var bg = ColorRect.new()
+	bg.name = "CombatBG"
+	bg.color = Color(0.02, 0.02, 0.04, 0.92)
+	bg.anchor_right = 1.0
+	bg.anchor_bottom = 1.0
+	bg.z_index = -1
+	add_child(bg)
+	
 	# Player panel (left)
 	player_panel = NinePatchRect.new()
 	player_panel.name = "PlayerPanel"
@@ -584,6 +593,14 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	card_root.name = "Card_%d" % index
 	card_root.size = Vector2(140, 200) * s
 	card_root.custom_minimum_size = Vector2(140, 200) * s
+	
+	# Solid card background (prevents checkerboard when no art)
+	var card_bg = ColorRect.new()
+	card_bg.name = "CardBG"
+	card_bg.anchor_right = 1.0; card_bg.anchor_bottom = 1.0
+	card_bg.color = _get_faction_color(card.faction)
+	card_bg.color.a = 0.3
+	card_root.add_child(card_bg)
 	
 	var art_rect = TextureRect.new()
 	art_rect.name = "Art"
