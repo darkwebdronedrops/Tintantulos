@@ -23,6 +23,8 @@ var in_combat: bool = false
 var in_transition: bool = false
 var in_ui: bool = false
 var is_paused: bool = false
+var floor_cleared: bool = false
+var floor_complete_notified: bool = false
 
 # Click-to-Move path following state
 var path_movement_active: bool = false
@@ -348,12 +350,16 @@ func _on_combat_ended(victory: bool):
 			enemy.reset_after_combat()
 
 func _floor_complete():
+	if floor_complete_notified:
+		return
+	floor_complete_notified = true
+	floor_cleared = true
 	_show_notification("🎉 Floor 1 Complete! The portal opens...", Color(0.3, 0.9, 0.3), 5.0)
 	_show_dialogue("The Tower", "The Snotling King falls. Press [S] to ascend to Floor 2.")
 	GameState.add_card_to_deck("goblin_snotling_king")
 	GameState.gems += 20
 	GameState.save_game()
-	print("[Floor1-Hex] Floor complete!")
+	print("[Floor1-Hex] Floor complete! Press S to ascend.")
 
 func _on_enemy_combat_initiated(ambush: bool):
 	"""Called when an enemy initiates or is ambushed into combat."""
@@ -540,7 +546,10 @@ func _input(event: InputEvent):
 			KEY_X:
 				_hex_move(Vector2(0.5, 0.866))      # SE (angle 60°)
 			KEY_S, KEY_SPACE:
-				_try_interact()
+				if floor_cleared:
+					_ascend_to_next_floor()
+				else:
+					_try_interact()
 				return
 
 func _on_click_move(screen_pos: Vector2):
@@ -1142,4 +1151,7 @@ func _process(_delta: float):
 
 func _ascend_to_next_floor():
 	AudioManager.play_sfx("floor_transition")
+	GameState.set_current_floor(2)
+	GameState.save_game()
+	print("[Floor1-Hex] Ascending to Floor 2...")
 	get_tree().change_scene_to_file("res://scenes/Floor2.tscn")
