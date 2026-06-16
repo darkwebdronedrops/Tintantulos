@@ -11,7 +11,7 @@ var current_step: int = 0
 var is_active: bool = false
 
 const STEPS: Array[String] = [
-	"Welcome to Tintantulos. You are a Borrowed — given form by the Tower itself.",
+	"You are a Wizard from another place, come to Tintantulos — the Lighthouse of Giants who sailed the storms from Torespar to its moon. Here, oceans are Quintessence, and the giants' history is alive.",
 	"Move with [W][E][A][D][Z][X] or click on the ground to walk. The hex grid responds to your steps.",
 	"Enemies patrol these halls. Approach from behind to ambush them. If they spot you first, they attack!",
 	"When combat begins, you draw cards. Each card costs Attention to play.",
