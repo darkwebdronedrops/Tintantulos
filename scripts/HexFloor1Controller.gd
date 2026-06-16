@@ -197,18 +197,18 @@ func _setup_enemies():
 	# Spawn enemies per room
 	var enemy_spawns = {
 		"upper": [
-			{"name": "Piston Assembly", "hex": Vector2i(-2, -22), "faction": "Construct"},
-			{"name": "Piston Assembly", "hex": Vector2i(2, -26), "faction": "Construct"},
+			{"name": "Piston Assembly", "hex": Vector2i(-2, -22), "faction": "Construct", "sprite": "res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"},
+			{"name": "Piston Assembly", "hex": Vector2i(2, -26), "faction": "Construct", "sprite": "res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"},
 		],
 		"middle": [
-			{"name": "Piston Assembly", "hex": Vector2i(22, -2), "faction": "Construct"},
-			{"name": "Piston Assembly", "hex": Vector2i(26, 2), "faction": "Construct"},
+			{"name": "Piston Assembly", "hex": Vector2i(22, -2), "faction": "Construct", "sprite": "res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"},
+			{"name": "Piston Assembly", "hex": Vector2i(26, 2), "faction": "Construct", "sprite": "res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"},
 		],
 		"secret": [
-			{"name": "Mimic Chest", "hex": Vector2i(0, 46), "faction": "Aberration"},
+			{"name": "The Duplicate", "hex": Vector2i(0, 46), "faction": "Aberration", "sprite": "res://assets/sprites/enemies/Aberration/enemy_the_duplicate_idle.png"},
 		],
 		"spore_heart": [
-			{"name": "Spore Heart", "hex": Vector2i(44, 0), "faction": "Elemental", "boss": true},
+			{"name": "Geode Heart", "hex": Vector2i(44, 0), "faction": "Elemental", "boss": true, "sprite": "res://assets/sprites/enemies/Elemental/enemy_geode_heart_idle.png"},
 		],
 	}
 	
@@ -219,7 +219,8 @@ func _setup_enemies():
 				spawn_data["name"],
 				spawn_data["hex"],
 				spawn_data.get("faction", "Unknown"),
-				spawn_data.get("boss", false)
+				spawn_data.get("boss", false),
+				spawn_data.get("sprite", "")
 			)
 			enemy.name = "HexEnemy_%d" % hex_enemies.size()
 			
@@ -355,8 +356,8 @@ func _floor_complete():
 	floor_complete_notified = true
 	floor_cleared = true
 	_show_notification("🎉 Floor 1 Complete! The portal opens...", Color(0.3, 0.9, 0.3), 5.0)
-	_show_dialogue("The Tower", "The Snotling King falls. Press [S] to ascend to Floor 2.")
-	GameState.add_card_to_deck("goblin_snotling_king")
+	_show_dialogue("The Tower", "The Geode Heart falls. Press [S] to ascend to Floor 2.")
+	GameState.add_card_to_deck("geode_heart_boss")
 	GameState.gems += 20
 	GameState.save_game()
 	print("[Floor1-Hex] Floor complete! Press S to ascend.")

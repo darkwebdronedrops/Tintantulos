@@ -38,13 +38,16 @@ signal state_changed(new_state: State)
 signal spotted_player
 signal combat_initiated(ambush: bool)
 
-func _init(id: String, name_: String, start_hex: Vector2i, faction_: String = "Unknown", boss: bool = false):
+var sprite_path: String = ""  # Explicit sprite path for combat UI
+
+func _init(id: String, name_: String, start_hex: Vector2i, faction_: String = "Unknown", boss: bool = false, sprite_path_: String = ""):
 	enemy_id = id
 	enemy_name = name_
 	hex_pos = start_hex
 	patrol_center = start_hex
 	faction = faction_
 	is_boss = boss
+	sprite_path = sprite_path_
 	if is_boss:
 		view_range = 10
 		combat_range = 2
@@ -283,6 +286,9 @@ func to_combat_data() -> CombatManager.EnemyData:
 		[]
 	)
 	data.hp = hp
+	data.faction = faction
+	if sprite_path != "":
+		data.sprite_texture_path = sprite_path
 	return data
 
 func take_damage(amount: int):
