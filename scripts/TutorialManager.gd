@@ -12,7 +12,7 @@ var is_active: bool = false
 
 const STEPS: Array[String] = [
 	"Welcome to Tintantulos. You are a Borrowed — given form by the Tower itself.",
-	"Move with [W][A][S][D] or click on the ground to walk. The hex grid responds to your steps.",
+	"Move with [W][E][A][D][Z][X] or click on the ground to walk. The hex grid responds to your steps.",
 	"Enemies patrol these halls. Approach from behind to ambush them. If they spot you first, they attack!",
 	"When combat begins, you draw cards. Each card costs Attention to play.",
 	"Play cards to deal damage, gain Shield, or Heal. Hover over cards to see what they do.",
