@@ -97,6 +97,7 @@ var shop_stock: Array[Dictionary] = [
 ]
 var shop_ui_active: bool = false
 var shop_ui_container: Control
+var shop_sprite: Sprite2D  # Visual shop widget in the middle room
 
 # -------------------------------------------------------------------
 # Signals
@@ -791,6 +792,13 @@ func _unlock_all_portals():
 func _check_interactables():
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
 	
+	# Check for shop proximity first
+	if shop_sprite and shop_sprite.visible:
+		var shop_hex = hex_map.world_to_hex(shop_sprite.global_position)
+		if HexTileMap._hex_distance(player_hex, shop_hex) <= 2:
+			_show_interact_prompt("Shop [S]")
+			return
+	
 	# Check for nearby interactables (objects on OBJECT tiles)
 	var neighbors = hex_map.get_neighbors(player_hex)
 	neighbors.append(player_hex)
@@ -808,12 +816,17 @@ func _check_interactables():
 func _try_interact():
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
 	
-	# Check current room for interactions
+	# Check for shop proximity first
+	if shop_sprite and shop_sprite.visible:
+		var shop_hex = hex_map.world_to_hex(shop_sprite.global_position)
+		if HexTileMap._hex_distance(player_hex, shop_hex) <= 2:
+			_open_shop()
+			return
+	
+	# Check current room for other interactions
 	match current_room_id:
 		"entry":
 			_show_dialogue("Transit Construct", "Welcome to the Tower, Seeker. The portals lead to the four trials.")
-		"middle":
-			_open_shop()
 		"lower":
 			_receive_blessing()
 		"secret":
@@ -1002,6 +1015,18 @@ func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.9), durat
 # ===================================================================
 
 func _setup_floor_specific():
+	# Place shop sprite in middle room
+	if hex_map and room_data.has("middle"):
+		var shop_pos = hex_map.hex_to_world(room_data["middle"]["center"])
+		shop_sprite = Sprite2D.new()
+		shop_sprite.name = "ShopSprite"
+		shop_sprite.texture = preload("res://assets/sprites/shop_machinist.png")
+		shop_sprite.position = shop_pos
+		shop_sprite.z_index = 50
+		shop_sprite.scale = Vector2(1.0, 1.0)
+		add_child(shop_sprite)
+		print("[Floor1-Hex] Shop sprite placed at middle room")
+	
 	if GameState.is_first_run:
 		print("[Floor1-Hex] First run — tutorial mode")
 		_lock_portals_except(["north"])
