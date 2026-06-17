@@ -839,6 +839,14 @@ func _check_interactables():
 			_show_interact_prompt("Shop [S]")
 			return
 	
+	# Check for secret chest proximity
+	var chest = get_node_or_null("SecretChest")
+	if chest and not chest.get_meta("opened", false):
+		var chest_hex = Vector2i(-4, 48)
+		if HexTileMap._hex_distance(player_hex, chest_hex) <= 1:
+			_show_interact_prompt("Secret Chest [S]")
+			return
+	
 	# Check for nearby interactables (objects on OBJECT tiles)
 	var neighbors = hex_map.get_neighbors(player_hex)
 	neighbors.append(player_hex)
@@ -861,6 +869,14 @@ func _try_interact():
 		var shop_hex = hex_map.world_to_hex(shop_sprite.global_position)
 		if HexTileMap._hex_distance(player_hex, shop_hex) <= 2:
 			_open_shop()
+			return
+	
+	# Check for secret chest proximity
+	var chest = get_node_or_null("SecretChest")
+	if chest and not chest.get_meta("opened", false):
+		var chest_hex = Vector2i(-4, 48)
+		if HexTileMap._hex_distance(player_hex, chest_hex) <= 1:
+			_open_secret_chest()
 			return
 	
 	# Check current room for other interactions
@@ -1221,7 +1237,6 @@ func _ascend_to_next_floor():
 	GameState.save_game()
 	print("[Floor1-Hex] Ascending to Floor 2...")
 	get_tree().change_scene_to_file("res://scenes/Floor2.tscn")
-
 func _setup_chest():
 	"""Place a secret chest in a hidden corridor."""
 	var chest = Sprite2D.new()
@@ -1233,24 +1248,6 @@ func _setup_chest():
 	chest.z_index = 80
 	add_child(chest)
 	print("[Floor1-Hex] Secret chest placed at (-4, 48)")
-
-func _check_chest():
-	"""Check if player is near the chest and show prompt."""
-	if not player_node:
-		return
-	var chest = get_node_or_null("SecretChest")
-	if not chest:
-		return
-	
-	var player_hex = hex_map.world_to_hex(player_node.global_position)
-	var chest_hex = Vector2i(-4, 48)
-	var dist = HexTileMap._hex_distance(player_hex, chest_hex)
-	
-	if dist <= 1:
-		_show_notification("Secret Chest [E]", Color(0.9, 0.8, 0.2), 0.5)
-		if Input.is_action_just_pressed("interact"):
-			_open_secret_chest()
-
 func _open_secret_chest():
 	"""Open the secret chest — gives gems + random card."""
 	var chest = get_node_or_null("SecretChest")
