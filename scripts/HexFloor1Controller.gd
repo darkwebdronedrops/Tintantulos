@@ -97,6 +97,8 @@ var shop_stock: Array[Dictionary] = [
 ]
 var shop_ui_active: bool = false
 var shop_ui_container: Control
+	# Post-combat UI
+	var post_combat_ui: PostCombatUI
 var shop_sprite: Sprite2D  # Visual shop widget in the middle room
 
 # -------------------------------------------------------------------
@@ -334,15 +336,24 @@ func _on_combat_ended(victory: bool):
 		room_cleared[current_room_id] = true
 		print("[Floor1-Hex] Room cleared: %s" % current_room_id)
 		
-		# Check boss unlock
-		if current_room_id == "upper" and not GameState.door_tutorial_completed:
-			GameState.door_tutorial_completed = true
-			_unlock_all_portals()
-			_show_dialogue("The Door", "The Door creaks open. All paths are now clear.")
+		# Get defeated faction for card picks
+		var defeated_faction = ""
+		for enemy in hex_enemies:
+			if enemy.hp <= 0:
+				defeated_faction = enemy.faction
+				break
 		
-		# Boss defeated
-		if current_room_id == "spore_heart":
-			_floor_complete()
+		# Show post-combat reward UI
+		if post_combat_ui:
+			var combat_manager = get_node_or_null("CombatManager")
+			var quiddity_earned = combat_manager.quiddity_this_combat if combat_manager else 0
+			post_combat_ui.show_post_combat(true, quiddity_earned, defeated_faction)
+			in_ui = true
+			print("[Floor1-Hex] Post-combat UI shown")
+			return  # Wait for ui_closed signal before continuing
+		
+		# Fallback: if no post_combat_ui, just do the old flow
+		_check_boss_unlock()
 	else:
 		print("[Floor1-Hex] Combat lost — player respawned")
 		GameState.player_hp = max(1, GameState.player_hp)
@@ -350,6 +361,22 @@ func _on_combat_ended(victory: bool):
 		# Reset all enemies
 		for enemy in hex_enemies:
 			enemy.reset_after_combat()
+
+func _on_post_combat_closed():
+	in_ui = false
+	print("[Floor1-Hex] Post-combat closed, resuming")
+	_check_boss_unlock()
+
+func _check_boss_unlock():
+	# Check boss unlock
+	if current_room_id == "upper" and not GameState.door_tutorial_completed:
+		GameState.door_tutorial_completed = true
+		_unlock_all_portals()
+		_show_dialogue("The Door", "The Door creaks open. All paths are now clear.")
+	
+	# Boss defeated
+	if current_room_id == "spore_heart":
+		_floor_complete()
 
 func _floor_complete():
 	if floor_complete_notified:
