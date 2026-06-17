@@ -385,7 +385,7 @@ func _floor_complete():
 	floor_cleared = true
 	_show_notification("🎉 Floor 1 Complete! The portal opens...", Color(0.3, 0.9, 0.3), 5.0)
 	_show_dialogue("The Tower", "The Geode Heart falls. Press [S] to ascend to Floor 2.")
-	GameState.add_card_to_deck("geode_heart_boss")
+	# Boss rewards come from PostCombatUI Quiddity system, not a fixed card
 	GameState.gems += 20
 	GameState.save_game()
 	print("[Floor1-Hex] Floor complete! Press S to ascend.")
