@@ -207,6 +207,10 @@ func _setup_enemies():
 			{"name": "Piston Assembly", "hex": Vector2i(22, -2), "faction": "Construct", "sprite": "res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"},
 			{"name": "Piston Assembly", "hex": Vector2i(26, 2), "faction": "Construct", "sprite": "res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"},
 		],
+		"lower": [
+			{"name": "Goblin Grunt", "hex": Vector2i(-2, 30), "faction": "Goblin", "sprite": "res://assets/sprites/enemies/Goblin/enemy_goblin_grunt_idle.png", "patrol_radius": 2},
+			{"name": "Goblin Grunt", "hex": Vector2i(2, 34), "faction": "Goblin", "sprite": "res://assets/sprites/enemies/Goblin/enemy_goblin_grunt_idle.png", "patrol_radius": 3},
+		],
 		"secret": [
 			{"name": "The Duplicate", "hex": Vector2i(0, 46), "faction": "Aberration", "sprite": "res://assets/sprites/enemies/Aberration/enemy_the_duplicate_idle.png"},
 		],
@@ -214,6 +218,9 @@ func _setup_enemies():
 			{"name": "Geode Heart", "hex": Vector2i(44, 0), "faction": "Elemental", "boss": true, "sprite": "res://assets/sprites/enemies/Elemental/enemy_geode_heart_idle.png"},
 		],
 	}
+	
+	# Spawn secret chest
+	_setup_chest()
 	
 	for room_id in enemy_spawns.keys():
 		for spawn_data in enemy_spawns[room_id]:
@@ -238,6 +245,12 @@ func _setup_enemies():
 				enemy.hp = 15
 				enemy.attack = 5
 				enemy.defense = 2
+			elif spawn_data.get("faction") == "Goblin":
+				enemy.max_hp = 8 + randi() % 5
+				enemy.hp = enemy.max_hp
+				enemy.attack = 3 + randi() % 2
+				enemy.defense = 0
+				enemy.patrol_radius = spawn_data.get("patrol_radius", 2)
 			else:
 				enemy.max_hp = 10 + randi() % 6
 				enemy.hp = enemy.max_hp
@@ -1208,3 +1221,64 @@ func _ascend_to_next_floor():
 	GameState.save_game()
 	print("[Floor1-Hex] Ascending to Floor 2...")
 	get_tree().change_scene_to_file("res://scenes/Floor2.tscn")
+
+func _setup_chest():
+	"""Place a secret chest in a hidden corridor."""
+	var chest = Sprite2D.new()
+	chest.name = "SecretChest"
+	chest.position = hex_map.hex_to_world(Vector2i(-4, 48))  # Hidden corner near secret room
+	chest.texture = load("res://assets/sprites/floor1_v2/chest.png")
+	chest.centered = true
+	chest.scale = Vector2(2.0, 2.0)
+	chest.z_index = 80
+	add_child(chest)
+	print("[Floor1-Hex] Secret chest placed at (-4, 48)")
+
+func _check_chest():
+	"""Check if player is near the chest and show prompt."""
+	if not player_node:
+		return
+	var chest = get_node_or_null("SecretChest")
+	if not chest:
+		return
+	
+	var player_hex = hex_map.world_to_hex(player_node.global_position)
+	var chest_hex = Vector2i(-4, 48)
+	var dist = HexTileMap._hex_distance(player_hex, chest_hex)
+	
+	if dist <= 1:
+		_show_notification("Secret Chest [E]", Color(0.9, 0.8, 0.2), 0.5)
+		if Input.is_action_just_pressed("interact"):
+			_open_secret_chest()
+
+func _open_secret_chest():
+	"""Open the secret chest — gives gems + random card."""
+	var chest = get_node_or_null("SecretChest")
+	if not chest:
+		return
+	
+	# Check if already opened
+	if chest.get_meta("opened", false):
+		return
+	
+	chest.set_meta("opened", true)
+	chest.modulate = Color(0.5, 0.5, 0.5)  # Greyed out
+	
+	# Rewards
+	var gems = 10 + randi() % 11  # 10-20 gems
+	GameState.gems += gems
+	
+	# Random card from defeated faction or universal
+	var pool = CardDB.get_cards_by_faction("Universal")
+	pool.shuffle()
+	var card = pool[0] if pool.size() > 0 else null
+	if card:
+		GameState.add_card_to_deck(card.id)
+		_show_dialogue("Chest", "You found %d gems and a %s card!" % [gems, card.card_name])
+	else:
+		_show_dialogue("Chest", "You found %d gems!" % gems)
+	
+	AudioManager.play_sfx("chest_open")
+	GameState.save_game()
+	print("[Floor1-Hex] Secret chest opened!")
+
