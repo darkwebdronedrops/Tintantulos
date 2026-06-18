@@ -611,152 +611,61 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	card_root.size = Vector2(140, 200) * s
 	card_root.custom_minimum_size = Vector2(140, 200) * s
 	
-	# Solid card background (prevents checkerboard when no art)
-	var card_bg = ColorRect.new()
-	card_bg.name = "CardBG"
-	card_bg.anchor_right = 1.0; card_bg.anchor_bottom = 1.0
-	card_bg.color = _get_faction_color(card.faction)
-	card_bg.color.a = 0.3
-	card_root.add_child(card_bg)
+	# Build finished card path from card data
+	var safe_name = card.card_name.to_lower().replace(" ", "_").replace("'", "")
+	var finished_path = "res://assets/sprites/cards/finished/%s/%s.png" % [card.faction, safe_name]
 	
-	# Art - drawn on top of frame
-	var art_rect = TextureRect.new()
-	art_rect.name = "Art"
-	art_rect.anchor_right = 1.0; art_rect.anchor_bottom = 1.0
-	art_rect.offset_left = 2 * s; art_rect.offset_top = 2 * s
-	art_rect.offset_right = -2 * s; art_rect.offset_bottom = -2 * s
-	art_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	art_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	art_rect.z_index = 2
-	if card.sprite_texture_path != "":
-		var art_tex = load(card.sprite_texture_path)
-		if art_tex:
-			art_rect.texture = art_tex
-			print("Card art loaded: %s" % card.sprite_texture_path)
-		else:
-			push_warning("Card art FAILED to load: %s" % card.sprite_texture_path)
-			art_rect.modulate = _get_faction_color(card.faction)
+	# Check if pre-composited finished card exists
+	var finished_tex = load(finished_path)
+	if finished_tex:
+		# Use finished card (single texture, all text/frame/art baked in)
+		var card_rect = TextureRect.new()
+		card_rect.name = "FinishedCard"
+		card_rect.anchor_right = 1.0; card_rect.anchor_bottom = 1.0
+		card_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		card_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		card_rect.texture = finished_tex
+		card_root.add_child(card_rect)
+		
+		# Gold border for survivors (on top of finished card)
+		if card.survives_reset:
+			var border = TextureRect.new()
+			border.name = "GoldBorder"
+			border.anchor_right = 1.0; border.anchor_bottom = 1.0
+			border.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			border.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			border.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			var gold_tex = load("res://assets/sprites/ui/ui_card_gold_border.png")
+			if gold_tex: border.texture = gold_tex
+			card_root.add_child(border)
+			var crown = TextureRect.new()
+			crown.name = "CrownIcon"
+			crown.position = Vector2(112, 5) * s
+			crown.size = Vector2(22, 20) * s
+			var crown_tex = load("res://assets/sprites/ui/ui_crown_icon.png")
+			if crown_tex: crown.texture = crown_tex
+			crown.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+			crown.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			card_root.add_child(crown)
 	else:
-		art_rect.modulate = _get_faction_color(card.faction)
-	card_root.add_child(art_rect)
+		# Fallback: dynamic compositing (broken - frame centers are opaque)
+		# Show a colored placeholder with name
+		push_warning("No finished card found for %s, using placeholder" % card.card_name)
+		var card_bg = ColorRect.new()
+		card_bg.name = "CardBG"
+		card_bg.anchor_right = 1.0; card_bg.anchor_bottom = 1.0
+		card_bg.color = _get_faction_color(card.faction)
+		card_root.add_child(card_bg)
+		
+		var name_label = Label.new()
+		name_label.text = card.card_name
+		name_label.anchor_right = 1.0; name_label.anchor_bottom = 1.0
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_label.add_theme_color_override("font_color", Color(1, 1, 1))
+		card_root.add_child(name_label)
 	
-	if card.survives_reset:
-		var border = TextureRect.new()
-		border.name = "GoldBorder"
-		border.anchor_right = 1.0; border.anchor_bottom = 1.0
-		border.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		border.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		border.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		border.z_index = 3
-		var gold_tex = load("res://assets/sprites/ui/ui_card_gold_border.png")
-		if gold_tex: border.texture = gold_tex
-		card_root.add_child(border)
-		var crown = TextureRect.new()
-		crown.name = "CrownIcon"
-		crown.position = Vector2(112, 5) * s
-		crown.size = Vector2(22, 20) * s
-		var crown_tex = load("res://assets/sprites/ui/ui_crown_icon.png")
-		if crown_tex: crown.texture = crown_tex
-		crown.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
-		crown.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		crown.z_index = 4
-		card_root.add_child(crown)
-	
-	# Frame - drawn FIRST (child index 0) so art shows on top by default
-	# Art rect is added after this, so it's on top by child order
-	var frame_rect = TextureRect.new()
-	frame_rect.name = "Frame"
-	frame_rect.anchor_right = 1.0; frame_rect.anchor_bottom = 1.0
-	frame_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	frame_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	frame_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	frame_rect.z_index = 1
-	if card.frame_texture_path != "":
-		var frame_tex = load(card.frame_texture_path)
-		if frame_tex:
-			frame_rect.texture = frame_tex
-			print("Card frame loaded: %s" % card.frame_texture_path)
-		else:
-			push_warning("Card frame FAILED to load: %s" % card.frame_texture_path)
-	card_root.add_child(frame_rect)
-	
-	if card.attention_cost > 0:
-		var badge = TextureRect.new()
-		badge.name = "CostBadge"
-		badge.position = Vector2(4, 4) * s
-		badge.size = Vector2(32, 26) * s
-		var badge_tex = load("res://assets/sprites/ui/ui_cost_badge.png")
-		if badge_tex: badge.texture = badge_tex
-		badge.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		badge.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		badge.z_index = 5
-		card_root.add_child(badge)
-		var cost_label = Label.new()
-		cost_label.text = str(card.attention_cost)
-		cost_label.position = Vector2(4, 4) * s
-		cost_label.size = Vector2(32, 26) * s
-		cost_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		cost_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		cost_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		cost_label.z_index = 6
-		card_root.add_child(cost_label)
-	
-	var name_bg = TextureRect.new()
-	name_bg.name = "NameBG"
-	name_bg.position = Vector2(4, 146) * s
-	name_bg.size = Vector2(132, 22) * s
-	var name_tex = load("res://assets/sprites/ui/ui_card_name_strip.png")
-	if name_tex: name_bg.texture = name_tex
-	name_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	name_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	name_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	name_bg.z_index = 5
-	card_root.add_child(name_bg)
-	
-	var name_label = Label.new()
-	name_label.text = card.card_name
-	name_label.position = Vector2(4, 146) * s
-	name_label.size = Vector2(132, 22) * s
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_color_override("font_color", Color(1, 1, 1))
-	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	name_label.z_index = 6
-	card_root.add_child(name_label)
-	
-	var effect_parts = []
-	if card.damage_flat > 0 or card.damage_dice != "":
-		if card.uses_dice:
-			effect_parts.append("DMG: %s" % card.damage_dice)
-		else:
-			effect_parts.append("DMG: %d" % card.damage_flat)
-	if card.shield_amount > 0: effect_parts.append("SHIELD: %d" % card.shield_amount)
-	if card.heal_amount > 0: effect_parts.append("HEAL: %d" % card.heal_amount)
-	if card.summon_count > 0: effect_parts.append("SUMMON %d" % card.summon_count)
-	var effect_text = " / ".join(effect_parts)
-	if effect_text != "":
-		var effect_bg = TextureRect.new()
-		effect_bg.name = "EffectBG"
-		effect_bg.position = Vector2(4, 168) * s
-		effect_bg.size = Vector2(132, 16) * s
-		var effect_tex = load("res://assets/sprites/ui/ui_card_effect_strip.png")
-		if effect_tex: effect_bg.texture = effect_tex
-		effect_bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		effect_bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		effect_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		effect_bg.z_index = 5
-		card_root.add_child(effect_bg)
-		var effect_label = Label.new()
-		effect_label.text = effect_text
-		effect_label.position = Vector2(4, 168) * s
-		effect_label.size = Vector2(132, 16) * s
-		effect_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		effect_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
-		effect_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		effect_label.z_index = 6
-		card_root.add_child(effect_label)
-	
-	# Click handler
+	# Click handler (always on top)
 	var click_handler = TextureButton.new()
 	click_handler.name = "ClickHandler"
 	click_handler.anchor_right = 1.0; click_handler.anchor_bottom = 1.0
@@ -764,7 +673,6 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	click_handler.pressed.connect(func(): _on_card_clicked(index))
 	click_handler.mouse_entered.connect(func(): _on_card_hover(index, true))
 	click_handler.mouse_exited.connect(func(): _on_card_hover(index, false))
-	click_handler.z_index = 10
 	card_root.add_child(click_handler)
 	
 	return card_root

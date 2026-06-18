@@ -222,9 +222,9 @@ FACTION_CONFIGS = {
         "border_color": (30, 30, 30, 255),
         "text_on_white": True,
         "overlay_adjustments": {
-            "Divine": {"name_y": 80, "effect_y": 20, "keywords_y": -15},
-            "Infernal": {"name_y": 60, "effect_y": 45},
-            "Arcane": {"name_y": 80, "effect_y": 30, "scale_factor": 1.185},
+            "Divine": {"name_y": 80, "effect_y": 20, "keywords_y": -15, "merged_frame_center_color": {"target": (255, 255, 255), "tolerance": (10, 10, 10)}},
+            "Infernal": {"name_y": 60, "effect_y": 45, "merged_frame_center_color": {"target": (255, 255, 255), "tolerance": (10, 10, 10)}},
+            "Arcane": {"name_y": 80, "effect_y": 30, "scale_factor": 1.185, "merged_frame_center_color": {"target": (255, 255, 255), "tolerance": (10, 10, 10)}},
         },
         "merged_frame_center_color": {
             "target": (74, 103, 133),
@@ -373,41 +373,6 @@ def composite_card(art_path, frame_path, faction, card_name, card_type, attentio
                 # Check if pixel is in border area
                 if x < border or x >= fw - border or y < border or y >= fh - border:
                     new_data.append((255, 255, 255, 0))
-                else:
-                    new_data.append((r, g, b, a))
-        frame.putdata(new_data)
-    elif not using_merged_frame and config.get("merged_frame_center_color"):
-        # Base config with merged_frame_center_color (no overlay)
-        # Apply color-based transparency to base frame
-        center_config = config["merged_frame_center_color"].copy()
-        target = center_config["target"]
-        tolerance = center_config["tolerance"]
-        protect_regions = center_config.get("protect_regions", [])
-        
-        frame_data = list(frame.getdata())
-        new_data = []
-        fw, fh = frame.size
-        for y in range(fh):
-            for x in range(fw):
-                idx = y * fw + x
-                r, g, b, a = frame_data[idx]
-                
-                # Check if pixel is in a protected region
-                in_protected = False
-                for region in protect_regions:
-                    if region["x1"] <= x <= region["x2"] and region["y1"] <= y <= region["y2"]:
-                        in_protected = True
-                        break
-                
-                # If in protected region, keep original
-                if in_protected:
-                    new_data.append((r, g, b, a))
-                # If matches target color, make transparent
-                elif (abs(r - target[0]) <= tolerance[0] and
-                      abs(g - target[1]) <= tolerance[1] and
-                      abs(b - target[2]) <= tolerance[2]):
-                    alpha = center_config.get("alpha", 0)
-                    new_data.append((r, g, b, alpha))
                 else:
                     new_data.append((r, g, b, a))
         frame.putdata(new_data)
