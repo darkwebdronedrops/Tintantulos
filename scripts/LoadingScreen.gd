@@ -96,14 +96,17 @@ func _create_ui():
 
 # Floor data
 const FLOOR_BACKDROPS = {
+	1: "res://assets/sprites/floor1/bg_portal_room.png",
 	2: "res://assets/sprites/floor2/bg_entry_old.png",
 }
 
 const FLOOR_NAMES = {
+	1: "Floor 1 — The Portal Room",
 	2: "Floor 2 — The Spore",
 }
 
 const FLOOR_SUBTITLES = {
+	1: "Where the Tower first speaks.",
 	2: "Beneath the garden, the roots remember.",
 }
 
