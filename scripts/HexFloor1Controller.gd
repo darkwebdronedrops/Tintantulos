@@ -97,8 +97,8 @@ var shop_stock: Array[Dictionary] = [
 ]
 var shop_ui_active: bool = false
 var shop_ui_container: Control
-	# Post-combat UI
-	var post_combat_ui: PostCombatUI
+# Post-combat UI
+var post_combat_ui: PostCombatUI
 var shop_sprite: Sprite2D  # Visual shop widget in the middle room
 
 # -------------------------------------------------------------------
