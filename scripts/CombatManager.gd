@@ -608,6 +608,10 @@ func _draw_cards(count: int):
 	
 	print("CombatManager: Drew %d cards (%d missing, took %d existential damage)" % [drawn, missing, missing * 5])
 
+func set_stake(stake_amount: int):
+	"""Set stake amount (alias for stake_cards for UI compatibility)."""
+	stake_cards(stake_amount)
+
 func stake_cards(stake_amount: int):
 	"""Set stake for the current combat. Stake reduces card draw, gives Quiddity 1:1."""
 	if stake_amount < 0 or stake_amount > 5:

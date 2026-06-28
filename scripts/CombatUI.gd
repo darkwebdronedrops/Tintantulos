@@ -64,9 +64,17 @@ func setup(cm: CombatManager):
 	_create_ui()
 
 func _create_ui():
-	var s = S
+	# =====================================================================
+	# STANDARDIZED COMBAT UI — Fixed positions for 1280×720 viewport
+	# =====================================================================
+	# Layout zones:
+	#   Player Panel : (10, 10)    size (200, 300)
+	#   Enemy Area   : (220, 10)   size (830, 130)
+	#   Hand Area    : (220, 560)  size (830, 120)
+	#   Equip Panel  : (1070, 10)  size (110, 300)
+	# =====================================================================
 	
-	# Solid background behind entire combat UI (hides checkerboard from missing textures)
+	# Solid background behind entire combat UI
 	var bg = ColorRect.new()
 	bg.name = "CombatBG"
 	bg.color = Color(0.02, 0.02, 0.04, 0.92)
@@ -75,11 +83,11 @@ func _create_ui():
 	bg.z_index = -1
 	add_child(bg)
 	
-	# Player panel (left)
+	# --- PLAYER PANEL (left, 200×300) ---
 	player_panel = NinePatchRect.new()
 	player_panel.name = "PlayerPanel"
 	player_panel.position = Vector2(10, 10)
-	player_panel.size = Vector2(260 * s, 360 * s)
+	player_panel.size = Vector2(200, 300)
 	var panel_tex = load("res://assets/sprites/ui/ui_panel_bg.png")
 	if panel_tex:
 		player_panel.texture = panel_tex
@@ -89,7 +97,6 @@ func _create_ui():
 		player_panel.patch_margin_bottom = 20
 	add_child(player_panel)
 	
-	# Solid background behind player panel
 	var player_bg = ColorRect.new()
 	player_bg.color = Color(0.08, 0.08, 0.12, 0.9)
 	player_bg.anchor_right = 1.0
@@ -97,11 +104,11 @@ func _create_ui():
 	player_panel.add_child(player_bg)
 	player_panel.move_child(player_bg, 0)
 	
-	# HP bar
+	# HP bar (y=8, height=20)
 	hp_bar = TextureProgressBar.new()
 	hp_bar.name = "HPBar"
-	hp_bar.position = Vector2(10, 10) * s
-	hp_bar.size = Vector2(240, 24) * s
+	hp_bar.position = Vector2(8, 8)
+	hp_bar.size = Vector2(184, 20)
 	hp_bar.min_value = 0; hp_bar.max_value = 100; hp_bar.value = 100
 	var hp_frame = load("res://assets/sprites/ui/ui_hp_bar_frame.png")
 	var hp_fill = load("res://assets/sprites/ui/ui_hp_bar_fill.png")
@@ -109,49 +116,48 @@ func _create_ui():
 	if hp_fill: hp_bar.texture_progress = hp_fill
 	player_panel.add_child(hp_bar)
 	
-	# HP text
 	hp_text_label = Label.new()
 	hp_text_label.name = "HPText"
-	hp_text_label.position = Vector2(10, 10) * s
-	hp_text_label.size = Vector2(240, 24) * s
+	hp_text_label.position = Vector2(8, 8)
+	hp_text_label.size = Vector2(184, 20)
 	hp_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	player_panel.add_child(hp_text_label)
 	
-	# Shield
+	# Shield (y=32)
 	shield_icon = TextureRect.new()
 	shield_icon.name = "ShieldIcon"
-	shield_icon.position = Vector2(10, 40) * s
-	shield_icon.size = Vector2(24, 24) * s
+	shield_icon.position = Vector2(8, 32)
+	shield_icon.size = Vector2(20, 20)
 	var shield_tex = load("res://assets/sprites/ui/ui_shield_icon.png")
 	if shield_tex: shield_icon.texture = shield_tex
 	player_panel.add_child(shield_icon)
 	
 	shield_label = Label.new()
 	shield_label.name = "ShieldLabel"
-	shield_label.position = Vector2(40, 40) * s
-	shield_label.size = Vector2(210, 24) * s
+	shield_label.position = Vector2(32, 32)
+	shield_label.size = Vector2(160, 20)
 	shield_label.add_theme_color_override("font_color", Color(0.55, 0.65, 0.85))
 	player_panel.add_child(shield_label)
 	
-	# Attention state
+	# Attention state (y=58)
 	attention_state_label = Label.new()
 	attention_state_label.name = "AttentionState"
-	attention_state_label.position = Vector2(5, 72) * s
-	attention_state_label.size = Vector2(250, 24) * s
+	attention_state_label.position = Vector2(4, 58)
+	attention_state_label.size = Vector2(192, 20)
 	attention_state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	player_panel.add_child(attention_state_label)
 	
 	attention_value_label = Label.new()
 	attention_value_label.name = "AttentionValue"
-	attention_value_label.position = Vector2(5, 100) * s
-	attention_value_label.size = Vector2(250, 20) * s
+	attention_value_label.position = Vector2(4, 80)
+	attention_value_label.size = Vector2(192, 18)
 	attention_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	player_panel.add_child(attention_value_label)
 	
 	attention_bar = TextureProgressBar.new()
 	attention_bar.name = "AttentionBar"
-	attention_bar.position = Vector2(5, 125) * s
-	attention_bar.size = Vector2(250, 22) * s
+	attention_bar.position = Vector2(4, 100)
+	attention_bar.size = Vector2(192, 18)
 	attention_bar.min_value = 0; attention_bar.max_value = 20
 	var attn_frame = load("res://assets/sprites/ui/ui_attention_frame.png")
 	var attn_fill = load("res://assets/sprites/ui/ui_attention_fill.png")
@@ -161,48 +167,40 @@ func _create_ui():
 	
 	var desc_label = Label.new()
 	desc_label.name = "AttentionDesc"
-	desc_label.position = Vector2(5, 152) * s
-	desc_label.size = Vector2(250, 40) * s
+	desc_label.position = Vector2(4, 122)
+	desc_label.size = Vector2(192, 36)
 	desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	player_panel.add_child(desc_label)
 	
-	# Quiddity
+	# Quiddity (y=162)
 	quiddity_icon = TextureRect.new()
 	quiddity_icon.name = "QuiddityIcon"
-	quiddity_icon.position = Vector2(10, 200) * s
-	quiddity_icon.size = Vector2(22, 22) * s
+	quiddity_icon.position = Vector2(8, 162)
+	quiddity_icon.size = Vector2(18, 18)
 	var gem_tex = load("res://assets/sprites/ui/ui_gem_quiddity.png")
 	if gem_tex: quiddity_icon.texture = gem_tex
 	player_panel.add_child(quiddity_icon)
 	
 	quiddity_label = Label.new()
 	quiddity_label.name = "QuiddityLabel"
-	quiddity_label.position = Vector2(38, 200) * s
-	quiddity_label.size = Vector2(214, 22) * s
+	quiddity_label.position = Vector2(30, 162)
+	quiddity_label.size = Vector2(162, 18)
 	quiddity_label.add_theme_color_override("font_color", Color(0.8, 0.4, 1.0))
 	player_panel.add_child(quiddity_label)
 	
-	# Deck
-	deck_icon = TextureRect.new()
-	deck_icon.name = "DeckIcon"
-	deck_icon.position = Vector2(10, 228) * s
-	deck_icon.size = Vector2(32, 40) * s
-	var deck_tex = load("res://assets/sprites/ui/ui_deck_icon.png")
-	if deck_tex: deck_icon.texture = deck_tex
-	player_panel.add_child(deck_icon)
-	
+	# Deck count (y=186)
 	deck_count_label = Label.new()
 	deck_count_label.name = "DeckCount"
-	deck_count_label.position = Vector2(48, 228) * s
-	deck_count_label.size = Vector2(204, 40) * s
+	deck_count_label.position = Vector2(8, 186)
+	deck_count_label.size = Vector2(184, 20)
 	deck_count_label.text = "Deck: 0"
 	player_panel.add_child(deck_count_label)
 	
-	# End turn button
+	# End Turn button (y=216)
 	end_turn_btn = TextureButton.new()
 	end_turn_btn.name = "EndTurnBtn"
-	end_turn_btn.position = Vector2(10, 275) * s
-	end_turn_btn.size = Vector2(115, 40) * s
+	end_turn_btn.position = Vector2(8, 216)
+	end_turn_btn.size = Vector2(90, 32)
 	var btn_tex = load("res://assets/sprites/ui/ui_button_bg.png")
 	var btn_pressed = load("res://assets/sprites/ui/ui_button_bg_pressed.png")
 	if btn_tex: end_turn_btn.texture_normal = btn_tex
@@ -216,11 +214,11 @@ func _create_ui():
 	end_turn_btn.pressed.connect(_on_end_turn)
 	player_panel.add_child(end_turn_btn)
 	
-	# Stake button
+	# Stake button (y=216, to the right)
 	stake_btn = TextureButton.new()
 	stake_btn.name = "StakeBtn"
-	stake_btn.position = Vector2(135, 275) * s
-	stake_btn.size = Vector2(115, 40) * s
+	stake_btn.position = Vector2(104, 216)
+	stake_btn.size = Vector2(90, 32)
 	if btn_tex: stake_btn.texture_normal = btn_tex
 	if btn_pressed: stake_btn.texture_pressed = btn_pressed
 	var stake_label = Label.new()
@@ -233,28 +231,29 @@ func _create_ui():
 	stake_btn.pressed.connect(_on_stake)
 	player_panel.add_child(stake_btn)
 	
-	# Potions
-	potion_container = HBoxContainer.new()
-	potion_container.name = "PotionContainer"
-	potion_container.position = Vector2(10, 380) * s
-	potion_container.size = Vector2(260, 40) * s
-	potion_container.alignment = BoxContainer.ALIGNMENT_CENTER
-	add_child(potion_container)
-	for i in range(3):
-		var slot = TextureButton.new()
-		slot.name = "PotionSlot_%d" % i
-		slot.size = Vector2(44, 44) * s
-		var empty_slot = load("res://assets/sprites/ui/ui_slot_empty.png")
-		if empty_slot: slot.texture_normal = empty_slot
-		slot.disabled = true
-		potion_container.add_child(slot)
-		potion_slots.append(slot)
+	# --- ENEMY CONTAINER (top center, 830×130) ---
+	enemy_container = HBoxContainer.new()
+	enemy_container.name = "EnemyContainer"
+	enemy_container.position = Vector2(220, 10)
+	enemy_container.size = Vector2(830, 130)
+	enemy_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	enemy_container.add_theme_constant_override("separation", 12)
+	add_child(enemy_container)
 	
-	# Equip panel (right)
+	# --- HAND CONTAINER (bottom center, 830×120) ---
+	hand_container = HBoxContainer.new()
+	hand_container.name = "HandContainer"
+	hand_container.position = Vector2(220, 560)
+	hand_container.size = Vector2(830, 120)
+	hand_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	hand_container.add_theme_constant_override("separation", 10)
+	add_child(hand_container)
+	
+	# --- EQUIP PANEL (right, 110×300) ---
 	equip_panel = NinePatchRect.new()
 	equip_panel.name = "EquipPanel"
-	equip_panel.position = Vector2(1170, 10) * s
-	equip_panel.size = Vector2(100, 280) * s
+	equip_panel.position = Vector2(1070, 10)
+	equip_panel.size = Vector2(110, 300)
 	if panel_tex:
 		equip_panel.texture = panel_tex
 		equip_panel.patch_margin_left = 15
@@ -265,8 +264,8 @@ func _create_ui():
 	
 	var equip_title = Label.new()
 	equip_title.text = "GEAR"
-	equip_title.position = Vector2(5, 8) * s
-	equip_title.size = Vector2(90, 20) * s
+	equip_title.position = Vector2(5, 6)
+	equip_title.size = Vector2(100, 18)
 	equip_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	equip_panel.add_child(equip_title)
 	
@@ -280,14 +279,14 @@ func _create_ui():
 	for i in range(4):
 		var slot = TextureRect.new()
 		slot.name = "Equip_%s" % equip_types[i]
-		slot.position = Vector2(18, 35 + i * 60) * s
-		slot.size = Vector2(64, 64) * s
+		slot.position = Vector2(23, 28 + i * 56)
+		slot.size = Vector2(48, 48)
 		var slot_tex = load("res://assets/sprites/ui/ui_equip_slot.png")
 		if slot_tex: slot.texture = slot_tex
 		var item = TextureRect.new()
 		item.name = "Item"
-		item.position = Vector2(16, 16) * s
-		item.size = Vector2(32, 32) * s
+		item.position = Vector2(8, 8)
+		item.size = Vector2(32, 32)
 		var item_tex = load(equip_icons[i])
 		if item_tex: item.texture = item_tex
 		item.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
@@ -297,8 +296,8 @@ func _create_ui():
 	
 	weapon_use_btn = TextureButton.new()
 	weapon_use_btn.name = "WeaponUseBtn"
-	weapon_use_btn.position = Vector2(18, 100) * s
-	weapon_use_btn.size = Vector2(64, 24) * s
+	weapon_use_btn.position = Vector2(23, 84)
+	weapon_use_btn.size = Vector2(48, 20)
 	var weapon_btn_tex = load("res://assets/sprites/ui/ui_weapon_attack.png")
 	if weapon_btn_tex: weapon_use_btn.texture_normal = weapon_btn_tex
 	weapon_use_btn.disabled = true
@@ -306,25 +305,7 @@ func _create_ui():
 	weapon_use_btn.pressed.connect(_on_weapon_use)
 	equip_panel.add_child(weapon_use_btn)
 	
-	# Hand container (bottom center)
-	hand_container = HBoxContainer.new()
-	hand_container.name = "HandContainer"
-	hand_container.position = Vector2(300, 560) * s
-	hand_container.size = Vector2(660, 130) * s
-	hand_container.alignment = BoxContainer.ALIGNMENT_CENTER
-	hand_container.add_theme_constant_override("separation", 8)
-	add_child(hand_container)
-	
-	# Enemy container (top center)
-	enemy_container = HBoxContainer.new()
-	enemy_container.name = "EnemyContainer"
-	enemy_container.position = Vector2(300, 10) * s
-	enemy_container.size = Vector2(660, 150) * s
-	enemy_container.alignment = BoxContainer.ALIGNMENT_CENTER
-	enemy_container.add_theme_constant_override("separation", 12)
-	add_child(enemy_container)
-	
-	# Mist overlay
+	# --- MIST OVERLAY (full screen effect) ---
 	mist_overlay = ColorRect.new()
 	mist_overlay.name = "MistOverlay"
 	mist_overlay.anchor_right = 1.0
