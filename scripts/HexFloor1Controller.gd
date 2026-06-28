@@ -276,7 +276,8 @@ func _setup_enemies():
 func _setup_combat():
 	var combat_manager = get_node_or_null("CombatManager")
 	if combat_manager:
-		combat_manager.combat_ended.connect(_on_combat_ended)
+		if not combat_manager.combat_ended.is_connected(_on_combat_ended):
+			combat_manager.combat_ended.connect(_on_combat_ended)
 		print("[Floor1-Hex] CombatManager wired")
 
 func _setup_post_combat_ui():
