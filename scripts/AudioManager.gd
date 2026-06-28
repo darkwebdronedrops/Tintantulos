@@ -134,11 +134,45 @@ func _setup_music_players():
 		player.name = "MusicPlayer_%d" % i
 		player.bus = "Music"
 		player.autoplay = false
+		player.finished.connect(_on_music_finished.bind(i))
 		add_child(player)
 		_music_players.append(player)
 	
 	_current_music_player = _music_players[0]
 	print("[AudioManager] Created music players")
+
+var _debug_timer: float = 0.0
+
+func _process(delta: float):
+	# Debug: monitor music player state every 5 seconds
+	_debug_timer += delta
+	if _debug_timer >= 5.0:
+		_debug_timer = 0.0
+		if current_mode != "none" and _current_music_player:
+			if not _current_music_player.playing:
+				print("[AudioManager] DEBUG: Music stopped unexpectedly! Mode: %s, Stream: %s" % [
+					current_mode,
+					_current_music_player.stream.resource_path if _current_music_player.stream else "null"
+				])
+			else:
+				var pos = _current_music_player.get_playback_position()
+				var len = _current_music_player.stream.get_length() if _current_music_player.stream else 0
+				print("[AudioManager] DEBUG: Mode=%s, Pos=%.1f/%.1f, Playing=%s" % [
+					current_mode, pos, len, _current_music_player.playing
+				])
+
+func _on_music_finished(player_idx: int):
+	var player = _music_players[player_idx]
+	print("[AudioManager] WARNING: Music player %d finished unexpectedly! Stream: %s, Mode: %s, Playing: %s" % [
+		player_idx,
+		player.stream.resource_path if player.stream else "null",
+		current_mode,
+		player.playing
+	])
+	# If the track finished and it's supposed to loop, restart it
+	if player.stream and current_mode != "none":
+		print("[AudioManager] Restarting track due to finished signal")
+		player.play()
 
 # ===================================================================
 # SFX POOL SETUP
@@ -448,13 +482,22 @@ func _play_track(track_key: String, mode: String, fade: bool) -> void:
 	
 	# Don't restart same track
 	if current_mode == mode and _current_music_player and _current_music_player.playing and _current_music_player.stream == stream:
+		print("[AudioManager] Already playing %s in mode %s, skipping" % [track_key, mode])
 		return
+	
+	print("[AudioManager] _play_track: %s (mode: %s, fade: %s, current_mode: %s)" % [track_key, mode, fade, current_mode])
+	print("[AudioManager] Current player playing: %s, stream: %s" % [
+		_current_music_player.playing if _current_music_player else false,
+		_current_music_player.stream.resource_path if _current_music_player and _current_music_player.stream else "null"
+	])
 	
 	current_mode = mode
 	
 	if fade and _current_music_player and _current_music_player.playing:
+		print("[AudioManager] Using crossfade")
 		_crossfade(stream)
 	else:
+		print("[AudioManager] Using hard switch")
 		# Hard switch
 		if _crossfade_tween and _crossfade_tween.is_valid():
 			_crossfade_tween.kill()
@@ -467,7 +510,7 @@ func _play_track(track_key: String, mode: String, fade: bool) -> void:
 		_current_music_player.stream = stream
 		_current_music_player.volume_db = linear_to_db(volumes.music * volumes.master)
 		_current_music_player.play()
-		print("[AudioManager] Playing: %s (%s)" % [track_key, mode])
+		print("[AudioManager] Playing: %s (%s), loop=%s" % [track_key, mode, stream.loop if "loop" in stream else "N/A"])
 
 func _crossfade(new_stream: AudioStream) -> void:
 	if _crossfade_tween and _crossfade_tween.is_valid():
