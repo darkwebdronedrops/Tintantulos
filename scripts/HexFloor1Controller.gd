@@ -290,10 +290,12 @@ func _start_combat(encounter_type: String):
 	in_combat = true
 	var combat_manager = get_node_or_null("CombatManager")
 	if combat_manager:
-		combat_manager.start_combat(enemies, GameState.player_deck)
+		# Setup UI FIRST so it receives all combat signals
 		var ui = get_node_or_null("CombatUI")
 		if ui:
 			ui.setup(combat_manager)
+		combat_manager.start_combat(enemies, GameState.player_deck)
+		if ui:
 			ui.visible = true
 		AudioManager.play_combat(1)
 		print("[Floor1-Hex] Combat started: %s" % encounter_type)

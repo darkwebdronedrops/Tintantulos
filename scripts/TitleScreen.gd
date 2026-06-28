@@ -81,29 +81,16 @@ func _build_title_screen():
 	menu_vbox.add_theme_constant_override("separation", 16)
 	add_child(menu_vbox)
 	
-	# Continue button (only if save exists)
-	continue_btn = Button.new()
-	continue_btn.text = "⚙ Continue"
-	continue_btn.custom_minimum_size = Vector2(300, 50)
-	continue_btn.add_theme_font_size_override("font_size", 18)
-	continue_btn.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
-	continue_btn.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0))
-	continue_btn.add_theme_color_override("font_pressed_color", Color(0.7, 0.7, 0.7))
-	continue_btn.add_theme_color_override("font_disabled_color", Color(0.4, 0.4, 0.4))
-	continue_btn.visible = GameState.has_save()
-	continue_btn.pressed.connect(_on_continue)
-	menu_vbox.add_child(continue_btn)
-	
-	# New Game button
+	# Play button (continue if save exists, otherwise new game)
 	new_game_btn = Button.new()
-	new_game_btn.text = "⚙ New Game"
+	new_game_btn.text = "⚙ Play"
 	new_game_btn.custom_minimum_size = Vector2(300, 50)
 	new_game_btn.add_theme_font_size_override("font_size", 18)
 	new_game_btn.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
 	new_game_btn.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0))
 	new_game_btn.add_theme_color_override("font_pressed_color", Color(0.7, 0.7, 0.7))
 	new_game_btn.add_theme_color_override("font_disabled_color", Color(0.4, 0.4, 0.4))
-	new_game_btn.pressed.connect(_on_new_game)
+	new_game_btn.pressed.connect(_on_play)
 	menu_vbox.add_child(new_game_btn)
 	
 	# Select Floor button (dev/test menu)
@@ -161,6 +148,13 @@ func _on_new_game():
 	get_tree().change_scene_to_file("res://scenes/Floor1.tscn")
 	new_game_started.emit()
 
+func _on_play():
+	"""Single Play button: continue if save exists, otherwise new game."""
+	if GameState.has_save():
+		_on_continue()
+	else:
+		_on_new_game()
+
 func _on_continue():
 	if GameState.has_save():
 		visible = false
@@ -177,9 +171,6 @@ func _on_quit():
 
 func show_title():
 	visible = true
-	# Update continue button visibility in case save was deleted/created
-	if continue_btn:
-		continue_btn.visible = GameState.has_save()
 
 # Floor Select Panel
 var floor_select_panel: Panel

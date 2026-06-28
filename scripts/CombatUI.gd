@@ -309,17 +309,19 @@ func _create_ui():
 	# Hand container (bottom center)
 	hand_container = HBoxContainer.new()
 	hand_container.name = "HandContainer"
-	hand_container.position = Vector2(280, 530) * s
-	hand_container.size = Vector2(700, 160) * s
+	hand_container.position = Vector2(300, 560) * s
+	hand_container.size = Vector2(660, 130) * s
 	hand_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	hand_container.add_theme_constant_override("separation", 8)
 	add_child(hand_container)
 	
 	# Enemy container (top center)
 	enemy_container = HBoxContainer.new()
 	enemy_container.name = "EnemyContainer"
-	enemy_container.position = Vector2(280, 10) * s
-	enemy_container.size = Vector2(700, 180) * s
+	enemy_container.position = Vector2(300, 10) * s
+	enemy_container.size = Vector2(660, 150) * s
 	enemy_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	enemy_container.add_theme_constant_override("separation", 12)
 	add_child(enemy_container)
 	
 	# Mist overlay
@@ -468,7 +470,7 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	var s = S
 	var panel = NinePatchRect.new()
 	panel.name = "Enemy_%d" % index
-	panel.size = Vector2(200, 180) * s
+	panel.size = Vector2(160, 140) * s
 	var panel_tex = load("res://assets/sprites/ui/ui_enemy_panel_bg.png")
 	if panel_tex:
 		panel.texture = panel_tex
@@ -488,8 +490,8 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	
 	var sprite = TextureRect.new()
 	sprite.name = "Sprite"
-	sprite.position = Vector2(60, 10) * s
-	sprite.size = Vector2(80, 80) * s
+	sprite.position = Vector2(50, 8) * s
+	sprite.size = Vector2(60, 60) * s
 	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	if enemy.sprite_texture_path != "" and ResourceLoader.exists(enemy.sprite_texture_path):
@@ -508,15 +510,15 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	var name_label = Label.new()
 	name_label.name = "Name"
 	name_label.text = enemy.enemy_name
-	name_label.position = Vector2(10, 95) * s
-	name_label.size = Vector2(180, 22) * s
+	name_label.position = Vector2(5, 72) * s
+	name_label.size = Vector2(150, 20) * s
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	panel.add_child(name_label)
 	
 	var enemy_hp_bar = TextureProgressBar.new()
 	enemy_hp_bar.name = "HPFill"
-	enemy_hp_bar.position = Vector2(10, 120) * s
-	enemy_hp_bar.size = Vector2(180, 20) * s
+	enemy_hp_bar.position = Vector2(5, 95) * s
+	enemy_hp_bar.size = Vector2(150, 16) * s
 	enemy_hp_bar.min_value = 0; enemy_hp_bar.max_value = 100; enemy_hp_bar.value = 100
 	var hp_frame = load("res://assets/sprites/ui/ui_hp_bar_frame.png")
 	var hp_fill = load("res://assets/sprites/ui/ui_hp_bar_fill.png")
@@ -527,8 +529,8 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	var hp_text = Label.new()
 	hp_text.name = "HPText"
 	hp_text.text = "%d / %d" % [enemy.hp, enemy.max_hp]
-	hp_text.position = Vector2(10, 120) * s
-	hp_text.size = Vector2(180, 20) * s
+	hp_text.position = Vector2(5, 95) * s
+	hp_text.size = Vector2(150, 16) * s
 	hp_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	panel.add_child(hp_text)
 	
@@ -608,8 +610,8 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	var s = S
 	var card_root = Control.new()
 	card_root.name = "Card_%d" % index
-	card_root.size = Vector2(140, 200) * s
-	card_root.custom_minimum_size = Vector2(140, 200) * s
+	card_root.size = Vector2(90, 120) * s
+	card_root.custom_minimum_size = Vector2(90, 120) * s
 	
 	# Build finished card path from card data
 	var safe_name = card.card_name.to_lower().replace(" ", "_").replace("'", "")
