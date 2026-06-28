@@ -133,6 +133,7 @@ func _finish_floor_setup():
 	_setup_player()
 	_setup_floor_specific()
 	_setup_enemies()  # Spawn hex enemies
+	_setup_post_combat_ui()  # Post-combat reward screen
 	
 	# Start music
 	AudioManager.play_floor_ambient(1)
@@ -278,14 +279,30 @@ func _setup_combat():
 		combat_manager.combat_ended.connect(_on_combat_ended)
 		print("[Floor1-Hex] CombatManager wired")
 
+func _setup_post_combat_ui():
+	"""Setup the post-combat reward UI."""
+	var post_combat_scene = load("res://scenes/PostCombatUI.tscn")
+	if post_combat_scene:
+		post_combat_ui = post_combat_scene.instantiate()
+		add_child(post_combat_ui)
+		post_combat_ui.visible = false
+		post_combat_ui.ui_closed.connect(_on_post_combat_closed)
+		print("[Floor1-Hex] PostCombatUI ready")
+	else:
+		push_warning("[Floor1-Hex] PostCombatUI scene not found!")
+
 func _start_combat(encounter_type: String):
 	if in_combat:
+		print("[Floor1-Hex] Combat already in progress, ignoring duplicate start")
 		return
 	
 	# Get enemies for this encounter
 	var enemies = _get_encounter_enemies(encounter_type)
 	if enemies.is_empty():
+		print("[Floor1-Hex] No enemies for encounter: %s" % encounter_type)
 		return
+	
+	print("[Floor1-Hex] Starting combat: %s with %d enemies" % [encounter_type, enemies.size()])
 	
 	in_combat = true
 	var combat_manager = get_node_or_null("CombatManager")
@@ -293,12 +310,23 @@ func _start_combat(encounter_type: String):
 		# Setup UI FIRST so it receives all combat signals
 		var ui = get_node_or_null("CombatUI")
 		if ui:
+			print("[Floor1-Hex] Setting up CombatUI...")
 			ui.setup(combat_manager)
+		else:
+			push_warning("[Floor1-Hex] CombatUI not found!")
+		
+		print("[Floor1-Hex] Calling combat_manager.start_combat...")
 		combat_manager.start_combat(enemies, GameState.player_deck)
+		
 		if ui:
 			ui.visible = true
+			print("[Floor1-Hex] CombatUI visible")
+		
 		AudioManager.play_combat(1)
 		print("[Floor1-Hex] Combat started: %s" % encounter_type)
+	else:
+		push_warning("[Floor1-Hex] CombatManager not found!")
+		in_combat = false
 
 func _get_encounter_enemies(encounter_type: String) -> Array[CombatManager.EnemyData]:
 	var result: Array[CombatManager.EnemyData] = []
@@ -408,7 +436,10 @@ func _floor_complete():
 func _on_enemy_combat_initiated(ambush: bool):
 	"""Called when an enemy initiates or is ambushed into combat."""
 	if in_combat:
+		print("[Floor1-Hex] _on_enemy_combat_initiated: already in combat, ignoring")
 		return
+	
+	print("[Floor1-Hex] _on_enemy_combat_initiated: ambush=%s" % str(ambush))
 	
 	ambush_bonus = ambush
 	
@@ -428,16 +459,20 @@ func _on_enemy_combat_initiated(ambush: bool):
 			enemy._set_state(HexEnemy.State.IN_COMBAT)
 	
 	if combat_enemies.is_empty():
+		print("[Floor1-Hex] No enemies in combat range")
 		return
+	
+	print("[Floor1-Hex] Starting hex combat with %d enemies" % combat_enemies.size())
 	
 	# Start card combat
 	in_combat = true
 	var combat_manager = get_node_or_null("CombatManager")
 	if combat_manager:
-		combat_manager.start_combat(combat_enemies, GameState.player_deck)
 		var ui = get_node_or_null("CombatUI")
 		if ui:
 			ui.setup(combat_manager)
+		combat_manager.start_combat(combat_enemies, GameState.player_deck)
+		if ui:
 			ui.visible = true
 		AudioManager.play_combat(1)
 		print("[Floor1-Hex] Hex combat started! Enemies: %d, Ambush: %s" % [combat_enemies.size(), str(ambush)])
@@ -447,6 +482,9 @@ func _on_enemy_combat_initiated(ambush: bool):
 			combat_manager.is_player_turn = true
 			combat_manager.player_shield += 2
 			print("[Floor1-Hex] Ambush bonus: +2 shield, player goes first")
+	else:
+		push_warning("[Floor1-Hex] CombatManager not found!")
+		in_combat = false
 
 func _check_enemy_sight():
 	"""Check if any enemy can see the player."""
