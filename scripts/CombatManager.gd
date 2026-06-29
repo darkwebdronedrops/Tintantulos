@@ -212,6 +212,9 @@ var is_boss_mode: bool = false
 var boss: BossAI.BossBehavior = null
 var boss_ai: BossAI = null
 
+# Tutorial Mode
+var tutorial_mode: bool = false
+
 # Eidolon tracking
 var player_last_damage: int = 10  # Default so Eidolon has something to mirror
 
@@ -298,6 +301,11 @@ func start_combat(enemy_data: Array, p_deck: Array = []):
 	player_last_damage = 10  # Reset for Eidolon tracking
 	player_stake = 0
 	current_stake = 0  # Reset stake each combat
+	
+	# Tutorial safety: player cannot die in tutorial
+	if tutorial_mode:
+		player_hp = max(player_hp, 1)
+		print("[CombatManager] Tutorial mode active: HP floor at 1")
 
 	# Load equipped weapon, shield, and trinket from GameState
 	_load_equipped_weapon()
@@ -586,7 +594,12 @@ func _draw_cards(count: int):
 			var draw_cost = trinket_effects.get("draw_hp_cost", 1)
 			_player_hp -= draw_cost
 			print("CombatManager: Grasping Shroud draw cost: %d HP" % draw_cost)
-			if _player_hp <= 0:
+			if tutorial_mode and _player_hp <= 0:
+				_player_hp = 1
+				print("[CombatManager] Tutorial safety: Shroud cost prevented, HP clamped to 1")
+				missing += (count - i - 1)
+				break
+			elif _player_hp <= 0:
 				_player_hp = 0
 				print("CombatManager: Grasping Shroud killed player by drawing!")
 				missing += (count - i - 1)  # Count remaining as missing
@@ -601,7 +614,10 @@ func _draw_cards(count: int):
 		_player_hp -= damage
 		player_damaged.emit(damage)
 		print("CombatManager: DECK DEATH — drew %d cards from empty deck, took %d damage!" % [missing, damage])
-		if _player_hp <= 0:
+		if tutorial_mode and _player_hp <= 0:
+			_player_hp = 1
+			print("[CombatManager] Tutorial safety: deck-death prevented, HP clamped to 1")
+		elif _player_hp <= 0:
 			_player_hp = 0
 			player_died.emit()
 			combat_active = false
@@ -1219,6 +1235,12 @@ func _check_combat_end() -> bool:
 			return true
 		combat_ended.emit(true)
 		return true
+	
+	# Tutorial safety: player cannot die in tutorial
+	if tutorial_mode and _player_hp <= 0:
+		_player_hp = 1
+		print("[CombatManager] Tutorial safety: HP clamped to 1")
+		return false
 	
 	if _player_hp <= 0:
 		combat_active = false

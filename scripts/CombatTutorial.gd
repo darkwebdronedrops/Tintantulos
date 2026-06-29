@@ -28,6 +28,7 @@ func _ready():
 		cm.turn_started.connect(_on_turn_started)
 		cm.player_damaged.connect(_on_player_damaged)
 		cm.combat_ended.connect(_on_combat_ended)
+		cm.card_played.connect(_on_card_played)
 
 func _find_combat_manager() -> CombatManager:
 	# Try to find combat manager in the scene
@@ -49,11 +50,18 @@ func _on_turn_started(is_player_turn: bool):
 	if is_player_turn and not has_shown_cards:
 		has_shown_cards = true
 		_show_hint("These are your cards. Each costs Attention to play.", Vector2(540, 520), 5.0)
+	
+	# Door tutorial: detect when player ends turn (enemy turn starts)
+	if door_tutorial_active and not is_player_turn and door_tutorial_step >= 2:
+		on_end_turn_pressed()
 
 func _on_player_damaged(damage: int, _shield_absorbed: int):
 	if not has_shown_damage:
 		has_shown_damage = true
 		_show_hint("You took damage! Shield absorbs damage before HP.", Vector2(540, 300), 4.0)
+
+func _on_card_played(card: CardData):
+	on_card_played(card.name)
 
 func _on_combat_ended(_victory: bool):
 	if GameState.has_seen_combat_tutorial:
@@ -80,6 +88,51 @@ func on_enemy_attack():
 	if not has_shown_enemy_attack:
 		has_shown_enemy_attack = true
 		_show_hint("Enemy attacks! Use Shield cards to protect yourself.", Vector2(540, 300), 4.0)
+
+# -------------------------------------------------------------------
+# Door Tutorial: Scripted hints for the Threshold Door encounter
+# -------------------------------------------------------------------
+var door_tutorial_active: bool = false
+var door_tutorial_step: int = 0
+var has_shown_strike_hint: bool = false
+var has_shown_block_hint: bool = false
+var has_shown_end_turn_hint: bool = false
+
+func start_door_tutorial():
+	"""Enable scripted hints for the tutorial Door encounter."""
+	door_tutorial_active = true
+	door_tutorial_step = 0
+	has_shown_strike_hint = false
+	has_shown_block_hint = false
+	has_shown_end_turn_hint = false
+	print("[CombatTutorial] Door tutorial started")
+	_show_hint("Combat begins! The Door is vulnerable.\nPlay a Strike to deal damage.", Vector2(540, 200), 5.0)
+
+func on_card_played(card_name: String):
+	"""Track card plays for tutorial hints."""
+	if not door_tutorial_active:
+		return
+	
+	match card_name.to_lower():
+		"strike", "attack":
+			if not has_shown_strike_hint:
+				has_shown_strike_hint = true
+				door_tutorial_step = 1
+				_show_hint("Good! The Door braces itself.\nPlay a Block before it attacks.", Vector2(540, 200), 5.0)
+		"block", "shield", "defend":
+			if not has_shown_block_hint and door_tutorial_step >= 1:
+				has_shown_block_hint = true
+				door_tutorial_step = 2
+				_show_hint("Shield absorbs damage before HP.\nPress [Space] or click End Turn.", Vector2(540, 520), 5.0)
+
+func on_end_turn_pressed():
+	"""Track end turn for tutorial hints."""
+	if not door_tutorial_active:
+		return
+	if not has_shown_end_turn_hint and door_tutorial_step >= 2:
+		has_shown_end_turn_hint = true
+		_show_hint("The Door attacks! Your Shield absorbs the blow.\nNow strike back!", Vector2(540, 200), 4.0)
+		door_tutorial_step = 3
 
 # -------------------------------------------------------------------
 # Core hint display

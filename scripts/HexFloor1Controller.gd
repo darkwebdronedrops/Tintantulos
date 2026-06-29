@@ -85,6 +85,16 @@ var door_tutorial_active: bool = false
 var tutorial_step: int = 0
 var tutorial_prompt_label: Label
 
+# Guided Tutorial State (replaces text-overlay tutorial)
+var guided_tutorial_active: bool = false
+var tutorial_phase: String = "movement"  # movement | click_move | door_prompt | ambush | combat | complete
+var tutorial_move_count: int = 0
+var tutorial_click_move_used: bool = false
+var floating_prompt: Label = null
+var tutorial_door: HexEnemy = null
+var tutorial_door_hex: Vector2i = Vector2i(0, -30)
+var tutorial_door_defeated: bool = false
+
 # -------------------------------------------------------------------
 # Shop
 # -------------------------------------------------------------------
@@ -116,7 +126,9 @@ func _ready():
 
 func _build_floor():
 	if GameState.is_first_run:
-		_start_tutorial()
+		# New interactive tutorial: skip old text overlay, go straight to floor
+		# But lock it down to entry room only until movement is learned
+		_finish_floor_setup()
 		return
 	
 	_finish_floor_setup()
@@ -198,7 +210,13 @@ func _setup_enemies():
 	enemy_container.name = "EnemyContainer"
 	add_child(enemy_container)
 	
-	# Spawn enemies per room
+	# On first run, only spawn The Door in upper room. Everything else is empty.
+	if GameState.is_first_run:
+		_spawn_tutorial_door()
+		print("[Floor1-Hex] Tutorial mode: only The Door spawned")
+		return
+	
+	# Normal enemy spawn logic for re-runs
 	var enemy_spawns = {
 		"upper": [
 			{"name": "Piston Assembly", "hex": Vector2i(-2, -22), "faction": "Construct", "sprite": "res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"},
@@ -362,6 +380,11 @@ func _on_combat_ended(victory: bool):
 	in_combat = false
 	AudioManager.play_floor_ambient(1)
 	
+	# Tutorial mode cleanup
+	var combat_manager = get_node_or_null("CombatManager")
+	if combat_manager and combat_manager.tutorial_mode:
+		combat_manager.tutorial_mode = false
+	
 	# Reset surviving enemies to unaware, clean up dead ones
 	for enemy in hex_enemies:
 		if enemy.hp > 0:
@@ -380,6 +403,12 @@ func _on_combat_ended(victory: bool):
 		room_cleared[current_room_id] = true
 		print("[Floor1-Hex] Room cleared: %s" % current_room_id)
 		
+		# Tutorial door defeated — complete the tutorial
+		if GameState.is_first_run and tutorial_door and tutorial_door.hp <= 0:
+			print("[Floor1-Hex] Tutorial Door defeated — completing tutorial")
+			_on_guided_tutorial_complete()
+			return
+		
 		# Get defeated faction for card picks
 		var defeated_faction = ""
 		for enemy in hex_enemies:
@@ -389,7 +418,6 @@ func _on_combat_ended(victory: bool):
 		
 		# Show post-combat reward UI
 		if post_combat_ui:
-			var combat_manager = get_node_or_null("CombatManager")
 			var quiddity_earned = combat_manager.quiddity_this_combat if combat_manager else 0
 			post_combat_ui.show_post_combat(true, quiddity_earned, defeated_faction)
 			in_ui = true
@@ -400,6 +428,20 @@ func _on_combat_ended(victory: bool):
 		_check_boss_unlock()
 	else:
 		print("[Floor1-Hex] Combat lost — player respawned")
+		# Tutorial safety: player can't die in tutorial
+		if GameState.is_first_run and guided_tutorial_active:
+			GameState.player_hp = max(1, GameState.player_hp)
+			player_node.global_position = hex_map.hex_to_world(room_data["entry"]["center"])
+			_show_notification("The Door pushes you back. Try again.", Color(0.9, 0.7, 0.3), 4.0)
+			# Reset tutorial door for retry
+			if tutorial_door and is_instance_valid(tutorial_door):
+				tutorial_door.reset_after_combat()
+				tutorial_door.hp = tutorial_door.max_hp
+				# Re-show prompt
+				_show_floating_prompt("Circle behind the Door from the north side.")
+				tutorial_phase = "door_prompt"
+			return
+		
 		GameState.player_hp = max(1, GameState.player_hp)
 		player_node.global_position = hex_map.hex_to_world(room_data["entry"]["center"])
 		# Reset all enemies
@@ -640,6 +682,11 @@ func _on_click_move(screen_pos: Vector2):
 	if not player_node or not hex_map:
 		return
 	
+	# Tutorial override: use tutorial-specific click handler
+	if GameState.is_first_run and guided_tutorial_active and tutorial_phase == "click_move":
+		_on_click_move_tutorial(screen_pos)
+		return
+	
 	# Convert screen position to world position
 	var world_pos = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
 	var target_hex = hex_map.world_to_hex(world_pos)
@@ -738,10 +785,264 @@ func _hex_move(move_vec: Vector2):
 		animator.play_walk(dir_str)
 		animator.set_meta("move_timer", 0.2)
 	
+	# --- Tutorial tracking ---
+	if GameState.is_first_run and guided_tutorial_active:
+		if tutorial_phase == "movement":
+			tutorial_move_count += 1
+			_spawn_sparkle(target_hex)
+			AudioManager.play_sfx("step_soft")  # soft step sound
+			if tutorial_move_count >= 3:
+				_show_floating_prompt("Good. Now click a hex to walk there.")
+				tutorial_phase = "click_move"
+				tutorial_move_count = 0
+		elif tutorial_phase == "door_prompt":
+			# Check if player is north of the door
+			if tutorial_door and tutorial_door.hp > 0:
+				var door_dist = HexTileMap._hex_distance(target_hex, tutorial_door_hex)
+				var player_is_north = target_hex.y < tutorial_door_hex.y
+				if player_is_north and door_dist <= 2:
+					_ambush_tutorial_door()
+	
 	# Check if we entered a new room or portal
 	_check_room_transition(target_hex)
 	_check_interactables()
 	_check_enemy_sight()  # Check sight after movement
+
+func _spawn_sparkle(hex: Vector2i):
+	"""Brief sparkle effect on hex where player stepped."""
+	if not hex_map:
+		return
+	var world_pos = hex_map.hex_to_world(hex)
+	
+	# Use a simple colored polygon as sparkle (no external asset needed)
+	var poly = Polygon2D.new()
+	poly.polygon = PackedVector2Array([
+		Vector2(-8, 0), Vector2(-4, -6), Vector2(0, -8),
+		Vector2(4, -6), Vector2(8, 0), Vector2(4, 6), Vector2(0, 8), Vector2(-4, 6)
+	])
+	poly.color = Color(1, 0.9, 0.4, 0.6)
+	poly.position = world_pos
+	add_child(poly)
+	var tw = create_tween()
+	tw.tween_property(poly, "modulate:a", 0.0, 0.5)
+	tw.tween_callback(poly.queue_free)
+
+func _show_floating_prompt(text: String):
+	if not floating_prompt:
+		floating_prompt = Label.new()
+		floating_prompt.name = "FloatingPrompt"
+		floating_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		floating_prompt.add_theme_font_size_override("font_size", 18)
+		floating_prompt.add_theme_color_override("font_color", Color(0.9, 0.8, 0.4))
+		floating_prompt.add_theme_color_override("font_shadow_color", Color(0, 0, 0))
+		floating_prompt.add_theme_constant_override("shadow_outline_size", 4)
+		add_child(floating_prompt)
+	floating_prompt.text = text
+	floating_prompt.visible = true
+	if player_node:
+		floating_prompt.position = player_node.global_position + Vector2(-200, -60)
+	else:
+		floating_prompt.position = Vector2(440, 300)
+
+func _hide_floating_prompt():
+	if floating_prompt:
+		floating_prompt.visible = false
+
+func _ambush_tutorial_door():
+	"""Trigger ambush combat with The Door when player approaches from behind."""
+	if not tutorial_door or tutorial_door.hp <= 0:
+		return
+	if tutorial_door.state == HexEnemy.State.IN_COMBAT:
+		return
+	
+	_hide_floating_prompt()
+	# The door "notices" the player and spins around
+	_show_notification("The Door senses you!", Color(0.9, 0.3, 0.3), 3.0)
+	
+	# Face the player
+	if tutorial_door.has_method("set_facing"):
+		tutorial_door.set_facing("north")
+	
+	# Start ambush combat with bonus
+	ambush_bonus = true
+	var combat_enemies: Array[CombatManager.EnemyData] = []
+	combat_enemies.append(tutorial_door.to_combat_data())
+	tutorial_door._set_state(HexEnemy.State.IN_COMBAT)
+	
+	in_combat = true
+	var combat_manager = get_node_or_null("CombatManager")
+	if combat_manager:
+		# Enable tutorial mode for safety
+		combat_manager.tutorial_mode = true
+		var ui = get_node_or_null("CombatUI")
+		if ui:
+			ui.setup(combat_manager)
+		combat_manager.start_combat(combat_enemies, _get_tutorial_deck())
+		if ui:
+			ui.visible = true
+		AudioManager.play_combat(1)
+		print("[Floor1-Hex] Tutorial Door ambush combat started!")
+		
+		# Ambush bonus
+		combat_manager.is_player_turn = true
+		combat_manager.player_shield += 2
+		
+		# Enable combat tutorial hints
+		var combat_tutorial = get_node_or_null("CombatTutorial")
+		if combat_tutorial:
+			combat_tutorial.start_door_tutorial()
+	else:
+		push_warning("[Floor1-Hex] CombatManager not found!")
+		in_combat = false
+
+func _get_tutorial_deck() -> Array:
+	"""Pre-made tutorial deck for the Door encounter."""
+	return [
+		"Strike", "Strike", "Strike", "Strike",
+		"Block", "Block", "Block", "Block",
+		"Focus", "Focus"
+	]
+
+func _on_tutorial_door_defeated():
+	"""Called when The Door is defeated in tutorial combat."""
+	tutorial_door_defeated = true
+	GameState.door_tutorial_completed = true
+	_unlock_all_portals()
+	_show_notification("The Door shatters. All paths open.", Color(0.3, 0.9, 0.3), 5.0)
+	
+	# Show post-combat reward
+	if post_combat_ui:
+		post_combat_ui.show_post_combat(true, 5, "Construct")
+		in_ui = true
+		print("[Floor1-Hex] Post-combat UI shown for tutorial")
+
+func _on_tutorial_combat_ended(victory: bool):
+	"""Override for tutorial combat end."""
+	if not tutorial_door:
+		return
+	
+	in_combat = false
+	AudioManager.play_floor_ambient(1)
+	
+	var combat_manager = get_node_or_null("CombatManager")
+	if combat_manager:
+		combat_manager.tutorial_mode = false
+	
+	if victory:
+		room_cleared["upper"] = true
+		# The Door is dead
+		for enemy in hex_enemies:
+			if enemy.hp <= 0:
+				enemy.queue_free()
+		var alive_enemies: Array[HexEnemy] = []
+		for enemy in hex_enemies:
+			if enemy.hp > 0:
+				alive_enemies.append(enemy)
+			hex_enemies = alive_enemies
+		_on_tutorial_door_defeated()
+	else:
+		# Player "lost" but can't die in tutorial — HP floor at 1
+		GameState.player_hp = max(1, GameState.player_hp)
+		player_node.global_position = hex_map.hex_to_world(room_data["entry"]["center"])
+		_show_notification("The Door pushes you back. Try again.", Color(0.9, 0.7, 0.3), 4.0)
+		if tutorial_door:
+			tutorial_door.reset_after_combat()
+			# Reset door HP for retry
+			tutorial_door.hp = tutorial_door.max_hp
+			
+		# Re-show the prompt
+		_show_floating_prompt("Circle behind the Door from the north side.")
+		tutorial_phase = "door_prompt"
+
+func _on_click_move_tutorial(screen_pos: Vector2):
+	"""Override click-to-move during tutorial to track progress."""
+	if not player_node or not hex_map:
+		return
+	
+	var world_pos = get_viewport().get_canvas_transform().affine_inverse() * screen_pos
+	var target_hex = hex_map.world_to_hex(world_pos)
+	
+	# Check if target is walkable
+	if not hex_map.is_walkable(target_hex):
+		_show_notification("Can't move there!")
+		return
+	
+	var current_hex = hex_map.world_to_hex(player_node.global_position)
+	if target_hex == current_hex:
+		return
+	
+	var path = hex_map.find_path(current_hex, target_hex)
+	if path.is_empty() or path.size() <= 1:
+		_show_notification("No path!")
+		return
+	
+	# Check if path goes near enemy for ambush
+	for step_hex in path.slice(1):
+		for enemy in hex_enemies:
+			if enemy.hp <= 0 or enemy.state == HexEnemy.State.IN_COMBAT:
+				continue
+			if HexTileMap._hex_distance(step_hex, enemy.hex_pos) <= 1:
+				var ambush_path = path.slice(1, path.find(step_hex) + 1)
+				path_movement_target = ambush_path
+				path_movement_index = 0
+				path_movement_timer = 0.0
+				path_movement_active = true
+				return
+	
+	# Start path following
+	path_movement_target = path.slice(1)
+	path_movement_index = 0
+	path_movement_timer = 0.0
+	path_movement_active = true
+	
+	# Track tutorial progress
+	if GameState.is_first_run and guided_tutorial_active and tutorial_phase == "click_move":
+		tutorial_click_move_used = true
+		_spawn_sparkle(target_hex)
+		_hide_floating_prompt()
+		_show_floating_prompt("The way north is blocked. Approach the Door from behind.")
+		_spawn_tutorial_door_if_needed()
+		tutorial_phase = "door_prompt"
+
+func _spawn_tutorial_door_if_needed():
+	"""Lazy-spawn the door when needed for tutorial."""
+	if tutorial_door and is_instance_valid(tutorial_door):
+		return
+	if not hex_map:
+		return
+	
+	var door_pos = hex_map.hex_to_world(tutorial_door_hex)
+	
+	tutorial_door = HexEnemy.new(
+		"tutorial_door",
+		"The Threshold Door",
+		tutorial_door_hex,
+		"Construct",
+		false,
+		"res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"
+	)
+	
+	if ResourceLoader.exists("res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"):
+		tutorial_door.sprite_texture = load("res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png")
+	
+	tutorial_door.max_hp = 8
+	tutorial_door.hp = 8
+	tutorial_door.attack = 2
+	tutorial_door.defense = 0
+	tutorial_door.facing = "south"
+	tutorial_door.name = "HexEnemy_TutorialDoor"
+	
+	if not enemy_container:
+		enemy_container = Node2D.new()
+		enemy_container.name = "EnemyContainer"
+		add_child(enemy_container)
+	
+	enemy_container.add_child(tutorial_door)
+	tutorial_door.set_hex_map_position(tutorial_door_hex, hex_map)
+	tutorial_door.combat_initiated.connect(_on_enemy_combat_initiated)
+	
+	hex_enemies.append(tutorial_door)
+	print("[Floor1-Hex] Tutorial Door spawned at %s" % str(tutorial_door_hex))
 
 func _vector_to_hex_dir(velocity: Vector2) -> int:
 	"""Convert a movement vector to hex direction index (0-5) for pointy-top hexes.
@@ -857,9 +1158,14 @@ func _opposite_direction(dir: String) -> String:
 	return ""
 
 func _is_portal_locked(direction: String) -> bool:
-	# Tutorial: only north unlocked initially
-	if GameState.is_first_run and current_room_id == "entry":
-		return direction != "north"
+	# Tutorial: only north unlocked initially, then locked until door is defeated
+	if GameState.is_first_run and guided_tutorial_active:
+		if tutorial_phase == "movement" or tutorial_phase == "click_move":
+			return direction != "north"
+		if tutorial_phase == "door_prompt" or tutorial_phase == "ambush" or tutorial_phase == "combat":
+			return true  # All portals locked during door tutorial
+		# After door defeated, all unlock
+		return false
 	return false
 
 func _unlock_all_portals():
@@ -1107,10 +1413,46 @@ func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.9), durat
 	tween.parallel().tween_property(notif, "modulate:a", 0.0, 1.5)
 	tween.tween_callback(notif.queue_free)
 
-# ===================================================================
-# TUTORIAL
-# ===================================================================
-
+func _spawn_tutorial_door():
+	"""Spawn the tutorial Door enemy in the upper room."""
+	if not hex_map:
+		return
+	
+	var door_pos = hex_map.hex_to_world(tutorial_door_hex)
+	
+	tutorial_door = HexEnemy.new(
+		"tutorial_door",
+		"The Threshold Door",
+		tutorial_door_hex,
+		"Construct",
+		false,
+		"res://assets/sprites/enemies/Construct/enemy_the_threshold_door_idle.png"
+	)
+	# Fallback texture if the specific door sprite doesn't exist
+	if not ResourceLoader.exists("res://assets/sprites/enemies/Construct/enemy_the_threshold_door_idle.png"):
+		# Try to find any construct sprite
+		for suffix in ["_idle", "_attack", "_damage", "_death", ""]:
+			var try_path = "res://assets/sprites/enemies/Construct/enemy_piston_assembly" + suffix + ".png"
+			if ResourceLoader.exists(try_path):
+				tutorial_door.sprite_texture = load(try_path)
+				break
+	else:
+		tutorial_door.sprite_texture = load("res://assets/sprites/enemies/Construct/enemy_the_threshold_door_idle.png")
+	
+	# The Door is simple: 8 HP, 2 ATK, predictable pattern
+	tutorial_door.max_hp = 8
+	tutorial_door.hp = 8
+	tutorial_door.attack = 2
+	tutorial_door.defense = 0
+	tutorial_door.facing = "south"  # Faces south, looking at player
+	tutorial_door.name = "HexEnemy_TutorialDoor"
+	
+	enemy_container.add_child(tutorial_door)
+	tutorial_door.set_hex_map_position(tutorial_door_hex, hex_map)
+	tutorial_door.combat_initiated.connect(_on_enemy_combat_initiated)
+	
+	hex_enemies.append(tutorial_door)
+	print("[Floor1-Hex] Tutorial Door spawned at %s" % str(tutorial_door_hex))
 func _setup_floor_specific():
 	# Place shop sprite in middle room
 	if hex_map and room_data.has("middle"):
@@ -1125,17 +1467,16 @@ func _setup_floor_specific():
 		print("[Floor1-Hex] Shop sprite placed at middle room")
 	
 	if GameState.is_first_run:
-		print("[Floor1-Hex] First run — tutorial mode")
-		_lock_portals_except(["north"])
+		print("[Floor1-Hex] First run — starting guided interactive tutorial")
+		_start_guided_tutorial()
 	else:
 		print("[Floor1-Hex] Re-run — all portals active")
 		_unlock_all_portals()
 
 func _start_tutorial():
-	in_ui = true
-	print("[Floor1-Hex] Starting tutorial via TutorialManager")
-	TutorialManager.start_tutorial()
-	TutorialManager.tutorial_completed.connect(_on_tutorial_completed, CONNECT_ONE_SHOT)
+	# DEPRECATED: replaced by guided interactive tutorial
+	# Kept for compatibility; delegates to new system
+	_start_guided_tutorial()
 
 func _on_tutorial_completed():
 	GameState.is_first_run = false
@@ -1143,6 +1484,31 @@ func _on_tutorial_completed():
 	in_ui = false
 	print("[Floor1-Hex] Tutorial complete — resuming floor setup")
 	_finish_floor_setup()
+
+func _start_guided_tutorial():
+	"""Begin the interactive, hands-on tutorial. No text overlays."""
+	guided_tutorial_active = true
+	tutorial_phase = "movement"
+	tutorial_move_count = 0
+	tutorial_click_move_used = false
+	tutorial_door_defeated = false
+	
+	# Player starts in entry room
+	_enter_room("entry")
+	
+	# Show first movement prompt
+	_show_floating_prompt("The hexes respond. Try W, E, A, D, Z, X.")
+	print("[Floor1-Hex] Guided tutorial started: movement phase")
+
+func _on_guided_tutorial_complete():
+	"""Called when the entire guided tutorial is finished."""
+	guided_tutorial_active = false
+	GameState.is_first_run = false
+	GameState.door_tutorial_completed = true
+	GameState.save_game()
+	_unlock_all_portals()
+	_show_notification("All portals unlocked!", Color(0.3, 0.9, 0.3), 4.0)
+	print("[Floor1-Hex] Guided tutorial complete!")
 
 func _lock_portals_except(allowed: Array[String]):
 	# Handled by _is_portal_locked
