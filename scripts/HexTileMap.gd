@@ -26,12 +26,39 @@ const DIRECTIONS = [
 	Vector2i(0, 1),    # SE
 ]
 
-# Tile colors/textures
-@export var tile_texture_floor: Texture2D
-@export var tile_texture_wall: Texture2D
-@export var tile_texture_object: Texture2D
-@export var tile_texture_void: Texture2D
-@export var tile_texture_water: Texture2D
+# Tile colors/textures — supports multiple variations per type
+@export var tile_textures_floor: Array[Texture2D] = []
+@export var tile_textures_wall: Array[Texture2D] = []
+@export var tile_textures_object: Array[Texture2D] = []
+@export var tile_textures_void: Array[Texture2D] = []
+@export var tile_textures_water: Array[Texture2D] = []
+
+# Backward-compat single texture (auto-populated from array if set)
+@export var tile_texture_floor: Texture2D:
+	set(value):
+		tile_texture_floor = value
+		if value and value not in tile_textures_floor:
+			tile_textures_floor.append(value)
+@export var tile_texture_wall: Texture2D:
+	set(value):
+		tile_texture_wall = value
+		if value and value not in tile_textures_wall:
+			tile_textures_wall.append(value)
+@export var tile_texture_object: Texture2D:
+	set(value):
+		tile_texture_object = value
+		if value and value not in tile_textures_object:
+			tile_textures_object.append(value)
+@export var tile_texture_void: Texture2D:
+	set(value):
+		tile_texture_void = value
+		if value and value not in tile_textures_void:
+			tile_textures_void.append(value)
+@export var tile_texture_water: Texture2D:
+	set(value):
+		tile_texture_water = value
+		if value and value not in tile_textures_water:
+			tile_textures_water.append(value)
 
 # Grid data: Vector2i(q, r) -> tile_type
 var grid: Dictionary = {}
@@ -219,14 +246,17 @@ func _update_tile_visual(hex: Vector2i):
 	tile_container.add_child(sprite)
 
 func _get_texture_for_tile(tile_type: int) -> Texture2D:
+	var arr: Array[Texture2D] = []
 	match tile_type:
-		TILE_FLOOR: return tile_texture_floor
-		TILE_WALL: return tile_texture_wall
-		TILE_OBJECT: return tile_texture_object
-		TILE_VOID: return tile_texture_void
-		TILE_PORTAL: return tile_texture_floor
-		TILE_WATER: return tile_texture_water if tile_texture_water else tile_texture_void
-		_: return tile_texture_void
+		TILE_FLOOR: arr = tile_textures_floor
+		TILE_WALL: arr = tile_textures_wall
+		TILE_OBJECT: arr = tile_textures_object
+		TILE_VOID: arr = tile_textures_void
+		TILE_PORTAL: arr = tile_textures_floor
+		TILE_WATER: arr = tile_textures_water if tile_textures_water.size() > 0 else tile_textures_void
+	if arr.size() > 0:
+		return arr[randi() % arr.size()]
+	return null
 
 func _get_hex_polygon() -> PackedVector2Array:
 	var points = PackedVector2Array()

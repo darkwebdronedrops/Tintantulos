@@ -134,6 +134,27 @@ func _build_floor():
 	_finish_floor_setup()
 
 func _finish_floor_setup():
+	# Load tile texture variations for Floor 1
+	if hex_map:
+		var floor_variants = [
+			preload("res://assets/sprites/hex/floor1/floor_v1.png"),
+			preload("res://assets/sprites/hex/floor1/floor_v2.png"),
+			preload("res://assets/sprites/hex/floor1/floor_v3.png"),
+			preload("res://assets/sprites/hex/floor1/floor_v4.png"),
+		]
+		var wall_variant = preload("res://assets/sprites/hex/floor1/wall.png")
+		for tex in floor_variants:
+			if tex:
+				hex_map.tile_textures_floor.append(tex)
+		if wall_variant:
+			hex_map.tile_textures_wall.append(wall_variant)
+		# Keep fallback single textures for compat
+		if hex_map.tile_textures_floor.size() > 0:
+			hex_map.tile_texture_floor = hex_map.tile_textures_floor[0]
+		if hex_map.tile_textures_wall.size() > 0:
+			hex_map.tile_texture_wall = hex_map.tile_textures_wall[0]
+		print("[Floor1-Hex] Loaded %d floor textures, %d wall textures" % [hex_map.tile_textures_floor.size(), hex_map.tile_textures_wall.size()])
+	
 	# Generate hex layout
 	if hex_map:
 		hex_map.generate_floor1_layout()
