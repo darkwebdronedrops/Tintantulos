@@ -725,6 +725,7 @@ func _setup_machinist_shop():
     bg.color = Color(0.1, 0.1, 0.15, 0.95)
     bg.size = Vector2(600, 400)
     bg.position = Vector2(0, 0)
+    shop_ui.add_child(bg)
     shop_ui.move_child(bg, 0)
 
 func _buy_shop_item(item: Dictionary, gems_label: Label):
