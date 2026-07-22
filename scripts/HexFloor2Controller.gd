@@ -102,24 +102,27 @@ func _build_floor():
 	# Load tile texture variations for Floor 2
 	if hex_map:
 		var floor_variants = [
-			preload("res://assets/sprites/hex/floor2/floor_v1.png"),
-			preload("res://assets/sprites/hex/floor2/floor_v2.png"),
-			preload("res://assets/sprites/hex/floor2/floor_v3.png"),
 			preload("res://assets/sprites/hex/floor2/floor_v4.png"),
 		]
 		var wall_variant = preload("res://assets/sprites/hex/floor2/wall.png")
-		var water_variant = preload("res://assets/sprites/hex/floor2/water.png")
+		var water_variants = [
+			preload("res://assets/sprites/hex/floor2/water_v1.png"),
+			preload("res://assets/sprites/hex/floor2/water_v2.png"),
+		]
+		for tex in water_variants:
+			if tex:
+				hex_map.tile_textures_water.append(tex)
 		for tex in floor_variants:
 			if tex:
 				hex_map.tile_textures_floor.append(tex)
 		if wall_variant:
 			hex_map.tile_textures_wall.append(wall_variant)
-		if water_variant:
-			hex_map.tile_textures_water.append(water_variant)
 		if hex_map.tile_textures_floor.size() > 0:
 			hex_map.tile_texture_floor = hex_map.tile_textures_floor[0]
 		if hex_map.tile_textures_wall.size() > 0:
 			hex_map.tile_texture_wall = hex_map.tile_textures_wall[0]
+		if hex_map.tile_textures_water.size() > 0:
+			hex_map.tile_texture_water = hex_map.tile_textures_water[0]
 		print("[Floor2-Hex] Loaded %d floor textures, %d wall textures, %d water textures" % [hex_map.tile_textures_floor.size(), hex_map.tile_textures_wall.size(), hex_map.tile_textures_water.size()])
 	
 	# Generate hex layout

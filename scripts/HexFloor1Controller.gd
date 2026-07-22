@@ -138,9 +138,7 @@ func _finish_floor_setup():
 	if hex_map:
 		var floor_variants = [
 			preload("res://assets/sprites/hex/floor1/floor_v1.png"),
-			preload("res://assets/sprites/hex/floor1/floor_v2.png"),
 			preload("res://assets/sprites/hex/floor1/floor_v3.png"),
-			preload("res://assets/sprites/hex/floor1/floor_v4.png"),
 		]
 		var wall_variant = preload("res://assets/sprites/hex/floor1/wall.png")
 		for tex in floor_variants:
