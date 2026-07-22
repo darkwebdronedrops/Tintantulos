@@ -103,6 +103,8 @@ func _build_floor():
 	if hex_map:
 		var floor_variants = [
 			preload("res://assets/sprites/hex/floor2/floor_v4.png"),
+			preload("res://assets/sprites/hex/floor2/floor_v5.png"),
+			preload("res://assets/sprites/hex/floor2/floor_v6.png"),
 		]
 		var wall_variant = preload("res://assets/sprites/hex/floor2/wall.png")
 		var water_variants = [
