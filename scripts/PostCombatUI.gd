@@ -39,11 +39,6 @@ func _ready():
 	visible = false
 	process_mode = PROCESS_MODE_ALWAYS  # Keep processing when game paused
 
-func _input(event):
-	if visible and event.is_action_pressed("ui_cancel"):
-		_on_confirm()
-		get_viewport().set_input_as_handled()
-
 func show_post_combat(victory: bool, quiddity: int, defeated_faction: String = ""):
 	"""Show the post-combat reward screen.
 	
