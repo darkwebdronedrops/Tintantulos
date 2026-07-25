@@ -129,7 +129,7 @@ func _create_ui():
 	shield_icon.name = "ShieldIcon"
 	shield_icon.position = Vector2(8, 32)
 	shield_icon.size = Vector2(20, 20)
-	shield_icon.expand_mode = TextureRect.EXPAND_FIT_SIZE
+	shield_icon.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	shield_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	var shield_tex = load("res://assets/sprites/ui/ui_shield_icon.png")
 	if shield_tex: shield_icon.texture = shield_tex
@@ -181,7 +181,7 @@ func _create_ui():
 	quiddity_icon.name = "QuiddityIcon"
 	quiddity_icon.position = Vector2(8, 162)
 	quiddity_icon.size = Vector2(18, 18)
-	quiddity_icon.expand_mode = TextureRect.EXPAND_FIT_SIZE
+	quiddity_icon.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	quiddity_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	var gem_tex = load("res://assets/sprites/ui/ui_gem_quiddity.png")
 	if gem_tex: quiddity_icon.texture = gem_tex
@@ -287,7 +287,7 @@ func _create_ui():
 		slot.name = "Equip_%s" % equip_types[i]
 		slot.position = Vector2(23, 28 + i * 56)
 		slot.size = Vector2(48, 48)
-		slot.expand_mode = TextureRect.EXPAND_FIT_SIZE
+		slot.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 		slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		var slot_tex = load("res://assets/sprites/ui/ui_equip_slot.png")
 		if slot_tex: slot.texture = slot_tex
@@ -295,7 +295,7 @@ func _create_ui():
 		item.name = "Item"
 		item.position = Vector2(8, 8)
 		item.size = Vector2(32, 32)
-		item.expand_mode = TextureRect.EXPAND_FIT_SIZE
+		item.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 		item.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		var item_tex = load(equip_icons[i])
 		if item_tex: item.texture = item_tex
