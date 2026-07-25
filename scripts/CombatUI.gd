@@ -11,9 +11,9 @@ var player_panel: NinePatchRect
 var attention_bar: TextureProgressBar
 var attention_state_label: Label
 var attention_value_label: Label
-var end_turn_btn: TextureButton
-var stake_btn: TextureButton
-var weapon_use_btn: TextureButton
+var end_turn_btn: Button
+var stake_btn: Button
+var weapon_use_btn: Button
 var shield_icon: TextureRect
 var shield_label: Label
 var hp_bar: TextureProgressBar
@@ -74,12 +74,14 @@ func _create_ui():
 	#   Equip Panel  : (1070, 10)  size (110, 300)
 	# =====================================================================
 	
-	# Solid background behind entire combat UI
+	# Semi-transparent background — shows hex battlefield behind combat
 	var bg = ColorRect.new()
 	bg.name = "CombatBG"
-	bg.color = Color(0.02, 0.02, 0.04, 0.92)
+	bg.color = Color(0.02, 0.02, 0.04, 0.55)
 	bg.anchor_right = 1.0
 	bg.anchor_bottom = 1.0
+	bg.z_index = -1
+	add_child(bg)
 	bg.z_index = -1
 	add_child(bg)
 	
@@ -196,42 +198,21 @@ func _create_ui():
 	deck_count_label.text = "Deck: 0"
 	player_panel.add_child(deck_count_label)
 	
-	# End Turn button (y=216)
-	end_turn_btn = TextureButton.new()
+	# End Turn button (y=216) — plain button, no oversized texture
+	end_turn_btn = Button.new()
 	end_turn_btn.name = "EndTurnBtn"
 	end_turn_btn.position = Vector2(8, 216)
 	end_turn_btn.size = Vector2(90, 32)
-	end_turn_btn.ignore_texture_size = true
-	end_turn_btn.stretch_mode = TextureButton.STRETCH_SCALE
-	var btn_tex = load("res://assets/sprites/ui/ui_button_bg.png")
-	var btn_pressed = load("res://assets/sprites/ui/ui_button_bg_pressed.png")
-	if btn_tex: end_turn_btn.texture_normal = btn_tex
-	if btn_pressed: end_turn_btn.texture_pressed = btn_pressed
-	var end_turn_label = Label.new()
-	end_turn_label.text = "End Turn (T)"
-	end_turn_label.anchor_right = 1.0; end_turn_label.anchor_bottom = 1.0
-	end_turn_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	end_turn_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	end_turn_btn.add_child(end_turn_label)
+	end_turn_btn.text = "End Turn (T)"
 	end_turn_btn.pressed.connect(_on_end_turn)
 	player_panel.add_child(end_turn_btn)
 	
-	# Stake button (y=216, to the right)
-	stake_btn = TextureButton.new()
+	# Stake button (y=216, to the right) — plain button
+	stake_btn = Button.new()
 	stake_btn.name = "StakeBtn"
 	stake_btn.position = Vector2(104, 216)
 	stake_btn.size = Vector2(90, 32)
-	stake_btn.ignore_texture_size = true
-	stake_btn.stretch_mode = TextureButton.STRETCH_SCALE
-	if btn_tex: stake_btn.texture_normal = btn_tex
-	if btn_pressed: stake_btn.texture_pressed = btn_pressed
-	var stake_label = Label.new()
-	stake_label.name = "StakeLabel"
-	stake_label.text = "Stake 0"
-	stake_label.anchor_right = 1.0; stake_label.anchor_bottom = 1.0
-	stake_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	stake_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	stake_btn.add_child(stake_label)
+	stake_btn.text = "Stake 0"
 	stake_btn.pressed.connect(_on_stake)
 	player_panel.add_child(stake_btn)
 	
@@ -304,14 +285,11 @@ func _create_ui():
 		equip_panel.add_child(slot)
 		equip_slots.append(slot)
 	
-	weapon_use_btn = TextureButton.new()
+	weapon_use_btn = Button.new()
 	weapon_use_btn.name = "WeaponUseBtn"
 	weapon_use_btn.position = Vector2(23, 84)
 	weapon_use_btn.size = Vector2(48, 20)
-	weapon_use_btn.ignore_texture_size = true
-	weapon_use_btn.stretch_mode = TextureButton.STRETCH_SCALE
-	var weapon_btn_tex = load("res://assets/sprites/ui/ui_weapon_attack.png")
-	if weapon_btn_tex: weapon_use_btn.texture_normal = weapon_btn_tex
+	weapon_use_btn.text = "Atk"
 	weapon_use_btn.disabled = true
 	weapon_use_btn.tooltip_text = "Weapon not charged"
 	weapon_use_btn.pressed.connect(_on_weapon_use)

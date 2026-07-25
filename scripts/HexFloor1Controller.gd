@@ -345,6 +345,12 @@ func _start_combat(encounter_type: String):
 	print("[Floor1-Hex] Starting combat: %s with %d enemies" % [encounter_type, enemies.size()])
 	
 	in_combat = true
+	
+	# Hide overworld UI so it doesn't overlap combat
+	var main_ui = get_node_or_null("MainUI")
+	if main_ui:
+		main_ui.visible = false
+	
 	var combat_manager = get_node_or_null("CombatManager")
 	if combat_manager:
 		# Setup UI FIRST so it receives all combat signals
@@ -399,6 +405,12 @@ func _spawn_enemies(enemy_names: Array[String]) -> Array[CombatManager.EnemyData
 
 func _on_combat_ended(victory: bool):
 	in_combat = false
+	
+	# Show overworld UI again
+	var main_ui = get_node_or_null("MainUI")
+	if main_ui:
+		main_ui.visible = true
+	
 	AudioManager.play_floor_ambient(1)
 	
 	# Tutorial mode cleanup
