@@ -88,13 +88,7 @@ func _create_ui():
 	player_panel.name = "PlayerPanel"
 	player_panel.position = Vector2(10, 10)
 	player_panel.size = Vector2(200, 300)
-	var panel_tex = load("res://assets/sprites/ui/ui_panel_bg.png")
-	if panel_tex:
-		player_panel.texture = panel_tex
-		player_panel.patch_margin_left = 20
-		player_panel.patch_margin_right = 20
-		player_panel.patch_margin_top = 20
-		player_panel.patch_margin_bottom = 20
+	# Skip decorative texture — use solid bg instead
 	add_child(player_panel)
 	
 	var player_bg = ColorRect.new()
@@ -207,6 +201,8 @@ func _create_ui():
 	end_turn_btn.name = "EndTurnBtn"
 	end_turn_btn.position = Vector2(8, 216)
 	end_turn_btn.size = Vector2(90, 32)
+	end_turn_btn.ignore_texture_size = true
+	end_turn_btn.stretch_mode = TextureButton.STRETCH_SCALE
 	var btn_tex = load("res://assets/sprites/ui/ui_button_bg.png")
 	var btn_pressed = load("res://assets/sprites/ui/ui_button_bg_pressed.png")
 	if btn_tex: end_turn_btn.texture_normal = btn_tex
@@ -225,6 +221,8 @@ func _create_ui():
 	stake_btn.name = "StakeBtn"
 	stake_btn.position = Vector2(104, 216)
 	stake_btn.size = Vector2(90, 32)
+	stake_btn.ignore_texture_size = true
+	stake_btn.stretch_mode = TextureButton.STRETCH_SCALE
 	if btn_tex: stake_btn.texture_normal = btn_tex
 	if btn_pressed: stake_btn.texture_pressed = btn_pressed
 	var stake_label = Label.new()
@@ -260,13 +258,16 @@ func _create_ui():
 	equip_panel.name = "EquipPanel"
 	equip_panel.position = Vector2(1070, 10)
 	equip_panel.size = Vector2(110, 300)
-	if panel_tex:
-		equip_panel.texture = panel_tex
-		equip_panel.patch_margin_left = 15
-		equip_panel.patch_margin_right = 15
-		equip_panel.patch_margin_top = 15
-		equip_panel.patch_margin_bottom = 15
+	# Skip decorative texture — use solid bg instead
 	add_child(equip_panel)
+	
+	var equip_bg = ColorRect.new()
+	equip_bg.name = "EquipBG"
+	equip_bg.color = Color(0.08, 0.08, 0.12, 0.9)
+	equip_bg.anchor_right = 1.0
+	equip_bg.anchor_bottom = 1.0
+	equip_panel.add_child(equip_bg)
+	equip_panel.move_child(equip_bg, 0)
 	
 	var equip_title = Label.new()
 	equip_title.text = "GEAR"
@@ -307,6 +308,8 @@ func _create_ui():
 	weapon_use_btn.name = "WeaponUseBtn"
 	weapon_use_btn.position = Vector2(23, 84)
 	weapon_use_btn.size = Vector2(48, 20)
+	weapon_use_btn.ignore_texture_size = true
+	weapon_use_btn.stretch_mode = TextureButton.STRETCH_SCALE
 	var weapon_btn_tex = load("res://assets/sprites/ui/ui_weapon_attack.png")
 	if weapon_btn_tex: weapon_use_btn.texture_normal = weapon_btn_tex
 	weapon_use_btn.disabled = true
@@ -461,13 +464,7 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	var panel = NinePatchRect.new()
 	panel.name = "Enemy_%d" % index
 	panel.size = Vector2(160, 140) * s
-	var panel_tex = load("res://assets/sprites/ui/ui_enemy_panel_bg.png")
-	if panel_tex:
-		panel.texture = panel_tex
-		panel.patch_margin_left = 15
-		panel.patch_margin_right = 15
-		panel.patch_margin_top = 15
-		panel.patch_margin_bottom = 15
+	# Skip decorative texture — use solid bg instead
 	
 	# Solid background (prevents checkerboard from missing textures)
 	var panel_bg = ColorRect.new()
@@ -482,7 +479,7 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	sprite.name = "Sprite"
 	sprite.position = Vector2(50, 8) * s
 	sprite.size = Vector2(60, 60) * s
-	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	sprite.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	if enemy.sprite_texture_path != "" and ResourceLoader.exists(enemy.sprite_texture_path):
 		var tex = load(enemy.sprite_texture_path)
