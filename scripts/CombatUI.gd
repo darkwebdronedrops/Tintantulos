@@ -110,6 +110,7 @@ func _create_ui():
 	hp_bar.position = Vector2(8, 8)
 	hp_bar.size = Vector2(184, 20)
 	hp_bar.min_value = 0; hp_bar.max_value = 100; hp_bar.value = 100
+	hp_bar.nine_patch_stretch = true
 	var hp_frame = load("res://assets/sprites/ui/ui_hp_bar_frame.png")
 	var hp_fill = load("res://assets/sprites/ui/ui_hp_bar_fill.png")
 	if hp_frame: hp_bar.texture_over = hp_frame
@@ -128,6 +129,8 @@ func _create_ui():
 	shield_icon.name = "ShieldIcon"
 	shield_icon.position = Vector2(8, 32)
 	shield_icon.size = Vector2(20, 20)
+	shield_icon.expand_mode = TextureRect.EXPAND_FIT_SIZE
+	shield_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	var shield_tex = load("res://assets/sprites/ui/ui_shield_icon.png")
 	if shield_tex: shield_icon.texture = shield_tex
 	player_panel.add_child(shield_icon)
@@ -159,6 +162,7 @@ func _create_ui():
 	attention_bar.position = Vector2(4, 100)
 	attention_bar.size = Vector2(192, 18)
 	attention_bar.min_value = 0; attention_bar.max_value = 20
+	attention_bar.nine_patch_stretch = true
 	var attn_frame = load("res://assets/sprites/ui/ui_attention_frame.png")
 	var attn_fill = load("res://assets/sprites/ui/ui_attention_fill.png")
 	if attn_frame: attention_bar.texture_over = attn_frame
@@ -177,6 +181,8 @@ func _create_ui():
 	quiddity_icon.name = "QuiddityIcon"
 	quiddity_icon.position = Vector2(8, 162)
 	quiddity_icon.size = Vector2(18, 18)
+	quiddity_icon.expand_mode = TextureRect.EXPAND_FIT_SIZE
+	quiddity_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	var gem_tex = load("res://assets/sprites/ui/ui_gem_quiddity.png")
 	if gem_tex: quiddity_icon.texture = gem_tex
 	player_panel.add_child(quiddity_icon)
@@ -281,15 +287,18 @@ func _create_ui():
 		slot.name = "Equip_%s" % equip_types[i]
 		slot.position = Vector2(23, 28 + i * 56)
 		slot.size = Vector2(48, 48)
+		slot.expand_mode = TextureRect.EXPAND_FIT_SIZE
+		slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		var slot_tex = load("res://assets/sprites/ui/ui_equip_slot.png")
 		if slot_tex: slot.texture = slot_tex
 		var item = TextureRect.new()
 		item.name = "Item"
 		item.position = Vector2(8, 8)
 		item.size = Vector2(32, 32)
+		item.expand_mode = TextureRect.EXPAND_FIT_SIZE
+		item.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		var item_tex = load(equip_icons[i])
 		if item_tex: item.texture = item_tex
-		item.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 		slot.add_child(item)
 		equip_panel.add_child(slot)
 		equip_slots.append(slot)
@@ -501,6 +510,7 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	enemy_hp_bar.position = Vector2(5, 95) * s
 	enemy_hp_bar.size = Vector2(150, 16) * s
 	enemy_hp_bar.min_value = 0; enemy_hp_bar.max_value = 100; enemy_hp_bar.value = 100
+	enemy_hp_bar.nine_patch_stretch = true
 	var hp_frame = load("res://assets/sprites/ui/ui_hp_bar_frame.png")
 	var hp_fill = load("res://assets/sprites/ui/ui_hp_bar_fill.png")
 	if hp_frame: enemy_hp_bar.texture_over = hp_frame
