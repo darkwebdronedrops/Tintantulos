@@ -800,6 +800,10 @@ func _hex_move(move_vec: Vector2):
 	var dirs = HexTileMap.DIRECTIONS
 	var target_hex = current_hex + dirs[direction]
 	
+	# Check walkable (prevents walking into void)
+	if not hex_map.is_walkable(target_hex):
+		return
+	
 	# Check wall collision
 	if hex_map.is_wall(target_hex):
 		return
@@ -1417,19 +1421,39 @@ func _make_offering():
 # ===================================================================
 
 func _show_dialogue(speaker: String, text: String):
-	var dialogue = Label.new()
-	dialogue.name = "DialogueBox"
-	dialogue.text = "%s: %s" % [speaker, text]
-	dialogue.position = Vector2(140, 550)
-	dialogue.size = Vector2(1000, 100)
-	dialogue.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	dialogue.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	dialogue.add_theme_font_size_override("font_size", 16)
-	add_child(dialogue)
+	# Remove existing dialogue
+	var existing = get_node_or_null("DialogueBox")
+	if existing:
+		existing.queue_free()
 	
+	# Create panel background
+	var panel = PanelContainer.new()
+	panel.name = "DialogueBox"
+	panel.position = Vector2(190, 520)  # Center-bottom
+	panel.size = Vector2(900, 120)
+	panel.z_index = 100  # On top of everything
+	
+	var bg = ColorRect.new()
+	bg.color = Color(0.05, 0.05, 0.08, 0.95)
+	bg.anchor_right = 1.0
+	bg.anchor_bottom = 1.0
+	panel.add_child(bg)
+	panel.move_child(bg, 0)
+	
+	var label = Label.new()
+	label.text = "%s: %s" % [speaker, text]
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_font_size_override("font_size", 16)
+	panel.add_child(label)
+	
+	add_child(panel)
+	
+	# Auto-remove after 5 seconds
 	await get_tree().create_timer(5.0).timeout
-	if is_instance_valid(dialogue):
-		dialogue.queue_free()
+	if is_instance_valid(panel):
+		panel.queue_free()
 
 func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.9), duration: float = 3.0):
 	var notif = Label.new()

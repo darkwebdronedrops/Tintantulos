@@ -39,6 +39,11 @@ func _ready():
 	visible = false
 	process_mode = PROCESS_MODE_ALWAYS  # Keep processing when game paused
 
+func _input(event):
+	if visible and event.is_action_pressed("ui_cancel"):
+		_on_confirm()
+		get_viewport().set_input_as_handled()
+
 func show_post_combat(victory: bool, quiddity: int, defeated_faction: String = ""):
 	"""Show the post-combat reward screen.
 	
@@ -483,10 +488,10 @@ func _create_bottom_bar() -> HBoxContainer:
 	# Skip button (alternative to confirm)
 	var skip_btn = Button.new()
 	skip_btn.name = "SkipButton"
-	skip_btn.text = "Skip Rewards"
-	skip_btn.custom_minimum_size = Vector2(120, 45)
-	skip_btn.add_theme_font_size_override("font_size", 14)
-	skip_btn.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7))
+	skip_btn.text = "Continue →"
+	skip_btn.custom_minimum_size = Vector2(160, 50)
+	skip_btn.add_theme_font_size_override("font_size", 18)
+	skip_btn.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
 	skip_btn.pressed.connect(_on_confirm)
 	bar.add_child(skip_btn)
 	
@@ -526,6 +531,8 @@ func _on_buy_card(index: int):
 		_update_currency_display()
 		_update_deck_count()
 		_show_notification("Added %s to deck!" % card.card_name, Color(0.3, 0.9, 0.3))
+		# Auto-close after purchase
+		call_deferred("_on_confirm")
 	else:
 		_show_notification("Failed to add card!", Color(0.9, 0.3, 0.3))
 
@@ -569,6 +576,9 @@ func _on_burn_card(index: int, card_id: String):
 		# Disable all remaining burn buttons since limit reached
 		if burns_used >= max_burns:
 			_disable_all_burn_buttons()
+		
+		# Auto-close after burn
+		call_deferred("_on_confirm")
 	else:
 		_show_notification("Failed to burn card!", Color(0.9, 0.3, 0.3))
 

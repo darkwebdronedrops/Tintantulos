@@ -31,6 +31,7 @@ var equip_slots: Array[TextureRect] = []
 
 var card_play_effect: CardPlayEffect
 var mist_overlay: ColorRect
+var card_preview: TextureRect  # Large card preview on hover
 
 var selected_card_index: int = -1
 
@@ -312,6 +313,17 @@ func _create_ui():
 	card_play_effect.name = "CardPlayEffect"
 	card_play_effect.effect_rect = mist_overlay
 	add_child(card_play_effect)
+	
+	# Card preview (large, shows on hover)
+	card_preview = TextureRect.new()
+	card_preview.name = "CardPreview"
+	card_preview.position = Vector2(440, 320)  # Center-bottom, above hand
+	card_preview.size = Vector2(240, 320)
+	card_preview.expand_mode = TextureRect.EXPAND_KEEP_SIZE
+	card_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	card_preview.visible = false
+	card_preview.z_index = 10  # On top of everything
+	add_child(card_preview)
 
 func _get_attention_color(state: CombatManager.AttentionState) -> Color:
 	match state:
@@ -670,8 +682,20 @@ func _on_card_hover(index: int, is_hovering: bool):
 	if card_root:
 		if is_hovering:
 			card_root.scale = Vector2(1.1, 1.1)
+			# Show large preview
+			if combat_manager and index >= 0 and index < combat_manager.hand.size():
+				var card = combat_manager.hand[index]
+				var safe_name = card.card_name.to_lower().replace(" ", "_").replace("'", "")
+				var finished_path = "res://assets/sprites/cards/finished/%s/%s.png" % [card.faction, safe_name]
+				var finished_tex = load(finished_path)
+				if finished_tex:
+					card_preview.texture = finished_tex
+					card_preview.visible = true
+				else:
+					card_preview.visible = false
 		else:
 			card_root.scale = Vector2(1.0, 1.0)
+			card_preview.visible = false
 
 func _on_target_selected(enemy_index: int):
 	AudioManager.play_sfx("target_select")
