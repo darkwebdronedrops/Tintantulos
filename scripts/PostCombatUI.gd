@@ -18,6 +18,8 @@ var pick_costs: Array[int] = []  # Quiddity cost for each pick
 var current_deck: Array[CardData] = []  # Player's current deck
 var selected_picks: Array[bool] = [false, false, false]  # Which picks are bought
 var burned_card_ids: Array[String] = []  # Cards the player burned
+var max_burns: int = 1  # Max cards that can be burned per post-combat
+var burns_used: int = 0
 
 # Visual nodes
 var main_panel: PanelContainer
@@ -48,6 +50,7 @@ func show_post_combat(victory: bool, quiddity: int, defeated_faction: String = "
 	quiddity_earned = quiddity
 	quiddity_available = GameState.player_quiddity + quiddity
 	burned_card_ids.clear()
+	burns_used = 0
 	selected_picks = [false, false, false]
 	
 	# Generate card picks
@@ -320,6 +323,7 @@ func _create_card_pick_panel(index: int) -> PanelContainer:
 	buy_btn.add_theme_color_override("font_pressed_color", Color(0.7, 0.7, 0.7))
 	buy_btn.add_theme_color_override("font_disabled_color", Color(0.4, 0.4, 0.4))
 	buy_btn.disabled = false
+	buy_btn.mouse_filter = Control.MOUSE_FILTER_STOP
 	buy_btn.pressed.connect(_on_buy_card.bind(index))
 	vbox.add_child(buy_btn)
 	
@@ -339,6 +343,7 @@ func _create_card_pick_panel(index: int) -> PanelContainer:
 	highlight.color = Color(0.3, 0.9, 0.3, 0.0)
 	highlight.size = Vector2(CARD_WIDTH, CARD_HEIGHT)
 	highlight.z_index = -1
+	highlight.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(highlight)
 	
 	return panel
@@ -475,6 +480,16 @@ func _create_bottom_bar() -> HBoxContainer:
 	confirm_btn.pressed.connect(_on_confirm)
 	bar.add_child(confirm_btn)
 	
+	# Skip button (alternative to confirm)
+	var skip_btn = Button.new()
+	skip_btn.name = "SkipButton"
+	skip_btn.text = "Skip Rewards"
+	skip_btn.custom_minimum_size = Vector2(120, 45)
+	skip_btn.add_theme_font_size_override("font_size", 14)
+	skip_btn.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7))
+	skip_btn.pressed.connect(_on_confirm)
+	bar.add_child(skip_btn)
+	
 	return bar
 
 # --- Interaction Handlers ---
@@ -515,6 +530,16 @@ func _on_buy_card(index: int):
 		_show_notification("Failed to add card!", Color(0.9, 0.3, 0.3))
 
 func _on_burn_card(index: int, card_id: String):
+	# Check burn limit
+	if burns_used >= max_burns:
+		_show_notification("Can only burn %d card per combat!" % max_burns, Color(0.9, 0.5, 0.2))
+		return
+	
+	# Check if already burned this card
+	if card_id in burned_card_ids:
+		_show_notification("Already burned this card!", Color(0.9, 0.5, 0.2))
+		return
+	
 	var card = CardDB.get_card(card_id)
 	if not card:
 		return
@@ -525,6 +550,7 @@ func _on_burn_card(index: int, card_id: String):
 	if result > 0:
 		AudioManager.play_sfx("burn")
 		burned_card_ids.append(card_id)
+		burns_used += 1
 		
 		# Remove the row from UI
 		var deck_list = deck_container.get_child(0) if deck_container.get_child_count() > 0 else null
@@ -539,8 +565,21 @@ func _on_burn_card(index: int, card_id: String):
 		_update_currency_display()
 		_update_deck_count()
 		_show_notification("Burned %s for %d💎" % [card.card_name, gem_value], Color(0.9, 0.7, 0.3))
+		
+		# Disable all remaining burn buttons since limit reached
+		if burns_used >= max_burns:
+			_disable_all_burn_buttons()
 	else:
 		_show_notification("Failed to burn card!", Color(0.9, 0.3, 0.3))
+
+func _disable_all_burn_buttons():
+	var deck_list = deck_container.get_child(0) if deck_container.get_child_count() > 0 else null
+	if deck_list:
+		for child in deck_list.get_children():
+			var burn_btn = child.get_node_or_null("BurnButton")
+			if burn_btn:
+				burn_btn.disabled = true
+				burn_btn.text = "Burned"
 
 func _on_confirm():
 	# Spend the quiddity that was used
