@@ -1321,7 +1321,13 @@ func _open_shop():
 	
 	shop_ui_container = Control.new()
 	shop_ui_container.name = "ShopUI"
-	add_child(shop_ui_container)
+	
+	# Put shop on CanvasLayer so it stays in screen space
+	var canvas = CanvasLayer.new()
+	canvas.name = "ShopCanvas"
+	canvas.layer = 100
+	add_child(canvas)
+	canvas.add_child(shop_ui_container)
 	
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.92)
@@ -1417,7 +1423,12 @@ func _close_shop():
 	shop_ui_active = false
 	in_ui = false
 	if shop_ui_container:
-		shop_ui_container.queue_free()
+		# shop_ui_container is inside a CanvasLayer, free the whole chain
+		var canvas = shop_ui_container.get_parent()
+		if canvas:
+			canvas.queue_free()
+		else:
+			shop_ui_container.queue_free()
 	shop_ui_container = null
 
 # ===================================================================
