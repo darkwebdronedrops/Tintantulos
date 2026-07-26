@@ -26,7 +26,7 @@ var deck_count_label: Label
 var potion_container: HBoxContainer
 var potion_slots: Array[TextureButton] = []
 
-var equip_panel: NinePatchRect
+var equip_panel: PanelContainer
 var equip_slots: Array[TextureRect] = []
 
 var card_play_effect: CardPlayEffect
