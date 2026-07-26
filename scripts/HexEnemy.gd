@@ -39,6 +39,7 @@ signal spotted_player
 signal combat_initiated(ambush: bool)
 
 var sprite_path: String = ""  # Explicit sprite path for combat UI
+var hex_map_ref: HexTileMap = null  # Cached reference for patrol updates
 
 func _init(id: String, name_: String, start_hex: Vector2i, faction_: String = "Unknown", boss: bool = false, sprite_path_: String = ""):
 	enemy_id = id
@@ -62,35 +63,45 @@ func _ready():
 	sprite.scale = Vector2(2.5, 2.5)
 	add_child(sprite)
 	
-	# Try to load enemy sprite
-	var base_name = enemy_name.to_lower().replace(" ", "_").replace("-", "_")
-	for suffix in ["_idle", "_walk", "", "_f0"]:
-		var try_path = "res://assets/sprites/enemies/enemy_" + base_name + suffix + ".png"
-		if ResourceLoader.exists(try_path):
-			sprite.texture = load(try_path)
-			break
+	# 1. Try passed sprite_path first (from controller)
+	if sprite_path != "" and ResourceLoader.exists(sprite_path):
+		sprite.texture = load(sprite_path)
 	
-	# Fallback: colored circle
+	# 2. Fallback: auto-detect by name
 	if not sprite.texture:
-		var img = Image.create(32, 32, false, Image.FORMAT_RGBA8)
+		var base_name = enemy_name.to_lower().replace(" ", "_").replace("-", "_")
+		for suffix in ["_idle", "_walk", "", "_f0"]:
+			var try_path = "res://assets/sprites/enemies/enemy_" + base_name + suffix + ".png"
+			if ResourceLoader.exists(try_path):
+				sprite.texture = load(try_path)
+				break
+	
+	# 3. Fallback: faction-colored circle with black outline (VERY visible)
+	if not sprite.texture:
+		var img = Image.create(64, 64, false, Image.FORMAT_RGBA8)
 		var color = _get_faction_color(faction)
-		img.fill(color)
-		# Draw circle
-		for x in range(32):
-			for y in range(32):
-				var dx = x - 16
-				var dy = y - 16
-				if dx * dx + dy * dy > 225:
-					img.set_pixel(x, y, Color(0, 0, 0, 0))
+		img.fill(Color(0, 0, 0, 0))
+		# Draw black outline circle
+		for x in range(64):
+			for y in range(64):
+				var dx = x - 32
+				var dy = y - 32
+				var dist_sq = dx * dx + dy * dy
+				if dist_sq <= 484:  # radius 22
+					if dist_sq >= 361:  # radius 19 (outline)
+						img.set_pixel(x, y, Color(0, 0, 0, 1))
+					else:
+						img.set_pixel(x, y, color)
 		sprite.texture = ImageTexture.create_from_image(img)
+		push_warning("[HexEnemy] No sprite found for %s, using fallback circle" % enemy_name)
 	
 	# State indicator (small dot above enemy)
 	state_indicator = Label.new()
 	state_indicator.name = "StateIndicator"
-	state_indicator.position = Vector2(-20, -30)
-	state_indicator.size = Vector2(40, 15)
+	state_indicator.position = Vector2(-20, -40)
+	state_indicator.size = Vector2(40, 20)
 	state_indicator.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	state_indicator.add_theme_font_size_override("font_size", 10)
+	state_indicator.add_theme_font_size_override("font_size", 14)
 	add_child(state_indicator)
 	_update_state_indicator()
 
@@ -264,9 +275,15 @@ func _update_position():
 		global_position = hex_map.hex_to_world(hex_pos)
 
 func _get_hex_map() -> HexTileMap:
-	var parent = get_parent()
-	if parent and parent.has_node("HexTileMap"):
-		return parent.get_node("HexTileMap")
+	# Use cached reference if available
+	if hex_map_ref:
+		return hex_map_ref
+	# Fallback: search up the tree
+	var node = self
+	while node:
+		if node.has_node("HexTileMap"):
+			return node.get_node("HexTileMap")
+		node = node.get_parent()
 	return null
 
 func _get_player() -> Node2D:
@@ -306,5 +323,6 @@ func reset_after_combat():
 func set_hex_map_position(new_hex: Vector2i, hex_map: HexTileMap):
 	hex_pos = new_hex
 	patrol_center = new_hex
+	hex_map_ref = hex_map  # Cache for patrol updates
 	if hex_map:
 		global_position = hex_map.hex_to_world(hex_pos)
