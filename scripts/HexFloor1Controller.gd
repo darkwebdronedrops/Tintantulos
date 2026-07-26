@@ -673,6 +673,20 @@ func _toggle_pause_menu():
 # ===================================================================
 
 func _input(event: InputEvent):
+	# Always handle ESC (even when in_ui) to close popups
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+		if shop_ui_active:
+			_close_shop()
+			get_viewport().set_input_as_handled()
+			return
+		if in_ui:
+			in_ui = false  # Reset UI lock
+			get_viewport().set_input_as_handled()
+			return
+		_toggle_pause_menu()
+		get_viewport().set_input_as_handled()
+		return
+	
 	if in_combat or in_transition or in_ui:
 		return
 	
