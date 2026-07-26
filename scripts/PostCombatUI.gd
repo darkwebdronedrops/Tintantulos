@@ -166,7 +166,7 @@ func _build_ui(victory: bool):
 	# Main panel
 	main_panel = PanelContainer.new()
 	main_panel.size = Vector2(900, 650)
-	main_panel.position = Vector2(510, 215)  # Centered for 1920x1080
+	main_panel.position = Vector2(490, 110)  # Centered for 1920x1080
 	add_child(main_panel)
 	
 	var main_vbox = VBoxContainer.new()
@@ -217,12 +217,14 @@ func _create_header(victory: bool) -> HBoxContainer:
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(spacer)
 	
-	# Close info
-	var hint = Label.new()
-	hint.text = "ESC to skip"
-	hint.add_theme_font_size_override("font_size", 12)
-	hint.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6))
-	header.add_child(hint)
+	# Continue button (replaces ESC hint)
+	var continue_btn_top = Button.new()
+	continue_btn_top.name = "ContinueButtonTop"
+	continue_btn_top.text = "Continue"
+	continue_btn_top.add_theme_font_size_override("font_size", 12)
+	continue_btn_top.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
+	continue_btn_top.pressed.connect(_on_confirm)
+	header.add_child(continue_btn_top)
 	
 	return header
 
@@ -471,24 +473,15 @@ func _create_bottom_bar() -> HBoxContainer:
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bar.add_child(spacer)
 	
-	# Confirm button
-	confirm_btn = Button.new()
-	confirm_btn.name = "ConfirmButton"
-	confirm_btn.text = "Confirm \u0026 Return"
-	confirm_btn.custom_minimum_size = Vector2(180, 45)
-	confirm_btn.add_theme_font_size_override("font_size", 16)
-	confirm_btn.pressed.connect(_on_confirm)
-	bar.add_child(confirm_btn)
-	
-	# Skip button (alternative to confirm)
-	var skip_btn = Button.new()
-	skip_btn.name = "SkipButton"
-	skip_btn.text = "Continue →"
-	skip_btn.custom_minimum_size = Vector2(160, 50)
-	skip_btn.add_theme_font_size_override("font_size", 18)
-	skip_btn.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
-	skip_btn.pressed.connect(_on_confirm)
-	bar.add_child(skip_btn)
+	# Continue button
+	var continue_btn = Button.new()
+	continue_btn.name = "ContinueButton"
+	continue_btn.text = "Continue →"
+	continue_btn.custom_minimum_size = Vector2(160, 50)
+	continue_btn.add_theme_font_size_override("font_size", 18)
+	continue_btn.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
+	continue_btn.pressed.connect(_on_confirm)
+	bar.add_child(continue_btn)
 	
 	return bar
 
