@@ -342,11 +342,11 @@ func _create_ui():
 	card_play_effect.effect_rect = mist_overlay
 	add_child(card_play_effect)
 	
-	# Card preview (large, shows on hover)
+	# Card preview (large, shows on hover) — sized to fit within 1280x720 viewport
 	card_preview = TextureRect.new()
 	card_preview.name = "CardPreview"
-	card_preview.position = Vector2(440, 320)  # Center-bottom, above hand
-	card_preview.size = Vector2(240, 320)
+	card_preview.size = Vector2(180, 250)
+	card_preview.position = Vector2(550, 160)
 	card_preview.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	card_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	card_preview.visible = false
@@ -608,6 +608,11 @@ func _update_enemy_buttons():
 				btn.disabled = false
 
 func _update_hand_display():
+	# Only rebuild if hand size changed — prevents destroying hover state
+	# when _on_card_drawn fires for each card in a batch, or when
+	# _on_card_clicked unnecessarily rebuilds before playing
+	if hand_container.get_child_count() == combat_manager.hand.size():
+		return
 	for child in hand_container.get_children(): child.queue_free()
 	for i in range(combat_manager.hand.size()):
 		var card = combat_manager.hand[i]
@@ -701,7 +706,7 @@ func _get_faction_color(faction: String) -> Color:
 
 func _on_card_clicked(index: int):
 	selected_card_index = index
-	_update_hand_display()
+	# Don't rebuild here — _on_card_played will handle it after the card is removed
 	for i in range(combat_manager.enemies.size()):
 		if combat_manager.enemies[i].hp > 0:
 			combat_manager.play_card(index, i)
