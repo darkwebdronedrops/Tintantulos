@@ -629,14 +629,20 @@ func set_stake(stake_amount: int):
 	stake_cards(stake_amount)
 
 func stake_cards(stake_amount: int):
-	"""Set stake for the current combat. Stake reduces card draw, gives Quiddity 1:1."""
+	"""Set stake for the current combat. Stake reduces card draw, gives Quiddity 1:1.
+	Refunds previous stake before applying new one."""
 	if stake_amount < 0 or stake_amount > 5:
 		return
+	# Refund previous stake's quiddity
+	var old_stake = player_stake
+	player_quiddity -= old_stake
+	quiddity_this_combat -= old_stake
+	# Apply new stake
 	player_stake = stake_amount
-	current_stake = stake_amount  # Keep alias in sync
+	current_stake = stake_amount
 	player_quiddity += stake_amount
 	quiddity_this_combat += stake_amount
-	print("CombatManager: Staked %d — draw %d cards, gained %d Quiddity" % [stake_amount, 5 - stake_amount, stake_amount])
+	print("CombatManager: Staked %d (refunded %d) — draw %d cards, quiddity %d" % [stake_amount, old_stake, 5 - stake_amount, player_quiddity])
 
 func use_weapon(target_index: int = 0) -> bool:
 	"""Use equipped weapon if charged. Returns true if weapon was used."""

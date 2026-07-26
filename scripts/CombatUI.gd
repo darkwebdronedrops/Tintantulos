@@ -479,17 +479,19 @@ func _create_enemy_displays():
 
 func _create_enemy_panel(enemy, index: int) -> Control:
 	var s = S
-	var panel = PanelContainer.new()
+	# Use Control (not PanelContainer) so children keep absolute positions
+	var panel = Control.new()
 	panel.name = "Enemy_%d" % index
 	panel.custom_minimum_size = Vector2(160, 130) * s
+	panel.size = Vector2(160, 130) * s
 	
-	var panel_bg_style = StyleBoxFlat.new()
-	panel_bg_style.bg_color = Color(0.08, 0.08, 0.12, 0.85)
-	panel_bg_style.corner_radius_top_left = 4
-	panel_bg_style.corner_radius_top_right = 4
-	panel_bg_style.corner_radius_bottom_left = 4
-	panel_bg_style.corner_radius_bottom_right = 4
-	panel.add_theme_stylebox_override("panel", panel_bg_style)
+	# Background
+	var bg = ColorRect.new()
+	bg.name = "PanelBG"
+	bg.color = Color(0.08, 0.08, 0.12, 0.85)
+	bg.anchor_right = 1.0
+	bg.anchor_bottom = 1.0
+	panel.add_child(bg)
 	
 	var sprite = TextureRect.new()
 	sprite.name = "Sprite"
