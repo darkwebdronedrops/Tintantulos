@@ -618,8 +618,10 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 		card_rect.name = "FinishedCard"
 		card_rect.anchor_right = 1.0; card_rect.anchor_bottom = 1.0
 		card_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	# Ensure card image doesn't block mouse events
-	card_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		card_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		card_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		card_rect.texture = finished_tex
+		card_root.add_child(card_rect)
 		
 		# Gold border for survivors (on top of finished card)
 		if card.survives_reset:
