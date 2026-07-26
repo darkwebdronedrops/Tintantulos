@@ -224,8 +224,8 @@ func _create_ui():
 	enemy_container.name = "EnemyContainer"
 	enemy_container.position = Vector2(220, 10)
 	enemy_container.size = Vector2(830, 130)
-	enemy_container.alignment = BoxContainer.ALIGNMENT_CENTER
-	enemy_container.add_theme_constant_override("separation", 12)
+	enemy_container.alignment = BoxContainer.ALIGNMENT_SPACE_BETWEEN
+	enemy_container.add_theme_constant_override("separation", 20)
 	add_child(enemy_container)
 	
 	# --- HAND CONTAINER (bottom center, 830×120) ---
@@ -238,27 +238,29 @@ func _create_ui():
 	add_child(hand_container)
 	
 	# --- EQUIP PANEL (right, 110×300) ---
-	equip_panel = NinePatchRect.new()
+	equip_panel = PanelContainer.new()
 	equip_panel.name = "EquipPanel"
 	equip_panel.position = Vector2(1070, 10)
 	equip_panel.size = Vector2(110, 300)
-	# Skip decorative texture — use solid bg instead
 	add_child(equip_panel)
 	
-	var equip_bg = ColorRect.new()
-	equip_bg.name = "EquipBG"
-	equip_bg.color = Color(0.08, 0.08, 0.12, 0.9)
-	equip_bg.anchor_right = 1.0
-	equip_bg.anchor_bottom = 1.0
-	equip_panel.add_child(equip_bg)
-	equip_panel.move_child(equip_bg, 0)
+	var equip_bg_style = StyleBoxFlat.new()
+	equip_bg_style.bg_color = Color(0.08, 0.08, 0.12, 0.9)
+	equip_bg_style.corner_radius_top_left = 4
+	equip_bg_style.corner_radius_top_right = 4
+	equip_bg_style.corner_radius_bottom_left = 4
+	equip_bg_style.corner_radius_bottom_right = 4
+	equip_panel.add_theme_stylebox_override("panel", equip_bg_style)
+	
+	var equip_vbox = VBoxContainer.new()
+	equip_vbox.add_theme_constant_override("separation", 4)
+	equip_panel.add_child(equip_vbox)
 	
 	var equip_title = Label.new()
 	equip_title.text = "GEAR"
-	equip_title.position = Vector2(5, 6)
-	equip_title.size = Vector2(100, 18)
 	equip_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	equip_panel.add_child(equip_title)
+	equip_title.add_theme_font_size_override("font_size", 14)
+	equip_vbox.add_child(equip_title)
 	
 	var equip_types = ["weapon", "armor", "trinket", "shield"]
 	var equip_icons = [
@@ -268,35 +270,41 @@ func _create_ui():
 		"res://assets/sprites/ui/ui_equip_shield.png"
 	]
 	for i in range(4):
+		var slot_hbox = HBoxContainer.new()
+		slot_hbox.add_theme_constant_override("separation", 4)
+		slot_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+		
 		var slot = TextureRect.new()
 		slot.name = "Equip_%s" % equip_types[i]
-		slot.position = Vector2(23, 28 + i * 56)
-		slot.size = Vector2(48, 48)
+		slot.custom_minimum_size = Vector2(48, 48)
 		slot.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 		slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		var slot_tex = load("res://assets/sprites/ui/ui_equip_slot.png")
 		if slot_tex: slot.texture = slot_tex
+		
 		var item = TextureRect.new()
 		item.name = "Item"
-		item.position = Vector2(8, 8)
-		item.size = Vector2(32, 32)
+		item.custom_minimum_size = Vector2(32, 32)
 		item.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 		item.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		var item_tex = load(equip_icons[i])
 		if item_tex: item.texture = item_tex
 		slot.add_child(item)
-		equip_panel.add_child(slot)
+		slot_hbox.add_child(slot)
+		equip_vbox.add_child(slot_hbox)
 		equip_slots.append(slot)
 	
+	var weapon_btn_hbox = HBoxContainer.new()
+	weapon_btn_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	weapon_use_btn = Button.new()
 	weapon_use_btn.name = "WeaponUseBtn"
-	weapon_use_btn.position = Vector2(23, 84)
-	weapon_use_btn.size = Vector2(48, 20)
+	weapon_use_btn.custom_minimum_size = Vector2(48, 20)
 	weapon_use_btn.text = "Atk"
 	weapon_use_btn.disabled = true
 	weapon_use_btn.tooltip_text = "Weapon not charged"
 	weapon_use_btn.pressed.connect(_on_weapon_use)
-	equip_panel.add_child(weapon_use_btn)
+	weapon_btn_hbox.add_child(weapon_use_btn)
+	equip_vbox.add_child(weapon_btn_hbox)
 	
 	# --- MIST OVERLAY (full screen effect) ---
 	mist_overlay = ColorRect.new()
@@ -324,7 +332,7 @@ func _create_ui():
 	card_preview.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	card_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	card_preview.visible = false
-	card_preview.z_index = 10  # On top of everything
+	card_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(card_preview)
 
 func _get_attention_color(state: CombatManager.AttentionState) -> Color:
@@ -458,19 +466,17 @@ func _create_enemy_displays():
 
 func _create_enemy_panel(enemy, index: int) -> Control:
 	var s = S
-	var panel = NinePatchRect.new()
+	var panel = PanelContainer.new()
 	panel.name = "Enemy_%d" % index
-	panel.size = Vector2(160, 140) * s
-	# Skip decorative texture — use solid bg instead
+	panel.custom_minimum_size = Vector2(160, 130) * s
 	
-	# Solid background (prevents checkerboard from missing textures)
-	var panel_bg = ColorRect.new()
-	panel_bg.name = "PanelBG"
-	panel_bg.color = Color(0.08, 0.08, 0.12, 0.9)
-	panel_bg.anchor_right = 1.0
-	panel_bg.anchor_bottom = 1.0
-	panel.add_child(panel_bg)
-	panel.move_child(panel_bg, 0)
+	var panel_bg_style = StyleBoxFlat.new()
+	panel_bg_style.bg_color = Color(0.08, 0.08, 0.12, 0.85)
+	panel_bg_style.corner_radius_top_left = 4
+	panel_bg_style.corner_radius_top_right = 4
+	panel_bg_style.corner_radius_bottom_left = 4
+	panel_bg_style.corner_radius_bottom_right = 4
+	panel.add_theme_stylebox_override("panel", panel_bg_style)
 	
 	var sprite = TextureRect.new()
 	sprite.name = "Sprite"
@@ -494,15 +500,16 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	var name_label = Label.new()
 	name_label.name = "Name"
 	name_label.text = enemy.enemy_name
-	name_label.position = Vector2(5, 72) * s
-	name_label.size = Vector2(150, 20) * s
+	name_label.position = Vector2(5, 70) * s
+	name_label.size = Vector2(150, 18) * s
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 11)
 	panel.add_child(name_label)
 	
 	var enemy_hp_bar = TextureProgressBar.new()
 	enemy_hp_bar.name = "HPFill"
-	enemy_hp_bar.position = Vector2(5, 95) * s
-	enemy_hp_bar.size = Vector2(150, 16) * s
+	enemy_hp_bar.position = Vector2(5, 90) * s
+	enemy_hp_bar.size = Vector2(150, 12) * s
 	enemy_hp_bar.min_value = 0; enemy_hp_bar.max_value = 100; enemy_hp_bar.value = 100
 	enemy_hp_bar.nine_patch_stretch = true
 	var hp_frame = load("res://assets/sprites/ui/ui_hp_bar_frame.png")
@@ -514,9 +521,10 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	var hp_text = Label.new()
 	hp_text.name = "HPText"
 	hp_text.text = "%d / %d" % [enemy.hp, enemy.max_hp]
-	hp_text.position = Vector2(5, 95) * s
-	hp_text.size = Vector2(150, 16) * s
+	hp_text.position = Vector2(5, 105) * s
+	hp_text.size = Vector2(150, 14) * s
 	hp_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hp_text.add_theme_font_size_override("font_size", 10)
 	panel.add_child(hp_text)
 	
 	var target_btn = TextureButton.new()
@@ -610,9 +618,8 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 		card_rect.name = "FinishedCard"
 		card_rect.anchor_right = 1.0; card_rect.anchor_bottom = 1.0
 		card_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		card_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		card_rect.texture = finished_tex
-		card_root.add_child(card_rect)
+	# Ensure card image doesn't block mouse events
+	card_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		# Gold border for survivors (on top of finished card)
 		if card.survives_reset:
