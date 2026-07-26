@@ -418,6 +418,18 @@ func _on_combat_ended(victory: bool):
 	if combat_manager and combat_manager.tutorial_mode:
 		combat_manager.tutorial_mode = false
 	
+	# Track which enemies were in this combat BEFORE resetting them
+	var combat_enemy_indices: Array[int] = []
+	for i in range(hex_enemies.size()):
+		if hex_enemies[i].state == HexEnemy.State.IN_COMBAT:
+			combat_enemy_indices.append(i)
+	
+	# If room was cleared, kill all enemies that participated in combat
+	if victory and not combat_enemy_indices.is_empty():
+		for idx in combat_enemy_indices:
+			hex_enemies[idx].hp = 0
+			print("[Floor1-Hex] Room cleared — killing hex enemy: %s" % hex_enemies[idx].enemy_name)
+	
 	# Reset surviving enemies to unaware, clean up dead ones
 	for enemy in hex_enemies:
 		if enemy.hp > 0:

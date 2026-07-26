@@ -342,14 +342,15 @@ func _create_ui():
 	card_play_effect.effect_rect = mist_overlay
 	add_child(card_play_effect)
 	
-	# Card preview (large, shows on hover) — sized to fit within 1280x720 viewport
+	# Card preview (large, shows on hover) — centered in upper viewport
 	card_preview = TextureRect.new()
 	card_preview.name = "CardPreview"
-	card_preview.size = Vector2(180, 250)
-	card_preview.position = Vector2(550, 160)
+	card_preview.size = Vector2(200, 280)
+	card_preview.position = Vector2(540, 80)
 	card_preview.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	card_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	card_preview.visible = false
+	card_preview.z_index = 10
 	card_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(card_preview)
 
@@ -608,16 +609,28 @@ func _update_enemy_buttons():
 				btn.disabled = false
 
 func _update_hand_display():
-	# Only rebuild if hand size changed — prevents destroying hover state
-	# when _on_card_drawn fires for each card in a batch, or when
-	# _on_card_clicked unnecessarily rebuilds before playing
-	if hand_container.get_child_count() == combat_manager.hand.size():
-		return
-	for child in hand_container.get_children(): child.queue_free()
-	for i in range(combat_manager.hand.size()):
-		var card = combat_manager.hand[i]
-		var card_node = _create_visual_card(card, i)
-		hand_container.add_child(card_node)
+	var current_count = hand_container.get_child_count()
+	var target_count = combat_manager.hand.size()
+	
+	if current_count == target_count:
+		return  # No change
+	
+	if target_count > current_count:
+		# Cards were added (draw) — append new ones without destroying existing
+		for i in range(current_count, target_count):
+			var card = combat_manager.hand[i]
+			var card_node = _create_visual_card(card, i)
+			hand_container.add_child(card_node)
+		# Check if mouse is already over a card and trigger hover manually
+		_check_hover_after_rebuild()
+	else:
+		# Cards were removed (played) — rebuild because indices shifted
+		for child in hand_container.get_children(): child.queue_free()
+		for i in range(target_count):
+			var card = combat_manager.hand[i]
+			var card_node = _create_visual_card(card, i)
+			hand_container.add_child(card_node)
+		_check_hover_after_rebuild()
 
 func _create_visual_card(card: CardData, index: int) -> Control:
 	var s = S
@@ -732,6 +745,18 @@ func _on_card_hover(index: int, is_hovering: bool):
 		else:
 			card_root.scale = Vector2(1.0, 1.0)
 			card_preview.visible = false
+
+func _check_hover_after_rebuild():
+	"""Manually check if mouse is over a card and trigger hover.
+	Godot's mouse_entered only fires on mouse movement INTO a control,
+	not when controls are created under an already-hovering mouse."""
+	var mouse_pos = get_viewport().get_mouse_position()
+	for i in range(hand_container.get_child_count()):
+		var card_root = hand_container.get_child(i)
+		var global_rect = card_root.get_global_rect()
+		if global_rect.has_point(mouse_pos):
+			_on_card_hover(i, true)
+			break
 
 func _on_target_selected(enemy_index: int):
 	AudioManager.play_sfx("target_select")
