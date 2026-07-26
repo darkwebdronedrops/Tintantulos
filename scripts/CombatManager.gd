@@ -705,6 +705,18 @@ func end_player_turn():
 
 	is_player_turn = true
 	player_shield = 0
+	
+	# Reset attention for new turn (pact debt will be added by _process_pact_queue)
+	player_attention = 0
+	if trinket_effects.has("attention_start_bonus"):
+		player_attention += trinket_effects["attention_start_bonus"]
+		print("CombatManager: Veil Piercer +%d Attention at turn start" % trinket_effects["attention_start_bonus"])
+	_update_attention_state()
+	
+	# Reset stake for new turn (player must re-stake to earn quiddity)
+	player_stake = 0
+	current_stake = 0
+	print("CombatManager: Turn start — Attention reset to %d, Stake reset to 0" % player_attention)
 
 	for s in summons:
 		s.has_attacked_this_turn = false

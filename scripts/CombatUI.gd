@@ -372,6 +372,11 @@ func _on_combat_ended(victory: bool):
 func _on_turn_started(is_player: bool):
 	end_turn_btn.disabled = not is_player
 	_update_weapon_button()
+	# Reset stake display at turn start
+	if stake_btn:
+		stake_btn.text = "Stake 0"
+	if combat_manager:
+		_update_quiddity_display(combat_manager.player_quiddity)
 
 func _on_card_drawn(_card: CardData):
 	_update_hand_display()
