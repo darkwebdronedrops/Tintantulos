@@ -224,8 +224,8 @@ func _create_ui():
 	enemy_container.name = "EnemyContainer"
 	enemy_container.position = Vector2(220, 10)
 	enemy_container.size = Vector2(830, 130)
-	enemy_container.alignment = BoxContainer.ALIGNMENT_SPACE_BETWEEN
-	enemy_container.add_theme_constant_override("separation", 20)
+	enemy_container.alignment = BoxContainer.ALIGNMENT_BEGIN
+	enemy_container.add_theme_constant_override("separation", 40)
 	add_child(enemy_container)
 	
 	# --- HAND CONTAINER (bottom center, 830×120) ---
