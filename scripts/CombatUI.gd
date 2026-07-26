@@ -342,17 +342,24 @@ func _create_ui():
 	card_play_effect.effect_rect = mist_overlay
 	add_child(card_play_effect)
 	
-	# Card preview (large, shows on hover) — centered in upper viewport
+	# Card preview (large, shows on hover) — size/position set dynamically
 	card_preview = TextureRect.new()
 	card_preview.name = "CardPreview"
-	card_preview.size = Vector2(200, 280)
-	card_preview.position = Vector2(540, 80)
 	card_preview.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	card_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	card_preview.visible = false
 	card_preview.z_index = 10
 	card_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(card_preview)
+	
+	# Dark backdrop behind preview for readability
+	var preview_bg = ColorRect.new()
+	preview_bg.name = "CardPreviewBG"
+	preview_bg.color = Color(0, 0, 0, 0.7)
+	preview_bg.visible = false
+	preview_bg.z_index = 9
+	preview_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(preview_bg)
 
 func _get_attention_color(state: CombatManager.AttentionState) -> Color:
 	match state:
@@ -728,25 +735,43 @@ func _on_card_clicked(index: int):
 			return
 
 func _on_card_hover(index: int, is_hovering: bool):
-	# Visual feedback for card hover
 	var card_root = hand_container.get_node_or_null("Card_%d" % index)
 	if card_root:
 		if is_hovering:
-			card_root.scale = Vector2(1.1, 1.1)
-			# Show large preview
+			# Slight scale on hand card (subtle, doesn't overlap neighbors)
+			card_root.scale = Vector2(1.05, 1.05)
+			# Show large preview — dynamically sized from viewport
 			if combat_manager and index >= 0 and index < combat_manager.hand.size():
 				var card = combat_manager.hand[index]
 				var safe_name = card.card_name.to_lower().replace(" ", "_").replace("'", "")
 				var finished_path = "res://assets/sprites/cards/finished/%s/%s.png" % [card.faction, safe_name]
 				var finished_tex = load(finished_path)
 				if finished_tex:
+					# Calculate preview size from viewport (55% height, card aspect ~0.7)
+					var vp_size = get_viewport().get_visible_rect().size
+					var preview_h = vp_size.y * 0.55
+					var preview_w = preview_h * 0.70
+					card_preview.size = Vector2(preview_w, preview_h)
+					card_preview.position = Vector2(
+						(vp_size.x - preview_w) / 2,
+						(vp_size.y - preview_h) / 2
+					)
 					card_preview.texture = finished_tex
 					card_preview.visible = true
+					# Backdrop fills entire viewport behind preview
+					var preview_bg = get_node_or_null("CardPreviewBG")
+					if preview_bg:
+						preview_bg.size = vp_size
+						preview_bg.position = Vector2.ZERO
+						preview_bg.visible = true
 				else:
 					card_preview.visible = false
 		else:
 			card_root.scale = Vector2(1.0, 1.0)
 			card_preview.visible = false
+			var preview_bg = get_node_or_null("CardPreviewBG")
+			if preview_bg:
+				preview_bg.visible = false
 
 func _check_hover_after_rebuild():
 	"""Manually check if mouse is over a card and trigger hover.

@@ -1274,6 +1274,17 @@ func _check_interactables():
 func _try_interact():
 	var player_hex = hex_map.world_to_hex(player_node.global_position)
 	
+	# Check for nearby enemies FIRST (combat takes priority)
+	if enemy_container:
+		for enemy in enemy_container.get_children():
+			if enemy is HexEnemy and enemy.state != HexEnemy.State.IN_COMBAT:
+				var dist = HexTileMap._hex_distance(player_hex, enemy.hex_pos)
+				if dist <= enemy.combat_range + 1:
+					print("[Floor1-Hex] Initiating combat with %s (dist=%d)" % [enemy.enemy_name, dist])
+					enemy._set_state(HexEnemy.State.IN_COMBAT)
+					_on_enemy_combat_initiated(true)
+					return
+	
 	# Check for shop proximity first
 	if shop_sprite and shop_sprite.visible:
 		var shop_hex = hex_map.world_to_hex(shop_sprite.global_position)
