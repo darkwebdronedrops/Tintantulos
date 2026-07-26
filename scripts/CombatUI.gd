@@ -8,7 +8,7 @@ class_name CombatUI
 var hand_container: HBoxContainer
 var enemy_container: HBoxContainer
 var player_panel: NinePatchRect
-var attention_bar: TextureProgressBar
+var attention_bar: ProgressBar
 var attention_state_label: Label
 var attention_value_label: Label
 var end_turn_btn: Button
