@@ -16,7 +16,7 @@ var stake_btn: Button
 var weapon_use_btn: Button
 var shield_icon: TextureRect
 var shield_label: Label
-var hp_bar: TextureProgressBar
+var hp_bar: ProgressBar
 var hp_text_label: Label
 var quiddity_icon: TextureRect
 var quiddity_label: Label
@@ -82,7 +82,7 @@ func _create_ui():
 	
 	var bg = ColorRect.new()
 	bg.name = "CombatBG"
-	bg.color = Color(0.02, 0.02, 0.04, 0.55)
+	bg.color = Color(0.02, 0.02, 0.04, 0.85)
 	bg.anchor_right = 1.0
 	bg.anchor_bottom = 1.0
 	bg.z_index = -1
@@ -103,17 +103,26 @@ func _create_ui():
 	player_panel.add_child(player_bg)
 	player_panel.move_child(player_bg, 0)
 	
-	# HP bar (y=8, height=20)
-	hp_bar = TextureProgressBar.new()
+	# HP bar (y=8, height=20) — plain ProgressBar, no oversized texture_over
+	hp_bar = ProgressBar.new()
 	hp_bar.name = "HPBar"
 	hp_bar.position = Vector2(8, 8)
 	hp_bar.size = Vector2(184, 20)
 	hp_bar.min_value = 0; hp_bar.max_value = 100; hp_bar.value = 100
-	hp_bar.nine_patch_stretch = true
-	var hp_frame = load("res://assets/sprites/ui/ui_hp_bar_frame.png")
-	var hp_fill = load("res://assets/sprites/ui/ui_hp_bar_fill.png")
-	if hp_frame: hp_bar.texture_over = hp_frame
-	if hp_fill: hp_bar.texture_progress = hp_fill
+	var hp_style = StyleBoxFlat.new()
+	hp_style.bg_color = Color(0.2, 0.8, 0.2)
+	hp_style.corner_radius_top_left = 3
+	hp_style.corner_radius_top_right = 3
+	hp_style.corner_radius_bottom_left = 3
+	hp_style.corner_radius_bottom_right = 3
+	hp_bar.add_theme_stylebox_override("fill", hp_style)
+	var hp_bg_style = StyleBoxFlat.new()
+	hp_bg_style.bg_color = Color(0.15, 0.15, 0.15)
+	hp_bg_style.corner_radius_top_left = 3
+	hp_bg_style.corner_radius_top_right = 3
+	hp_bg_style.corner_radius_bottom_left = 3
+	hp_bg_style.corner_radius_bottom_right = 3
+	hp_bar.add_theme_stylebox_override("background", hp_bg_style)
 	player_panel.add_child(hp_bar)
 	
 	hp_text_label = Label.new()
@@ -156,16 +165,25 @@ func _create_ui():
 	attention_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	player_panel.add_child(attention_value_label)
 	
-	attention_bar = TextureProgressBar.new()
+	attention_bar = ProgressBar.new()
 	attention_bar.name = "AttentionBar"
 	attention_bar.position = Vector2(4, 100)
 	attention_bar.size = Vector2(192, 18)
 	attention_bar.min_value = 0; attention_bar.max_value = 20
-	attention_bar.nine_patch_stretch = true
-	var attn_frame = load("res://assets/sprites/ui/ui_attention_frame.png")
-	var attn_fill = load("res://assets/sprites/ui/ui_attention_fill.png")
-	if attn_frame: attention_bar.texture_over = attn_frame
-	if attn_fill: attention_bar.texture_progress = attn_fill
+	var attn_fill_style = StyleBoxFlat.new()
+	attn_fill_style.bg_color = Color(0.8, 0.2, 0.8)
+	attn_fill_style.corner_radius_top_left = 3
+	attn_fill_style.corner_radius_top_right = 3
+	attn_fill_style.corner_radius_bottom_left = 3
+	attn_fill_style.corner_radius_bottom_right = 3
+	attention_bar.add_theme_stylebox_override("fill", attn_fill_style)
+	var attn_bg_style = StyleBoxFlat.new()
+	attn_bg_style.bg_color = Color(0.15, 0.15, 0.15)
+	attn_bg_style.corner_radius_top_left = 3
+	attn_bg_style.corner_radius_top_right = 3
+	attn_bg_style.corner_radius_bottom_left = 3
+	attn_bg_style.corner_radius_bottom_right = 3
+	attention_bar.add_theme_stylebox_override("background", attn_bg_style)
 	player_panel.add_child(attention_bar)
 	
 	var desc_label = Label.new()
@@ -429,12 +447,6 @@ func _update_player_display(_amount: int = 0):
 	var hp_percent = float(combat_manager.player_hp) / combat_manager.player_max_hp
 	hp_bar.value = hp_percent * 100
 	hp_text_label.text = "%d / %d" % [combat_manager.player_hp, combat_manager.player_max_hp]
-	if hp_percent <= 0.3:
-		var low_fill = load("res://assets/sprites/ui/ui_hp_bar_fill_low.png")
-		if low_fill: hp_bar.texture_progress = low_fill
-	else:
-		var normal_fill = load("res://assets/sprites/ui/ui_hp_bar_fill.png")
-		if normal_fill: hp_bar.texture_progress = normal_fill
 	shield_label.text = "Shield: %d" % combat_manager.player_shield
 
 func _update_attention_display(current: int, maximum: int):
@@ -506,16 +518,25 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	name_label.add_theme_font_size_override("font_size", 11)
 	panel.add_child(name_label)
 	
-	var enemy_hp_bar = TextureProgressBar.new()
+	var enemy_hp_bar = ProgressBar.new()
 	enemy_hp_bar.name = "HPFill"
 	enemy_hp_bar.position = Vector2(5, 90) * s
 	enemy_hp_bar.size = Vector2(150, 12) * s
 	enemy_hp_bar.min_value = 0; enemy_hp_bar.max_value = 100; enemy_hp_bar.value = 100
-	enemy_hp_bar.nine_patch_stretch = true
-	var hp_frame = load("res://assets/sprites/ui/ui_hp_bar_frame.png")
-	var hp_fill = load("res://assets/sprites/ui/ui_hp_bar_fill.png")
-	if hp_frame: enemy_hp_bar.texture_over = hp_frame
-	if hp_fill: enemy_hp_bar.texture_progress = hp_fill
+	var ehp_fill = StyleBoxFlat.new()
+	ehp_fill.bg_color = Color(0.2, 0.8, 0.2)
+	ehp_fill.corner_radius_top_left = 2
+	ehp_fill.corner_radius_top_right = 2
+	ehp_fill.corner_radius_bottom_left = 2
+	ehp_fill.corner_radius_bottom_right = 2
+	enemy_hp_bar.add_theme_stylebox_override("fill", ehp_fill)
+	var ehp_bg = StyleBoxFlat.new()
+	ehp_bg.bg_color = Color(0.15, 0.15, 0.15)
+	ehp_bg.corner_radius_top_left = 2
+	ehp_bg.corner_radius_top_right = 2
+	ehp_bg.corner_radius_bottom_left = 2
+	ehp_bg.corner_radius_bottom_right = 2
+	enemy_hp_bar.add_theme_stylebox_override("background", ehp_bg)
 	panel.add_child(enemy_hp_bar)
 	
 	var hp_text = Label.new()
@@ -557,12 +578,6 @@ func _update_enemy_display(index: int, _damage: int):
 	if enemy_hp:
 		var hp_percent = float(enemy.hp) / enemy.max_hp
 		enemy_hp.value = hp_percent * 100
-		if hp_percent <= 0.3:
-			var low_fill = load("res://assets/sprites/ui/ui_hp_bar_fill_low.png")
-			if low_fill: enemy_hp.texture_progress = low_fill
-		else:
-			var normal_fill = load("res://assets/sprites/ui/ui_hp_bar_fill.png")
-			if normal_fill: enemy_hp.texture_progress = normal_fill
 	var hp_text = panel.get_node_or_null("HPText")
 	if hp_text: hp_text.text = "%d / %d" % [enemy.hp, enemy.max_hp]
 	if enemy.hp <= 0:
