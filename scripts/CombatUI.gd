@@ -76,13 +76,15 @@ func _create_ui():
 	# =====================================================================
 	
 	# Semi-transparent background — shows hex battlefield behind combat
+	var existing_bg = get_node_or_null("CombatBG")
+	if existing_bg:
+		existing_bg.queue_free()
+	
 	var bg = ColorRect.new()
 	bg.name = "CombatBG"
 	bg.color = Color(0.02, 0.02, 0.04, 0.55)
 	bg.anchor_right = 1.0
 	bg.anchor_bottom = 1.0
-	bg.z_index = -1
-	add_child(bg)
 	bg.z_index = -1
 	add_child(bg)
 	
