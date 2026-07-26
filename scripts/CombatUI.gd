@@ -399,9 +399,9 @@ func _on_combat_ended(victory: bool):
 func _on_turn_started(is_player: bool):
 	end_turn_btn.disabled = not is_player
 	_update_weapon_button()
-	# Reset stake display at turn start
-	if stake_btn:
-		stake_btn.text = "Stake 0"
+	# Stake is consumed after drawing — display actual value (should be 0)
+	if stake_btn and combat_manager:
+		stake_btn.text = "Stake %d" % combat_manager.current_stake
 	if combat_manager:
 		_update_quiddity_display(combat_manager.player_quiddity)
 

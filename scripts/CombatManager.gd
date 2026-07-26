@@ -735,6 +735,12 @@ func end_player_turn():
 	_check_trinket_passives()
 
 	_draw_cards(5 - player_stake)
+	
+	# Stake is consumed after drawing — reset so player must re-stake next turn
+	player_stake = 0
+	current_stake = 0
+	print("CombatManager: Cards drawn — Stake consumed, reset to 0")
+	
 	turn_started.emit(true)
 
 func play_card(hand_index: int, target_index: int):
