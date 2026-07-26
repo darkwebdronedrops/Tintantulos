@@ -235,6 +235,14 @@ func _update_tile_visual(hex: Vector2i):
 	sprite.position = world_pos
 	sprite.z_index = tile_type  # Walls on top, floor on bottom
 	
+	# Vary rotation based on hex position to alternate lighting direction
+	# This makes tiles not all look like they're lit from the same angle
+	var rot_index = abs(hex.x + hex.y * 2) % 3
+	match rot_index:
+		0: sprite.rotation = 0
+		1: sprite.rotation = PI / 3.0  # 60°
+		2: sprite.rotation = PI * 2.0 / 3.0  # 120°
+	
 	# Add collision for walls and water
 	if tile_type == TILE_WALL or tile_type == TILE_WATER:
 		var static_body = StaticBody2D.new()
