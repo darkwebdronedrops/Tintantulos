@@ -40,7 +40,8 @@ func _build_menu():
 	var bg = ColorRect.new()
 	bg.name = "SettingsBG"
 	bg.color = Color(0.05, 0.05, 0.08, 0.9)
-	bg.size = Vector2(1920, 1080)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	bg.size = vp_size
 	bg.position = Vector2.ZERO
 	add_child(bg)
 	
@@ -48,7 +49,7 @@ func _build_menu():
 	var panel = PanelContainer.new()
 	panel.name = "SettingsPanel"
 	panel.size = Vector2(480, 520)
-	panel.position = Vector2(720, 280)
+	panel.position = Vector2((vp_size.x - 480) / 2, (vp_size.y - 520) / 2)
 	add_child(panel)
 	
 	# Panel background sprite if available
@@ -303,7 +304,8 @@ func _apply_brightness():
 		brightness_overlay = ColorRect.new()
 		brightness_overlay.name = "BrightnessOverlay"
 		brightness_overlay.color = Color(0, 0, 0, 0)
-		brightness_overlay.size = Vector2(1920, 1080)
+		var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+		brightness_overlay.size = vp_size
 		brightness_overlay.position = Vector2.ZERO
 		brightness_overlay.z_index = 1000  # Above everything
 		brightness_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Don't block clicks

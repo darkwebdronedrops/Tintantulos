@@ -159,14 +159,18 @@ func _build_ui(victory: bool):
 	# Background dim
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.85)
-	bg.size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1920, 1080)
+	bg.size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
 	bg.position = Vector2.ZERO
 	add_child(bg)
 	
-	# Main panel
+	# Main panel — sized and positioned relative to viewport
+	var viewport_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
 	main_panel = PanelContainer.new()
-	main_panel.size = Vector2(900, 650)
-	main_panel.position = Vector2(490, 110)  # Centered for 1920x1080
+	main_panel.size = Vector2(min(900, viewport_size.x - 40), min(650, viewport_size.y - 40))
+	main_panel.position = Vector2(
+		(viewport_size.x - main_panel.size.x) / 2,
+		(viewport_size.y - main_panel.size.y) / 2 - 30  # Slightly above center
+	)
 	add_child(main_panel)
 	
 	var main_vbox = VBoxContainer.new()

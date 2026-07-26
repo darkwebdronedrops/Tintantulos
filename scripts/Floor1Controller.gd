@@ -294,14 +294,15 @@ func _open_shop():
 	# Background
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.92)
-	bg.size = Vector2(1920, 1080)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	bg.size = vp_size
 	bg.position = Vector2.ZERO
 	shop_ui_container.add_child(bg)
 	
-	# Panel
+	# Panel — centered
 	var panel = PanelContainer.new()
 	panel.size = Vector2(700, 550)
-	panel.position = Vector2(610, 265)
+	panel.position = Vector2((vp_size.x - 700) / 2, (vp_size.y - 550) / 2)
 	shop_ui_container.add_child(panel)
 	
 	var vbox = VBoxContainer.new()

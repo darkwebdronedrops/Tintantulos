@@ -47,7 +47,8 @@ func _build_hud():
 	# Main container — fills viewport, no interaction blocking
 	var container = Control.new()
 	container.name = "HUDContainer"
-	container.size = Vector2(1920, 1080)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	container.size = vp_size
 	container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(container)
 	
@@ -327,7 +328,8 @@ func show_damage_flash():
 	"""Flash the screen red briefly when taking damage"""
 	var flash = ColorRect.new()
 	flash.color = Color(0.9, 0.1, 0.1, 0.3)
-	flash.size = Vector2(1920, 1080)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	flash.size = vp_size
 	flash.position = Vector2.ZERO
 	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(flash)

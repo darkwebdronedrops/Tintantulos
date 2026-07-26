@@ -1748,14 +1748,15 @@ func _show_save_dialog(room_node: Node2D):
 	
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.85)
-	bg.size = Vector2(1920, 1080)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	bg.size = vp_size
 	bg.position = Vector2.ZERO
 	save_dialog_overlay.add_child(bg)
 	
 	var panel = ColorRect.new()
 	panel.color = Color(0.12, 0.15, 0.18, 1.0)
 	panel.size = Vector2(360, 220)
-	panel.position = Vector2(780, 430)
+	panel.position = Vector2((vp_size.x - 360) / 2, (vp_size.y - 220) / 2)
 	save_dialog_overlay.add_child(panel)
 	
 	var title = Label.new()
@@ -1859,13 +1860,14 @@ func _show_game_over_screen():
 	
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.95)
-	bg.size = Vector2(1920, 1080)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	bg.size = vp_size
 	bg.position = Vector2.ZERO
 	overlay.add_child(bg)
 	
 	var title = Label.new()
 	title.text = "THE MACHINE STOPS"
-	title.position = Vector2(610, 300)
+	title.position = Vector2((vp_size.x - 700) / 2, vp_size.y * 0.28)
 	title.size = Vector2(700, 60)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 40)
@@ -1886,7 +1888,7 @@ func _show_game_over_screen():
 	stats.text = "Rooms cleared: %d/12  |  Gems: %d  |  Tokens: %d" % [
 		cleared, GameState.gems, GameState.get_gear_devil_token_count()
 	]
-	stats.position = Vector2(610, 430)
+	stats.position = Vector2((vp_size.x - 700) / 2, vp_size.y * 0.40)
 	stats.size = Vector2(700, 30)
 	stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stats.add_theme_font_size_override("font_size", 14)

@@ -22,14 +22,15 @@ func _build_screen():
 	# Background
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.95)
-	bg.size = Vector2(1920, 1080)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	bg.size = vp_size
 	bg.position = Vector2.ZERO
 	add_child(bg)
 	
 	# Title
 	var title = Label.new()
 	title.text = "THE MACHINE STOPS"
-	title.position = Vector2(560, 200)
+	title.position = Vector2((vp_size.x - 800) / 2, vp_size.y * 0.18)
 	title.size = Vector2(800, 80)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 48)
@@ -39,7 +40,7 @@ func _build_screen():
 	# Subtitle
 	var subtitle = Label.new()
 	subtitle.text = "You have escaped the Tower of Tintantulos."
-	subtitle.position = Vector2(560, 290)
+	subtitle.position = Vector2((vp_size.x - 800) / 2, vp_size.y * 0.27)
 	subtitle.size = Vector2(800, 30)
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	subtitle.add_theme_font_size_override("font_size", 18)
@@ -53,7 +54,7 @@ func _build_screen():
 		cleared, GameState.gems, GameState.get_gear_devil_token_count(),
 		GameState.player_deck.size(), GameState.defeated_bosses.size()
 	]
-	stats.position = Vector2(660, 360)
+	stats.position = Vector2((vp_size.x - 600) / 2, vp_size.y * 0.33)
 	stats.size = Vector2(600, 150)
 	stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stats.add_theme_font_size_override("font_size", 16)
@@ -63,7 +64,7 @@ func _build_screen():
 	# Survivor Choice Section
 	var choice_label = Label.new()
 	choice_label.text = "Choose one card to carry into the next climb:"
-	choice_label.position = Vector2(560, 520)
+	choice_label.position = Vector2((vp_size.x - 800) / 2, vp_size.y * 0.48)
 	choice_label.size = Vector2(800, 30)
 	choice_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	choice_label.add_theme_font_size_override("font_size", 14)
@@ -72,7 +73,7 @@ func _build_screen():
 	
 	var survivor_container = HBoxContainer.new()
 	survivor_container.name = "SurvivorContainer"
-	survivor_container.position = Vector2(460, 555)
+	survivor_container.position = Vector2((vp_size.x - 1000) / 2, vp_size.y * 0.51)
 	survivor_container.size = Vector2(1000, 80)
 	survivor_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	survivor_container.add_theme_constant_override("separation", 12)
@@ -105,7 +106,7 @@ func _build_screen():
 	
 	# Buttons
 	var btn_vbox = VBoxContainer.new()
-	btn_vbox.position = Vector2(810, 660)
+	btn_vbox.position = Vector2((vp_size.x - 300) / 2, vp_size.y * 0.61)
 	btn_vbox.size = Vector2(300, 150)
 	btn_vbox.add_theme_constant_override("separation", 16)
 	add_child(btn_vbox)

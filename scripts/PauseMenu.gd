@@ -20,14 +20,15 @@ func _build_menu():
 	# Background dim
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.8)
-	bg.size = Vector2(1920, 1080)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	bg.size = vp_size
 	bg.position = Vector2.ZERO
 	add_child(bg)
 	
 	# Center panel
 	panel = PanelContainer.new()
 	panel.size = Vector2(400, 350)
-	panel.position = Vector2(760, 365)
+	panel.position = Vector2((vp_size.x - 400) / 2, (vp_size.y - 350) / 2)
 	add_child(panel)
 	
 	# Panel background sprite if available
@@ -126,7 +127,8 @@ func _on_save():
 	# Show brief confirmation
 	var notif = Label.new()
 	notif.text = "💾 Game Saved!"
-	notif.position = Vector2(860, 720)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	notif.position = Vector2((vp_size.x - 200) / 2, vp_size.y * 0.67)
 	notif.size = Vector2(200, 30)
 	notif.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	notif.add_theme_font_size_override("font_size", 14)

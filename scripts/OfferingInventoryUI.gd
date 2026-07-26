@@ -39,14 +39,15 @@ func _build_ui():
 	# Background dim
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.9)
-	bg.size = Vector2(1920, 1080)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	bg.size = vp_size
 	bg.position = Vector2.ZERO
 	add_child(bg)
 	
-	# Main panel
+	# Main panel — centered
 	var main_hbox = HBoxContainer.new()
 	main_hbox.add_theme_constant_override("separation", 20)
-	main_hbox.position = Vector2(360, 200)
+	main_hbox.position = Vector2((vp_size.x - 1200) / 2, (vp_size.y - 680) / 2)
 	main_hbox.size = Vector2(1200, 680)
 	add_child(main_hbox)
 	
@@ -447,7 +448,8 @@ func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.8)):
 	var notif = Label.new()
 	notif.text = text
 	notif.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	notif.position = Vector2(760, 900)
+	var vp_size = get_viewport().get_visible_rect().size if get_viewport() else Vector2(1280, 720)
+	notif.position = Vector2((vp_size.x - 400) / 2, vp_size.y * 0.83)
 	notif.size = Vector2(400, 30)
 	notif.add_theme_font_size_override("font_size", 14)
 	notif.modulate = color
