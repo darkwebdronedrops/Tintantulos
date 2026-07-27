@@ -20,6 +20,7 @@ script = ExtResource("1_controller")
 [node name="Backdrop" type="Sprite2D" parent="."]
 z_index = -1
 position = Vector2(640, 360)
+scale = Vector2(15, 15)
 texture = ExtResource("10_backdrop")
 
 [node name="HexTileMap" type="Node2D" parent="."]

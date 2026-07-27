@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/floor10_dragon_v2.mp3-1f6fff85d77e40ad02af4ae
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

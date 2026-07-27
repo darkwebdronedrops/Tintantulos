@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/floor7_pact_v1.mp3-8fe1ced396f456a6d1c398890e
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

@@ -166,6 +166,7 @@ func _finish_floor_setup():
 	_setup_player()
 	_setup_floor_specific()
 	_setup_enemies()  # Spawn hex enemies
+	_setup_npcs()     # Spawn NPCs
 	_setup_post_combat_ui()  # Post-combat reward screen
 	
 	# Start music
@@ -307,6 +308,55 @@ func _setup_enemies():
 			print("[Floor1-Hex] Spawned %s at %s" % [spawn_data["name"], str(spawn_data["hex"])])
 	
 	print("[Floor1-Hex] %d hex enemies spawned" % hex_enemies.size())
+
+# ===================================================================
+# NPCs
+# ===================================================================
+
+func _setup_npcs():
+	"""Spawn NPCs in the hex world."""
+	# Transit Construct in entry room
+	var npc = Sprite2D.new()
+	npc.name = "NPC_TransitConstruct"
+	npc.texture = load("res://assets/sprites/floor1/npc_transit_construct.png")
+	if not npc.texture:
+		push_warning("[Floor1-Hex] NPC texture not found")
+		return
+	
+	npc.centered = true
+	npc.scale = Vector2(2.5, 2.5)
+	npc.z_index = 85
+	
+	# Place near the entry portal
+	if hex_map:
+		var npc_hex = Vector2i(3, 2)  # Near entry room center
+		npc.position = hex_map.hex_to_world(npc_hex)
+	else:
+		npc.position = Vector2(100, 100)
+	
+	# Interact area
+	var area = Area2D.new()
+	area.name = "InteractArea"
+	var collision = CollisionShape2D.new()
+	var circle = CircleShape2D.new()
+	circle.radius = 30.0
+	collision.shape = circle
+	area.add_child(collision)
+	npc.add_child(area)
+	
+	# Label above NPC
+	var label = Label.new()
+	label.name = "NPCLabel"
+	label.text = "Transit Construct"
+	label.position = Vector2(-60, -40)
+	label.size = Vector2(120, 20)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", Color(0.8, 0.9, 1.0))
+	npc.add_child(label)
+	
+	add_child(npc)
+	print("[Floor1-Hex] Spawned Transit Construct NPC at %s" % str(npc.position))
 
 # ===================================================================
 # COMBAT
@@ -539,7 +589,7 @@ func _on_enemy_combat_initiated(ambush: bool):
 	var combat_enemies: Array[CombatManager.EnemyData] = []
 	
 	for enemy in hex_enemies:
-		if enemy.state == HexEnemy.State.IN_COMBAT or enemy.hp <= 0:
+		if enemy.hp <= 0:
 			continue
 		var dist = HexTileMap._hex_distance(player_hex, enemy.hex_pos)
 		if dist <= 3:  # Combat range for all nearby enemies
@@ -1474,12 +1524,19 @@ func _show_dialogue(speaker: String, text: String):
 	if existing:
 		existing.queue_free()
 	
+	# Create CanvasLayer for screen-locked UI
+	var canvas = CanvasLayer.new()
+	canvas.name = "DialogueCanvas"
+	canvas.layer = 90
+	add_child(canvas)
+	
 	# Create panel background
 	var panel = PanelContainer.new()
 	panel.name = "DialogueBox"
-	panel.position = Vector2(190, 520)  # Center-bottom
-	panel.size = Vector2(900, 120)
-	panel.z_index = 100  # On top of everything
+	# Center-bottom of screen (viewport 1280x720)
+	panel.position = Vector2(190, 560)
+	panel.size = Vector2(900, 100)
+	panel.z_index = 100
 	
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.08, 0.95)
@@ -1496,14 +1553,20 @@ func _show_dialogue(speaker: String, text: String):
 	label.add_theme_font_size_override("font_size", 16)
 	panel.add_child(label)
 	
-	add_child(panel)
+	canvas.add_child(panel)
 	
 	# Auto-remove after 5 seconds
 	await get_tree().create_timer(5.0).timeout
-	if is_instance_valid(panel):
+	if is_instance_valid(canvas):
+		canvas.queue_free()
+	elif is_instance_valid(panel):
 		panel.queue_free()
 
 func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.9), duration: float = 3.0):
+	var canvas = CanvasLayer.new()
+	canvas.layer = 95
+	add_child(canvas)
+	
 	var notif = Label.new()
 	notif.text = text
 	notif.position = Vector2(390, 300)
@@ -1511,12 +1574,17 @@ func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.9), durat
 	notif.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	notif.add_theme_font_size_override("font_size", 14)
 	notif.add_theme_color_override("font_color", color)
-	add_child(notif)
+	canvas.add_child(notif)
 	
 	var tween = create_tween()
 	tween.tween_property(notif, "position:y", 250, 1.5)
 	tween.parallel().tween_property(notif, "modulate:a", 0.0, 1.5)
-	tween.tween_callback(notif.queue_free)
+	tween.tween_callback(func():
+		if is_instance_valid(canvas):
+			canvas.queue_free()
+		elif is_instance_valid(notif):
+			notif.queue_free()
+	)
 
 func _spawn_tutorial_door():
 	"""Spawn the tutorial Door enemy in the upper room."""

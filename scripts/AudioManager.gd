@@ -249,6 +249,7 @@ func _load_all_streams():
 				# Enable looping for all music streams
 				if stream is AudioStreamOggVorbis or stream is AudioStreamMP3 or stream is AudioStreamWAV:
 					stream.loop = true
+				print("[AudioManager] Loaded music: %s (loop=%s)" % [track_key, str(stream.loop) if "loop" in stream else "N/A"])
 				_music_streams[track_key] = stream
 				break
 		if not _music_streams.has(track_key):
@@ -532,9 +533,16 @@ func _crossfade(new_stream: AudioStream) -> void:
 	_crossfade_tween.set_parallel(true)
 	_crossfade_tween.tween_property(old_player, "volume_db", -80.0, MUSIC_CROSSFADE_TIME)
 	_crossfade_tween.tween_property(new_player, "volume_db", target_db, MUSIC_CROSSFADE_TIME)
+	
+	# Safeguard: capture player to stop by value; never stop the current player
+	var player_to_stop = old_player
 	_crossfade_tween.chain().tween_callback(func():
-		old_player.stop()
-		old_player.stream = null
+		if is_instance_valid(player_to_stop) and player_to_stop != _current_music_player:
+			player_to_stop.stop()
+			player_to_stop.stream = null
+			print("[AudioManager] Crossfade callback: stopped old player")
+		elif is_instance_valid(player_to_stop):
+			print("[AudioManager] Crossfade callback: skipped stop (player is now current)")
 	)
 	
 	print("[AudioManager] Crossfading to new track")

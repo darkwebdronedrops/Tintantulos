@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/floor4_bazaar_main_v1.mp3-b51e24b9141a9fbb105
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

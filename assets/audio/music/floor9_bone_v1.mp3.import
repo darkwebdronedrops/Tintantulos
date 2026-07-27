@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/floor9_bone_v1.mp3-9981a57bfd12ca0e75d5ae3640
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

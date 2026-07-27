@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/floor1_portal.mp3-cff73fdd1ae1288aa6a8bf5ea41
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

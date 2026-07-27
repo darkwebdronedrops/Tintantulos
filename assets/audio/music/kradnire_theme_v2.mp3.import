@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/kradnire_theme_v2.mp3-59177ab58af24ec283dc435
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

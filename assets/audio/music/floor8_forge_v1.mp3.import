@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/floor8_forge_v1.mp3-13d04c595c238dafa64c2754b
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

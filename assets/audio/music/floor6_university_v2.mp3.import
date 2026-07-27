@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/floor6_university_v2.mp3-0c445875c3659f2bdf19
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

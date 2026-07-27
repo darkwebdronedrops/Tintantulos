@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/Entis_Marr.mp3-fd2e45ee381e6c7619eed1065cebca
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

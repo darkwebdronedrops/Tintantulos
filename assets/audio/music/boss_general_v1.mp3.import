@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/boss_general_v1.mp3-834f33504d1cf6cfe79479ec0
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0
