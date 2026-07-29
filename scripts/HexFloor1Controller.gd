@@ -122,6 +122,11 @@ signal boss_portal_unlocked
 # ===================================================================
 
 func _ready():
+	# Reset for replayability — selecting Floor 1 from menu should always be fresh
+	floor_cleared = false
+	floor_complete_notified = false
+	room_cleared.clear()
+	room_encounter_spawned.clear()
 	call_deferred("_build_floor")
 
 func _build_floor():
