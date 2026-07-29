@@ -345,6 +345,7 @@ func _create_ui():
 	# Card preview (large, shows on hover) — size/position set dynamically
 	card_preview = TextureRect.new()
 	card_preview.name = "CardPreview"
+	card_preview.expand_mode = TextureRect.EXPAND_FIT_SIZE  # Fit within our size, don't use texture native size
 	card_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	card_preview.visible = false
 	card_preview.z_index = 10
