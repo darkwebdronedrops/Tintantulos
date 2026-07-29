@@ -85,7 +85,10 @@ Color(0.4, 0.4, 0.35), Color(0.35, 0.3, 0.25), Color(0.3, 0.4, 0.45)
 # ===================================================================
 
 func _ready():
-    call_deferred("_build_floor")
+	# Reset for replayability — selecting floor from menu should always be fresh
+	room_cleared.clear()
+	room_encounter_spawned.clear()
+	call_deferred("_build_floor")
 
 func _build_floor():
     if hex_map:
@@ -794,17 +797,28 @@ func _toggle_pause_menu():
     get_tree().paused = is_paused
 
 func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.9), duration: float = 3.0):
-    var label = Label.new()
-    label.text = text
-    label.add_theme_color_override("font_color", color)
-    label.add_theme_font_size_override("font_size", 20)
-    label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    label.position = Vector2(640, 360)
-    label.size = Vector2(600, 40)
-    add_child(label)
-
-    await get_tree().create_timer(duration).timeout
-    label.queue_free()
+    var canvas = CanvasLayer.new()
+    canvas.layer = 95
+    add_child(canvas)
+    
+    var notif = Label.new()
+    notif.text = text
+    notif.position = Vector2(390, 300)
+    notif.size = Vector2(500, 30)
+    notif.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    notif.add_theme_font_size_override("font_size", 14)
+    notif.add_theme_color_override("font_color", color)
+    canvas.add_child(notif)
+    
+    var tween = create_tween()
+    tween.tween_property(notif, "position:y", 250, 1.5)
+    tween.parallel().tween_property(notif, "modulate:a", 0.0, 1.5)
+    tween.tween_callback(func():
+        if is_instance_valid(canvas):
+            canvas.queue_free()
+        elif is_instance_valid(notif):
+            notif.queue_free()
+    )
 
 # ===================================================================
 # FLOOR COMPLETE

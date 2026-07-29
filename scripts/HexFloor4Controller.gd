@@ -115,6 +115,9 @@ signal level_changed(level_name: String)
 # ===================================================================
 
 func _ready():
+	# Reset for replayability — selecting floor from menu should always be fresh
+	room_cleared.clear()
+	room_encounter_spawned.clear()
 	call_deferred("_build_floor")
 
 func _build_floor():
@@ -1113,19 +1116,28 @@ func _show_dialogue(speaker: String, text: String):
 		dialogue.queue_free()
 
 func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.9), duration: float = 3.0):
+	var canvas = CanvasLayer.new()
+	canvas.layer = 95
+	add_child(canvas)
+	
 	var notif = Label.new()
 	notif.text = text
 	notif.position = Vector2(390, 300)
 	notif.size = Vector2(500, 30)
 	notif.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	notif.add_theme_font_size_override("font_size", 14)
-	notif.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3))
-	add_child(notif)
+	notif.add_theme_color_override("font_color", color)
+	canvas.add_child(notif)
 	
 	var tween = create_tween()
 	tween.tween_property(notif, "position:y", 250, 1.5)
 	tween.parallel().tween_property(notif, "modulate:a", 0.0, 1.5)
-	tween.tween_callback(notif.queue_free)
+	tween.tween_callback(func():
+		if is_instance_valid(canvas):
+			canvas.queue_free()
+		elif is_instance_valid(notif):
+			notif.queue_free()
+	)
 
 # ===================================================================
 # FLOOR SPECIFIC

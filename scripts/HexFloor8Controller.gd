@@ -159,6 +159,9 @@ signal room_changed(room_id: String, room_name: String)
 # ===================================================================
 
 func _ready():
+	# Reset for replayability — selecting floor from menu should always be fresh
+	room_cleared.clear()
+	room_encounter_spawned.clear()
 	call_deferred("_build_floor")
 
 func _build_floor():

@@ -160,6 +160,9 @@ signal room_changed(room_id: String, room_name: String)
 # ===================================================================
 
 func _ready():
+	# Reset for replayability — selecting floor from menu should always be fresh
+	room_cleared.clear()
+	room_encounter_spawned.clear()
 	call_deferred("_build_floor")
 
 func _build_floor():
@@ -2006,20 +2009,51 @@ func _descend_to_floor5():
 # ===================================================================
 
 func _show_dialogue(speaker: String, text: String):
-	var dialogue = Label.new()
-	dialogue.name = "DialogueBox"
-	dialogue.text = "%s: %s" % [speaker, text]
-	dialogue.position = Vector2(140, 550)
-	dialogue.size = Vector2(1000, 100)
-	dialogue.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	dialogue.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	dialogue.add_theme_font_size_override("font_size", 16)
-	add_child(dialogue)
+	# Remove existing dialogue
+	var existing = get_node_or_null("DialogueCanvas")
+	if existing:
+		existing.queue_free()
+	
+	# Create CanvasLayer for screen-locked UI
+	var canvas = CanvasLayer.new()
+	canvas.name = "DialogueCanvas"
+	canvas.layer = 90
+	add_child(canvas)
+	
+	# Create panel background
+	var panel = PanelContainer.new()
+	panel.name = "DialogueBox"
+	panel.position = Vector2(190, 560)
+	panel.size = Vector2(900, 100)
+	panel.z_index = 100
+	
+	var bg = ColorRect.new()
+	bg.color = Color(0.05, 0.05, 0.08, 0.95)
+	bg.anchor_right = 1.0
+	bg.anchor_bottom = 1.0
+	panel.add_child(bg)
+	panel.move_child(bg, 0)
+	
+	var label = Label.new()
+	label.text = "%s: %s" % [speaker, text]
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_font_size_override("font_size", 16)
+	panel.add_child(label)
+	
+	canvas.add_child(panel)
+	
+	# Auto-remove after 5 seconds
 	await get_tree().create_timer(5.0).timeout
-	if is_instance_valid(dialogue):
-		dialogue.queue_free()
+	if is_instance_valid(canvas):
+		canvas.queue_free()
 
-func _show_notification(text: String, color: Color = Color(0.3, 0.9, 0.3), duration: float = 3.0):
+func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.9), duration: float = 3.0):
+	var canvas = CanvasLayer.new()
+	canvas.layer = 95
+	add_child(canvas)
+	
 	var notif = Label.new()
 	notif.text = text
 	notif.position = Vector2(390, 300)
@@ -2027,12 +2061,17 @@ func _show_notification(text: String, color: Color = Color(0.3, 0.9, 0.3), durat
 	notif.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	notif.add_theme_font_size_override("font_size", 14)
 	notif.add_theme_color_override("font_color", color)
-	add_child(notif)
+	canvas.add_child(notif)
 	
 	var tween = create_tween()
 	tween.tween_property(notif, "position:y", 250, 1.5)
 	tween.parallel().tween_property(notif, "modulate:a", 0.0, 1.5)
-	tween.tween_callback(notif.queue_free)
+	tween.tween_callback(func():
+		if is_instance_valid(canvas):
+			canvas.queue_free()
+		elif is_instance_valid(notif):
+			notif.queue_free()
+	)
 
 # ===================================================================
 # FLOOR SPECIFIC
