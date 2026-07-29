@@ -583,6 +583,22 @@ func _step_path():
 func _interact():
     var player_hex = hex_map.world_to_hex(player_node.global_position)
 
+    # Check if near Machinist shop attendant
+    var attendant = get_node_or_null("NPC_ShopAttendant")
+    if attendant:
+        var attendant_hex = hex_map.world_to_hex(attendant.global_position)
+        if HexTileMap._hex_distance(player_hex, attendant_hex) <= 2:
+            _show_dialogue("Machinist", "Welcome to my shop! Press S near the Crown Cog to browse my wares. Gems accepted.")
+            return
+
+    # Check if near Offering Guide
+    var guide = get_node_or_null("NPC_OfferingGuide")
+    if guide:
+        var guide_hex = hex_map.world_to_hex(guide.global_position)
+        if HexTileMap._hex_distance(player_hex, guide_hex) <= 2:
+            _show_dialogue("Offering Guide", "Offerings are powerful one-use items. You earn Quiddity by staking cards in combat — the more you stake, the more Quiddity you gain. Spend it at shrines to unlock blessings... or curses.")
+            return
+
     # Check if near Crown Cog (center)
     if HexTileMap._hex_distance(player_hex, crown_cog_hex) <= 2:
         _open_machinist_shop()
@@ -610,12 +626,12 @@ func _interact():
 
 func _setup_npcs():
     """Spawn NPCs in the Gearworks."""
-    # Gearwright near the center
-    var npc = Sprite2D.new()
-    npc.name = "NPC_Gearwright"
-    var tex = load("res://assets/sprites/floor3/npc_gearwright.png")
+    # Shop Attendant at the Crown Cog (Machinist Shop)
+    var attendant = Sprite2D.new()
+    attendant.name = "NPC_ShopAttendant"
+    var tex = load("res://assets/sprites/floor3/npc_attendant.png")
     if tex:
-        npc.texture = tex
+        attendant.texture = tex
     else:
         # Fallback: teal gear-shaped polygon
         var poly = Polygon2D.new()
@@ -625,18 +641,17 @@ func _setup_npcs():
             Vector2(-15, -10)
         ])
         poly.color = Color(0.2, 0.7, 0.8)
-        npc.add_child(poly)
+        attendant.add_child(poly)
     
-    npc.centered = true
-    npc.scale = Vector2(2.5, 2.5)
-    npc.z_index = 85
+    attendant.centered = true
+    attendant.scale = Vector2(2.5, 2.5)
+    attendant.z_index = 85
     
-    # Place near center (Room 12 area)
+    # Place at Crown Cog center (where the shop is)
     if hex_map:
-        var npc_hex = Vector2i(0, 3)
-        npc.position = hex_map.hex_to_world(npc_hex)
+        attendant.position = hex_map.hex_to_world(crown_cog_hex)
     else:
-        npc.position = Vector2(400, 300)
+        attendant.position = Vector2(400, 300)
     
     # Interact area
     var area = Area2D.new()
@@ -646,21 +661,72 @@ func _setup_npcs():
     circle.radius = 30.0
     collision.shape = circle
     area.add_child(collision)
-    npc.add_child(area)
+    attendant.add_child(area)
     
     # Label above NPC
     var label = Label.new()
     label.name = "NPCLabel"
-    label.text = "Gearwright"
+    label.text = "Machinist"
     label.position = Vector2(-60, -40)
     label.size = Vector2(120, 20)
     label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     label.add_theme_font_size_override("font_size", 12)
     label.add_theme_color_override("font_color", Color(0.8, 0.9, 1.0))
-    npc.add_child(label)
+    attendant.add_child(label)
     
-    add_child(npc)
-    print("[Floor3-Hex] Spawned Gearwright NPC at %s" % str(npc.position))
+    add_child(attendant)
+    print("[Floor3-Hex] Spawned Machinist shop attendant at %s" % str(attendant.position))
+    
+    # Offering System Guide — explains how offerings work
+    var guide = Sprite2D.new()
+    guide.name = "NPC_OfferingGuide"
+    tex = load("res://assets/sprites/floor3/npc_guide.png")
+    if tex:
+        guide.texture = tex
+    else:
+        # Fallback: golden offering bowl shape
+        var poly = Polygon2D.new()
+        poly.polygon = PackedVector2Array([
+            Vector2(-15, -10), Vector2(15, -10), Vector2(20, 5),
+            Vector2(10, 20), Vector2(-10, 20), Vector2(-20, 5)
+        ])
+        poly.color = Color(0.9, 0.7, 0.3)
+        guide.add_child(poly)
+    
+    guide.centered = true
+    guide.scale = Vector2(2.5, 2.5)
+    guide.z_index = 85
+    
+    # Place near Room 12 (top of ring, easy to find)
+    if hex_map and room_data.has("12"):
+        var guide_hex = room_data["12"]["hex"] + Vector2i(2, 1)
+        guide.position = hex_map.hex_to_world(guide_hex)
+    else:
+        guide.position = Vector2(500, 200)
+    
+    # Interact area
+    var area2 = Area2D.new()
+    area2.name = "InteractArea"
+    var collision2 = CollisionShape2D.new()
+    var circle2 = CircleShape2D.new()
+    circle2.radius = 30.0
+    collision2.shape = circle2
+    area2.add_child(collision2)
+    guide.add_child(area2)
+    
+    # Label above NPC
+    var label2 = Label.new()
+    label2.name = "NPCLabel"
+    label2.text = "Offering Guide"
+    label2.position = Vector2(-60, -40)
+    label2.size = Vector2(120, 20)
+    label2.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    label2.add_theme_font_size_override("font_size", 12)
+    label2.add_theme_color_override("font_color", Color(0.9, 0.8, 0.3))
+    guide.add_child(label2)
+    
+    add_child(guide)
+    print("[Floor3-Hex] Spawned Offering Guide at %s" % str(guide.position))
 
 # ===================================================================
 # LIGHT BEAM PUZZLE
