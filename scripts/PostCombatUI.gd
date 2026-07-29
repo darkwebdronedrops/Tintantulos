@@ -315,6 +315,17 @@ func _create_card_pick_panel(index: int) -> PanelContainer:
 		stats_label.add_theme_color_override("font_color", Color(0.5, 0.6, 0.7))
 		vbox.add_child(stats_label)
 	
+	# Card description
+	var desc = card.get_effective_description()
+	if not desc.is_empty():
+		var desc_label = Label.new()
+		desc_label.text = desc
+		desc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		desc_label.add_theme_font_size_override("font_size", 9)
+		desc_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
+		desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		vbox.add_child(desc_label)
+	
 	# Spacer
 	var spacer = Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL

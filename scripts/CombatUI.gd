@@ -345,7 +345,6 @@ func _create_ui():
 	# Card preview (large, shows on hover) — size/position set dynamically
 	card_preview = TextureRect.new()
 	card_preview.name = "CardPreview"
-	card_preview.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	card_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	card_preview.visible = false
 	card_preview.z_index = 10
@@ -747,15 +746,20 @@ func _on_card_hover(index: int, is_hovering: bool):
 				var finished_path = "res://assets/sprites/cards/finished/%s/%s.png" % [card.faction, safe_name]
 				var finished_tex = load(finished_path)
 				if finished_tex:
-					# Calculate preview size from viewport (55% height, card aspect ~0.7)
+					# Calculate preview size from viewport (45% height max, card aspect ~0.7)
 					var vp_size = get_viewport().get_visible_rect().size
-					var preview_h = vp_size.y * 0.55
+					var max_h = min(vp_size.y * 0.45, 400)  # Cap at 400px or 45% of viewport
+					var max_w = min(vp_size.x * 0.45, 280)  # Cap width similarly
+					var preview_h = max_h
 					var preview_w = preview_h * 0.70
+					if preview_w > max_w:
+						preview_w = max_w
+						preview_h = preview_w / 0.70
+					# Position: centered with 20px padding from edges
+					var pos_x = clamp((vp_size.x - preview_w) / 2, 20, vp_size.x - preview_w - 20)
+					var pos_y = clamp((vp_size.y - preview_h) / 2, 20, vp_size.y - preview_h - 20)
 					card_preview.size = Vector2(preview_w, preview_h)
-					card_preview.position = Vector2(
-						(vp_size.x - preview_w) / 2,
-						(vp_size.y - preview_h) / 2
-					)
+					card_preview.position = Vector2(pos_x, pos_y)
 					card_preview.texture = finished_tex
 					card_preview.visible = true
 					# Backdrop fills entire viewport behind preview
