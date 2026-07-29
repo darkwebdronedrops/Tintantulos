@@ -479,6 +479,12 @@ func _on_combat_ended(victory: bool):
 		if hex_enemies[i].state == HexEnemy.State.IN_COMBAT:
 			combat_enemy_indices.append(i)
 	
+	# Capture defeated faction BEFORE we remove dead enemies
+	var defeated_faction = ""
+	for idx in combat_enemy_indices:
+		defeated_faction = hex_enemies[idx].faction
+		break  # Just need one faction
+	
 	# If room was cleared, kill all enemies that participated in combat
 	if victory and not combat_enemy_indices.is_empty():
 		for idx in combat_enemy_indices:
@@ -509,19 +515,12 @@ func _on_combat_ended(victory: bool):
 			_on_guided_tutorial_complete()
 			return
 		
-		# Get defeated faction for card picks
-		var defeated_faction = ""
-		for enemy in hex_enemies:
-			if enemy.hp <= 0:
-				defeated_faction = enemy.faction
-				break
-		
 		# Show post-combat reward UI
 		if post_combat_ui:
 			var quiddity_earned = combat_manager.quiddity_this_combat if combat_manager else 0
 			post_combat_ui.show_post_combat(true, quiddity_earned, defeated_faction)
 			in_ui = true
-			print("[Floor1-Hex] Post-combat UI shown")
+			print("[Floor1-Hex] Post-combat UI shown, faction: %s" % defeated_faction)
 			return  # Wait for ui_closed signal before continuing
 		
 		# Fallback: if no post_combat_ui, just do the old flow

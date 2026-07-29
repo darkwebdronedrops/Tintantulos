@@ -20,6 +20,8 @@ var selected_picks: Array[bool] = [false, false, false]  # Which picks are bough
 var burned_card_ids: Array[String] = []  # Cards the player burned
 var max_burns: int = 1  # Max cards that can be burned per post-combat
 var burns_used: int = 0
+var upgraded_cards: Dictionary = {}  # card_id -> faction_keyword added
+var current_faction: String = ""  # Defeated enemy faction for upgrades
 
 # Visual nodes
 var main_panel: PanelContainer
@@ -52,6 +54,8 @@ func show_post_combat(victory: bool, quiddity: int, defeated_faction: String = "
 	burned_card_ids.clear()
 	burns_used = 0
 	selected_picks = [false, false, false]
+	upgraded_cards.clear()
+	current_faction = defeated_faction
 	
 	# Generate card picks
 	_generate_card_picks(defeated_faction)
@@ -185,6 +189,11 @@ func _build_ui(victory: bool):
 	var picks_section = _create_picks_section()
 	main_vbox.add_child(picks_section)
 	
+	# === KEYWORD UPGRADE SECTION ===
+	if not current_faction.is_empty():
+		var upgrade_section = _create_upgrade_section()
+		main_vbox.add_child(upgrade_section)
+	
 	# === DECK + BURN SECTION ===
 	var deck_section = _create_deck_section()
 	main_vbox.add_child(deck_section)
@@ -256,7 +265,87 @@ func _create_picks_section() -> VBoxContainer:
 	
 	return section
 
-func _create_card_pick_panel(index: int) -> PanelContainer:
+func _create_upgrade_section() -> VBoxContainer:
+	var section = VBoxContainer.new()
+	section.add_theme_constant_override("separation", 8)
+	
+	# Section label
+	var label = Label.new()
+	label.text = "Imbue cards with %s essence (5💎 each):" % current_faction
+	label.add_theme_font_size_override("font_size", 14)
+	label.add_theme_color_override("font_color", _get_faction_color(current_faction))
+	section.add_child(label)
+	
+	# Upgrade container
+	var upgrade_container = HBoxContainer.new()
+	upgrade_container.add_theme_constant_override("separation", 12)
+	upgrade_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	section.add_child(upgrade_container)
+	
+	# Show up to 3 cards that can be upgraded
+	var shown = 0
+	for i in range(current_deck.size()):
+		if shown >= 3:
+			break
+		var card = current_deck[i]
+		# Skip if already has this faction keyword
+		if card.faction == current_faction or card.keywords.has(current_faction.to_lower()):
+			continue
+		# Skip already upgraded in this session
+		if upgraded_cards.has(card.id):
+			continue
+		
+		var panel = _create_upgrade_panel(i, card)
+		upgrade_container.add_child(panel)
+		shown += 1
+	
+	if shown == 0:
+		var none_label = Label.new()
+		none_label.text = "No cards available for imbuing."
+		none_label.add_theme_font_size_override("font_size", 11)
+		none_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+		section.add_child(none_label)
+	
+	return section
+
+func _create_upgrade_panel(index: int, card: CardData) -> PanelContainer:
+	var panel = PanelContainer.new()
+	panel.custom_minimum_size = Vector2(180, 80)
+	
+	var vbox = VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 4)
+	panel.add_child(vbox)
+	
+	# Card name
+	var name_label = Label.new()
+	name_label.text = card.card_name
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 11)
+	name_label.add_theme_color_override("font_color", _get_faction_color(card.faction))
+	vbox.add_child(name_label)
+	
+	# Current keywords
+	if card.keywords.size() > 0:
+		var kw_label = Label.new()
+		kw_label.text = "Keywords: " + ", ".join(card.keywords)
+		kw_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		kw_label.add_theme_font_size_override("font_size", 9)
+		kw_label.add_theme_color_override("font_color", Color(0.5, 0.6, 0.7))
+		vbox.add_child(kw_label)
+	
+	# Spacer
+	var spacer = Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(spacer)
+	
+	# Imbue button
+	var imbue_btn = Button.new()
+	imbue_btn.text = "Imbue %s (5💎)" % current_faction
+	imbue_btn.disabled = GameState.gems < 5
+	imbue_btn.pressed.connect(_on_imbue_card.bind(index, card.id))
+	vbox.add_child(imbue_btn)
+	
+	return panel
 	var card = card_picks[index]
 	var cost = pick_costs[index]
 	
@@ -593,6 +682,64 @@ func _disable_all_burn_buttons():
 			if burn_btn:
 				burn_btn.disabled = true
 				burn_btn.text = "Burned"
+
+func _on_imbue_card(index: int, card_id: String):
+	"""Add faction keyword to a card, spending gems."""
+	if GameState.gems < 5:
+		_show_notification("Not enough gems! Need 5💎", Color(0.9, 0.5, 0.2))
+		return
+	
+	var card = CardDB.get_card(card_id)
+	if not card:
+		return
+	
+	# Deduct gems
+	GameState.gems -= 5
+	
+	# Create imbued clone with unique ID
+	var new_id = card_id + "_imbued_" + current_faction.to_lower()
+	
+	# Check if already exists (shouldn't happen per-session, but safety)
+	if CardDB.cards.has(new_id):
+		# Just use the existing one
+		upgraded_cards[card_id] = current_faction
+		_show_notification("%s imbued with %s essence!" % [card.card_name, current_faction], Color(0.3, 0.9, 0.3))
+	else:
+		# Clone the card
+		var new_card = CardData.new()
+		new_card.id = new_id
+		new_card.card_name = card.card_name + " [%s]" % current_faction
+		new_card.faction = card.faction
+		new_card.card_type = card.card_type
+		new_card.attention_cost = card.attention_cost
+		new_card.quiddity_gain = card.quiddity_gain
+		new_card.damage_dice = card.damage_dice
+		new_card.damage_flat = card.damage_flat
+		new_card.uses_dice = card.uses_dice
+		new_card.shield_amount = card.shield_amount
+		new_card.heal_amount = card.heal_amount
+		new_card.summon_attack = card.summon_attack
+		new_card.summon_hp = card.summon_hp
+		new_card.summon_count = card.summon_count
+		new_card.keywords = card.keywords.duplicate()
+		new_card.keywords.append(current_faction.to_lower())
+		new_card.description = card.description + "\n[Imbued with %s essence]" % current_faction
+		new_card.survives_reset = card.survives_reset
+		
+		# Register in CardDB
+		CardDB.register_card(new_card)
+		
+		# Replace in player deck
+		GameState.remove_card_from_deck(card_id)
+		GameState.add_card_to_deck(new_id)
+		
+		upgraded_cards[card_id] = current_faction
+		_show_notification("%s imbued with %s essence!" % [card.card_name, current_faction], Color(0.3, 0.9, 0.3))
+	
+	_update_currency_display()
+	# Rebuild UI to reflect changes
+	current_deck = GameState.get_deck_card_data()
+	_build_ui(true)
 
 func _on_confirm():
 	# Spend the quiddity that was used
