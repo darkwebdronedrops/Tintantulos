@@ -173,6 +173,7 @@ func _build_floor():
 	_setup_ui()
 	_setup_player()
 	_setup_enemies()
+	_setup_npcs()
 	_setup_floor_specific()
 	
 	AudioManager.play_floor_ambient(6)
@@ -2072,6 +2073,64 @@ func _show_notification(text: String, color: Color = Color(0.9, 0.9, 0.9), durat
 		elif is_instance_valid(notif):
 			notif.queue_free()
 	)
+
+# ===================================================================
+# NPCs
+# ===================================================================
+
+func _setup_npcs():
+	"""Spawn NPCs in the University."""
+	# Scholar in the quadrangle
+	var npc = Sprite2D.new()
+	npc.name = "NPC_Scholar"
+	var tex = load("res://assets/sprites/floor6/npc_scholar.png")
+	if tex:
+		npc.texture = tex
+	else:
+		# Fallback: purple scholar robe shape
+		var poly = Polygon2D.new()
+		poly.polygon = PackedVector2Array([
+			Vector2(0, -25), Vector2(12, -10), Vector2(15, 10),
+			Vector2(10, 25), Vector2(-10, 25), Vector2(-15, 10),
+			Vector2(-12, -10)
+		])
+		poly.color = Color(0.6, 0.4, 0.8)
+		npc.add_child(poly)
+	
+	npc.centered = true
+	npc.scale = Vector2(2.5, 2.5)
+	npc.z_index = 85
+	
+	# Place in quadrangle (center of floor)
+	if hex_map:
+		var npc_hex = Vector2i(2, 2)
+		npc.position = hex_map.hex_to_world(npc_hex)
+	else:
+		npc.position = Vector2(400, 300)
+	
+	# Interact area
+	var area = Area2D.new()
+	area.name = "InteractArea"
+	var collision = CollisionShape2D.new()
+	var circle = CircleShape2D.new()
+	circle.radius = 30.0
+	collision.shape = circle
+	area.add_child(collision)
+	npc.add_child(area)
+	
+	# Label above NPC
+	var label = Label.new()
+	label.name = "NPCLabel"
+	label.text = "Scholar"
+	label.position = Vector2(-60, -40)
+	label.size = Vector2(120, 20)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_color_override("font_color", Color(0.9, 0.8, 1.0))
+	npc.add_child(label)
+	
+	add_child(npc)
+	print("[Floor6-Hex] Spawned Scholar NPC at %s" % str(npc.position))
 
 # ===================================================================
 # FLOOR SPECIFIC

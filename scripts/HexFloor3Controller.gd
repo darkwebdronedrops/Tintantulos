@@ -100,6 +100,7 @@ func _build_floor():
     _setup_ui()
     _setup_player()
     _setup_enemies()
+    _setup_npcs()
     _setup_light_beam_puzzle()
     _setup_machinist_shop()
 
@@ -602,6 +603,64 @@ func _interact():
             return
 
     _show_notification("Nothing to interact with here.", Color(0.7, 0.7, 0.7), 2.0)
+
+# ===================================================================
+# NPCs
+# ===================================================================
+
+func _setup_npcs():
+    """Spawn NPCs in the Gearworks."""
+    # Gearwright near the center
+    var npc = Sprite2D.new()
+    npc.name = "NPC_Gearwright"
+    var tex = load("res://assets/sprites/floor3/npc_gearwright.png")
+    if tex:
+        npc.texture = tex
+    else:
+        # Fallback: teal gear-shaped polygon
+        var poly = Polygon2D.new()
+        poly.polygon = PackedVector2Array([
+            Vector2(0, -20), Vector2(15, -10), Vector2(20, 5),
+            Vector2(10, 20), Vector2(-10, 20), Vector2(-20, 5),
+            Vector2(-15, -10)
+        ])
+        poly.color = Color(0.2, 0.7, 0.8)
+        npc.add_child(poly)
+    
+    npc.centered = true
+    npc.scale = Vector2(2.5, 2.5)
+    npc.z_index = 85
+    
+    # Place near center (Room 12 area)
+    if hex_map:
+        var npc_hex = Vector2i(0, 3)
+        npc.position = hex_map.hex_to_world(npc_hex)
+    else:
+        npc.position = Vector2(400, 300)
+    
+    # Interact area
+    var area = Area2D.new()
+    area.name = "InteractArea"
+    var collision = CollisionShape2D.new()
+    var circle = CircleShape2D.new()
+    circle.radius = 30.0
+    collision.shape = circle
+    area.add_child(collision)
+    npc.add_child(area)
+    
+    # Label above NPC
+    var label = Label.new()
+    label.name = "NPCLabel"
+    label.text = "Gearwright"
+    label.position = Vector2(-60, -40)
+    label.size = Vector2(120, 20)
+    label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    label.add_theme_font_size_override("font_size", 12)
+    label.add_theme_color_override("font_color", Color(0.8, 0.9, 1.0))
+    npc.add_child(label)
+    
+    add_child(npc)
+    print("[Floor3-Hex] Spawned Gearwright NPC at %s" % str(npc.position))
 
 # ===================================================================
 # LIGHT BEAM PUZZLE
