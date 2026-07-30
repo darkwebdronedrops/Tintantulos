@@ -439,113 +439,6 @@ func _create_upgrade_panel(index: int, card: CardData) -> PanelContainer:
 	vbox.add_child(imbue_btn)
 	
 	return panel
-	var card = card_picks[index]
-	var cost = pick_costs[index]
-	
-	var panel = PanelContainer.new()
-	panel.custom_minimum_size = Vector2(CARD_WIDTH, CARD_HEIGHT)
-	panel.name = "CardPick_%d" % index
-	
-	var vbox = VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 4)
-	panel.add_child(vbox)
-	
-	# Gold survivor indicator (header row)
-	if card.survives_reset:
-		var survivor_row = HBoxContainer.new()
-		var crown = Label.new()
-		crown.text = "★ GOLD"
-		crown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		crown.add_theme_font_size_override("font_size", 10)
-		crown.add_theme_color_override("font_color", Color(1.0, 0.84, 0.0))
-		survivor_row.add_child(crown)
-		vbox.add_child(survivor_row)
-	
-	# Card name
-	var name_label = Label.new()
-	name_label.name = "NameLabel"
-	name_label.text = card.card_name
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 13)
-	name_label.add_theme_color_override("font_color", _get_faction_color(card.faction))
-	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	vbox.add_child(name_label)
-	
-	# Faction badge
-	var faction_label = Label.new()
-	faction_label.text = card.faction
-	faction_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	faction_label.add_theme_font_size_override("font_size", 10)
-	faction_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7))
-	vbox.add_child(faction_label)
-	
-	# Type + cost
-	var type_label = Label.new()
-	type_label.text = "%s | Cost: %d◈" % [card.card_type, cost]
-	type_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	type_label.add_theme_font_size_override("font_size", 11)
-	type_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.8))
-	vbox.add_child(type_label)
-	
-	# Stats summary
-	var stats = _get_card_stats_summary(card)
-	if not stats.is_empty():
-		var stats_label = Label.new()
-		stats_label.text = stats
-		stats_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		stats_label.add_theme_font_size_override("font_size", 10)
-		stats_label.add_theme_color_override("font_color", Color(0.5, 0.6, 0.7))
-		vbox.add_child(stats_label)
-	
-	# Card description
-	var desc = card.get_effective_description()
-	if not desc.is_empty():
-		var desc_label = Label.new()
-		desc_label.text = desc
-		desc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		desc_label.add_theme_font_size_override("font_size", 9)
-		desc_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-		desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		vbox.add_child(desc_label)
-	
-	# Spacer
-	var spacer = Control.new()
-	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vbox.add_child(spacer)
-	
-	# Buy button
-	var buy_btn = Button.new()
-	buy_btn.name = "BuyButton"
-	buy_btn.text = "Buy (%d◈)" % cost
-	buy_btn.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
-	buy_btn.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0))
-	buy_btn.add_theme_color_override("font_pressed_color", Color(0.7, 0.7, 0.7))
-	buy_btn.add_theme_color_override("font_disabled_color", Color(0.4, 0.4, 0.4))
-	buy_btn.disabled = false
-	buy_btn.mouse_filter = Control.MOUSE_FILTER_STOP
-	buy_btn.pressed.connect(_on_buy_card.bind(index))
-	vbox.add_child(buy_btn)
-	
-	# Already owned indicator
-	var owned_label = Label.new()
-	owned_label.name = "OwnedLabel"
-	owned_label.text = "In deck" if _is_card_in_deck(card.id) else ""
-	owned_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	owned_label.add_theme_font_size_override("font_size", 9)
-	owned_label.add_theme_color_override("font_color", Color(0.4, 0.7, 0.4))
-	owned_label.visible = _is_card_in_deck(card.id)
-	vbox.add_child(owned_label)
-	
-	# Selection highlight
-	var highlight = ColorRect.new()
-	highlight.name = "Highlight"
-	highlight.color = Color(0.3, 0.9, 0.3, 0.0)
-	highlight.size = Vector2(CARD_WIDTH, CARD_HEIGHT)
-	highlight.z_index = -1
-	highlight.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.add_child(highlight)
-	
-	return panel
 
 func _create_deck_section() -> HBoxContainer:
 	var section = HBoxContainer.new()
@@ -973,3 +866,116 @@ func _input(event: InputEvent):
 		if event.keycode == KEY_ESCAPE:
 			_on_confirm()
 			get_viewport().set_input_as_handled()
+
+func _create_card_pick_panel(index: int) -> PanelContainer:
+	var card = card_picks[index]
+	var cost = pick_costs[index]
+	
+	var panel = PanelContainer.new()
+	panel.custom_minimum_size = Vector2(CARD_WIDTH, CARD_HEIGHT)
+	panel.name = "CardPick_%d" % index
+	
+	var vbox = VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 4)
+	panel.add_child(vbox)
+	
+	# Gold survivor indicator (header row)
+	if card.survives_reset:
+		var survivor_row = HBoxContainer.new()
+		var crown = Label.new()
+		crown.text = "★ GOLD"
+		crown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		crown.add_theme_font_size_override("font_size", 10)
+		crown.add_theme_color_override("font_color", Color(1.0, 0.84, 0.0))
+		survivor_row.add_child(crown)
+		vbox.add_child(survivor_row)
+	
+	# Card name
+	var name_label = Label.new()
+	name_label.name = "NameLabel"
+	name_label.text = card.card_name
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 13)
+	name_label.add_theme_color_override("font_color", _get_faction_color(card.faction))
+	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vbox.add_child(name_label)
+	
+	# Faction badge
+	var faction_label = Label.new()
+	faction_label.text = card.faction
+	faction_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	faction_label.add_theme_font_size_override("font_size", 10)
+	faction_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7))
+	vbox.add_child(faction_label)
+	
+	# Type + cost
+	var type_label = Label.new()
+	type_label.text = "%s | Cost: %d◈" % [card.card_type, cost]
+	type_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	type_label.add_theme_font_size_override("font_size", 11)
+	type_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.8))
+	vbox.add_child(type_label)
+	
+	# Stats summary
+	var stats = _get_card_stats_summary(card)
+	if not stats.is_empty():
+		var stats_label = Label.new()
+		stats_label.text = stats
+		stats_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		stats_label.add_theme_font_size_override("font_size", 10)
+		stats_label.add_theme_color_override("font_color", Color(0.5, 0.6, 0.7))
+		vbox.add_child(stats_label)
+	
+	# Card description
+	var desc = card.get_effective_description()
+	if not desc.is_empty():
+		var desc_label = Label.new()
+		desc_label.text = desc
+		desc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		desc_label.add_theme_font_size_override("font_size", 9)
+		desc_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
+		desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		vbox.add_child(desc_label)
+	
+	# Spacer
+	var spacer = Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(spacer)
+	
+	# Buy button
+	var buy_btn = Button.new()
+	buy_btn.name = "BuyButton"
+	buy_btn.text = "Buy (%d◈)" % cost
+	buy_btn.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
+	buy_btn.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0))
+	buy_btn.add_theme_color_override("font_pressed_color", Color(0.7, 0.7, 0.7))
+	buy_btn.add_theme_color_override("font_disabled_color", Color(0.4, 0.4, 0.4))
+	buy_btn.disabled = false
+	buy_btn.mouse_filter = Control.MOUSE_FILTER_STOP
+	buy_btn.pressed.connect(_on_buy_card.bind(index))
+	vbox.add_child(buy_btn)
+	
+	# Already owned indicator
+	var owned_label = Label.new()
+	owned_label.name = "OwnedLabel"
+	owned_label.text = "In deck" if _is_card_in_deck(card.id) else ""
+	owned_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	owned_label.add_theme_font_size_override("font_size", 9)
+	owned_label.add_theme_color_override("font_color", Color(0.4, 0.7, 0.4))
+	owned_label.visible = _is_card_in_deck(card.id)
+	vbox.add_child(owned_label)
+	
+	# Selection highlight
+	var highlight = ColorRect.new()
+	highlight.name = "Highlight"
+	highlight.color = Color(0.3, 0.9, 0.3, 0.0)
+	highlight.size = Vector2(CARD_WIDTH, CARD_HEIGHT)
+	highlight.z_index = -1
+	highlight.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(highlight)
+	
+	return panel
+
+func _calculate_burn_value(card: CardData) -> int:
+	"""Calculate gems earned when burning a card."""
+	return GameState._calculate_card_gem_value(card)
