@@ -89,6 +89,8 @@ func _ready():
 	call_deferred("_build_floor")
 
 func _build_floor():
+	GameState.set_current_floor(3)
+	print("[Floor3-Hex] current_floor set to 3")
     if hex_map:
         hex_map.generate_floor3_layout()
         print("[Floor3-Hex] Hex grid generated: %d tiles" % hex_map.grid.size())

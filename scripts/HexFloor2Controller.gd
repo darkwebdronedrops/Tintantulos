@@ -102,6 +102,8 @@ func _ready():
 	call_deferred("_build_floor")
 
 func _build_floor():
+	GameState.set_current_floor(2)
+	print("[Floor2-Hex] current_floor set to 2")
 	# Load tile texture variations for Floor 2
 	if hex_map:
 		var floor_variants = [

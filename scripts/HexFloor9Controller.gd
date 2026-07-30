@@ -155,6 +155,8 @@ func _ready():
 	call_deferred("_build_floor")
 
 func _build_floor():
+	GameState.set_current_floor(9)
+	print("[Floor9-Hex] current_floor set to 9")
 	_generate_hex_layout()
 	print("[Floor9-Hex] Hex grid generated: %d tiles" % hex_map.grid.size())
 	

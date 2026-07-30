@@ -121,6 +121,9 @@ func _ready():
 	call_deferred("_build_floor")
 
 func _build_floor():
+	GameState.set_current_floor(4)
+	print("[Floor4-Hex] current_floor set to 4")
+	
 	# Generate hex layout
 	if hex_map:
 		hex_map.generate_floor4_layout()
