@@ -27,6 +27,7 @@ const DIRECTIONS = [
 ]
 
 # Tile colors/textures — supports multiple variations per type
+@export var tile_textures_portal: Array[Texture2D] = []
 @export var tile_textures_floor: Array[Texture2D] = []
 @export var tile_textures_wall: Array[Texture2D] = []
 @export var tile_textures_object: Array[Texture2D] = []
@@ -34,6 +35,11 @@ const DIRECTIONS = [
 @export var tile_textures_water: Array[Texture2D] = []
 
 # Backward-compat single texture (auto-populated from array if set)
+@export var tile_texture_portal: Texture2D:
+	set(value):
+		tile_texture_portal = value
+		if value and value not in tile_textures_portal:
+			tile_textures_portal.append(value)
 @export var tile_texture_floor: Texture2D:
 	set(value):
 		tile_texture_floor = value
@@ -260,7 +266,7 @@ func _get_texture_for_tile(tile_type: int) -> Texture2D:
 		TILE_WALL: arr = tile_textures_wall
 		TILE_OBJECT: arr = tile_textures_object
 		TILE_VOID: arr = tile_textures_void
-		TILE_PORTAL: arr = tile_textures_floor
+		TILE_PORTAL: arr = tile_textures_portal if tile_textures_portal.size() > 0 else tile_textures_floor
 		TILE_WATER: arr = tile_textures_water if tile_textures_water.size() > 0 else tile_textures_void
 	if arr.size() > 0:
 		return arr[randi() % arr.size()]

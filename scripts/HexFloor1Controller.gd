@@ -160,6 +160,13 @@ func _finish_floor_setup():
 			hex_map.tile_texture_wall = hex_map.tile_textures_wall[0]
 		print("[Floor1-Hex] Loaded %d floor textures, %d wall textures" % [hex_map.tile_textures_floor.size(), hex_map.tile_textures_wall.size()])
 	
+		# Load portal textures
+		var portal_tex = preload("res://assets/sprites/floor1/portal_main.png")
+		if portal_tex:
+			hex_map.tile_textures_portal.append(portal_tex)
+			hex_map.tile_texture_portal = portal_tex
+			print("[Floor1-Hex] Loaded portal texture")
+	
 	# Generate hex layout
 	if hex_map:
 		hex_map.generate_floor1_layout()
@@ -173,6 +180,7 @@ func _finish_floor_setup():
 	_setup_enemies()  # Spawn hex enemies
 	_setup_npcs()     # Spawn NPCs
 	_setup_post_combat_ui()  # Post-combat reward screen
+	_setup_portal_indicators()  # Visual portal lock/unlock indicators
 	
 	# Start music
 	AudioManager.play_floor_ambient(1)
@@ -1288,6 +1296,69 @@ func _is_portal_locked(direction: String) -> bool:
 func _unlock_all_portals():
 	GameState.is_first_run = false
 	_show_notification("All portals unlocked!")
+	_update_portal_indicators()
+
+func _setup_portal_indicators():
+	"""Spawn visual indicators at portal positions to show lock state."""
+	if not hex_map:
+		return
+	
+	# Remove existing indicators
+	var existing = get_node_or_null("PortalIndicators")
+	if existing:
+		existing.queue_free()
+	
+	var container = Node2D.new()
+	container.name = "PortalIndicators"
+	add_child(container)
+	
+	for room_id in portal_connections.keys():
+		var room_info = room_data.get(room_id, {})
+		var center = room_info.get("center", Vector2i.ZERO)
+		
+		for dir_name in portal_connections[room_id].keys():
+			var offset = portal_offsets.get(dir_name, Vector2i.ZERO)
+			var portal_hex = center + offset
+			var world_pos = hex_map.hex_to_world(portal_hex)
+			
+			# Create indicator (small glowing hex)
+			var indicator = Polygon2D.new()
+			indicator.name = "PortalIndicator_%s_%s" % [room_id, dir_name]
+			indicator.polygon = PackedVector2Array([
+				Vector2(0, -8), Vector2(7, -4), Vector2(7, 4),
+				Vector2(0, 8), Vector2(-7, 4), Vector2(-7, -4)
+			])
+			indicator.position = world_pos
+			indicator.z_index = 100  # Above tiles
+			container.add_child(indicator)
+	
+	_update_portal_indicators()
+
+func _update_portal_indicators():
+	"""Update portal indicator colors based on lock state."""
+	var container = get_node_or_null("PortalIndicators")
+	if not container:
+		return
+	
+	for room_id in portal_connections.keys():
+		for dir_name in portal_connections[room_id].keys():
+			var indicator = container.get_node_or_null("PortalIndicator_%s_%s" % [room_id, dir_name])
+			if not indicator:
+				continue
+			
+			var locked = _is_portal_locked(dir_name)
+			if locked:
+				# Locked: dim red, pulsing slow
+				indicator.color = Color(0.6, 0.2, 0.2, 0.7)
+				var tween = create_tween().set_loops()
+				tween.tween_property(indicator, "modulate:a", 0.4, 1.0)
+				tween.tween_property(indicator, "modulate:a", 0.9, 1.0)
+			else:
+				# Unlocked: bright cyan, pulsing fast
+				indicator.color = Color(0.3, 0.8, 1.0, 0.8)
+				var tween = create_tween().set_loops()
+				tween.tween_property(indicator, "modulate:a", 0.5, 0.5)
+				tween.tween_property(indicator, "modulate:a", 1.0, 0.5)
 
 # ===================================================================
 # INTERACTION
