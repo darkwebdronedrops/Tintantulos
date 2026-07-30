@@ -808,13 +808,19 @@ func _light_beam_complete():
 # ===================================================================
 
 func _setup_machinist_shop():
-    shop_ui = Control.new()
-    shop_ui.name = "ShopUI"
-    shop_ui.visible = false
-    shop_ui.z_index = 200
-    shop_ui.size = Vector2(600, 400)
-    shop_ui.position = Vector2(340, 160)
-    add_child(shop_ui)
+	shop_ui = Control.new()
+	shop_ui.name = "ShopUI"
+	shop_ui.visible = false
+	shop_ui.z_index = 200
+	shop_ui.size = Vector2(600, 400)
+	shop_ui.position = Vector2(340, 160)
+	
+	# Wrap in CanvasLayer for screen-space rendering
+	var shop_canvas = CanvasLayer.new()
+	shop_canvas.name = "ShopCanvas"
+	shop_canvas.layer = 100
+	add_child(shop_canvas)
+	shop_canvas.add_child(shop_ui)
     
     # Shop title
     var title = Label.new()

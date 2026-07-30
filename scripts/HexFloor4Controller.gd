@@ -1012,7 +1012,12 @@ func _open_shop():
 	var shop_ui = Control.new()
 	shop_ui.name = "ShopUI"
 	shop_ui.z_index = 200
-	add_child(shop_ui)
+	# Wrap shop in CanvasLayer for screen-space rendering
+	var shop_canvas = CanvasLayer.new()
+	shop_canvas.name = "ShopCanvas"
+	shop_canvas.layer = 100
+	add_child(shop_canvas)
+	shop_canvas.add_child(shop_ui)
 	
 	# Background
 	var bg = ColorRect.new()
