@@ -76,6 +76,13 @@ Three-cost structure: Cast / Trigger / Disarm / Persist. See Keyword System.
 
 ## KEYWORD SYSTEM
 
+**IMPORTANT: The following are NOT keywords:**
+- **Faction names:** Construct, Goblin, Elemental, Undead, Demon, Aberration, Dragon, Universal
+- **Card types:** Attack, Defense, Skill, Summon, Trap, Field, Direct, Overlay
+- **Overlay types:** Arcane, Divine, Infernal
+
+Keywords are **mechanical modifiers** that affect card behavior.
+
 ### CONSTRUCT KEYWORDS
 | Keyword | Effect |
 |---------|--------|
@@ -116,12 +123,20 @@ Three-cost structure: Cast / Trigger / Disarm / Persist. See Keyword System.
 | **Void** | Ignore defenses. 50% double damage. |
 | **Persist** | Effect continues across turns. |
 
-### OVERLAY KEYWORDS
+### OVERLAY TYPES (Not Keywords)
+Overlays have three types, stored in `overlay_type` field:
+- **Arcane** — Manipulates deck/hand. Cards return to bottom of deck. Cost +1 each replay.
+- **Divine** — Holy blessings. +1 Attention cost. +2 HP heal delayed.
+- **Infernal** — Health-for-power trade. +0 Attention. Adds 1 Corruption when cast.
+
+These are **not keywords** — they are overlay classification types.
+
+### KEYWORDS FOUND ON OVERLAYS (Mechanical Only)
 | Keyword | Effect |
 |---------|--------|
-| **Arcane** | -1 Attention (min 1). Returns to bottom of deck. Cost +1 each play. |
-| **Divine** | +1 Attention. +2 HP heal (delayed). |
-| **Infernal** | +0 Attention. Adds 1 Corruption when cast. |
+| **First** | Act before enemy actions. |
+| **Lifedrain** | Heal HP equal to damage dealt. |
+| **Persist** | Effect continues across turns. |
 
 ### UNIVERSAL KEYWORDS
 | Keyword | Effect |
