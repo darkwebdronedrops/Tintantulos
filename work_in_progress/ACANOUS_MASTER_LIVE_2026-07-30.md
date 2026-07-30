@@ -700,7 +700,58 @@ The Compiler fights by "optimizing" the player's deck against them:
 
 ## GEAR SYSTEM
 
-*[Preserved from original compile — see individual gear documentation]*
+Gear is equipped in four slots: Weapon, Armor, Shield, Trinket. Equipment is purchased with Quiddity/gems or found as loot. Each item has a floor requirement — must have reached that floor to equip.
+
+### Weapons (5)
+
+| ID | Name | Floor | Charge | Start Ready | Damage | Cost | Description |
+|----|------|-------|--------|-------------|--------|------|-------------|
+| goblin_shiv | Goblin Shiv | 1 | 2 | ✅ | 3-6 | 15 | A jagged blade that strikes fast. Ready to use immediately. |
+| gearwork_hammer | Gearwork Hammer | 3 | 3 | ❌ | 5-10 | 25 | Heavy and slow. Breaks shields. Needs time to wind up. |
+| aether_channel | Aether Channel | 5 | 4 | ✅ | 4-8 | 40 | Channels elemental force. Ignores block. Ready at start. |
+| pact_blade | Pact Blade | 7 | 5 | ❌ | 8-15 | 60 | Costs HP to swing. Heals if it kills. Dark power demands sacrifice. |
+| dragon_maw | Dragon Maw | 9 | 3 | ✅ | 6-12 | 80 | Strikes all enemies. Attention distributes the blow. |
+
+### Armor (5)
+
+| ID | Name | Floor | HP Bonus | Special | Cost | Description |
+|----|------|-------|----------|---------|------|-------------|
+| goblin_scrap | Goblin Scrap | 1 | +5 | +1 Quiddity per enemy kill | 10 | Stitched together from battlefield salvage. |
+| gearworks_plate | Gearworks Plate | 3 | +10 | Ignore first trap damage per floor | 20 | Reinforced with clockwork joints. |
+| aether_weave | Aether Weave | 5 | +15 | +1 card draw per turn | 35 | Woven from crystallized mana threads. |
+| pactbound_mail | Pactbound Mail | 7 | +20 | 50% resist first debuff per combat | 50 | Bound with infernal thread. Offers dark protection. |
+| dragonbone | Dragonbone | 9 | +30 | Survive first lethal hit per combat | 75 | Scales harder than steel. Regrows when broken. |
+
+### Shields (5)
+
+| ID | Name | Floor | Type | Block/Retributive | Cost | Description |
+|----|------|-------|------|-------------------|------|-------------|
+| rusty_targe | Rusty Targe | 1 | Block | 1 | 8 | Old but serviceable. Blocks 1 damage. |
+| gearshield | Gearshield | 3 | Retributive | 2 | 18 | Counter-rotating gears. Attacker takes 2 damage. |
+| aegis_bulwark | Aegis Bulwark | 5 | Block | 2 | 30 | Blocks 2 damage. Ignores first elemental hit. |
+| pactward | Pactward | 7 | Retributive | 3 | 45 | Dark mirror surface. Retributive + chance to debuff attacker. |
+| dragon_scale | Dragon Scale | 9 | Hybrid | 2/2 | 60 | Once per combat: negate any single hit entirely. |
+
+### Trinkets (10)
+
+| ID | Name | Faction | Cost | Effect |
+|----|------|---------|------|--------|
+| crystal_focus | Crystal Focus | Arcane | 20 | Spell cards cost 1 less Quiddity. Once per combat: free spell. |
+| blessed_relic | Blessed Relic | Divine | 20 | Healing +2. Once per floor: full heal outside combat. |
+| blood_chalice | Blood Chalice | Infernal | 20 | Lose 3 HP at combat start, gain 6 Quiddity. |
+| grasping_shroud | Grasping Shroud | Undead | 25 | Your deck IS your HP. Drawing costs HP. Reshuffle heals to full. |
+| assembly_core | Assembly Core | Construct | 20 | Start combat with free Assembly Drone summon. |
+| swarm_totem | Swarm Totem | Goblin | 15 | +1 max summons. Goblin summons +1 HP. |
+| catalyst_ring | Catalyst Ring | Elemental | 20 | Elemental cards charge 1 turn faster. |
+| veil_piercer | Veil Piercer | Aberration | 20 | See enemy intents 2 turns ahead. +2 Attention start. |
+| merchants_signet | Merchant's Signet | Universal | 15 | Shops on every floor. Items 25% cheaper. |
+| survivors_badge | Survivor's Badge | Universal | 15 | +5 max HP. Below 25% HP: gain 3 Block. |
+
+### Equipment Mechanics
+- **Equip:** Moves item from inventory to equipped slot. Armor changes recalculate max HP.
+- **Unequip:** Returns item to inventory. Armor unequip reduces max HP.
+- **Floor lock:** Items require having reached their floor number to equip.
+- **Charge system:** Weapons have a charge cooldown (turns between uses). Some start ready, others need to wind up.
 
 ---
 
