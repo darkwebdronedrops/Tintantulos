@@ -290,7 +290,7 @@ These are **not keywords** — they are overlay classification types.
 **Unique Features:**
 - Player weight calculation (affects dragon HP)
 - Dragon HP scales with player build
-- **Compiler Secret Boss:** If player deck reaches 60 cards, The Compiler awakens and replaces the Dragon
+- **Compiler Secret Boss:** If player deck reaches **50 cards**, The Compiler awakens and replaces the Dragon
 - Compiler mechanics: Debug (destroys cards), Memory Leak (converts Quiddity to damage), Stack Overflow (spawns copies of your cards), Garbage Collection (removes most powerful cards)
 - **Implemented:** ✅ Complete
 
@@ -357,7 +357,7 @@ Dialogue and notifications wrapped in CanvasLayer (screen-locked, follows camera
 ## SPECIAL MECHANICS
 
 ### The Compiler (Secret Boss)
-- **Trigger:** Deck reaches 60 cards
+- **Trigger:** Deck reaches **50 cards** (weighted count, GameState.deck_max_size)
 - **Effect:** Replaces Dragon at Floor 10
 - **Mechanics:** Debug, Memory Leak, Stack Overflow, Garbage Collection
 - **Visual:** Towering construct of glowing code and shifting cards
