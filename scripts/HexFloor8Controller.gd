@@ -552,6 +552,23 @@ func _setup_post_combat_ui():
 	else:
 		push_warning("[Floor8-Hex] PostCombatUI scene not found!")
 
+func _setup_machinist_shop():
+	"""Setup the Machinist's tabbed shop (equipment, overlays, consumables, upgrades)."""
+	machinist_shop = MachinistShopUI.new()
+	machinist_shop.name = "MachinistShopUI"
+	add_child(machinist_shop)
+	machinist_shop.shop_closed.connect(_on_machinist_shop_closed)
+	print("[Floor8-Hex] MachinistShopUI ready")
+
+func _open_machinist_shop():
+	in_ui = true
+	machinist_shop.show_shop()
+	print("[Floor8-Hex] Machinist shop opened")
+
+func _on_machinist_shop_closed():
+	in_ui = false
+	print("[Floor8-Hex] Machinist shop closed")
+
 func _setup_enemies():
 	enemy_container = Node2D.new()
 	enemy_container.name = "EnemyContainer"
@@ -1652,7 +1669,7 @@ func _interact_at_hex(hex: Vector2i):
 	var obj_id = _get_object_id_at_hex(hex)
 	match obj_id:
 		"shop_save":
-			_open_shop()
+			_open_machinist_shop()
 			_save_game()
 		"vessel":
 			_show_vessel_menu()
@@ -1663,7 +1680,7 @@ func _interact_at_hex(hex: Vector2i):
 			_show_dialogue("Goblin Leader", "Listen up, greenskins!\nWe work together, we live together!\nAnyone flees, I PERSONALLY feed them to the reactor!\n...it's a good motivator.")
 			_boost_goblin_morale(15)
 		"goblin_resting":
-			_open_shop()
+			_open_machinist_shop()
 		"charge_station":
 			_spend_elemental_charge_at_station()
 		"overclock_monitor":
@@ -1721,129 +1738,6 @@ func _spend_elemental_charge_at_station():
 		"water": _show_notification("💧 Water heal! +%d HP!" % consumed, Color(0.2, 0.5, 0.9))
 		"earth": _show_notification("🪨 Earth shield! +%d armor!" % (consumed * 3), Color(0.6, 0.4, 0.2))
 		"air": _show_notification("🌪️ Air speed! +%d moves!" % consumed, Color(0.7, 0.8, 0.9))
-
-func _open_shop():
-	var discount = _get_shop_discount()
-	in_ui = true
-	
-	var shop_ui = Control.new()
-	shop_ui.name = "ShopUI"
-	shop_ui.z_index = 200
-	# Wrap shop in CanvasLayer for screen-space rendering
-	var shop_canvas = CanvasLayer.new()
-	shop_canvas.name = "ShopCanvas"
-	shop_canvas.layer = 100
-	add_child(shop_canvas)
-	shop_canvas.add_child(shop_ui)
-	
-	# Background
-	var bg = ColorRect.new()
-	bg.color = Color(0.08, 0.02, 0.02, 0.92)
-	bg.size = Vector2(1280, 720)
-	shop_ui.add_child(bg)
-	
-	var panel = PanelContainer.new()
-	panel.size = Vector2(700, 550)
-	panel.position = Vector2(290, 85)
-	shop_ui.add_child(panel)
-	
-	var vbox = VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 16)
-	panel.add_child(vbox)
-	
-	# Header
-	var header = HBoxContainer.new()
-	vbox.add_child(header)
-	
-	var title = Label.new()
-	title.text = "🔥 Infernal Overlay Foundry 🔥"
-	if discount < 1.0:
-		title.text += " (Goblin Discount: %.0f%% OFF!)" % ((1.0 - discount) * 100)
-	title.add_theme_font_size_override("font_size", 24)
-	title.add_theme_color_override("font_color", Color(0.9, 0.2, 0.1))
-	header.add_child(title)
-	
-	var gems_label = Label.new()
-	gems_label.name = "GemsLabel"
-	gems_label.text = "Gems: %d💎" % GameState.gems
-	gems_label.add_theme_font_size_override("font_size", 18)
-	gems_label.add_theme_color_override("font_color", Color(0.9, 0.7, 0.3))
-	header.add_child(gems_label)
-	
-	# Infernal overlay stock
-	var shop_items = [
-		{"card_id": "Overlay_infernal_bolt", "cost": int(20 * discount), "name": "Infernal Bolt", "desc": "0-cost Overlay: Deal 4 fire damage, burn 1"},
-		{"card_id": "Overlay_infernal_shield", "cost": int(20 * discount), "name": "Infernal Shield", "desc": "0-cost Overlay: Gain 5 shield, reflect 1 fire"},
-		{"card_id": "Overlay_infernal_pact", "cost": int(22 * discount), "name": "Infernal Pact", "desc": "0-cost Overlay: Draw 2, take 2 damage"},
-		{"card_id": "Overlay_infernal_echo", "cost": int(25 * discount), "name": "Infernal Echo", "desc": "0-cost Overlay: Next attack hits twice"},
-		{"card_id": "Overlay_infernal_surge", "cost": int(22 * discount), "name": "Infernal Surge", "desc": "0-cost Overlay: All enemies take 2 fire"},
-		{"card_id": "Overlay_infernal_resonance", "cost": int(25 * discount), "name": "Infernal Resonance", "desc": "0-cost Overlay: Double next damage dealt"},
-		{"card_id": "Overlay_infernal_wrath", "cost": int(30 * discount), "name": "Infernal Wrath", "desc": "0-cost Overlay: Deal 6 to all, ignore shield"},
-		{"card_id": "Overlay_infernal_overload", "cost": int(30 * discount), "name": "Infernal Overload", "desc": "0-cost Overlay: Sacrifice 3 HP, deal 8 damage"},
-	]
-	
-	var grid = GridContainer.new()
-	grid.columns = 2
-	vbox.add_child(grid)
-	
-	for i in range(shop_items.size()):
-		var item = shop_items[i]
-		var slot = _create_infernal_shop_slot(i, item, gems_label, shop_ui)
-		grid.add_child(slot)
-	
-	var close_btn = Button.new()
-	close_btn.text = "Leave Shop"
-	close_btn.pressed.connect(func(): _close_infernal_shop(shop_ui))
-	vbox.add_child(close_btn)
-
-func _create_infernal_shop_slot(index: int, item: Dictionary, gems_label: Label, shop_ui: Control) -> PanelContainer:
-	var slot = PanelContainer.new()
-	
-	var vbox = VBoxContainer.new()
-	slot.add_child(vbox)
-	
-	var name_label = Label.new()
-	name_label.text = item["name"]
-	name_label.add_theme_font_size_override("font_size", 16)
-	vbox.add_child(name_label)
-	
-	var desc_label = Label.new()
-	desc_label.text = item["desc"]
-	desc_label.add_theme_font_size_override("font_size", 12)
-	vbox.add_child(desc_label)
-	
-	var cost_label = Label.new()
-	cost_label.text = "%d💎" % item["cost"]
-	cost_label.add_theme_color_override("font_color", Color(0.9, 0.7, 0.3))
-	vbox.add_child(cost_label)
-	
-	var buy_btn = Button.new()
-	buy_btn.text = "Buy"
-	buy_btn.disabled = GameState.gems < item["cost"]
-	buy_btn.pressed.connect(func(): _on_buy_infernal(item, gems_label, shop_ui))
-	vbox.add_child(buy_btn)
-	
-	return slot
-
-func _on_buy_infernal(item: Dictionary, gems_label: Label, shop_ui: Control):
-	if GameState.gems < item["cost"]:
-		_show_notification("Not enough gems!", Color(0.9, 0.3, 0.3), 2.0)
-		return
-	
-	GameState.gems -= item["cost"]
-	gems_label.text = "Gems: %d💎" % GameState.gems
-	
-	var card = CardDB.get_card(item["card_id"])
-	if card:
-		GameState.player_deck.append(card)
-		AudioManager.play_sfx("buy_item")
-		_show_notification("Purchased: %s!" % item["name"], Color(0.9, 0.2, 0.1), 2.0)
-	else:
-		_show_notification("Card not found: %s" % item["card_id"], Color(0.9, 0.3, 0.3), 2.0)
-
-func _close_infernal_shop(shop_ui: Control):
-	in_ui = false
-	shop_ui.queue_free()
 
 func _save_game():
 	if GameState.has_method("save_game"):
@@ -2013,6 +1907,7 @@ func _process(_delta: float):
 			combat_manager.process(_delta)
 		var ui = get_node_or_null("CombatUI")
 var post_combat_ui: PostCombatUI
+var machinist_shop: MachinistShopUI
 		if ui and ui.has_method("process"):
 			ui.process(_delta)
 

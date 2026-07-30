@@ -204,6 +204,23 @@ func _setup_post_combat_ui():
 	else:
 		push_warning("[Floor4-Hex] PostCombatUI scene not found!")
 
+func _setup_machinist_shop():
+	"""Setup the Machinist's tabbed shop (equipment, overlays, consumables, upgrades)."""
+	machinist_shop = MachinistShopUI.new()
+	machinist_shop.name = "MachinistShopUI"
+	add_child(machinist_shop)
+	machinist_shop.shop_closed.connect(_on_machinist_shop_closed)
+	print("[Floor4-Hex] MachinistShopUI ready")
+
+func _open_machinist_shop():
+	in_ui = true
+	machinist_shop.show_shop()
+	print("[Floor4-Hex] Machinist shop opened")
+
+func _on_machinist_shop_closed():
+	in_ui = false
+	print("[Floor4-Hex] Machinist shop closed")
+
 func _setup_enemies():
 	"""Spawn enemies on the hex grid for each level."""
 	enemy_container = Node2D.new()
@@ -955,7 +972,7 @@ func _enter_booth(booth_id: String):
 	
 	if booth_id in real_vendors:
 		_show_dialogue("Vendor", "Welcome to %s!" % booth_name)
-		_open_shop()
+		_open_machinist_shop()
 	else:
 		_show_dialogue("Trap", "It's a trap! %s attacks!" % booth_name)
 		_trigger_trap_combat(booth_id)
@@ -1005,126 +1022,6 @@ func _get_booth_display_name(booth_id: String) -> String:
 		"booth_10": return "The Sample Crier"
 		"booth_11": return "The Reflection Salon"
 		_: return "Unknown Booth"
-
-func _open_shop():
-	in_ui = true
-	
-	var shop_ui = Control.new()
-	shop_ui.name = "ShopUI"
-	shop_ui.z_index = 200
-	# Wrap shop in CanvasLayer for screen-space rendering
-	var shop_canvas = CanvasLayer.new()
-	shop_canvas.name = "ShopCanvas"
-	shop_canvas.layer = 100
-	add_child(shop_canvas)
-	shop_canvas.add_child(shop_ui)
-	
-	# Background
-	var bg = ColorRect.new()
-	bg.color = Color(0.05, 0.05, 0.08, 0.92)
-	bg.size = Vector2(1280, 720)
-	shop_ui.add_child(bg)
-	
-	var panel = PanelContainer.new()
-	panel.size = Vector2(700, 550)
-	panel.position = Vector2(290, 85)
-	shop_ui.add_child(panel)
-	
-	var vbox = VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 16)
-	panel.add_child(vbox)
-	
-	# Header
-	var header = HBoxContainer.new()
-	vbox.add_child(header)
-	
-	var title = Label.new()
-	title.text = "✦ Arcane Overlay Emporium ✦"
-	title.add_theme_font_size_override("font_size", 24)
-	title.add_theme_color_override("font_color", Color(0.6, 0.4, 0.9))
-	header.add_child(title)
-	
-	var gems_label = Label.new()
-	gems_label.name = "GemsLabel"
-	gems_label.text = "Gems: %d💎" % GameState.gems
-	gems_label.add_theme_font_size_override("font_size", 18)
-	gems_label.add_theme_color_override("font_color", Color(0.9, 0.7, 0.3))
-	header.add_child(gems_label)
-	
-	# Arcane overlay stock
-	var shop_items = [
-		{"card_id": "Overlay_arcane_bolt", "cost": 15, "name": "Arcane Bolt", "desc": "0-cost Overlay: Deal 3 arcane damage"},
-		{"card_id": "Overlay_arcane_shield", "cost": 15, "name": "Arcane Shield", "desc": "0-cost Overlay: Gain 4 shield"},
-		{"card_id": "Overlay_arcane_infusion", "cost": 18, "name": "Arcane Infusion", "desc": "0-cost Overlay: Next card +2 damage"},
-		{"card_id": "Overlay_arcane_echo", "cost": 20, "name": "Arcane Echo", "desc": "0-cost Overlay: Copy last card played"},
-		{"card_id": "Overlay_arcane_surge", "cost": 18, "name": "Arcane Surge", "desc": "0-cost Overlay: Draw 2, discard 1"},
-		{"card_id": "Overlay_arcane_weave", "cost": 22, "name": "Arcane Weave", "desc": "0-cost Overlay: All attacks this turn pierce"},
-		{"card_id": "Overlay_arcane_resonance", "cost": 20, "name": "Arcane Resonance", "desc": "0-cost Overlay: Double next spell damage"},
-		{"card_id": "Overlay_arcane_overload", "cost": 25, "name": "Arcane Overload", "desc": "0-cost Overlay: Deal 5 to ALL enemies"},
-	]
-	
-	var grid = GridContainer.new()
-	grid.columns = 2
-	vbox.add_child(grid)
-	
-	for i in range(shop_items.size()):
-		var item = shop_items[i]
-		var slot = _create_shop_slot(i, item, gems_label, shop_ui)
-		grid.add_child(slot)
-	
-	var close_btn = Button.new()
-	close_btn.text = "Leave Shop"
-	close_btn.pressed.connect(func(): _close_shop(shop_ui))
-	vbox.add_child(close_btn)
-
-func _create_shop_slot(index: int, item: Dictionary, gems_label: Label, shop_ui: Control) -> PanelContainer:
-	var slot = PanelContainer.new()
-	
-	var vbox = VBoxContainer.new()
-	slot.add_child(vbox)
-	
-	var name_label = Label.new()
-	name_label.text = item["name"]
-	name_label.add_theme_font_size_override("font_size", 16)
-	vbox.add_child(name_label)
-	
-	var desc_label = Label.new()
-	desc_label.text = item["desc"]
-	desc_label.add_theme_font_size_override("font_size", 12)
-	vbox.add_child(desc_label)
-	
-	var cost_label = Label.new()
-	cost_label.text = "%d💎" % item["cost"]
-	cost_label.add_theme_color_override("font_color", Color(0.9, 0.7, 0.3))
-	vbox.add_child(cost_label)
-	
-	var buy_btn = Button.new()
-	buy_btn.text = "Buy"
-	buy_btn.disabled = GameState.gems < item["cost"]
-	buy_btn.pressed.connect(func(): _on_buy_overlay(item, gems_label, shop_ui))
-	vbox.add_child(buy_btn)
-	
-	return slot
-
-func _on_buy_overlay(item: Dictionary, gems_label: Label, shop_ui: Control):
-	if GameState.gems < item["cost"]:
-		_show_notification("Not enough gems!", Color(0.9, 0.3, 0.3), 2.0)
-		return
-	
-	GameState.gems -= item["cost"]
-	gems_label.text = "Gems: %d💎" % GameState.gems
-	
-	var card = CardDB.get_card(item["card_id"])
-	if card:
-		GameState.player_deck.append(card)
-		AudioManager.play_sfx("buy_item")
-		_show_notification("Purchased: %s!" % item["name"], Color(0.6, 0.4, 0.9), 2.0)
-	else:
-		_show_notification("Card not found: %s" % item["card_id"], Color(0.9, 0.3, 0.3), 2.0)
-
-func _close_shop(shop_ui: Control):
-	in_ui = false
-	shop_ui.queue_free()
 
 # ===================================================================
 # AETHER SLICK
@@ -1254,6 +1151,7 @@ func _process(_delta: float):
 		if animator and animator.has_meta("move_timer"):
 			var timer = animator.get_meta("move_timer") - _delta
 var post_combat_ui: PostCombatUI
+var machinist_shop: MachinistShopUI
 			if timer <= 0:
 				animator.play_idle()
 				animator.set_meta("move_timer", 0.0)

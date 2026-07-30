@@ -48,8 +48,6 @@ var light_beam_widgets: Array[Dictionary] = []
 var light_beam_active: bool = false
 
 # Machinist Shop
-var in_shop: bool = false
-var shop_ui: Control
 
 # Combat
 var hex_enemies: Array[HexEnemy] = []
@@ -405,6 +403,23 @@ func _setup_post_combat_ui():
 		print("[Floor3-Hex] PostCombatUI ready")
 	else:
 		push_warning("[Floor3-Hex] PostCombatUI scene not found!")
+
+func _setup_machinist_shop():
+	"""Setup the Machinist's tabbed shop (equipment, overlays, consumables, upgrades)."""
+	machinist_shop = MachinistShopUI.new()
+	machinist_shop.name = "MachinistShopUI"
+	add_child(machinist_shop)
+	machinist_shop.shop_closed.connect(_on_machinist_shop_closed)
+	print("[Floor3-Hex] MachinistShopUI ready")
+
+func _open_machinist_shop():
+	in_ui = true
+	machinist_shop.show_shop()
+	print("[Floor3-Hex] Machinist shop opened")
+
+func _on_machinist_shop_closed():
+	in_ui = false
+	print("[Floor3-Hex] Machinist shop closed")
 
 func _setup_enemies():
     enemy_container = Node2D.new()
@@ -807,124 +822,6 @@ func _light_beam_complete():
 # MACHINIST SHOP
 # ===================================================================
 
-func _setup_machinist_shop():
-	shop_ui = Control.new()
-	shop_ui.name = "ShopUI"
-	shop_ui.visible = false
-	shop_ui.z_index = 200
-	shop_ui.size = Vector2(600, 400)
-	shop_ui.position = Vector2(340, 160)
-	
-	# Wrap in CanvasLayer for screen-space rendering
-	var shop_canvas = CanvasLayer.new()
-	shop_canvas.name = "ShopCanvas"
-	shop_canvas.layer = 100
-	add_child(shop_canvas)
-	shop_canvas.add_child(shop_ui)
-    
-    # Shop title
-    var title = Label.new()
-    title.text = "🔧 Machinist's Shop"
-    title.add_theme_font_size_override("font_size", 28)
-    title.position = Vector2(150, 20)
-    shop_ui.add_child(title)
-    
-    # Gold display (uses gems)
-    var gems_label = Label.new()
-    gems_label.name = "GoldLabel"
-    gems_label.text = "Gems: %d💎" % GameState.gems
-    gems_label.add_theme_font_size_override("font_size", 18)
-    gems_label.add_theme_color_override("font_color", Color(0.9, 0.8, 0.3))
-    gems_label.position = Vector2(420, 30)
-    shop_ui.add_child(gems_label)
-    
-    # Shop stock items - all valid cards from CardDB
-    var shop_items = [
-        {"card_id": "Construct_efficient_block", "cost": 8, "name": "Efficient Block", "desc": "1-cost: Block 3, Draw 1"},
-        {"card_id": "Construct_gear_shield", "cost": 10, "name": "Gear Shield", "desc": "1-cost: Block 4, Trap 1 dmg when attacked"},
-        {"card_id": "Construct_clockwork_tick", "cost": 12, "name": "Clockwork Tick", "desc": "2-cost: Summon 2 ticks that deal 1 dmg each turn"},
-        {"card_id": "Construct_overclock", "cost": 15, "name": "Overclock", "desc": "2-cost: Next attack +50% damage"},
-        {"card_id": "Construct_torque_strike", "cost": 12, "name": "Torque Strike", "desc": "2-cost: Deal 4-6 damage, ignore 2 shield"},
-        {"card_id": "Construct_precision_bolt", "cost": 10, "name": "Precision Bolt", "desc": "1-cost: Deal 3 damage, +1 if target has shield"},
-        {"card_id": "Construct_turret_deployment", "cost": 15, "name": "Turret Deploy", "desc": "2-cost: Summon turret (2 atk, 8 hp)"},
-        {"card_id": "Construct_assembly_drone", "cost": 18, "name": "Assembly Drone", "desc": "3-cost: Summon drone (3 atk, 10 hp)"},
-        {"card_id": "Universal_fortify", "cost": 10, "name": "Fortify", "desc": "2-cost: Gain 5 shield"},
-        {"card_id": "Universal_cleanse", "cost": 10, "name": "Cleanse", "desc": "2-cost: Heal 3, remove debuffs"},
-    ]
-    
-    for i in range(shop_items.size()):
-        var item = shop_items[i]
-        var row = i / 2
-        var col = i % 2
-        var x = 30 + col * 280
-        var y = 80 + row * 70
-        
-        var btn = Button.new()
-        btn.name = "ShopItem_%d" % i
-        btn.text = "%s\n%d Gold" % [item["name"], item["cost"]]
-        btn.position = Vector2(x, y)
-        btn.size = Vector2(260, 60)
-        btn.add_theme_font_size_override("font_size", 14)
-        
-        # Store item data in button metadata
-        btn.set_meta("item_data", item)
-        
-        btn.pressed.connect(func(): _buy_shop_item(item, gems_label))
-        shop_ui.add_child(btn)
-    
-    # Close button
-    var close_btn = Button.new()
-    close_btn.text = "Close [ESC]"
-    close_btn.position = Vector2(230, 350)
-    close_btn.size = Vector2(140, 40)
-    close_btn.pressed.connect(_close_machinist_shop)
-    shop_ui.add_child(close_btn)
-    
-    # Background panel
-    var bg = ColorRect.new()
-    bg.color = Color(0.1, 0.1, 0.15, 0.95)
-    bg.size = Vector2(600, 400)
-    bg.position = Vector2(0, 0)
-    shop_ui.add_child(bg)
-    shop_ui.move_child(bg, 0)
-
-func _buy_shop_item(item: Dictionary, gems_label: Label):
-    var gems = GameState.gems
-    if gems < item["cost"]:
-        _show_notification("Not enough gems! Need %d💎" % item["cost"], Color(0.9, 0.3, 0.3), 2.0)
-        return
-    
-    # Deduct gems
-    GameState.gems -= item["cost"]
-    gems_label.text = "Gems: %d💎" % GameState.gems
-    
-    # Add card to deck
-    var card = CardDB.get_card(item["card_id"])
-    if card:
-        GameState.player_deck.append(card)
-        AudioManager.play_sfx("buy_item")
-        _show_notification("Purchased: %s!" % item["name"], Color(0.3, 0.9, 0.3), 2.0)
-    else:
-        _show_notification("Card not found: %s" % item["card_id"], Color(0.9, 0.3, 0.3), 2.0)
-
-func _open_machinist_shop():
-    in_shop = true
-    in_ui = true
-    shop_ui.visible = true
-    
-    # Update gems display
-    var gems_label = shop_ui.get_node_or_null("GoldLabel")
-    if gems_label:
-        gems_label.text = "Gems: %d💎" % GameState.gems
-    
-    _show_notification("🔧 Machinist Shop: Buy gear upgrades!", Color(0.3, 0.9, 0.3), 3.0)
-
-func _close_machinist_shop():
-    in_shop = false
-    in_ui = false
-    shop_ui.visible = false
-
-
 # ===================================================================
 # UI
 # ===================================================================
@@ -993,6 +890,7 @@ func _floor_complete():
 func _show_floor_transition_prompt():
     var prompt = Label.new()
 var post_combat_ui: PostCombatUI
+var machinist_shop: MachinistShopUI
     prompt.name = "FloorTransitionPrompt"
     prompt.text = "Press [S] to Ascend to Floor 4 — The Curio Bazaar"
     prompt.position = Vector2(640, 600)
