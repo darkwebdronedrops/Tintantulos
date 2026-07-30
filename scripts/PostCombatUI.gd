@@ -149,7 +149,43 @@ func _calculate_card_cost(card: CardData) -> int:
 	
 	return clamp(cost, 1, 20)
 
-func _calculate_burn_value(card: CardData) -> int:
+func _calculate_imbue_cost(card: CardData) -> int:
+	"""Calculate gem cost to imbue a card based on its power."""
+	var cost = 5  # Base cost
+	
+	# Scale with existing keywords (more powerful cards = more expensive)
+	cost += card.keywords.size() * 2
+	
+	# Scale with card stats
+	if card.damage_flat > 0:
+		cost += card.damage_flat / 3
+	if card.uses_dice:
+		cost += 3
+	if card.shield_amount > 0:
+		cost += card.shield_amount / 5
+	if card.heal_amount > 0:
+		cost += card.heal_amount / 5
+	if card.summon_count > 0:
+		cost += card.summon_count * 2
+	
+	# Faction cards (already have a faction) are cheaper to upgrade
+	if card.faction != "Universal" and not card.faction.is_empty():
+		cost = max(3, cost - 2)
+	
+	return clamp(cost, 3, 15)
+
+func _can_imbue_card(card: CardData) -> bool:
+	"""Check if card can receive more imbued keywords."""
+	# Count non-faction keywords (purchased upgrades)
+	var upgrade_count = 0
+	var base_faction = card.faction.to_lower()
+	for kw in card.keywords:
+		if kw != base_faction and not kw.is_empty():
+			upgrade_count += 1
+	
+	# Universal cards: max 2 upgrades
+	# Faction cards: max 2 upgrades (they already have base faction)
+	return upgrade_count < 2
 	"""Calculate gems earned when burning a card."""
 	return GameState._calculate_card_gem_value(card)
 
@@ -271,7 +307,7 @@ func _create_upgrade_section() -> VBoxContainer:
 	
 	# Section label
 	var label = Label.new()
-	label.text = "Imbue cards with %s essence (5💎 each):" % current_faction
+	label.text = "Imbue cards with %s essence:" % current_faction
 	label.add_theme_font_size_override("font_size", 14)
 	label.add_theme_color_override("font_color", _get_faction_color(current_faction))
 	section.add_child(label)
@@ -291,6 +327,9 @@ func _create_upgrade_section() -> VBoxContainer:
 		# Skip if already has this faction keyword
 		if card.faction == current_faction or card.keywords.has(current_faction.to_lower()):
 			continue
+		# Skip if already at upgrade limit
+		if not _can_imbue_card(card):
+			continue
 		# Skip already upgraded in this session
 		if upgraded_cards.has(card.id):
 			continue
@@ -301,7 +340,7 @@ func _create_upgrade_section() -> VBoxContainer:
 	
 	if shown == 0:
 		var none_label = Label.new()
-		none_label.text = "No cards available for imbuing."
+		none_label.text = "No cards available for imbuing (max 2 upgrades per card)."
 		none_label.add_theme_font_size_override("font_size", 11)
 		none_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 		section.add_child(none_label)
@@ -333,6 +372,15 @@ func _create_upgrade_panel(index: int, card: CardData) -> PanelContainer:
 		kw_label.add_theme_color_override("font_color", Color(0.5, 0.6, 0.7))
 		vbox.add_child(kw_label)
 	
+	# Cost
+	var cost = _calculate_imbue_cost(card)
+	var cost_label = Label.new()
+	cost_label.text = "Cost: %d💎" % cost
+	cost_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	cost_label.add_theme_font_size_override("font_size", 10)
+	cost_label.add_theme_color_override("font_color", Color(0.9, 0.7, 0.3))
+	vbox.add_child(cost_label)
+	
 	# Spacer
 	var spacer = Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -340,9 +388,9 @@ func _create_upgrade_panel(index: int, card: CardData) -> PanelContainer:
 	
 	# Imbue button
 	var imbue_btn = Button.new()
-	imbue_btn.text = "Imbue %s (5💎)" % current_faction
-	imbue_btn.disabled = GameState.gems < 5
-	imbue_btn.pressed.connect(_on_imbue_card.bind(index, card.id))
+	imbue_btn.text = "Imbue %s" % current_faction
+	imbue_btn.disabled = GameState.gems < cost
+	imbue_btn.pressed.connect(_on_imbue_card.bind(index, card.id, cost))
 	vbox.add_child(imbue_btn)
 	
 	return panel
@@ -683,10 +731,10 @@ func _disable_all_burn_buttons():
 				burn_btn.disabled = true
 				burn_btn.text = "Burned"
 
-func _on_imbue_card(index: int, card_id: String):
+func _on_imbue_card(index: int, card_id: String, cost: int):
 	"""Add faction keyword to a card, spending gems."""
-	if GameState.gems < 5:
-		_show_notification("Not enough gems! Need 5💎", Color(0.9, 0.5, 0.2))
+	if GameState.gems < cost:
+		_show_notification("Not enough gems! Need %d💎" % cost, Color(0.9, 0.5, 0.2))
 		return
 	
 	var card = CardDB.get_card(card_id)
