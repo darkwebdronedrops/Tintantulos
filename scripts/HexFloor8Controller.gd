@@ -172,6 +172,7 @@ func _build_floor():
 	_setup_ui()
 	_setup_player()
 	_setup_enemies()
+	_setup_post_combat_ui()  # Post-combat reward screen
 	_setup_floor_specific()
 	
 	AudioManager.play_floor_ambient(8)
@@ -439,12 +440,36 @@ func _start_combat(encounter_type: String):
 
 func _on_combat_ended(victory: bool):
 	in_combat = false
+		
+		# Capture defeated faction BEFORE cleanup
+		var defeated_faction = ""
+		for enemy in hex_enemies:
+			if enemy.state == HexEnemy.State.IN_COMBAT and enemy.hp <= 0:
+				defeated_faction = enemy.faction
+				break
+		
+		# Show overworld UI again
+		var main_ui = get_node_or_null("MainUI")
+		if main_ui:
+			main_ui.visible = true
+		
 	AudioManager.play_floor_ambient(8)
 	var ui = get_node_or_null("CombatUI")
 	if ui:
 		ui.visible = false
 	if victory:
 		room_cleared[current_room_id] = true
+
+				# Show post-combat reward UI
+				if post_combat_ui:
+					var quiddity_earned = 0
+					var combat_manager = get_node_or_null("CombatManager")
+					if combat_manager:
+						quiddity_earned = combat_manager.quiddity_this_combat
+					post_combat_ui.show_post_combat(true, quiddity_earned, defeated_faction)
+					in_ui = true
+					print("[Floor8-Hex] Post-combat UI shown, faction: %s" % defeated_faction)
+					return  # Wait for ui_closed signal
 		if current_room_id == "control_room":
 			_show_notification("⚡ CHIEF ENGINEER BLIX DEFEATED!", Color(0.9, 0.9, 0.3))
 			GameState.add_card_to_deck("chief_engineer_blix")
@@ -513,6 +538,19 @@ func _check_hazard_rewards():
 # ===================================================================
 # ENEMIES
 # ===================================================================
+
+
+func _setup_post_combat_ui():
+	"""Setup the post-combat reward UI."""
+	var post_combat_scene = load("res://scenes/PostCombatUI.tscn")
+	if post_combat_scene:
+		post_combat_ui = post_combat_scene.instantiate()
+		add_child(post_combat_ui)
+		post_combat_ui.visible = false
+		post_combat_ui.ui_closed.connect(_on_post_combat_closed)
+		print("[Floor8-Hex] PostCombatUI ready")
+	else:
+		push_warning("[Floor8-Hex] PostCombatUI scene not found!")
 
 func _setup_enemies():
 	enemy_container = Node2D.new()
@@ -1969,5 +2007,11 @@ func _process(_delta: float):
 		if combat_manager and combat_manager.has_method("process"):
 			combat_manager.process(_delta)
 		var ui = get_node_or_null("CombatUI")
+var post_combat_ui: PostCombatUI
 		if ui and ui.has_method("process"):
 			ui.process(_delta)
+
+func _on_post_combat_closed():
+	in_ui = false
+	print("[Floor8-Hex] Post-combat closed, resuming")
+

@@ -362,6 +362,19 @@ func _build_enemy_list(encounter_type: String, room_id: String = "") -> Dictiona
 
 func _on_combat_ended(player_won: bool):
     in_combat = false
+    	
+    	# Capture defeated faction BEFORE cleanup
+    	var defeated_faction = ""
+    	for enemy in hex_enemies:
+    		if enemy.state == HexEnemy.State.IN_COMBAT and enemy.hp <= 0:
+    			defeated_faction = enemy.faction
+    			break
+    	
+    	# Show overworld UI again
+    	var main_ui = get_node_or_null("MainUI")
+    	if main_ui:
+    		main_ui.visible = true
+    	
     var ui = get_node_or_null("CombatUI")
     if ui:
         ui.visible = false
@@ -379,6 +392,19 @@ func _on_combat_ended(player_won: bool):
 # ===================================================================
 # ENEMIES
 # ===================================================================
+
+
+func _setup_post_combat_ui():
+	"""Setup the post-combat reward UI."""
+	var post_combat_scene = load("res://scenes/PostCombatUI.tscn")
+	if post_combat_scene:
+		post_combat_ui = post_combat_scene.instantiate()
+		add_child(post_combat_ui)
+		post_combat_ui.visible = false
+		post_combat_ui.ui_closed.connect(_on_post_combat_closed)
+		print("[Floor3-Hex] PostCombatUI ready")
+	else:
+		push_warning("[Floor3-Hex] PostCombatUI scene not found!")
 
 func _setup_enemies():
     enemy_container = Node2D.new()
@@ -960,6 +986,7 @@ func _floor_complete():
 
 func _show_floor_transition_prompt():
     var prompt = Label.new()
+var post_combat_ui: PostCombatUI
     prompt.name = "FloorTransitionPrompt"
     prompt.text = "Press [S] to Ascend to Floor 4 — The Curio Bazaar"
     prompt.position = Vector2(640, 600)
@@ -968,3 +995,8 @@ func _show_floor_transition_prompt():
     prompt.add_theme_font_size_override("font_size", 20)
     prompt.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3))
     add_child(prompt)
+
+func _on_post_combat_closed():
+	in_ui = false
+	print("[Floor3-Hex] Post-combat closed, resuming")
+

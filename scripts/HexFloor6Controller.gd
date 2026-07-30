@@ -173,6 +173,7 @@ func _build_floor():
 	_setup_ui()
 	_setup_player()
 	_setup_enemies()
+	_setup_post_combat_ui()  # Post-combat reward screen
 	_setup_npcs()
 	_setup_floor_specific()
 	
@@ -442,6 +443,19 @@ func _setup_player():
 # ENEMIES
 # ===================================================================
 
+
+func _setup_post_combat_ui():
+	"""Setup the post-combat reward UI."""
+	var post_combat_scene = load("res://scenes/PostCombatUI.tscn")
+	if post_combat_scene:
+		post_combat_ui = post_combat_scene.instantiate()
+		add_child(post_combat_ui)
+		post_combat_ui.visible = false
+		post_combat_ui.ui_closed.connect(_on_post_combat_closed)
+		print("[Floor6-Hex] PostCombatUI ready")
+	else:
+		push_warning("[Floor6-Hex] PostCombatUI scene not found!")
+
 func _setup_enemies():
 	"""Spawn enemies on the hex grid for each room."""
 	enemy_container = Node2D.new()
@@ -611,6 +625,19 @@ func _spawn_enemies(enemy_names: Array[String]) -> Array[CombatManager.EnemyData
 
 func _on_combat_ended(victory: bool):
 	in_combat = false
+		
+		# Capture defeated faction BEFORE cleanup
+		var defeated_faction = ""
+		for enemy in hex_enemies:
+			if enemy.state == HexEnemy.State.IN_COMBAT and enemy.hp <= 0:
+				defeated_faction = enemy.faction
+				break
+		
+		# Show overworld UI again
+		var main_ui = get_node_or_null("MainUI")
+		if main_ui:
+			main_ui.visible = true
+		
 	AudioManager.play_floor_ambient(6)
 	
 	# Reset surviving enemies to unaware, clean up dead ones
@@ -634,6 +661,17 @@ func _on_combat_ended(victory: bool):
 	
 	if victory:
 		room_cleared[current_room_id] = true
+
+				# Show post-combat reward UI
+				if post_combat_ui:
+					var quiddity_earned = 0
+					var combat_manager = get_node_or_null("CombatManager")
+					if combat_manager:
+						quiddity_earned = combat_manager.quiddity_this_combat
+					post_combat_ui.show_post_combat(true, quiddity_earned, defeated_faction)
+					in_ui = true
+					print("[Floor6-Hex] Post-combat UI shown, faction: %s" % defeated_faction)
+					return  # Wait for ui_closed signal
 		print("[Floor6-Hex] Room cleared: %s" % current_room_id)
 		
 		# Check faction kills for course progress
@@ -657,6 +695,19 @@ func _on_combat_ended(victory: bool):
 			enemy.reset_after_combat()
 	
 	professor_defeated_in_combat = false
+		
+		# Capture defeated faction BEFORE cleanup
+		var defeated_faction = ""
+		for enemy in hex_enemies:
+			if enemy.state == HexEnemy.State.IN_COMBAT and enemy.hp <= 0:
+				defeated_faction = enemy.faction
+				break
+		
+		# Show overworld UI again
+		var main_ui = get_node_or_null("MainUI")
+		if main_ui:
+			main_ui.visible = true
+		
 
 func _on_enemy_combat_initiated(ambush: bool):
 	"""Called when an enemy initiates or is ambushed into combat."""
@@ -2220,6 +2271,7 @@ func _process(_delta: float):
 		var animator = player_node.get_node_or_null("PlayerAnimator") if player_node else null
 		if animator and animator.has_meta("move_timer"):
 			var timer = animator.get_meta("move_timer") - _delta
+var post_combat_ui: PostCombatUI
 			if timer <= 0:
 				animator.play_idle()
 				animator.set_meta("move_timer", 0.0)
@@ -2277,3 +2329,8 @@ func has_master_key() -> bool:
 
 func is_clocktower_sabotaged() -> bool:
 	return clocktower_sabotaged
+
+func _on_post_combat_closed():
+	in_ui = false
+	print("[Floor6-Hex] Post-combat closed, resuming")
+
