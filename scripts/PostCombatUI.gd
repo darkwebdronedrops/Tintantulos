@@ -23,6 +23,18 @@ var burns_used: int = 0
 var upgraded_cards: Dictionary = {}  # card_id -> faction_keyword added
 var current_faction: String = ""  # Defeated enemy faction for upgrades
 
+# Faction → Keyword mapping (2-3 keywords per faction, from Master Doc)
+const FACTION_KEYWORDS := {
+	"Aberration": ["Void", "Glitch"],
+	"Construct": ["Machine", "Precision", "Persist"],
+	"Demon": ["Pact", "Corruption", "Bargain"],
+	"Dragon": ["Evasion", "First Strike", "Persist"],
+	"Elemental": ["Flow", "Charge", "Nature"],
+	"Goblin": ["Sneaky", "Fast", "Sharp"],
+	"Undead": ["Death", "Bone", "Grasp"],
+	"Universal": [],  # No imbue for Universal
+}
+
 # Visual nodes
 var main_panel: PanelContainer
 var card_pick_container: HBoxContainer
@@ -174,17 +186,33 @@ func _calculate_imbue_cost(card: CardData) -> int:
 	
 	return clamp(cost, 3, 15)
 
-func _can_imbue_card(card: CardData) -> bool:
-	"""Check if card can receive more imbued keywords."""
-	# Count non-faction keywords (purchased upgrades)
-	var upgrade_count = 0
-	var base_faction = card.faction.to_lower()
-	for kw in card.keywords:
-		if kw != base_faction and not kw.is_empty():
-			upgrade_count += 1
+func _can_imbue_card(card: CardData, faction: String) -> bool:
+	"""Check if card can receive an imbue from this faction."""
+	var faction_kws = FACTION_KEYWORDS.get(faction, [])
+	if faction_kws.is_empty():
+		return false
 	
-	# Universal cards: max 2 upgrades
-	# Faction cards: max 2 upgrades (they already have base faction)
+	# Check if card already has ALL keywords from this faction
+	var has_all = true
+	for kw in faction_kws:
+		if not card.keywords.has(kw):
+			has_all = false
+			break
+	if has_all:
+		return false
+	
+	# Count purchased upgrades (non-base-faction keywords)
+	var upgrade_count = 0
+	var base_faction = card.faction
+	var base_kws = FACTION_KEYWORDS.get(base_faction, [])
+	for kw in card.keywords:
+		if kw in base_kws:
+			continue  # Base faction keyword, not a purchase
+		if kw in faction_kws and faction == base_faction:
+			continue  # Same faction re-imbue, count as base
+		upgrade_count += 1
+	
+	# Max 2 purchased upgrades per card
 	return upgrade_count < 2
 	"""Calculate gems earned when burning a card."""
 	return GameState._calculate_card_gem_value(card)
@@ -305,12 +333,24 @@ func _create_upgrade_section() -> VBoxContainer:
 	var section = VBoxContainer.new()
 	section.add_theme_constant_override("separation", 8)
 	
+	# Check if faction has keywords
+	var faction_kws = FACTION_KEYWORDS.get(current_faction, [])
+	if faction_kws.is_empty():
+		return section  # No keywords for this faction, skip section entirely
+	
 	# Section label
 	var label = Label.new()
 	label.text = "Imbue cards with %s essence:" % current_faction
 	label.add_theme_font_size_override("font_size", 14)
 	label.add_theme_color_override("font_color", _get_faction_color(current_faction))
 	section.add_child(label)
+	
+	# Show available keywords
+	var kw_label = Label.new()
+	kw_label.text = "Available: " + ", ".join(faction_kws)
+	kw_label.add_theme_font_size_override("font_size", 10)
+	kw_label.add_theme_color_override("font_color", Color(0.5, 0.6, 0.7))
+	section.add_child(kw_label)
 	
 	# Upgrade container
 	var upgrade_container = HBoxContainer.new()
@@ -324,11 +364,8 @@ func _create_upgrade_section() -> VBoxContainer:
 		if shown >= 3:
 			break
 		var card = current_deck[i]
-		# Skip if already has this faction keyword
-		if card.faction == current_faction or card.keywords.has(current_faction.to_lower()):
-			continue
-		# Skip if already at upgrade limit
-		if not _can_imbue_card(card):
+		# Skip if already at upgrade limit or has all faction keywords
+		if not _can_imbue_card(card, current_faction):
 			continue
 		# Skip already upgraded in this session
 		if upgraded_cards.has(card.id):
@@ -350,6 +387,14 @@ func _create_upgrade_section() -> VBoxContainer:
 func _create_upgrade_panel(index: int, card: CardData) -> PanelContainer:
 	var panel = PanelContainer.new()
 	panel.custom_minimum_size = Vector2(180, 80)
+	
+	# Determine which keyword this card will receive
+	var faction_kws = FACTION_KEYWORDS.get(current_faction, [])
+	var keyword_to_add = ""
+	for kw in faction_kws:
+		if not card.keywords.has(kw):
+			keyword_to_add = kw
+			break
 	
 	var vbox = VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 4)
@@ -386,11 +431,11 @@ func _create_upgrade_panel(index: int, card: CardData) -> PanelContainer:
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	vbox.add_child(spacer)
 	
-	# Imbue button
+	# Imbue button — shows the actual keyword that will be added
 	var imbue_btn = Button.new()
-	imbue_btn.text = "Imbue %s" % current_faction
+	imbue_btn.text = "+ %s" % keyword_to_add
 	imbue_btn.disabled = GameState.gems < cost
-	imbue_btn.pressed.connect(_on_imbue_card.bind(index, card.id, cost))
+	imbue_btn.pressed.connect(_on_imbue_card.bind(index, card.id, cost, keyword_to_add))
 	vbox.add_child(imbue_btn)
 	
 	return panel
@@ -731,8 +776,8 @@ func _disable_all_burn_buttons():
 				burn_btn.disabled = true
 				burn_btn.text = "Burned"
 
-func _on_imbue_card(index: int, card_id: String, cost: int):
-	"""Add faction keyword to a card, spending gems."""
+func _on_imbue_card(index: int, card_id: String, cost: int, keyword: String):
+	"""Add a faction keyword to a card, spending gems."""
 	if GameState.gems < cost:
 		_show_notification("Not enough gems! Need %d💎" % cost, Color(0.9, 0.5, 0.2))
 		return
@@ -742,21 +787,22 @@ func _on_imbue_card(index: int, card_id: String, cost: int):
 		return
 	
 	# Deduct gems
-	GameState.gems -= 5
+	GameState.gems -= cost
 	
 	# Create imbued clone with unique ID
-	var new_id = card_id + "_imbued_" + current_faction.to_lower()
+	var keyword_lower = keyword.to_lower()
+	var new_id = card_id + "_imbued_" + keyword_lower
 	
 	# Check if already exists (shouldn't happen per-session, but safety)
 	if CardDB.cards.has(new_id):
 		# Just use the existing one
-		upgraded_cards[card_id] = current_faction
-		_show_notification("%s imbued with %s essence!" % [card.card_name, current_faction], Color(0.3, 0.9, 0.3))
+		upgraded_cards[card_id] = keyword
+		_show_notification("%s gains %s!" % [card.card_name, keyword], Color(0.3, 0.9, 0.3))
 	else:
 		# Clone the card
 		var new_card = CardData.new()
 		new_card.id = new_id
-		new_card.card_name = card.card_name + " [%s]" % current_faction
+		new_card.card_name = card.card_name + " [%s]" % keyword
 		new_card.faction = card.faction
 		new_card.card_type = card.card_type
 		new_card.attention_cost = card.attention_cost
@@ -770,8 +816,8 @@ func _on_imbue_card(index: int, card_id: String, cost: int):
 		new_card.summon_hp = card.summon_hp
 		new_card.summon_count = card.summon_count
 		new_card.keywords = card.keywords.duplicate()
-		new_card.keywords.append(current_faction.to_lower())
-		new_card.description = card.description + "\n[Imbued with %s essence]" % current_faction
+		new_card.keywords.append(keyword)
+		new_card.description = card.description + "\n[Imbued: %s]" % keyword
 		new_card.survives_reset = card.survives_reset
 		
 		# Register in CardDB
@@ -781,8 +827,8 @@ func _on_imbue_card(index: int, card_id: String, cost: int):
 		GameState.remove_card_from_deck(card_id)
 		GameState.add_card_to_deck(new_id)
 		
-		upgraded_cards[card_id] = current_faction
-		_show_notification("%s imbued with %s essence!" % [card.card_name, current_faction], Color(0.3, 0.9, 0.3))
+		upgraded_cards[card_id] = keyword
+		_show_notification("%s gains %s!" % [card.card_name, keyword], Color(0.3, 0.9, 0.3))
 	
 	_update_currency_display()
 	# Rebuild UI to reflect changes
