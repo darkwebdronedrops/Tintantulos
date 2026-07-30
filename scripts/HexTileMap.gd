@@ -358,7 +358,7 @@ func _generate_corridor(corridor_id: String, start: Vector2i, end: Vector2i, wid
 				var check = Vector2i(hex.x + dq, hex.y + dr)
 				# Only place floor if not already occupied by a room or wall
 				var existing = get_tile(check)
-				if existing == TILE_VOID or existing == TILE_PORTAL:
+				if existing == TILE_VOID:
 					set_tile(check, TILE_FLOOR)
 
 func _generate_patrol_zone(zone_id: String, center: Vector2i, radius: int):
@@ -891,7 +891,7 @@ func _generate_organic_corridor(corridor_id: String, start: Vector2i, end: Vecto
 			for dr in range(-width, width + 1):
 				var check = Vector2i(hex.x + dq, hex.y + dr)
 				var existing = get_tile(check)
-				if existing == TILE_VOID or existing == TILE_PORTAL:
+				if existing == TILE_VOID:
 					set_tile(check, TILE_FLOOR)
 
 func _add_fungal_pillars(room_id: String, center: Vector2i, room_radius: int, count: int):
