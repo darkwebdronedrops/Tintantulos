@@ -1218,6 +1218,7 @@ static func new_game():
 				print("GameState: Archived survivor card: %s" % card_id)
 	
 	# Increment run count
+	var was_first_run = (run_count == 1)
 	run_count += 1
 	if run_count > 1:
 		ng_plus_unlocked = true
@@ -1234,8 +1235,15 @@ static func new_game():
 	player_quiddity = 0
 	# Floor 1 reset
 	transit_tokens.clear()
-	is_first_run = true
-	door_tutorial_completed = false
+	# Only show tutorial on FIRST EVER run, never on NG+
+	if was_first_run:
+		is_first_run = true
+		door_tutorial_completed = false
+		print("GameState: First run — tutorial enabled")
+	else:
+		is_first_run = false
+		door_tutorial_completed = true
+		print("GameState: NG+ run #%d — tutorial skipped" % run_count)
 	floor1_rooms_cleared.clear()
 	shortcut_maker_status = "none"
 	shortcut_maker_pact_taken = false

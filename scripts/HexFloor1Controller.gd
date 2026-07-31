@@ -664,6 +664,11 @@ func _try_ambush_at_hex(target_hex: Vector2i) -> bool:
 # UI
 # ===================================================================
 
+# -------------------------------------------------------------------
+# Tutorial Skip Button
+# -------------------------------------------------------------------
+var skip_tutorial_btn: Button = null
+
 func _setup_ui():
 	# Interact prompt
 	interact_prompt = Label.new()
@@ -675,6 +680,30 @@ func _setup_ui():
 	interact_prompt.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3))
 	interact_prompt.visible = false
 	add_child(interact_prompt)
+	
+	# Skip Tutorial button (hidden by default)
+	skip_tutorial_btn = Button.new()
+	skip_tutorial_btn.name = "SkipTutorialBtn"
+	skip_tutorial_btn.text = "Skip Tutorial"
+	skip_tutorial_btn.position = Vector2(1100, 20)
+	skip_tutorial_btn.size = Vector2(140, 36)
+	skip_tutorial_btn.visible = false
+	var skip_style = StyleBoxFlat.new()
+	skip_style.bg_color = Color(0.2, 0.15, 0.1, 0.85)
+	skip_style.border_color = Color(0.8, 0.6, 0.3, 0.6)
+	skip_style.border_width_left = 1
+	skip_style.border_width_right = 1
+	skip_style.border_width_top = 1
+	skip_style.border_width_bottom = 1
+	skip_style.corner_radius_top_left = 4
+	skip_style.corner_radius_top_right = 4
+	skip_style.corner_radius_bottom_left = 4
+	skip_style.corner_radius_bottom_right = 4
+	skip_tutorial_btn.add_theme_stylebox_override("normal", skip_style)
+	skip_tutorial_btn.add_theme_font_size_override("font_size", 12)
+	skip_tutorial_btn.add_theme_color_override("font_color", Color(0.8, 0.7, 0.4))
+	skip_tutorial_btn.pressed.connect(_skip_tutorial)
+	add_child(skip_tutorial_btn)
 	
 	# Pause menu
 	_pause_menu_setup()
@@ -1741,12 +1770,56 @@ func _start_guided_tutorial():
 	tutorial_click_move_used = false
 	tutorial_door_defeated = false
 	
+	# Show skip button
+	if skip_tutorial_btn:
+		skip_tutorial_btn.visible = true
+	
 	# Player starts in entry room
 	_enter_room("entry")
 	
 	# Show first movement prompt
 	_show_floating_prompt("The hexes respond. Try W, E, A, D, Z, X.")
 	print("[Floor1-Hex] Guided tutorial started: movement phase")
+
+func _skip_tutorial():
+	"""Skip the tutorial and transition to normal Floor 1."""
+	print("[Floor1-Hex] Tutorial skipped by player")
+	
+	# Hide skip button
+	if skip_tutorial_btn:
+		skip_tutorial_btn.visible = false
+	
+	# Hide floating prompt
+	_hide_floating_prompt()
+	
+	# Complete tutorial state
+	guided_tutorial_active = false
+	GameState.is_first_run = false
+	GameState.door_tutorial_completed = true
+	GameState.save_game()
+	
+	# Remove tutorial door if it exists
+	if tutorial_door and is_instance_valid(tutorial_door):
+		tutorial_door.queue_free()
+		tutorial_door = null
+	
+	# Clear tutorial enemies from array
+	var normal_enemies: Array[HexEnemy] = []
+	for enemy in hex_enemies:
+		if enemy.name != "HexEnemy_TutorialDoor":
+			normal_enemies.append(enemy)
+		else:
+			enemy.queue_free()
+	hex_enemies = normal_enemies
+	
+	# Unlock all portals
+	_unlock_all_portals()
+	
+	# Spawn normal enemies for this floor
+	_setup_enemies()
+	
+	_show_notification("Tutorial skipped. Welcome to Floor 1.", Color(0.3, 0.9, 0.3), 4.0)
+	print("[Floor1-Hex] Tutorial skip complete — normal Floor 1 active")
 
 func _on_guided_tutorial_complete():
 	"""Called when the entire guided tutorial is finished."""
@@ -1756,6 +1829,9 @@ func _on_guided_tutorial_complete():
 	GameState.save_game()
 	_unlock_all_portals()
 	_show_notification("All portals unlocked!", Color(0.3, 0.9, 0.3), 4.0)
+	# Hide skip button
+	if skip_tutorial_btn:
+		skip_tutorial_btn.visible = false
 	print("[Floor1-Hex] Guided tutorial complete!")
 
 func _lock_portals_except(allowed: Array[String]):

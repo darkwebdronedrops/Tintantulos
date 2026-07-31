@@ -50,10 +50,20 @@ func _on_turn_started(is_player_turn: bool):
 	if is_player_turn and not has_shown_cards:
 		has_shown_cards = true
 		_show_hint("These are your cards. Each costs Attention to play.", Vector2(540, 520), 5.0)
+		# Delayed Stake hint
+		_show_stake_hint_delayed()
 	
 	# Door tutorial: detect when player ends turn (enemy turn starts)
 	if door_tutorial_active and not is_player_turn and door_tutorial_step >= 2:
 		on_end_turn_pressed()
+
+var has_shown_stake_hint: bool = false
+
+func _show_stake_hint_delayed():
+	await get_tree().create_timer(6.0).timeout
+	if not has_shown_stake_hint and is_inside_tree():
+		has_shown_stake_hint = true
+		_show_hint("Stake: Draw fewer cards → earn more Quiddity (gems).\nRisk vs reward.", Vector2(540, 580), 5.0)
 
 func _on_player_damaged(damage: int, _shield_absorbed: int):
 	if not has_shown_damage:
