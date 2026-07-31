@@ -142,17 +142,24 @@ func _finish_floor_setup():
 	# Load tile texture variations for Floor 1
 	if hex_map:
 		var floor_variants = [
-			preload("res://assets/sprites/hex/floor1/floor_v1.png"),
-			preload("res://assets/sprites/hex/floor1/floor_v3.png"),
-			preload("res://assets/sprites/hex/floor1/floor_v5.png"),
-			preload("res://assets/sprites/hex/floor1/floor_v6.png"),
+			preload("res://assets/sprites/hex/floor1/floor_v1_hexmask.png"),
+			preload("res://assets/sprites/hex/floor1/floor_v2_hexmask.png"),
+			preload("res://assets/sprites/hex/floor1/floor_v3_hexmask.png"),
+			preload("res://assets/sprites/hex/floor1/floor_v4_hexmask.png"),
+			preload("res://assets/sprites/hex/floor1/floor_v5_hexmask.png"),
+			preload("res://assets/sprites/hex/floor1/floor_v6_hexmask.png"),
 		]
-		var wall_variant = preload("res://assets/sprites/hex/floor1/wall.png")
+		var wall_variant = preload("res://assets/sprites/hex/floor1/wall_hexmask.png")
+		var void_variant = preload("res://assets/sprites/hex/floor1/void_v1_hexmask.png")
 		for tex in floor_variants:
 			if tex:
 				hex_map.tile_textures_floor.append(tex)
 		if wall_variant:
 			hex_map.tile_textures_wall.append(wall_variant)
+		if void_variant:
+			hex_map.tile_textures_void.append(void_variant)
+			if hex_map.tile_textures_void.size() > 0:
+				hex_map.tile_texture_void = hex_map.tile_textures_void[0]
 		# Keep fallback single textures for compat
 		if hex_map.tile_textures_floor.size() > 0:
 			hex_map.tile_texture_floor = hex_map.tile_textures_floor[0]
@@ -161,7 +168,7 @@ func _finish_floor_setup():
 		print("[Floor1-Hex] Loaded %d floor textures, %d wall textures" % [hex_map.tile_textures_floor.size(), hex_map.tile_textures_wall.size()])
 	
 		# Load portal textures
-		var portal_tex = preload("res://assets/sprites/floor1/portal_main.png")
+		var portal_tex = preload("res://assets/sprites/floor1/portal_main_hexmask.png")
 		if portal_tex:
 			hex_map.tile_textures_portal.append(portal_tex)
 			hex_map.tile_texture_portal = portal_tex
