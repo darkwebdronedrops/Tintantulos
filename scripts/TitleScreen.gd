@@ -105,6 +105,24 @@ func _build_title_screen():
 	select_floor_btn.pressed.connect(_on_select_floor)
 	menu_vbox.add_child(select_floor_btn)
 	
+	# Play Tutorial button
+	var tutorial_btn = Button.new()
+	tutorial_btn.text = "📖 Play Tutorial"
+	tutorial_btn.custom_minimum_size = Vector2(300, 50)
+	tutorial_btn.add_theme_font_size_override("font_size", 18)
+	tutorial_btn.add_theme_color_override("font_color", Color(0.7, 0.8, 0.5))
+	tutorial_btn.add_theme_color_override("font_hover_color", Color(0.9, 1.0, 0.7))
+	tutorial_btn.add_theme_color_override("font_pressed_color", Color(0.5, 0.6, 0.3))
+	tutorial_btn.add_theme_color_override("font_disabled_color", Color(0.3, 0.3, 0.2))
+	tutorial_btn.pressed.connect(_on_play_tutorial)
+	menu_vbox.add_child(tutorial_btn)
+	
+	# Quit button
+	quit_btn = Button.new()
+	select_floor_btn.add_theme_color_override("font_disabled_color", Color(0.3, 0.3, 0.2))
+	select_floor_btn.pressed.connect(_on_select_floor)
+	menu_vbox.add_child(select_floor_btn)
+	
 	# Quit button
 	quit_btn = Button.new()
 	quit_btn.text = "Quit"
@@ -164,6 +182,17 @@ func _on_continue():
 		var floor_scene = "res://scenes/Floor%d.tscn" % GameState.current_floor
 		get_tree().change_scene_to_file(floor_scene)
 		continue_game_started.emit()
+
+func _on_play_tutorial():
+	"""Force tutorial mode: reset first-run flags and load Floor 1."""
+	visible = false
+	AudioManager.stop_music()
+	# Force tutorial state
+	GameState.is_first_run = true
+	GameState.door_tutorial_completed = false
+	GameState.save_game()
+	print("[TitleScreen] Tutorial mode forced — loading Floor 1 with tutorial")
+	get_tree().change_scene_to_file("res://scenes/Floor1.tscn")
 
 func _on_quit():
 	quit_requested.emit()
