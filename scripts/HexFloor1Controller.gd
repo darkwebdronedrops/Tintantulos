@@ -1184,7 +1184,7 @@ func _spawn_tutorial_door_if_needed():
 	)
 	
 	if ResourceLoader.exists("res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"):
-		tutorial_door.sprite_texture = load("res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png")
+		tutorial_door.sprite.texture = load("res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png")
 	
 	tutorial_door.max_hp = 8
 	tutorial_door.hp = 8
@@ -1718,10 +1718,10 @@ func _spawn_tutorial_door():
 		for suffix in ["_idle", "_attack", "_damage", "_death", ""]:
 			var try_path = "res://assets/sprites/enemies/Construct/enemy_piston_assembly" + suffix + ".png"
 			if ResourceLoader.exists(try_path):
-				tutorial_door.sprite_texture = load(try_path)
+				tutorial_door.sprite.texture = load(try_path)
 				break
 	else:
-		tutorial_door.sprite_texture = load("res://assets/sprites/enemies/Construct/enemy_the_threshold_door_idle.png")
+		tutorial_door.sprite.texture = load("res://assets/sprites/enemies/Construct/enemy_the_threshold_door_idle.png")
 	
 	# The Door is simple: 8 HP, 2 ATK, predictable pattern
 	tutorial_door.max_hp = 8
