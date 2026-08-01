@@ -658,6 +658,10 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	
 	# Build finished card path from card data
 	var safe_name = card.card_name.to_lower().replace(" ", "_").replace("'", "")
+	# Strip imbue suffix like [Sneaky] so upgraded cards use base art
+	var bracket_idx = safe_name.find("_[")
+	if bracket_idx != -1:
+		safe_name = safe_name.substr(0, bracket_idx)
 	var finished_path = "res://assets/sprites/cards/finished/%s/%s.png" % [card.faction, safe_name]
 	
 	# Check if pre-composited finished card exists
@@ -752,6 +756,10 @@ func _on_card_hover(index: int, is_hovering: bool):
 			if combat_manager and index >= 0 and index < combat_manager.hand.size():
 				var card = combat_manager.hand[index]
 				var safe_name = card.card_name.to_lower().replace(" ", "_").replace("'", "")
+				# Strip imbue suffix like [Sneaky] so upgraded cards use base art
+				var bracket_idx = safe_name.find("_[")
+				if bracket_idx != -1:
+					safe_name = safe_name.substr(0, bracket_idx)
 				var finished_path = "res://assets/sprites/cards/finished/%s/%s.png" % [card.faction, safe_name]
 				var finished_tex = load(finished_path)
 				if finished_tex:
