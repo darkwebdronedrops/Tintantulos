@@ -41,6 +41,7 @@ var _status_container: HBoxContainer
 var _hand_container: HBoxContainer
 var _summon_container: HBoxContainer
 var _summon_slots: Array[PanelContainer] = []
+var _death_button: TextureButton = null
 var _hand_cards: Array[Control] = []
 
 # Card data in hand
@@ -205,6 +206,36 @@ func _setup_ui():
 	
 	flee_btn.pressed.connect(_on_flee_pressed)
 	root.add_child(flee_btn)
+	
+	# ===== DEATH BUTTON (bottom-left, next to Flee) =====
+	var death_btn = TextureButton.new()
+	death_btn.name = "DeathButton"
+	death_btn.position = Vector2(60, get_viewport().size.y - 48)
+	death_btn.size = Vector2(32, 32)
+	death_btn.visible = false  # Only shown when conditions met
+	
+	# Use a skull icon or fallback to text
+	var death_tex = load("res://assets/sprites/ui/ui_icon_skull.png")
+	if death_tex:
+		death_btn.texture_normal = death_tex
+		death_btn.texture_hover = death_tex
+		death_btn.texture_pressed = death_tex
+		death_btn.ignore_texture_size = true
+		death_btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	else:
+		# Fallback: colored rect with "D"
+		death_btn.self_modulate = Color(0.4, 0.1, 0.4)  # Purple
+	
+	death_btn.mouse_entered.connect(func():
+		death_btn.self_modulate = Color(0.6, 0.2, 0.6)
+	)
+	death_btn.mouse_exited.connect(func():
+		death_btn.self_modulate = Color(0.4, 0.1, 0.4)
+	)
+	
+	death_btn.pressed.connect(_on_death_pressed)
+	root.add_child(death_btn)
+	_death_button = death_btn
 
 func _create_card_slot(index: int) -> PanelContainer:
 	"""Create an empty card display slot."""
@@ -381,6 +412,7 @@ func _refresh_all():
 	_refresh_deck_count()
 	_refresh_phase()
 	_refresh_hand()
+	update_death_button_visibility()
 
 func _refresh_hp():
 	_hp_bar.max_value = max_hp
@@ -553,6 +585,23 @@ func show_shield_number(amount: int, position: Vector2):
 	"""Show floating shield text."""
 	FloatingText.spawn_shield(self, position, amount)
 
+func set_combat_manager(cm: CombatManager):
+	"""Set the combat manager and connect to its signals."""
+	combat_manager = cm
+	if cm:
+		cm.turn_started.connect(_on_turn_started)
+		cm.card_played.connect(_on_card_played_death_check)
+		cm.combat_started.connect(_on_combat_started_death)
+
+func _on_turn_started(is_player: bool):
+	update_death_button_visibility()
+
+func _on_card_played_death_check(_card: CardData):
+	update_death_button_visibility()
+
+func _on_combat_started_death():
+	update_death_button_visibility()
+
 func _on_flee_pressed():
 	"""Player pressed FLEE button."""
 	if combat_manager:
@@ -561,3 +610,59 @@ func _on_flee_pressed():
 			_show_notification("⚡ FLED! No Aggro active — RUN!", Color(0.9, 0.5, 0.2))
 		else:
 			_show_notification("Cannot flee right now!", Color(0.7, 0.7, 0.7))
+
+func _on_death_pressed():
+	"""Player pressed DEATH button — sacrifice summon to cast from discard."""
+	if not combat_manager:
+		return
+	
+	var death_cards = combat_manager.get_discard_with_death()
+	if death_cards.is_empty():
+		_show_notification("No Death cards in discard!", Color(0.5, 0.5, 0.5))
+		return
+	
+	# Check for summons
+	var has_summon = false
+	for s in combat_manager.summons:
+		if s.hp > 0:
+			has_summon = true
+			break
+	if not has_summon:
+		_show_notification("No summon to sacrifice!", Color(0.5, 0.5, 0.5))
+		return
+	
+	# Simple: cast the first Death card at the first living enemy
+	# TODO: Add picker UI for card and target selection
+	var target_idx = 0
+	for i in range(combat_manager.enemies.size()):
+		if combat_manager.enemies[i].hp > 0:
+			target_idx = i
+			break
+	
+	var card_idx = 0
+	for i in range(combat_manager.discard_pile.size()):
+		if combat_manager.discard_pile[i].keywords.has("death") or combat_manager.discard_pile[i].keywords.has("Death"):
+			card_idx = i
+			break
+	
+	var success = combat_manager.cast_death_card(card_idx, target_idx)
+	if success:
+		_show_notification("💀 Death cast from discard!", Color(0.6, 0.2, 0.6))
+		_update_hand_display()
+		_update_enemy_display()
+	else:
+		_show_notification("Cannot cast Death card!", Color(0.5, 0.5, 0.5))
+
+func update_death_button_visibility():
+	"""Show/hide Death button based on available sacrifices and Death cards."""
+	if not _death_button or not combat_manager:
+		return
+	
+	var has_death = combat_manager.get_discard_with_death().size() > 0
+	var has_summon = false
+	for s in combat_manager.summons:
+		if s.hp > 0:
+			has_summon = true
+			break
+	
+	_death_button.visible = has_death and has_summon and combat_manager.is_player_turn
