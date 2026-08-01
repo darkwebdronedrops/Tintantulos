@@ -181,7 +181,11 @@ func _get_attention_state_name() -> String:
 			return "Scream"
 	return "Unknown"
 
+# Trap System
+var active_traps: Array[Dictionary] = []  # {card: CardData, caster_turn: int}
+
 # Combat State
+var turn_count: int = 0
 var hand: Array = []
 var enemies: Array = []
 var deck: Array = []
@@ -290,6 +294,7 @@ func start_combat(enemy_data: Array, p_deck: Array = []):
 	summons.clear()
 	player_dots.clear()
 	pact_queue.clear()
+	active_traps.clear()
 	player_charge = 0
 	charge_revealed = false
 	player_shield = 0
@@ -298,6 +303,7 @@ func start_combat(enemy_data: Array, p_deck: Array = []):
 	quiddity_this_combat = 0
 	is_boss_mode = false
 	boss = null
+	turn_count = 0
 	player_last_damage = 10  # Reset for Eidolon tracking
 	player_stake = 0
 	current_stake = 0  # Reset stake each combat
@@ -711,6 +717,7 @@ func end_player_turn():
 
 	is_player_turn = true
 	player_shield = 0
+	turn_count += 1
 	
 	# Reset attention for new turn (pact debt will be added by _process_pact_queue)
 	player_attention = 0
@@ -1117,7 +1124,79 @@ func _tick_player_dots():
 		player_damaged.emit(total_damage)
 
 func _apply_trap(card: CardData):
-	pass
+	"""Cast a trap: pay cost, place in active_traps. Effect triggers on enemy action."""
+	var cost = card.trap_cast_cost if card.trap_cast_cost > 0 else card.attention_cost
+	player_attention += cost
+	active_traps.append({"card": card, "caster_turn": turn_count})
+	print("CombatManager: TRAP CAST — %s (cost %d Attention). Trigger: %s | Disarm: %s" % [
+		card.card_name, cost, card.trap_trigger_action, card.trap_disarm_action
+	])
+
+func _check_traps(enemy_action: EnemyAction, enemy_index: int) -> bool:
+	"""Check if any active trap triggers on this enemy action. Returns true if a trap fired."""
+	var action_str = ""
+	match enemy_action:
+		EnemyAction.ATTACK:
+			action_str = "Attack"
+		EnemyAction.DEFEND:
+			action_str = "Defend"
+		EnemyAction.SPECIAL:
+			action_str = "Special"
+	
+	var i = 0
+	while i < active_traps.size():
+		var trap = active_traps[i]
+		var card = trap.card as CardData
+		
+		# Disarm: enemy performs disarm action → trap fizzles, player pays disarm cost
+		if card.trap_disarm_action != "" and action_str == card.trap_disarm_action:
+			player_attention += card.trap_disarm_cost
+			print("CombatManager: TRAP DISARMED — %s fizzled! (disarm cost: %d Attention)" % [
+				card.card_name, card.trap_disarm_cost
+			])
+			active_traps.remove_at(i)
+			continue
+		
+		# Trigger: enemy performs trigger action → trap fires
+		var trigger_match = false
+		if card.trap_trigger_action == "Move":
+			# "Move" maps to ATTACK (enemy moves to attack)
+			trigger_match = (enemy_action == EnemyAction.ATTACK)
+		elif card.trap_trigger_action != "":
+			trigger_match = (action_str == card.trap_trigger_action)
+		
+		if trigger_match:
+			_trigger_trap(card, enemy_index)
+			active_traps.remove_at(i)
+			return true
+		
+		i += 1
+	return false
+
+func _trigger_trap(card: CardData, enemy_index: int):
+	"""Execute trap effect."""
+	var enemy = enemies[enemy_index]
+	match card.card_name:
+		"Gear Shield":
+			# Block next attack: nullify damage this turn
+			enemy.attack = 0
+			print("CombatManager: TRAP TRIGGERED — Gear Shield blocks %s's attack!" % enemy.name)
+		"Tripwire":
+			# 3 damage + lose next action
+			var dmg = 3
+			enemy.hp -= dmg
+			enemy_damaged.emit(enemy_index, dmg)
+			# Skip next action by advancing index
+			enemy.current_action_index += 1
+			print("CombatManager: TRAP TRIGGERED — Tripwire snags %s for %d damage! They lose their next action." % [
+				enemy.name, dmg
+			])
+			if enemy.hp <= 0:
+				print("CombatManager: %s died from trap damage!" % enemy.name)
+		_:
+			print("CombatManager: TRAP TRIGGERED — %s on %s (generic, no specific effect)" % [
+				card.card_name, enemy.name
+			])
 
 func _apply_glitch_effect(card: CardData):
 	"""Glitch: 25% chance for bonus effect based on card type"""
@@ -1175,7 +1254,12 @@ func _enemy_act(index: int):
 
 	var action = enemy.action_pattern[enemy.current_action_index % enemy.action_pattern.size()]
 	enemy.current_action_index += 1
-
+	
+	# Check traps BEFORE enemy acts
+	if _check_traps(action, index):
+		# Trap fired — enemy's action was interrupted
+		return
+	
 	match action:
 		EnemyAction.ATTACK:
 			var damage = enemy.attack
