@@ -124,7 +124,8 @@ class SummonData:
 		return false
 
 	func grow():
-		if has_keyword("nature"):
+		# Growth: any summon with growth stats can grow (not just Nature keyword)
+		if growth_atk > 0 or growth_hp > 0:
 			attack += growth_atk
 			max_hp += growth_hp
 			hp += growth_hp
@@ -222,6 +223,9 @@ var tutorial_mode: bool = false
 # Eidolon tracking
 var player_last_damage: int = 10  # Default so Eidolon has something to mirror
 
+# First keyword tracking
+var _first_played_cards: Array[String] = []  # Cards already played this combat (for "First" keyword)
+
 # Signals
 signal combat_started
 signal combat_ended(victory: bool)
@@ -295,6 +299,7 @@ func start_combat(enemy_data: Array, p_deck: Array = []):
 	player_dots.clear()
 	pact_queue.clear()
 	active_traps.clear()
+	_first_played_cards.clear()
 	player_charge = 0
 	charge_revealed = false
 	player_shield = 0
@@ -767,6 +772,11 @@ func play_card(hand_index: int, target_index: int):
 	# Apply trinket cost modifications
 	effective_cost = _modify_card_cost_with_trinket(effective_cost, card)
 	
+	# First keyword: first play of this card each combat costs 1 less
+	if (card.keywords.has("first") or card.keywords.has("First")) and not _first_played_cards.has(card.card_name):
+		effective_cost = max(1, effective_cost - 1)
+		print("CombatManager: First trigger - %s costs 1 less on first play! (now %d)" % [card.card_name, effective_cost])
+	
 	if player_attention + effective_cost > 20:
 		return
 
@@ -776,6 +786,10 @@ func play_card(hand_index: int, target_index: int):
 		next_card_cost_reduction = 0  # Consume the discount
 
 	player_attention += effective_cost
+	
+	# Track this card as played (for First keyword)
+	if not _first_played_cards.has(card.card_name):
+		_first_played_cards.append(card.card_name)
 
 	# Elemental CHARGE: playing Elemental cards adds +1 CHARGE
 	if card.faction == "Elemental":
@@ -882,10 +896,17 @@ func _resolve_damage(card: CardData, target_index: int):
 		var dice_str = card.damage_dice
 		if card.keywords.has("sharp") or card.keywords.has("Sharp"):
 			dice_str = _upgrade_dice_for_sharp(dice_str)
-			damage = _roll_dice(dice_str)
-			print("CombatManager: Sharp trigger - upgraded dice: %s = %d" % [dice_str, damage])
+			
+		# Machine keyword: roll twice and average (reliable damage)
+		if card.keywords.has("machine") or card.keywords.has("Machine"):
+			var roll1 = _roll_dice(dice_str)
+			var roll2 = _roll_dice(dice_str)
+			damage = int((roll1 + roll2) / 2.0)
+			print("CombatManager: Machine trigger - averaged %s: %d + %d = %d" % [dice_str, roll1, roll2, damage])
 		else:
 			damage = _roll_dice(dice_str)
+			if card.keywords.has("sharp") or card.keywords.has("Sharp"):
+				print("CombatManager: Sharp trigger - upgraded dice: %s = %d" % [dice_str, damage])
 	else:
 		if card.keywords.has("sharp") or card.keywords.has("Sharp"):
 			damage = card.damage_flat + 1
@@ -914,7 +935,7 @@ func _resolve_damage(card: CardData, target_index: int):
 			else:
 				print("CombatManager: Nature trigger - +%d damage from %d CHARGE" % [nature_bonus, player_charge])
 
-	# Flow keyword: +1d6 per CHARGE (max +3d6)
+	# Flow keyword: +1d6 per CHARGE (max +3d6), then CONSUMES all CHARGE
 	if card.keywords.has("flow") or card.keywords.has("Flow"):
 		if player_charge > 0:
 			var flow_dice_count = min(player_charge, 3)
@@ -925,6 +946,9 @@ func _resolve_damage(card: CardData, target_index: int):
 				print("CombatManager: ⚡ CHARGE REVEALED! You've built %d elemental energy! Flow adds +%dd6 = %d damage!" % [player_charge, flow_dice_count, flow_bonus])
 			else:
 				print("CombatManager: Flow trigger - +%dd6 = %d bonus damage from %d CHARGE" % [flow_dice_count, flow_bonus, player_charge])
+			# Flow CONSUMES CHARGE (it's the spending side)
+			print("CombatManager: Flow consumed all %d CHARGE!" % player_charge)
+			player_charge = 0
 
 	if actual_damage <= 0:
 		AudioManager.play_sfx("miss_dodge")
