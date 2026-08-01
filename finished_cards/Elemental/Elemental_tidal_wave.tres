@@ -37,6 +37,6 @@ corruption_gain = 0
 is_overlay = false
 overlay_type = ""
 gem_cost = 0
-description = "2d8 damage to all enemies. Flow: If you have 3+ Flow cards in discard, +1d8."
+description = "2d8 damage . Flow: If you have 3+ Flow cards in discard, +1d8."
 frame_texture_path = "res://assets/sprites/cards/elemental_frame.png"
 sprite_texture_path = "res://assets/sprites/cards/Elemental/Elemental_tidal_wave.png"

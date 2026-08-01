@@ -37,7 +37,7 @@ corruption_gain = 2
 is_overlay = false
 overlay_type = ""
 gem_cost = 0
-description = "3d6 damage to all enemies. Gain 2 Corruption."
+description = "3d6 damage . Gain 2 Corruption."
 frame_texture_path = "res://assets/sprites/cards/demon_frame.png"
 
 sprite_texture_path = "res://assets/sprites/cards/Demon/Demon_hellfire.png"

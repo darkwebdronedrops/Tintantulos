@@ -730,8 +730,8 @@ func end_player_turn():
 		player_attention += trinket_effects["attention_start_bonus"]
 		print("CombatManager: Veil Piercer +%d Attention at turn start" % trinket_effects["attention_start_bonus"])
 	_update_attention_state()
-	# Stake persists from previous turn — player must explicitly change it
-	print("CombatManager: Turn start — Attention reset to %d, Stake remains %d (draw %d cards)" % [player_attention, player_stake, 5 - player_stake])
+	# Stake was set during previous player turn — used to reduce draw, then reset
+	print("CombatManager: Turn start — Attention reset to %d, Stake %d (draw %d cards)" % [player_attention, player_stake, 5 - player_stake])
 
 	for s in summons:
 		s.has_attacked_this_turn = false

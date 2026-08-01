@@ -37,6 +37,6 @@ corruption_gain = 0
 is_overlay = false
 overlay_type = ""
 gem_cost = 0
-description = "Sacrifice a summon. Deal its HP as damage to all enemies."
+description = "Sacrifice a summon. Deal its HP as damage ."
 frame_texture_path = "res://assets/sprites/cards/undead_frame.png"
 sprite_texture_path = "res://assets/sprites/cards/Undead/Undead_corpse_explosion.png"

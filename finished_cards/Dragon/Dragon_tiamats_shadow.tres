@@ -37,7 +37,7 @@ corruption_gain = 0
 is_overlay = false
 overlay_type = ""
 gem_cost = 0
-description = "4d8 damage. If you control 3+ Dragons, this hits all enemies."
+description = "4d8 damage. If you control 3+ Dragons, this hits target enemy."
 frame_texture_path = "res://assets/sprites/cards/dragon_frame.png"
 
 sprite_texture_path = "res://assets/sprites/cards/Dragon/Dragon_tiamats_shadow.png"

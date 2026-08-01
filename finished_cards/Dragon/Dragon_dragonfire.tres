@@ -37,7 +37,7 @@ corruption_gain = 0
 is_overlay = false
 overlay_type = ""
 gem_cost = 0
-description = "3d6 Fire damage to all enemies in a cone."
+description = "3d6 Fire damage  in a cone."
 frame_texture_path = "res://assets/sprites/cards/dragon_frame.png"
 
 sprite_texture_path = "res://assets/sprites/cards/Dragon/Dragon_dragonfire.png"
