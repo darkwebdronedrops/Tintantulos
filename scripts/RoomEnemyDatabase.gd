@@ -1,6 +1,6 @@
 extends Node
 class_name RoomEnemyDatabase
-# Note: Also registered as autoload singleton — use get_node("/root/RoomEnemyDatabase") for the instance
+# Note: Not an autoload singleton — instantiate or reference directly when needed
 
 # RoomEnemyDatabase — Thematic enemy compositions for Floor 3
 # Each room has unique enemies that "are the things in the room"

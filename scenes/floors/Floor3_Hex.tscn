@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://c8t5wogjsm0jo"]
+[gd_scene load_steps=4 format=3 uid="uid://c8t5wogjsm0jo"]
 
 [ext_resource type="TileSet" path="res://resources/TileSetHex.tres" id="1_8x5jg"]
 [ext_resource type="Script" path="res://scripts/HexFloorGenerator.gd" id="2_gen"]
-[ext_resource type="Script" path="res://scripts/HexPlayer.gd" id="3_player"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/character_sprite.png" id="4_sprite"]
 
 [node name="Floor3Hex" type="Node2D"]
@@ -14,10 +13,3 @@ layer_0/name = "Floor"
 layer_0/tile_data = PackedInt32Array()
 script = ExtResource("2_gen")
 floor_number = 3
-
-[node name="Player" type="CharacterBody2D" parent="."]
-position = Vector2(0, 0)
-script = ExtResource("3_player")
-
-[node name="Sprite2D" type="Sprite2D" parent="Player"]
-texture = ExtResource("4_sprite")
