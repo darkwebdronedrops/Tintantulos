@@ -1311,7 +1311,7 @@ func _enemy_act(index: int):
 		EnemyAction.DEFEND:
 			enemy.defense += 3
 		EnemyAction.SPECIAL:
-			pass
+			_enemy_special(index)
 
 func _apply_enemy_attention_multiplier(damage: int) -> int:
 	match current_attention_state:
@@ -1402,7 +1402,80 @@ func _boss_turn():
 	if result.effect == "PHASE_CHANGE":
 		print("CombatManager: ⚠ %s enters PHASE 2!" % boss.name)
 
-func _find_lowest_hp_summon() -> int:
+func _enemy_special(index: int):
+	"""Execute enemy SPECIAL action based on faction/keywords."""
+	var enemy = enemies[index]
+	
+	# Faction-based specials
+	if enemy.faction == "Construct":
+		# Gear up: +2 defense and next attack deals +2
+		enemy.defense += 2
+		enemy.attack += 2
+		print("CombatManager: %s SPECIAL — gears shift! +2 DEF, +2 ATK" % enemy.name)
+		
+	elif enemy.faction == "Goblin":
+		# Sneaky: heal 3 HP
+		var heal = 3
+		enemy.hp = min(enemy.max_hp, enemy.hp + heal)
+		print("CombatManager: %s SPECIAL — scurries away! +%d HP (%d/%d)" % [
+			enemy.name, heal, enemy.hp, enemy.max_hp
+		])
+		
+	elif enemy.faction == "Undead":
+		# Bone call: summon a bone minion (weak)
+		if enemies.size() < 4:
+			var minion = EnemyData.new("Bone Minion", 5, 2, 0, [EnemyAction.ATTACK], ["Bone"])
+			minion.faction = "Undead"
+			enemies.append(minion)
+			print("CombatManager: %s SPECIAL — raises a Bone Minion!" % enemy.name)
+		else:
+			# Full field: drain life instead
+			var drain = 2
+			_player_hp -= drain
+			player_damaged.emit(drain)
+			enemy.hp = min(enemy.max_hp, enemy.hp + drain)
+			print("CombatManager: %s SPECIAL — life drain! %d damage, heals %d" % [
+				enemy.name, drain, drain
+			])
+			
+	elif enemy.faction == "Elemental":
+		# Charge up: gain 2 CHARGE (applies to player for elemental cards)
+		player_charge = min(MAX_CHARGE, player_charge + 2)
+		print("CombatManager: %s SPECIAL — elemental surge! Player CHARGE +2 (now %d/%d)" % [
+			enemy.name, player_charge, MAX_CHARGE
+		])
+		
+	elif enemy.faction == "Aberration":
+		# Glitch: random effect
+		var roll = randi() % 3
+		match roll:
+			0:
+				# Confuse: player loses 1 Attention
+				player_attention = max(0, player_attention - 1)
+				print("CombatManager: %s SPECIAL — glitches reality! -1 Attention" % enemy.name)
+			1:
+				# Mutate: +3 HP
+				var heal = 3
+				enemy.hp = min(enemy.max_hp, enemy.hp + heal)
+				print("CombatManager: %s SPECIAL — mutates! +%d HP" % [enemy.name, heal])
+			2:
+				# Echo: attack again
+				var dmg = enemy.attack
+				_player_hp -= dmg
+				player_damaged.emit(dmg)
+				print("CombatManager: %s SPECIAL — echoes! %d damage" % [enemy.name, dmg])
+				
+	elif enemy.faction == "Demon":
+		# Corrupt: apply corruption DoT to player
+		var dot = DoTData.new("corruption", 2, 3, enemy.name + " (Corrupt)", Color(0.6, 0.2, 0.8))
+		player_dots.append(dot)
+		print("CombatManager: %s SPECIAL — corrupts! 2 dmg/turn for 3 turns" % enemy.name)
+		
+	else:
+		# Generic: heal 2
+		var heal = 2
+		enemy.hp = min(enemy.max_hp, enemy.hp + heal)
+		print("CombatManager: %s SPECIAL — recovers! +%d HP" % [enemy.name, heal])
 	if summons.size() == 0:
 		return -1
 
