@@ -48,6 +48,10 @@ var light_beam_widgets: Array[Dictionary] = []
 var light_beam_active: bool = false
 
 # Machinist Shop
+var machinist_shop: MachinistShopUI
+
+# Post-Combat UI
+var post_combat_ui: PostCombatUI
 
 # Combat
 var hex_enemies: Array[HexEnemy] = []
@@ -83,14 +87,14 @@ Color(0.4, 0.4, 0.35), Color(0.35, 0.3, 0.25), Color(0.3, 0.4, 0.45)
 # ===================================================================
 
 func _ready():
-	# Reset for replayability — selecting floor from menu should always be fresh
-	room_cleared.clear()
-	room_encounter_spawned.clear()
-	call_deferred("_build_floor")
+    # Reset for replayability — selecting floor from menu should always be fresh
+    room_cleared.clear()
+    room_encounter_spawned.clear()
+    call_deferred("_build_floor")
 
 func _build_floor():
-	GameState.set_current_floor(3)
-	print("[Floor3-Hex] current_floor set to 3")
+    GameState.set_current_floor(3)
+    print("[Floor3-Hex] current_floor set to 3")
     if hex_map:
         hex_map.generate_floor3_layout()
         print("[Floor3-Hex] Hex grid generated: %d tiles" % hex_map.grid.size())
@@ -317,12 +321,9 @@ func _start_combat(encounter_type: String, room_id: String = ""):
     if not combat_manager or not ui:
         return
 
-    # Build enemy list
-    var enemy_data = _build_enemy_list(encounter_type, room_id)
-    var enemy_list = enemy_data["enemies"]
-    var is_boss = enemy_data.get("is_boss", false)
-
-    if enemy_list.is_empty():
+    # Build enemy list from RoomEnemyDatabase templates
+    var enemies = _get_encounter_enemies(encounter_type, room_id)
+    if enemies.is_empty():
         in_combat = false
         return
 
@@ -331,7 +332,7 @@ func _start_combat(encounter_type: String, room_id: String = ""):
         player_deck = CardDB.get_starter_deck()
         GameState.player_deck = player_deck
 
-    combat_manager.start_combat(enemy_list, player_deck)
+    combat_manager.start_combat(enemies, player_deck)
     ui.visible = true
 
     # Hide interact prompt
@@ -339,42 +340,51 @@ func _start_combat(encounter_type: String, room_id: String = ""):
 
     print("[Floor3-Hex] Combat started: %s" % encounter_type)
 
-func _build_enemy_list(encounter_type: String, room_id: String = "") -> Dictionary:
-    var enemies = []
-    var is_boss = false
+func _get_encounter_enemies(encounter_type: String, room_id: String = "") -> Array[CombatManager.EnemyData]:
+    var result: Array[CombatManager.EnemyData] = []
 
     if encounter_type == "boss" and room_id != "":
         var boss_type = room_data[room_id].get("boss_type", "")
-        if boss_type != "":
-            enemies.append({"name": boss_type, "level": 5, "is_boss": true})
-            is_boss = true
+        match boss_type:
+            "TheCaldera": result = _spawn_enemies(["The Caldera"])
+            "GearMother": result = _spawn_enemies(["Gear Pair"])
+            "TheEidolon": result = _spawn_enemies(["The Eidolon"])
+            _:
+                result = _spawn_enemies(["The Caldera"])
     elif encounter_type == "standard":
-        enemies.append({"name": "Construct_gearling", "level": 2})
-        enemies.append({"name": "Construct_piston", "level": 2})
+        result = _spawn_enemies(["Piston Assembly", "Diagnostic Eye"])
     elif encounter_type == "warren":
-        enemies.append({"name": "Goblin_tinkerer", "level": 2})
-        enemies.append({"name": "Goblin_scrapper", "level": 1})
+        result = _spawn_enemies(["Torch Boy", "Torch Boy"])
     elif encounter_type == "elite":
-        enemies.append({"name": "Construct_automaton", "level": 3})
-        enemies.append({"name": "Construct_gearling", "level": 2})
+        result = _spawn_enemies(["Brass Enforcer", "Clockwork Hound"])
 
-    return {"enemies": enemies, "is_boss": is_boss}
+    return result
+
+func _spawn_enemies(enemy_names: Array[String]) -> Array[CombatManager.EnemyData]:
+    var result: Array[CombatManager.EnemyData] = []
+    for name in enemy_names:
+        var template = RoomEnemyDatabase.ENEMIES.get(name)
+        if template:
+            result.append(template.to_combat_data())
+        else:
+            push_warning("[Floor3-Hex] Enemy template not found: %s" % name)
+    return result
 
 func _on_combat_ended(player_won: bool):
     in_combat = false
-    	
-    	# Capture defeated faction BEFORE cleanup
-    	var defeated_faction = ""
-    	for enemy in hex_enemies:
-    		if enemy.state == HexEnemy.State.IN_COMBAT and enemy.hp <= 0:
-    			defeated_faction = enemy.faction
-    			break
-    	
-    	# Show overworld UI again
-    	var main_ui = get_node_or_null("MainUI")
-    	if main_ui:
-    		main_ui.visible = true
-    	
+    
+    # Capture defeated faction BEFORE cleanup
+    var defeated_faction = ""
+    for enemy in hex_enemies:
+            if enemy.state == HexEnemy.State.IN_COMBAT and enemy.hp <= 0:
+                defeated_faction = enemy.faction
+                break
+    
+    # Show overworld UI again
+    var main_ui = get_node_or_null("MainUI")
+    if main_ui:
+            main_ui.visible = true
+    
     var ui = get_node_or_null("CombatUI")
     if ui:
         ui.visible = false
@@ -395,33 +405,33 @@ func _on_combat_ended(player_won: bool):
 
 
 func _setup_post_combat_ui():
-	"""Setup the post-combat reward UI."""
-	var post_combat_scene = load("res://scenes/PostCombatUI.tscn")
-	if post_combat_scene:
-		post_combat_ui = post_combat_scene.instantiate()
-		add_child(post_combat_ui)
-		post_combat_ui.visible = false
-		post_combat_ui.ui_closed.connect(_on_post_combat_closed)
-		print("[Floor3-Hex] PostCombatUI ready")
-	else:
-		push_warning("[Floor3-Hex] PostCombatUI scene not found!")
+    """Setup the post-combat reward UI."""
+    var post_combat_scene = load("res://scenes/PostCombatUI.tscn")
+    if post_combat_scene:
+        post_combat_ui = post_combat_scene.instantiate()
+        add_child(post_combat_ui)
+        post_combat_ui.visible = false
+        post_combat_ui.ui_closed.connect(_on_post_combat_closed)
+        print("[Floor3-Hex] PostCombatUI ready")
+    else:
+        push_warning("[Floor3-Hex] PostCombatUI scene not found!")
 
 func _setup_machinist_shop():
-	"""Setup the Machinist's tabbed shop (equipment, overlays, consumables, upgrades)."""
-	machinist_shop = MachinistShopUI.new()
-	machinist_shop.name = "MachinistShopUI"
-	add_child(machinist_shop)
-	machinist_shop.shop_closed.connect(_on_machinist_shop_closed)
-	print("[Floor3-Hex] MachinistShopUI ready")
+    """Setup the Machinist's tabbed shop (equipment, overlays, consumables, upgrades)."""
+    machinist_shop = MachinistShopUI.new()
+    machinist_shop.name = "MachinistShopUI"
+    add_child(machinist_shop)
+    machinist_shop.shop_closed.connect(_on_machinist_shop_closed)
+    print("[Floor3-Hex] MachinistShopUI ready")
 
 func _open_machinist_shop():
-	in_ui = true
-	machinist_shop.show_shop()
-	print("[Floor3-Hex] Machinist shop opened")
+    in_ui = true
+    machinist_shop.show_shop()
+    print("[Floor3-Hex] Machinist shop opened")
 
 func _on_machinist_shop_closed():
-	in_ui = false
-	print("[Floor3-Hex] Machinist shop closed")
+    in_ui = false
+    print("[Floor3-Hex] Machinist shop closed")
 
 func _setup_enemies():
     enemy_container = Node2D.new()
@@ -891,8 +901,6 @@ func _floor_complete():
 
 func _show_floor_transition_prompt():
     var prompt = Label.new()
-var post_combat_ui: PostCombatUI
-var machinist_shop: MachinistShopUI
     prompt.name = "FloorTransitionPrompt"
     prompt.text = "Press [S] to Ascend to Floor 4 — The Curio Bazaar"
     prompt.position = Vector2(640, 600)
@@ -903,6 +911,6 @@ var machinist_shop: MachinistShopUI
     add_child(prompt)
 
 func _on_post_combat_closed():
-	in_ui = false
-	print("[Floor3-Hex] Post-combat closed, resuming")
+    in_ui = false
+    print("[Floor3-Hex] Post-combat closed, resuming")
 

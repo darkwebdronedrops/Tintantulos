@@ -342,15 +342,23 @@ func _create_ui():
 	card_play_effect.effect_rect = mist_overlay
 	add_child(card_play_effect)
 	
-	# Card preview (large, shows on hover) — size/position set dynamically
-	card_preview = TextureRect.new()
+	# Card preview (large, shows on hover) — wrapper Control enforces fixed size
+	card_preview = Control.new()
 	card_preview.name = "CardPreview"
-	card_preview.expand_mode = TextureRect.EXPAND_KEEP_SIZE  # Fit within our size, don't use texture native size
-	card_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	card_preview.size = Vector2(240, 320)
 	card_preview.visible = false
 	card_preview.z_index = 10
 	card_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(card_preview)
+	
+	var card_preview_tex = TextureRect.new()
+	card_preview_tex.name = "CardPreviewTex"
+	card_preview_tex.anchor_right = 1.0
+	card_preview_tex.anchor_bottom = 1.0
+	card_preview_tex.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	card_preview_tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	card_preview_tex.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	card_preview.add_child(card_preview_tex)
 	
 	# Dark backdrop behind preview for readability
 	var preview_bg = ColorRect.new()
@@ -650,6 +658,10 @@ func _create_visual_card(card: CardData, index: int) -> Control:
 	
 	# Build finished card path from card data
 	var safe_name = card.card_name.to_lower().replace(" ", "_").replace("'", "")
+	# Strip imbue suffix like [Sneaky] so upgraded cards use base art
+	var bracket_idx = safe_name.find("_[")
+	if bracket_idx != -1:
+		safe_name = safe_name.substr(0, bracket_idx)
 	var finished_path = "res://assets/sprites/cards/finished/%s/%s.png" % [card.faction, safe_name]
 	
 	# Check if pre-composited finished card exists
@@ -744,6 +756,10 @@ func _on_card_hover(index: int, is_hovering: bool):
 			if combat_manager and index >= 0 and index < combat_manager.hand.size():
 				var card = combat_manager.hand[index]
 				var safe_name = card.card_name.to_lower().replace(" ", "_").replace("'", "")
+				# Strip imbue suffix like [Sneaky] so upgraded cards use base art
+				var bracket_idx = safe_name.find("_[")
+				if bracket_idx != -1:
+					safe_name = safe_name.substr(0, bracket_idx)
 				var finished_path = "res://assets/sprites/cards/finished/%s/%s.png" % [card.faction, safe_name]
 				var finished_tex = load(finished_path)
 				if finished_tex:
@@ -761,7 +777,9 @@ func _on_card_hover(index: int, is_hovering: bool):
 					var pos_y = clamp((vp_size.y - preview_h) / 2, 20, vp_size.y - preview_h - 20)
 					card_preview.size = Vector2(preview_w, preview_h)
 					card_preview.position = Vector2(pos_x, pos_y)
-					card_preview.texture = finished_tex
+					var tex_rect = card_preview.get_node_or_null("CardPreviewTex")
+					if tex_rect:
+						tex_rect.texture = finished_tex
 					card_preview.visible = true
 					# Backdrop fills entire viewport behind preview
 					var preview_bg = get_node_or_null("CardPreviewBG")
