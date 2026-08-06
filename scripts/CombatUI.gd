@@ -336,6 +336,37 @@ func _create_ui():
 	
 	var weapon_btn_hbox = HBoxContainer.new()
 	weapon_btn_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	
+	# Weapon charge bar — shows progress toward weapon readiness
+	var weapon_charge_bar = ProgressBar.new()
+	weapon_charge_bar.name = "WeaponChargeBar"
+	weapon_charge_bar.custom_minimum_size = Vector2(80, 10)
+	weapon_charge_bar.max_value = 100
+	weapon_charge_bar.value = 0
+	weapon_charge_bar.show_percentage = false
+	
+	var charge_fill = StyleBoxFlat.new()
+	charge_fill.bg_color = Color(0.9, 0.7, 0.2)
+	charge_fill.corner_radius_top_left = 2
+	charge_fill.corner_radius_top_right = 2
+	charge_fill.corner_radius_bottom_left = 2
+	charge_fill.corner_radius_bottom_right = 2
+	weapon_charge_bar.add_theme_stylebox_override("fill", charge_fill)
+	
+	var charge_bg = StyleBoxFlat.new()
+	charge_bg.bg_color = Color(0.15, 0.15, 0.15)
+	charge_bg.corner_radius_top_left = 2
+	charge_bg.corner_radius_top_right = 2
+	charge_bg.corner_radius_bottom_left = 2
+	charge_bg.corner_radius_bottom_right = 2
+	weapon_charge_bar.add_theme_stylebox_override("background", charge_bg)
+	
+	weapon_btn_hbox.add_child(weapon_charge_bar)
+	equip_vbox.add_child(weapon_btn_hbox)
+	
+	# Weapon use button
+	var weapon_btn_row = HBoxContainer.new()
+	weapon_btn_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	weapon_use_btn = Button.new()
 	weapon_use_btn.name = "WeaponUseBtn"
 	weapon_use_btn.custom_minimum_size = Vector2(48, 20)
@@ -343,8 +374,8 @@ func _create_ui():
 	weapon_use_btn.disabled = true
 	weapon_use_btn.tooltip_text = "Weapon not charged"
 	weapon_use_btn.pressed.connect(_on_weapon_use)
-	weapon_btn_hbox.add_child(weapon_use_btn)
-	equip_vbox.add_child(weapon_btn_hbox)
+	weapon_btn_row.add_child(weapon_use_btn)
+	equip_vbox.add_child(weapon_btn_row)
 	
 	# --- MIST OVERLAY (full screen effect) ---
 	mist_overlay = ColorRect.new()
@@ -796,6 +827,33 @@ func _update_weapon_button():
 		return
 	var weapon_ready = combat_manager.equipped_weapon_id != "" and combat_manager.weapon_charge >= combat_manager.weapon_max_charge
 	weapon_use_btn.disabled = not weapon_ready
+	
+	# Update charge bar — nested inside equip_vbox → weapon_btn_hbox
+	var charge_bar = equip_panel.get_node_or_null("WeaponChargeBar")
+	if not charge_bar and equip_panel:
+		var vbox = equip_panel.get_child(0)
+		if vbox:
+			for child in vbox.get_children():
+				if child.name == "WeaponChargeBar":
+					charge_bar = child
+					break
+	
+	if charge_bar:
+		if combat_manager.equipped_weapon_id == "":
+			charge_bar.value = 0
+			charge_bar.tooltip_text = "No weapon equipped"
+		elif combat_manager.weapon_max_charge > 0:
+			var pct = float(combat_manager.weapon_charge) / combat_manager.weapon_max_charge * 100
+			charge_bar.value = pct
+			charge_bar.tooltip_text = "Charge: %d/%d" % [combat_manager.weapon_charge, combat_manager.weapon_max_charge]
+			# Change color when ready
+			var fill_style = charge_bar.get_theme_stylebox("fill")
+			if fill_style and fill_style is StyleBoxFlat:
+				fill_style.bg_color = Color(0.3, 0.9, 0.3) if weapon_ready else Color(0.9, 0.7, 0.2)
+		else:
+			charge_bar.value = 0
+			charge_bar.tooltip_text = "No weapon"
+	
 	if weapon_ready:
 		weapon_use_btn.tooltip_text = "Weapon ready!"
 	else:
