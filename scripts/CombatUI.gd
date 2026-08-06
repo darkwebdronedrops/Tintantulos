@@ -246,6 +246,28 @@ func _create_ui():
 	enemy_container.add_theme_constant_override("separation", 40)
 	add_child(enemy_container)
 	
+	# --- ACTIVE TRAPS PANEL (below enemy area, only visible when traps active) ---
+	var trap_panel_container = PanelContainer.new()
+	trap_panel_container.name = "TrapPanel"
+	trap_panel_container.position = Vector2(220, 145)
+	trap_panel_container.size = Vector2(830, 40)
+	trap_panel_container.visible = false
+	add_child(trap_panel_container)
+	
+	var trap_bg = StyleBoxFlat.new()
+	trap_bg.bg_color = Color(0.1, 0.08, 0.12, 0.85)
+	trap_bg.corner_radius_top_left = 4
+	trap_bg.corner_radius_top_right = 4
+	trap_bg.corner_radius_bottom_left = 4
+	trap_bg.corner_radius_bottom_right = 4
+	trap_panel_container.add_theme_stylebox_override("panel", trap_bg)
+	
+	var trap_hbox = HBoxContainer.new()
+	trap_hbox.name = "TrapIcons"
+	trap_hbox.alignment = BoxContainer.ALIGNMENT_BEGIN
+	trap_hbox.add_theme_constant_override("separation", 8)
+	trap_panel_container.add_child(trap_hbox)
+	
 	# --- HAND CONTAINER (bottom center, 830×120) ---
 	hand_container = HBoxContainer.new()
 	hand_container.name = "HandContainer"
@@ -421,6 +443,7 @@ func _on_turn_started(is_player: bool):
 		stake_btn.text = "Stake %d" % combat_manager.current_stake
 	if combat_manager:
 		_update_quiddity_display(combat_manager.player_quiddity)
+	_update_trap_display()  # Traps may have triggered during enemy phase
 
 func _on_card_drawn(_card: CardData):
 	_update_hand_display()
@@ -458,6 +481,7 @@ func _on_card_played(card: CardData):
 	_update_player_display(0)
 	selected_card_index = -1
 	_update_deck_count()
+	_update_trap_display()  # Update if a trap card was just cast
 	if card_play_effect and card:
 		card_play_effect.trigger_effect(card.faction)
 
@@ -487,6 +511,61 @@ func _update_deck_count():
 	if deck_count_label:
 		var count = combat_manager.player_deck.size() if combat_manager.get("player_deck") else 0
 		deck_count_label.text = "Deck: %d" % count
+
+func _update_trap_display():
+	"""Update the active traps panel visibility and icons."""
+	var trap_panel = get_node_or_null("TrapPanel")
+	if not trap_panel:
+		return
+	
+	var trap_icons = trap_panel.get_node("TrapIcons")
+	if not trap_icons:
+		return
+	
+	# Clear existing icons
+	for child in trap_icons.get_children():
+		child.queue_free()
+	
+	if not combat_manager or combat_manager.active_traps.is_empty():
+		trap_panel.visible = false
+		return
+	
+	trap_panel.visible = true
+	
+	# Add icon for each active trap
+	for trap_data in combat_manager.active_traps:
+		var card = trap_data["card"] as CardData
+		var icon_tex_path = ""
+		
+		# Map card names to icon textures
+		match card.card_name:
+			"Gear Shield":
+				icon_tex_path = "res://assets/sprites/ui/ui_trap_gear_shield.png"
+			"Tripwire":
+				icon_tex_path = "res://assets/sprites/ui/ui_trap_tripwire.png"
+			_:
+				icon_tex_path = "res://assets/sprites/ui/ui_trap_gear_shield.png"  # fallback
+		
+		var icon_container = VBoxContainer.new()
+		icon_container.add_theme_constant_override("separation", 2)
+		
+		var icon = TextureRect.new()
+		icon.custom_minimum_size = Vector2(24, 24)
+		icon.expand_mode = TextureRect.EXPAND_KEEP_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		if ResourceLoader.exists(icon_tex_path):
+			icon.texture = load(icon_tex_path)
+		icon_container.add_child(icon)
+		
+		var name_label = Label.new()
+		name_label.text = card.card_name
+		name_label.add_theme_font_size_override("font_size", 8)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		icon_container.add_child(name_label)
+		
+		trap_icons.add_child(icon_container)
+	
+	print("[CombatUI] Active traps: %d displayed" % combat_manager.active_traps.size())
 
 func _create_enemy_displays():
 	for child in enemy_container.get_children(): child.queue_free()
