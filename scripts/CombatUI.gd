@@ -727,28 +727,49 @@ func _get_enemy_statuses(enemy) -> Array[Dictionary]:
 	
 	# Check corruption (Demon DoT)
 	if enemy.get("corruption_stacks") and enemy.corruption_stacks > 0:
-		statuses.append({"name": "COR", "color": Color(0.6, 0.2, 0.8), "turns": enemy.corruption_stacks})
+		statuses.append({"name": "COR", "color": Color(0.6, 0.2, 0.8), "turns": enemy.corruption_stacks, "icon": "res://assets/sprites/ui/status_corruption.png"})
 	
 	# Check shield
 	if enemy.get("shield") and enemy.shield > 0:
-		statuses.append({"name": "SHD", "color": Color(0.3, 0.5, 0.9), "turns": enemy.shield})
+		statuses.append({"name": "SHD", "color": Color(0.3, 0.5, 0.9), "turns": enemy.shield, "icon": "res://assets/sprites/ui/status_shield.png"})
 	
 	# Check charge
 	if enemy.get("charge_stacks") and enemy.charge_stacks > 0:
-		statuses.append({"name": "CHG", "color": Color(0.9, 0.6, 0.1), "turns": enemy.charge_stacks})
+		statuses.append({"name": "CHG", "color": Color(0.9, 0.6, 0.1), "turns": enemy.charge_stacks, "icon": "res://assets/sprites/ui/status_charge.png"})
 	
 	# Check evasion
 	if enemy.get("evasion") and enemy.evasion > 0:
-		statuses.append({"name": "EVA", "color": Color(0.2, 0.8, 0.3), "turns": enemy.evasion})
+		statuses.append({"name": "EVA", "color": Color(0.2, 0.8, 0.3), "turns": enemy.evasion, "icon": "res://assets/sprites/ui/status_evasion.png"})
 	
 	# Check lifedrain
 	if enemy.get("lifedrain") and enemy.lifedrain > 0:
-		statuses.append({"name": "DRN", "color": Color(0.8, 0.2, 0.2), "turns": enemy.lifedrain})
+		statuses.append({"name": "DRN", "color": Color(0.8, 0.2, 0.2), "turns": enemy.lifedrain, "icon": "res://assets/sprites/ui/status_lifedrain.png"})
+	
+	# Check void
+	if enemy.get("void_stacks") and enemy.void_stacks > 0:
+		statuses.append({"name": "VOD", "color": Color(0.1, 0.05, 0.2), "turns": enemy.void_stacks, "icon": "res://assets/sprites/ui/status_void.png"})
+	
+	# Check glitch
+	if enemy.get("glitch") and enemy.glitch > 0:
+		statuses.append({"name": "GLT", "color": Color(0.7, 0.7, 0.7), "turns": enemy.glitch, "icon": "res://assets/sprites/ui/status_glitch.png"})
 	
 	return statuses
 
 func _create_status_icon(status: Dictionary) -> Control:
-	"""Create a small colored badge for a status effect."""
+	"""Create a status effect icon — uses PixelLab texture if available, else colored badge."""
+	var icon_path = status.get("icon", "")
+	
+	# Try PixelLab texture first
+	if icon_path != "" and ResourceLoader.exists(icon_path):
+		var icon = TextureRect.new()
+		icon.custom_minimum_size = Vector2(24, 24)
+		icon.expand_mode = TextureRect.EXPAND_KEEP_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture = load(icon_path)
+		icon.tooltip_text = "%s (%d turns)" % [status["name"], status["turns"]]
+		return icon
+	
+	# Fallback: colored badge
 	var badge = PanelContainer.new()
 	badge.custom_minimum_size = Vector2(28, 16)
 	
