@@ -647,6 +647,15 @@ func _create_enemy_panel(enemy, index: int) -> Control:
 	hp_text.add_theme_font_size_override("font_size", 10)
 	panel.add_child(hp_text)
 	
+	# --- Status Effects Row (below HP text) ---
+	var status_container = HBoxContainer.new()
+	status_container.name = "StatusEffects"
+	status_container.position = Vector2(5, 120) * s
+	status_container.size = Vector2(150, 16) * s
+	status_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	status_container.add_theme_constant_override("separation", 2)
+	panel.add_child(status_container)
+	
 	var target_btn = TextureButton.new()
 	target_btn.name = "TargetButton"
 	target_btn.anchor_right = 1.0; target_btn.anchor_bottom = 1.0
@@ -679,6 +688,7 @@ func _update_enemy_display(index: int, _damage: int):
 		enemy_hp.value = hp_percent * 100
 	var hp_text = panel.get_node_or_null("HPText")
 	if hp_text: hp_text.text = "%d / %d" % [enemy.hp, enemy.max_hp]
+	_update_enemy_status_effects(index)
 	if enemy.hp <= 0:
 		panel.modulate = Color(0.4, 0.4, 0.4)
 		var btn = panel.get_node_or_null("TargetButton")
@@ -687,6 +697,78 @@ func _update_enemy_display(index: int, _damage: int):
 			var btn_label = btn.get_node_or_null("Label")
 			if btn_label and btn_label is Label:
 				btn_label.text = "DEFEATED"
+
+func _update_enemy_status_effects(index: int):
+	"""Update status effect icons on an enemy panel."""
+	var panel = enemy_container.get_node_or_null("Enemy_%d" % index)
+	if not panel: return
+	var status_container = panel.get_node_or_null("StatusEffects")
+	if not status_container: return
+	
+	# Clear old icons
+	for child in status_container.get_children():
+		child.queue_free()
+	
+	var enemy = combat_manager.enemies[index]
+	
+	# Check for active status effects on this enemy
+	# These would be tracked in CombatManager or enemy data
+	var statuses = _get_enemy_statuses(enemy)
+	
+	for status in statuses:
+		var icon = _create_status_icon(status)
+		if icon:
+			status_container.add_child(icon)
+
+func _get_enemy_statuses(enemy) -> Array[Dictionary]:
+	"""Return array of active status effects on enemy.
+	Format: [{"name": str, "color": Color, "turns": int}]"""
+	var statuses: Array[Dictionary] = []
+	
+	# Check corruption (Demon DoT)
+	if enemy.get("corruption_stacks") and enemy.corruption_stacks > 0:
+		statuses.append({"name": "COR", "color": Color(0.6, 0.2, 0.8), "turns": enemy.corruption_stacks})
+	
+	# Check shield
+	if enemy.get("shield") and enemy.shield > 0:
+		statuses.append({"name": "SHD", "color": Color(0.3, 0.5, 0.9), "turns": enemy.shield})
+	
+	# Check charge
+	if enemy.get("charge_stacks") and enemy.charge_stacks > 0:
+		statuses.append({"name": "CHG", "color": Color(0.9, 0.6, 0.1), "turns": enemy.charge_stacks})
+	
+	# Check evasion
+	if enemy.get("evasion") and enemy.evasion > 0:
+		statuses.append({"name": "EVA", "color": Color(0.2, 0.8, 0.3), "turns": enemy.evasion})
+	
+	# Check lifedrain
+	if enemy.get("lifedrain") and enemy.lifedrain > 0:
+		statuses.append({"name": "DRN", "color": Color(0.8, 0.2, 0.2), "turns": enemy.lifedrain})
+	
+	return statuses
+
+func _create_status_icon(status: Dictionary) -> Control:
+	"""Create a small colored badge for a status effect."""
+	var badge = PanelContainer.new()
+	badge.custom_minimum_size = Vector2(28, 16)
+	
+	var style = StyleBoxFlat.new()
+	style.bg_color = status["color"]
+	style.corner_radius_top_left = 3
+	style.corner_radius_top_right = 3
+	style.corner_radius_bottom_left = 3
+	style.corner_radius_bottom_right = 3
+	badge.add_theme_stylebox_override("panel", style)
+	
+	var label = Label.new()
+	label.text = status["name"]
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 8)
+	label.add_theme_color_override("font_color", Color(1, 1, 1))
+	badge.add_child(label)
+	
+	return badge
 
 func _update_weapon_button():
 	if not combat_manager or not weapon_use_btn:
