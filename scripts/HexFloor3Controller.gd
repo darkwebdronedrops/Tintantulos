@@ -86,10 +86,15 @@ Color(0.4, 0.4, 0.35), Color(0.35, 0.3, 0.25), Color(0.3, 0.4, 0.45)
 # LIFECYCLE
 # ===================================================================
 
+var floor_cleared: bool = false
+var floor_complete_notified: bool = false
+
 func _ready():
     # Reset for replayability — selecting floor from menu should always be fresh
     room_cleared.clear()
     room_encounter_spawned.clear()
+    floor_cleared = false
+    floor_complete_notified = false
     call_deferred("_build_floor")
 
 func _build_floor():
@@ -553,7 +558,11 @@ func _input(event: InputEvent):
         elif event.keycode == KEY_S: move_vec = Vector2(0, 1)
         elif event.keycode == KEY_A: move_vec = Vector2(-1, 0)
         elif event.keycode == KEY_D: move_vec = Vector2(1, 0)
-        elif event.keycode == KEY_E: _interact()
+        elif event.keycode == KEY_E:
+            if floor_cleared:
+                _ascend_to_next_floor()
+            else:
+                _interact()
         elif event.keycode == KEY_R: _rotate_dial()
         elif event.keycode == KEY_ESCAPE: _toggle_pause_menu()
 

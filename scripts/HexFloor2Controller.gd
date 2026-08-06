@@ -95,10 +95,15 @@ signal room_changed(room_id: String, room_name: String)
 # LIFECYCLE
 # ===================================================================
 
+var floor_cleared: bool = false
+var floor_complete_notified: bool = false
+
 func _ready():
 	# Reset for replayability — selecting floor from menu should always be fresh
 	room_cleared.clear()
 	room_encounter_spawned.clear()
+	floor_cleared = false
+	floor_complete_notified = false
 	call_deferred("_build_floor")
 
 func _build_floor():
@@ -466,6 +471,10 @@ func _try_ambush_at_hex(target_hex: Vector2i) -> bool:
 	return false
 
 func _floor_complete():
+	if floor_complete_notified:
+		return
+	floor_complete_notified = true
+	floor_cleared = true
 	_show_dialogue("The Tower", "The Spore Heart falls. Press [S] to ascend to Floor 3.")
 	GameState.add_card_to_deck("spore_heart_card")
 	GameState.gems += 20
@@ -585,7 +594,10 @@ func _input(event: InputEvent):
 			KEY_X:
 				_hex_move(Vector2(0.5, 0.866))
 			KEY_S, KEY_SPACE:
-				_try_interact()
+				if floor_cleared:
+					_ascend_to_next_floor()
+				else:
+					_try_interact()
 				return
 
 func _on_click_move(screen_pos: Vector2):

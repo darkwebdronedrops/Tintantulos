@@ -114,10 +114,15 @@ signal level_changed(level_name: String)
 # LIFECYCLE
 # ===================================================================
 
+var floor_cleared: bool = false
+var floor_complete_notified: bool = false
+
 func _ready():
 	# Reset for replayability — selecting floor from menu should always be fresh
 	room_cleared.clear()
 	room_encounter_spawned.clear()
+	floor_cleared = false
+	floor_complete_notified = false
 	call_deferred("_build_floor")
 
 func _build_floor():
@@ -377,6 +382,19 @@ func _on_combat_ended(victory: bool):
 		for enemy in hex_enemies:
 			enemy.reset_after_combat()
 
+func _floor_complete():
+	if floor_complete_notified:
+		return
+	floor_complete_notified = true
+	floor_cleared = true
+	_show_dialogue("The Tower", "The Great Lifter falls. Press [S] to ascend to Floor 5.")
+	GameState.gems += 20
+	GameState.save_game()
+
+func _ascend_to_next_floor():
+	AudioManager.play_sfx("floor_transition")
+	get_tree().change_scene_to_file("res://scenes/Floor5.tscn")
+
 func _on_enemy_combat_initiated(ambush: bool):
 	"""Called when an enemy initiates or is ambushed into combat."""
 	if in_combat:
@@ -598,7 +616,10 @@ func _input(event: InputEvent):
 			KEY_X:
 				_hex_move(Vector2(0.5, 0.866))
 			KEY_S, KEY_SPACE:
-				_try_interact()
+				if floor_cleared:
+					_ascend_to_next_floor()
+				else:
+					_try_interact()
 				return
 
 func _on_click_move(screen_pos: Vector2):
