@@ -93,92 +93,118 @@ func _create_ui():
 	player_panel.name = "PlayerPanel"
 	player_panel.position = Vector2(10, 10)
 	player_panel.size = Vector2(200, 300)
-	# Skip decorative texture — use solid bg instead
 	add_child(player_panel)
 	
+	# Dark metal background with subtle border
 	var player_bg = ColorRect.new()
-	player_bg.color = Color(0.08, 0.08, 0.12, 0.9)
+	player_bg.name = "PanelBG"
+	player_bg.color = Color(0.06, 0.06, 0.10, 0.95)
 	player_bg.anchor_right = 1.0
 	player_bg.anchor_bottom = 1.0
 	player_panel.add_child(player_bg)
 	player_panel.move_child(player_bg, 0)
 	
-	# HP bar (y=8, height=20) — plain ProgressBar, no oversized texture_over
+	# Border overlay
+	var border = ColorRect.new()
+	border.name = "Border"
+	border.color = Color(0.3, 0.25, 0.2, 0.5)
+	border.position = Vector2(0, 0)
+	border.size = Vector2(200, 2)
+	player_panel.add_child(border)
+	
+	# Title bar
+	var title_label = Label.new()
+	title_label.name = "PlayerTitle"
+	title_label.text = "PLAYER"
+	title_label.position = Vector2(0, 4)
+	title_label.size = Vector2(200, 18)
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_label.add_theme_font_size_override("font_size", 12)
+	title_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+	player_panel.add_child(title_label)
+	
+	# HP bar (y=26) — with dynamic color
 	hp_bar = ProgressBar.new()
 	hp_bar.name = "HPBar"
-	hp_bar.position = Vector2(8, 8)
-	hp_bar.size = Vector2(184, 20)
+	hp_bar.position = Vector2(8, 26)
+	hp_bar.size = Vector2(184, 18)
 	hp_bar.min_value = 0; hp_bar.max_value = 100; hp_bar.value = 100
-	var hp_style = StyleBoxFlat.new()
-	hp_style.bg_color = Color(0.2, 0.8, 0.2)
-	hp_style.corner_radius_top_left = 3
-	hp_style.corner_radius_top_right = 3
-	hp_style.corner_radius_bottom_left = 3
-	hp_style.corner_radius_bottom_right = 3
-	hp_bar.add_theme_stylebox_override("fill", hp_style)
-	var hp_bg_style = StyleBoxFlat.new()
-	hp_bg_style.bg_color = Color(0.15, 0.15, 0.15)
-	hp_bg_style.corner_radius_top_left = 3
-	hp_bg_style.corner_radius_top_right = 3
-	hp_bg_style.corner_radius_bottom_left = 3
-	hp_bg_style.corner_radius_bottom_right = 3
-	hp_bar.add_theme_stylebox_override("background", hp_bg_style)
+	var hp_bg = StyleBoxFlat.new()
+	hp_bg.bg_color = Color(0.12, 0.12, 0.12)
+	hp_bg.corner_radius_top_left = 4
+	hp_bg.corner_radius_top_right = 4
+	hp_bg.corner_radius_bottom_left = 4
+	hp_bg.corner_radius_bottom_right = 4
+	hp_bar.add_theme_stylebox_override("background", hp_bg)
 	player_panel.add_child(hp_bar)
 	
 	hp_text_label = Label.new()
 	hp_text_label.name = "HPText"
-	hp_text_label.position = Vector2(8, 8)
-	hp_text_label.size = Vector2(184, 20)
+	hp_text_label.position = Vector2(8, 26)
+	hp_text_label.size = Vector2(184, 18)
 	hp_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hp_text_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hp_text_label.add_theme_font_size_override("font_size", 11)
 	player_panel.add_child(hp_text_label)
 	
-	# Shield (y=32)
+	# Shield row (y=50)
+	var shield_row = HBoxContainer.new()
+	shield_row.name = "ShieldRow"
+	shield_row.position = Vector2(8, 50)
+	shield_row.size = Vector2(184, 22)
+	player_panel.add_child(shield_row)
+	
 	shield_icon = TextureRect.new()
 	shield_icon.name = "ShieldIcon"
-	shield_icon.position = Vector2(8, 32)
-	shield_icon.size = Vector2(20, 20)
+	shield_icon.custom_minimum_size = Vector2(18, 18)
 	shield_icon.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	shield_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	var shield_tex = load("res://assets/sprites/ui/ui_shield_icon.png")
 	if shield_tex: shield_icon.texture = shield_tex
-	player_panel.add_child(shield_icon)
+	shield_row.add_child(shield_icon)
 	
 	shield_label = Label.new()
 	shield_label.name = "ShieldLabel"
-	shield_label.position = Vector2(32, 32)
-	shield_label.size = Vector2(160, 20)
+	shield_label.text = "Shield: 0"
 	shield_label.add_theme_color_override("font_color", Color(0.55, 0.65, 0.85))
-	player_panel.add_child(shield_label)
+	shield_label.add_theme_font_size_override("font_size", 12)
+	shield_row.add_child(shield_label)
 	
-	# Attention state (y=58)
+	# Attention section (y=78)
+	var attn_header = Label.new()
+	attn_header.name = "AttentionHeader"
+	attn_header.text = "ATTENTION"
+	attn_header.position = Vector2(0, 78)
+	attn_header.size = Vector2(200, 16)
+	attn_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	attn_header.add_theme_font_size_override("font_size", 10)
+	attn_header.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+	player_panel.add_child(attn_header)
+	
 	attention_state_label = Label.new()
 	attention_state_label.name = "AttentionState"
-	attention_state_label.position = Vector2(4, 58)
-	attention_state_label.size = Vector2(192, 20)
+	attention_state_label.position = Vector2(4, 96)
+	attention_state_label.size = Vector2(192, 22)
 	attention_state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	attention_state_label.add_theme_font_size_override("font_size", 16)
+	attention_state_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
 	player_panel.add_child(attention_state_label)
 	
 	attention_value_label = Label.new()
 	attention_value_label.name = "AttentionValue"
-	attention_value_label.position = Vector2(4, 80)
-	attention_value_label.size = Vector2(192, 18)
+	attention_value_label.position = Vector2(4, 118)
+	attention_value_label.size = Vector2(192, 16)
 	attention_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	attention_value_label.add_theme_font_size_override("font_size", 11)
 	player_panel.add_child(attention_value_label)
 	
 	attention_bar = ProgressBar.new()
 	attention_bar.name = "AttentionBar"
-	attention_bar.position = Vector2(4, 100)
-	attention_bar.size = Vector2(192, 18)
+	attention_bar.position = Vector2(8, 136)
+	attention_bar.size = Vector2(184, 12)
 	attention_bar.min_value = 0; attention_bar.max_value = 20
-	var attn_fill_style = StyleBoxFlat.new()
-	attn_fill_style.bg_color = Color(0.8, 0.2, 0.8)
-	attn_fill_style.corner_radius_top_left = 3
-	attn_fill_style.corner_radius_top_right = 3
-	attn_fill_style.corner_radius_bottom_left = 3
-	attn_fill_style.corner_radius_bottom_right = 3
-	attention_bar.add_theme_stylebox_override("fill", attn_fill_style)
 	var attn_bg_style = StyleBoxFlat.new()
-	attn_bg_style.bg_color = Color(0.15, 0.15, 0.15)
+	attn_bg_style.bg_color = Color(0.12, 0.12, 0.12)
 	attn_bg_style.corner_radius_top_left = 3
 	attn_bg_style.corner_radius_top_right = 3
 	attn_bg_style.corner_radius_bottom_left = 3
@@ -188,54 +214,77 @@ func _create_ui():
 	
 	var desc_label = Label.new()
 	desc_label.name = "AttentionDesc"
-	desc_label.position = Vector2(4, 122)
-	desc_label.size = Vector2(192, 36)
+	desc_label.position = Vector2(4, 152)
+	desc_label.size = Vector2(192, 28)
 	desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	desc_label.add_theme_font_size_override("font_size", 9)
+	desc_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
 	player_panel.add_child(desc_label)
 	
-	# Quiddity (y=162)
+	# Resources row (y=186)
+	var res_row = HBoxContainer.new()
+	res_row.name = "ResourceRow"
+	res_row.position = Vector2(8, 186)
+	res_row.size = Vector2(184, 22)
+	player_panel.add_child(res_row)
+	
 	quiddity_icon = TextureRect.new()
 	quiddity_icon.name = "QuiddityIcon"
-	quiddity_icon.position = Vector2(8, 162)
-	quiddity_icon.size = Vector2(18, 18)
+	quiddity_icon.custom_minimum_size = Vector2(16, 16)
 	quiddity_icon.expand_mode = TextureRect.EXPAND_KEEP_SIZE
 	quiddity_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	var gem_tex = load("res://assets/sprites/ui/ui_gem_quiddity.png")
 	if gem_tex: quiddity_icon.texture = gem_tex
-	player_panel.add_child(quiddity_icon)
+	res_row.add_child(quiddity_icon)
 	
 	quiddity_label = Label.new()
 	quiddity_label.name = "QuiddityLabel"
-	quiddity_label.position = Vector2(30, 162)
-	quiddity_label.size = Vector2(162, 18)
+	quiddity_label.text = "0"
 	quiddity_label.add_theme_color_override("font_color", Color(0.8, 0.4, 1.0))
-	player_panel.add_child(quiddity_label)
+	quiddity_label.add_theme_font_size_override("font_size", 12)
+	res_row.add_child(quiddity_label)
 	
-	# Deck count (y=186)
+	# Spacer
+	var spacer = Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	res_row.add_child(spacer)
+	
 	deck_count_label = Label.new()
 	deck_count_label.name = "DeckCount"
-	deck_count_label.position = Vector2(8, 186)
-	deck_count_label.size = Vector2(184, 20)
 	deck_count_label.text = "Deck: 0"
-	player_panel.add_child(deck_count_label)
+	deck_count_label.add_theme_font_size_override("font_size", 11)
+	res_row.add_child(deck_count_label)
 	
-	# End Turn button (y=216) — plain button, no oversized texture
+	# Buttons (y=218)
+	var btn_row = HBoxContainer.new()
+	btn_row.name = "ButtonRow"
+	btn_row.position = Vector2(8, 218)
+	btn_row.size = Vector2(184, 36)
+	btn_row.add_theme_constant_override("separation", 6)
+	player_panel.add_child(btn_row)
+	
 	end_turn_btn = Button.new()
 	end_turn_btn.name = "EndTurnBtn"
-	end_turn_btn.position = Vector2(8, 216)
-	end_turn_btn.size = Vector2(90, 32)
+	end_turn_btn.custom_minimum_size = Vector2(86, 32)
 	end_turn_btn.text = "End Turn (T)"
 	end_turn_btn.pressed.connect(_on_end_turn)
-	player_panel.add_child(end_turn_btn)
+	btn_row.add_child(end_turn_btn)
 	
-	# Stake button (y=216, to the right) — plain button
 	stake_btn = Button.new()
 	stake_btn.name = "StakeBtn"
-	stake_btn.position = Vector2(104, 216)
-	stake_btn.size = Vector2(90, 32)
+	stake_btn.custom_minimum_size = Vector2(86, 32)
 	stake_btn.text = "Stake 0"
 	stake_btn.pressed.connect(_on_stake)
-	player_panel.add_child(stake_btn)
+	btn_row.add_child(stake_btn)
+	
+	# Flee button (y=260) — small, secondary
+	var flee_btn = Button.new()
+	flee_btn.name = "FleeBtn"
+	flee_btn.position = Vector2(8, 262)
+	flee_btn.size = Vector2(184, 24)
+	flee_btn.text = "Flee"
+	flee_btn.pressed.connect(func(): if combat_manager: combat_manager.attempt_flee())
+	player_panel.add_child(flee_btn)
 	
 	# --- ENEMY CONTAINER (top center, 830×130) ---
 	enemy_container = HBoxContainer.new()
@@ -521,6 +570,16 @@ func _update_player_display(_amount: int = 0):
 	hp_bar.value = hp_percent * 100
 	hp_text_label.text = "%d / %d" % [combat_manager.player_hp, combat_manager.player_max_hp]
 	shield_label.text = "Shield: %d" % combat_manager.player_shield
+	
+	# Dynamic HP bar color: green → yellow → red
+	var fill_style = hp_bar.get_theme_stylebox("fill")
+	if fill_style and fill_style is StyleBoxFlat:
+		if hp_percent > 0.5:
+			fill_style.bg_color = Color(0.2, 0.8, 0.2)  # Green
+		elif hp_percent > 0.25:
+			fill_style.bg_color = Color(0.9, 0.8, 0.1)  # Yellow
+		else:
+			fill_style.bg_color = Color(0.9, 0.2, 0.2)  # Red
 
 func _update_attention_display(current: int, maximum: int):
 	attention_bar.value = current
