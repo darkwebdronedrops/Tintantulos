@@ -347,7 +347,7 @@ func _create_ui():
 	card_preview.name = "CardPreview"
 	card_preview.size = Vector2(240, 320)
 	card_preview.visible = false
-	card_preview.z_index = 10
+	card_preview.z_index = 100  # Higher than everything else
 	card_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(card_preview)
 	
@@ -360,13 +360,15 @@ func _create_ui():
 	card_preview_tex.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card_preview.add_child(card_preview_tex)
 	
-	# Dark backdrop behind preview for readability
+	# Dark backdrop behind preview for readability — covers entire viewport
 	var preview_bg = ColorRect.new()
 	preview_bg.name = "CardPreviewBG"
-	preview_bg.color = Color(0, 0, 0, 0.7)
+	preview_bg.color = Color(0, 0, 0, 0.75)
 	preview_bg.visible = false
-	preview_bg.z_index = 9
+	preview_bg.z_index = 99  # Just below preview
 	preview_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	preview_bg.anchor_right = 1.0
+	preview_bg.anchor_bottom = 1.0
 	add_child(preview_bg)
 
 func _get_attention_color(state: CombatManager.AttentionState) -> Color:
@@ -748,53 +750,118 @@ func _on_card_clicked(index: int):
 
 func _on_card_hover(index: int, is_hovering: bool):
 	var card_root = hand_container.get_node_or_null("Card_%d" % index)
-	if card_root:
-		if is_hovering:
-			# Slight scale on hand card (subtle, doesn't overlap neighbors)
-			card_root.scale = Vector2(1.05, 1.05)
-			# Show large preview — dynamically sized from viewport
-			if combat_manager and index >= 0 and index < combat_manager.hand.size():
-				var card = combat_manager.hand[index]
-				var safe_name = card.card_name.to_lower().replace(" ", "_").replace("'", "")
-				# Strip imbue suffix like [Sneaky] so upgraded cards use base art
-				var bracket_idx = safe_name.find("_[")
-				if bracket_idx != -1:
-					safe_name = safe_name.substr(0, bracket_idx)
-				var finished_path = "res://assets/sprites/cards/finished/%s/%s.png" % [card.faction, safe_name]
-				var finished_tex = load(finished_path)
-				if finished_tex:
-					# Calculate preview size from viewport (45% height max, card aspect ~0.7)
-					var vp_size = get_viewport().get_visible_rect().size
-					var max_h = min(vp_size.y * 0.45, 400)  # Cap at 400px or 45% of viewport
-					var max_w = min(vp_size.x * 0.45, 280)  # Cap width similarly
-					var preview_h = max_h
-					var preview_w = preview_h * 0.70
-					if preview_w > max_w:
-						preview_w = max_w
-						preview_h = preview_w / 0.70
-					# Position: centered with 20px padding from edges
-					var pos_x = clamp((vp_size.x - preview_w) / 2, 20, vp_size.x - preview_w - 20)
-					var pos_y = clamp((vp_size.y - preview_h) / 2, 20, vp_size.y - preview_h - 20)
-					card_preview.size = Vector2(preview_w, preview_h)
-					card_preview.position = Vector2(pos_x, pos_y)
-					var tex_rect = card_preview.get_node_or_null("CardPreviewTex")
-					if tex_rect:
-						tex_rect.texture = finished_tex
-					card_preview.visible = true
-					# Backdrop fills entire viewport behind preview
-					var preview_bg = get_node_or_null("CardPreviewBG")
-					if preview_bg:
-						preview_bg.size = vp_size
-						preview_bg.position = Vector2.ZERO
-						preview_bg.visible = true
-				else:
-					card_preview.visible = false
-		else:
-			card_root.scale = Vector2(1.0, 1.0)
-			card_preview.visible = false
-			var preview_bg = get_node_or_null("CardPreviewBG")
-			if preview_bg:
-				preview_bg.visible = false
+	if not card_root:
+		return
+		
+	if is_hovering:
+		# Slight scale on hand card (subtle, doesn't overlap neighbors)
+		card_root.scale = Vector2(1.05, 1.05)
+		card_root.z_index = 5  # Bring hovered card slightly forward
+		
+		# Show large preview
+		if combat_manager and index >= 0 and index < combat_manager.hand.size():
+			var card = combat_manager.hand[index]
+			var safe_name = card.card_name.to_lower().replace(" ", "_").replace("'", "")
+			# Strip imbue suffix like [Sneaky] so upgraded cards use base art
+			var bracket_idx = safe_name.find("_[")
+			if bracket_idx != -1:
+				safe_name = safe_name.substr(0, bracket_idx)
+			var finished_path = "res://assets/sprites/cards/finished/%s/%s.png" % [card.faction, safe_name]
+			var finished_tex = load(finished_path)
+			if finished_tex:
+				# Calculate preview size from viewport (50% height max, card aspect ~0.7)
+				var vp_size = get_viewport().get_visible_rect().size
+				var max_h = min(vp_size.y * 0.50, 420)  # Cap at 420px or 50% of viewport
+				var max_w = min(vp_size.x * 0.40, 300)  # Cap width
+				var preview_h = max_h
+				var preview_w = preview_h * 0.72  # Card aspect ratio
+				if preview_w > max_w:
+					preview_w = max_w
+					preview_h = preview_w / 0.72
+				
+				# Center with padding
+				var pos_x = clamp((vp_size.x - preview_w) / 2, 20, vp_size.x - preview_w - 20)
+				var pos_y = clamp((vp_size.y - preview_h) / 2, 20, vp_size.y - preview_h - 20)
+				
+				card_preview.size = Vector2(preview_w, preview_h)
+				card_preview.position = Vector2(pos_x, pos_y)
+				
+				var tex_rect = card_preview.get_node_or_null("CardPreviewTex")
+				if tex_rect:
+					tex_rect.texture = finished_tex
+				
+				# Show backdrop and preview
+				var preview_bg = get_node_or_null("CardPreviewBG")
+				if preview_bg:
+					preview_bg.visible = true
+				card_preview.visible = true
+				
+				# Print debug info
+				print("[CombatUI] Card preview: %s (%dx%d) at (%d,%d)" % [
+					card.card_name, int(preview_w), int(preview_h), int(pos_x), int(pos_y)
+				])
+			else:
+				# No texture found — show placeholder with card info
+				_show_text_preview(card)
+	else:
+		card_root.scale = Vector2(1.0, 1.0)
+		card_root.z_index = 0
+		card_preview.visible = false
+		var preview_bg = get_node_or_null("CardPreviewBG")
+		if preview_bg:
+			preview_bg.visible = false
+
+func _show_text_preview(card: CardData):
+	"""Show text-based preview when card image is missing."""
+	var vp_size = get_viewport().get_visible_rect().size
+	var preview_w = 280
+	var preview_h = 360
+	var pos_x = clamp((vp_size.x - preview_w) / 2, 20, vp_size.x - preview_w - 20)
+	var pos_y = clamp((vp_size.y - preview_h) / 2, 20, vp_size.y - preview_h - 20)
+	
+	card_preview.size = Vector2(preview_w, preview_h)
+	card_preview.position = Vector2(pos_x, pos_y)
+	
+	# Clear old children except the texture rect
+	for child in card_preview.get_children():
+		if child.name != "CardPreviewTex":
+			child.queue_free()
+	
+	# Create text-based preview
+	var bg = ColorRect.new()
+	bg.color = _get_faction_color(card.faction)
+	bg.anchor_right = 1.0
+	bg.anchor_bottom = 1.0
+	card_preview.add_child(bg)
+	card_preview.move_child(bg, 0)
+	
+	var name_label = Label.new()
+	name_label.text = card.card_name
+	name_label.anchor_right = 1.0
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.position = Vector2(0, 20)
+	name_label.add_theme_font_size_override("font_size", 24)
+	card_preview.add_child(name_label)
+	
+	var type_label = Label.new()
+	type_label.text = "%s | %s" % [card.faction, card.card_type]
+	type_label.anchor_right = 1.0
+	type_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	type_label.position = Vector2(0, 60)
+	card_preview.add_child(type_label)
+	
+	var desc_label = Label.new()
+	desc_label.text = card.description
+	desc_label.anchor_right = 1.0
+	desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	desc_label.position = Vector2(20, 100)
+	desc_label.size = Vector2(preview_w - 40, preview_h - 120)
+	card_preview.add_child(desc_label)
+	
+	var preview_bg = get_node_or_null("CardPreviewBG")
+	if preview_bg:
+		preview_bg.visible = true
+	card_preview.visible = true
 
 func _check_hover_after_rebuild():
 	"""Manually check if mouse is over a card and trigger hover.
