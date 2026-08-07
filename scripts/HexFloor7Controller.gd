@@ -1419,6 +1419,19 @@ var post_combat_ui: PostCombatUI
 		if ui and ui.has_method("process"):
 			ui.process(_delta)
 
+func _floor_complete():
+	if floor_complete_notified:
+		return
+	floor_complete_notified = true
+	floor_cleared = true
+	_show_dialogue("The Tower", "The Denied is judged. Press [S] to ascend to Floor 8.")
+	GameState.gems += 20
+	GameState.save_game()
+
+func _ascend_to_next_floor():
+	AudioManager.play_sfx("floor_transition")
+	get_tree().change_scene_to_file("res://scenes/Floor8.tscn")
+
 func _on_post_combat_closed():
 	in_ui = false
 	print("[Floor7-Hex] Post-combat closed, resuming")

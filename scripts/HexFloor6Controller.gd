@@ -962,7 +962,10 @@ func _input(event: InputEvent):
 			KEY_X:
 				_hex_move(Vector2(0.5, 0.866))
 			KEY_S, KEY_SPACE:
-				_try_interact()
+				if floor_cleared:
+					_ascend_to_floor7()
+				else:
+					_try_interact()
 				return
 			KEY_T:
 				# End turn in combat (if implemented)
@@ -2048,6 +2051,15 @@ func _defend_thesis():
 # ===================================================================
 # FLOOR COMPLETE / TRANSITION
 # ===================================================================
+
+func _floor_complete():
+	if floor_complete_notified:
+		return
+	floor_complete_notified = true
+	floor_cleared = true
+	_show_dialogue("The Tower", "The Dean falls. The University is yours. Press [S] to ascend to Floor 7.")
+	GameState.gems += 20
+	GameState.save_game()
 
 func _ascend_to_floor7():
 	if not dean_defeated:

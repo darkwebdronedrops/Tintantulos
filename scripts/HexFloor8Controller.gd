@@ -1409,6 +1409,15 @@ func _show_floor_transition_prompt():
 	prompt.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3))
 	add_child(prompt)
 
+func _floor_complete():
+	if floor_complete_notified:
+		return
+	floor_complete_notified = true
+	floor_cleared = true
+	_show_dialogue("The Tower", "The Dimensional Anchor stabilizes. Press [S] to ascend to Floor 9.")
+	GameState.gems += 20
+	GameState.save_game()
+
 func _ascend_to_next_floor():
 	print("[Floor8] Ascending to Floor 9...")
 	get_tree().change_scene_to_file("res://scenes/Floor9.tscn")

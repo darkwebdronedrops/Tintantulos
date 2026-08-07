@@ -1585,6 +1585,15 @@ var post_combat_ui: PostCombatUI
 		if ui and ui.has_method("process"):
 			ui.process(_delta)
 
+func _floor_complete():
+	if floor_complete_notified:
+		return
+	floor_complete_notified = true
+	floor_cleared = true
+	_show_dialogue("The Tower", "The Dragon is no more. The Cano Protocol is broken. You have reached the end. Press [S] to return to the title screen.")
+	GameState.gems += 50
+	GameState.save_game()
+
 func _on_post_combat_closed():
 	in_ui = false
 	print("[Floor10-Hex] Post-combat closed, resuming")
