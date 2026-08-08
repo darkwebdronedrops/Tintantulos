@@ -551,14 +551,16 @@ func _input(event: InputEvent):
     if in_combat or in_ui or is_paused:
         return
 
-    # WASD movement
+    # Hex-directional movement (matches other floors)
     if event is InputEventKey and event.pressed:
         var move_vec = Vector2.ZERO
-        if event.keycode == KEY_W: move_vec = Vector2(0, -1)
-        elif event.keycode == KEY_S: move_vec = Vector2(0, 1)
-        elif event.keycode == KEY_A: move_vec = Vector2(-1, 0)
-        elif event.keycode == KEY_D: move_vec = Vector2(1, 0)
-        elif event.keycode == KEY_E:
+        if event.keycode == KEY_W: move_vec = Vector2(0, -1)      # NW
+        elif event.keycode == KEY_E: move_vec = Vector2(1, -1)     # NE
+        elif event.keycode == KEY_A: move_vec = Vector2(-1, 0)     # W
+        elif event.keycode == KEY_D: move_vec = Vector2(1, 0)      # E
+        elif event.keycode == KEY_Z: move_vec = Vector2(-1, 1)     # SW
+        elif event.keycode == KEY_X: move_vec = Vector2(0, 1)      # SE
+        elif event.keycode == KEY_S:
             if floor_cleared:
                 _ascend_to_next_floor()
             else:
