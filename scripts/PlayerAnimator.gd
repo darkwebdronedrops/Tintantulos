@@ -1,5 +1,4 @@
 extends Node2D
-class_name PlayerAnimator
 
 # PlayerAnimator - Handles all player sprite animations
 # 4 Stances: borrowed, scream, whisper, undefined
@@ -84,25 +83,7 @@ func set_state(stance: String, action: String, direction: String = "s"):
 func set_direction(direction: String):
 	if current_direction != direction:
 		current_direction = direction
-		_update_flip()
 		_load_frame()
-
-func _update_flip():
-	"""Flip sprite horizontally based on facing direction.
-	All base sprites face left; flip for east-facing movement."""
-	if not sprite:
-		return
-	# Directions ending in 'e' = facing right (flip to face right)
-	# Directions ending in 'w' = facing left (no flip)
-	# n/s = keep last horizontal facing
-	if current_direction.ends_with("e"):
-		sprite.flip_h = true
-	elif current_direction.ends_with("w"):
-		sprite.flip_h = false
-	# n/s: don't change flip state
-
-func _load_frame():
-	_update_flip()  # Ensure flip is correct before loading
 
 func _load_frame():
 	var path = _build_sprite_path()
