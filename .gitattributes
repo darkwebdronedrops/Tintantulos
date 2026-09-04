@@ -1,0 +1,42 @@
+# Godot text files — always LF, never CRLF
+*.gd text eol=lf
+*.tscn text eol=lf
+*.tres text eol=lf
+*.import text eol=lf
+*.cfg text eol=lf
+*.godot text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.csv text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+
+# Binary files — never modify line endings
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.bmp binary
+*.tga binary
+*.svg binary
+*.mp3 binary
+*.wav binary
+*.ogg binary
+*.ogv binary
+*.mp4 binary
+*.ttf binary
+*.otf binary
+*.fnt binary
+*.ico binary
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.rar binary
+*.7z binary
