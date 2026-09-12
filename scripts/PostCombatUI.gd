@@ -214,6 +214,8 @@ func _can_imbue_card(card: CardData, faction: String) -> bool:
 	
 	# Max 2 purchased upgrades per card
 	return upgrade_count < 2
+
+func _calculate_burn_value(card: CardData) -> int:
 	"""Calculate gems earned when burning a card."""
 	return GameState._calculate_card_gem_value(card)
 
@@ -439,6 +441,8 @@ func _create_upgrade_panel(index: int, card: CardData) -> PanelContainer:
 	vbox.add_child(imbue_btn)
 	
 	return panel
+
+func _create_card_pick_panel(index: int) -> PanelContainer:
 	var card = card_picks[index]
 	var cost = pick_costs[index]
 	
