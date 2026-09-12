@@ -244,6 +244,16 @@ func _setup_enemies():
 		return
 	
 	# Normal enemy spawn logic for re-runs
+	_spawn_regular_enemies()
+	print("[Floor1-Hex] %d hex enemies spawned" % hex_enemies.size())
+
+func _spawn_regular_enemies():
+	"""Spawn all regular enemies (called at setup or after tutorial completion)."""
+	if not enemy_container:
+		enemy_container = Node2D.new()
+		enemy_container.name = "EnemyContainer"
+		add_child(enemy_container)
+	
 	var enemy_spawns = {
 		"upper": [
 			{"name": "Piston Assembly", "hex": Vector2i(-2, -22), "faction": "Construct", "sprite": "res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"},
@@ -265,7 +275,7 @@ func _setup_enemies():
 		],
 	}
 	
-	# Spawn secret chest
+	# Spawn secret chest (only once)
 	_setup_chest()
 	
 	for room_id in enemy_spawns.keys():
@@ -311,8 +321,6 @@ func _setup_enemies():
 			
 			hex_enemies.append(enemy)
 			print("[Floor1-Hex] Spawned %s at %s" % [spawn_data["name"], str(spawn_data["hex"])])
-	
-	print("[Floor1-Hex] %d hex enemies spawned" % hex_enemies.size())
 
 # ===================================================================
 # NPCs
@@ -1684,8 +1692,10 @@ func _on_guided_tutorial_complete():
 	GameState.door_tutorial_completed = true
 	GameState.save_game()
 	_unlock_all_portals()
+	# Spawn regular enemies now that tutorial is done
+	_spawn_regular_enemies()
 	_show_notification("All portals unlocked!", Color(0.3, 0.9, 0.3), 4.0)
-	print("[Floor1-Hex] Guided tutorial complete!")
+	print("[Floor1-Hex] Guided tutorial complete! Regular enemies spawned.")
 
 func _lock_portals_except(allowed: Array[String]):
 	# Handled by _is_portal_locked
