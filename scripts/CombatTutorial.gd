@@ -44,12 +44,23 @@ func _find_combat_manager() -> CombatManager:
 func _on_combat_started(_enemies: Array):
 	if not has_shown_combat_start:
 		has_shown_combat_start = true
-		_show_hint("Combat begins! It's your turn.", Vector2(540, 200), 4.0)
+		if door_tutorial_active:
+			# Thought-style opening (already shown by start_door_tutorial)
+			pass
+		else:
+			_show_hint("Combat begins! It's your turn.", Vector2(540, 200), 4.0)
 
 func _on_turn_started(is_player_turn: bool):
 	if is_player_turn and not has_shown_cards:
 		has_shown_cards = true
-		_show_hint("These are your cards. Each costs Attention to play.", Vector2(540, 520), 5.0)
+		if door_tutorial_active:
+			_show_thought("Cards. They respond to my focus — Attention.\nPlay them before I run out of focus.", 5.0)
+		else:
+			_show_hint("These are your cards. Each costs Attention to play.", Vector2(540, 520), 5.0)
+	
+	# Second player turn: show Stake thought
+	if door_tutorial_active and is_player_turn and door_tutorial_step >= 3:
+		show_stake_thought()
 	
 	# Door tutorial: detect when player ends turn (enemy turn starts)
 	if door_tutorial_active and not is_player_turn and door_tutorial_step >= 2:
@@ -58,7 +69,10 @@ func _on_turn_started(is_player_turn: bool):
 func _on_player_damaged(damage: int, _shield_absorbed: int):
 	if not has_shown_damage:
 		has_shown_damage = true
-		_show_hint("You took damage! Shield absorbs damage before HP.", Vector2(540, 300), 4.0)
+		if door_tutorial_active:
+			_show_thought("That hurt. My HP — I can't lose it all.\nShield first. Always shield first.", 4.0)
+		else:
+			_show_hint("You took damage! Shield absorbs damage before HP.", Vector2(540, 300), 4.0)
 
 func _on_card_played(card: CardData):
 	on_card_played(card.name)
@@ -90,26 +104,30 @@ func on_enemy_attack():
 		_show_hint("Enemy attacks! Use Shield cards to protect yourself.", Vector2(540, 300), 4.0)
 
 # -------------------------------------------------------------------
-# Door Tutorial: Scripted hints for the Threshold Door encounter
+# Door Tutorial: "Thoughts" — first-person inner monologue
 # -------------------------------------------------------------------
 var door_tutorial_active: bool = false
 var door_tutorial_step: int = 0
 var has_shown_strike_hint: bool = false
 var has_shown_block_hint: bool = false
 var has_shown_end_turn_hint: bool = false
+var has_shown_stake_thought: bool = false
+var has_shown_attention_thought: bool = false
 
 func start_door_tutorial():
-	"""Enable scripted hints for the tutorial Door encounter."""
+	"""Enable scripted 'Thoughts' for the tutorial Door encounter."""
 	door_tutorial_active = true
 	door_tutorial_step = 0
 	has_shown_strike_hint = false
 	has_shown_block_hint = false
 	has_shown_end_turn_hint = false
-	print("[CombatTutorial] Door tutorial started")
-	_show_hint("Combat begins! The Door is vulnerable.\nPlay a Strike to deal damage.", Vector2(540, 200), 5.0)
+	has_shown_stake_thought = false
+	has_shown_attention_thought = false
+	print("[CombatTutorial] Door tutorial started — Thoughts mode")
+	_show_thought("The Door. It's... alive. And angry.\nI need to fight. Strike — I know this one.", 5.0)
 
 func on_card_played(card_name: String):
-	"""Track card plays for tutorial hints."""
+	"""Track card plays for tutorial thoughts."""
 	if not door_tutorial_active:
 		return
 	
@@ -118,21 +136,116 @@ func on_card_played(card_name: String):
 			if not has_shown_strike_hint:
 				has_shown_strike_hint = true
 				door_tutorial_step = 1
-				_show_hint("Good! The Door braces itself.\nPlay a Block before it attacks.", Vector2(540, 200), 5.0)
+				_show_thought("It hit. Good. But it's bracing for another slam.\nI need to protect myself. Block.", 5.0)
 		"block", "shield", "defend":
 			if not has_shown_block_hint and door_tutorial_step >= 1:
 				has_shown_block_hint = true
 				door_tutorial_step = 2
-				_show_hint("Shield absorbs damage before HP.\nPress [Space] or click End Turn.", Vector2(540, 520), 5.0)
+				_show_thought("Shield up. That should absorb the blow.\nNow I need to end my turn — [Space].", 5.0)
 
 func on_end_turn_pressed():
-	"""Track end turn for tutorial hints."""
+	"""Track end turn for tutorial thoughts."""
 	if not door_tutorial_active:
 		return
 	if not has_shown_end_turn_hint and door_tutorial_step >= 2:
 		has_shown_end_turn_hint = true
-		_show_hint("The Door attacks! Your Shield absorbs the blow.\nNow strike back!", Vector2(540, 200), 4.0)
+		_show_thought("The shield held. I can breathe.\nNow — strike back while it's recovering!", 4.0)
 		door_tutorial_step = 3
+
+func show_stake_thought():
+	"""Show the Stake/Quiddity thought (called on second player turn)."""
+	if not door_tutorial_active or has_shown_stake_thought:
+		return
+	has_shown_stake_thought = true
+	_show_thought("If I draw fewer cards, I save power for later.\nStake low — earn more Quiddity. Risk vs reward.", 5.5)
+
+func show_attention_thought():
+	"""Show the Attention mechanic thought (called when attention changes)."""
+	if not door_tutorial_active or has_shown_attention_thought:
+		return
+	has_shown_attention_thought = true
+	_show_thought("My focus — Attention. More power, but riskier.\nWhisper is safe. Scream is deadly. For both of us.", 5.5)
+
+# -------------------------------------------------------------------
+# Thoughts display — first-person inner monologue
+# -------------------------------------------------------------------
+func _show_thought(text: String, duration: float = 4.0):
+	"""Display a 'Thought' — italic, subtle, first-person."""
+	# Queue if already showing
+	if is_showing_hint:
+		hint_queue.append({"text": "[THOUGHT]" + text, "pos": Vector2.ZERO, "dur": duration})
+		return
+	
+	is_showing_hint = true
+	
+	# Create thought panel
+	var panel = Panel.new()
+	panel.name = "ThoughtPanel"
+	panel.position = Vector2(340, 40)  # Top-center
+	panel.size = Vector2(600, 80)
+	
+	# Style: subtle, no border, translucent
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.05, 0.05, 0.08, 0.75)
+	style.corner_radius_top_left = 12
+	style.corner_radius_top_right = 12
+	style.corner_radius_bottom_left = 12
+	style.corner_radius_bottom_right = 12
+	panel.add_theme_stylebox_override("panel", style)
+	
+	# Label — italic, larger, softer color
+	var label = Label.new()
+	label.name = "ThoughtLabel"
+	label.text = "💭  " + text
+	label.anchor_right = 1.0
+	label.anchor_bottom = 1.0
+	label.offset_left = 16
+	label.offset_right = -16
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 15)
+	label.add_theme_color_override("font_color", Color(0.82, 0.80, 0.72))
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	panel.add_child(label)
+	
+	# Z-index high
+	panel.z_index = 200
+	panel.modulate.a = 0.0
+	
+	# Add to tree
+	if get_parent():
+		get_parent().add_child(panel)
+	else:
+		add_child(panel)
+	
+	current_hint = panel
+	
+	# Fade in slowly
+	var tween = create_tween()
+	tween.tween_property(panel, "modulate:a", 1.0, 0.6)
+	await tween.finished
+	
+	# Wait duration
+	await get_tree().create_timer(duration).timeout
+	
+	# Fade out
+	var tween_out = create_tween()
+	tween_out.tween_property(panel, "modulate:a", 0.0, 0.8)
+	await tween_out.finished
+	
+	# Remove
+	panel.queue_free()
+	current_hint = null
+	is_showing_hint = false
+	
+	# Process queue — check if next is a thought or hint
+	if not hint_queue.is_empty():
+		var next = hint_queue.pop_front()
+		var next_text = next["text"]
+		if next_text.begins_with("[THOUGHT]"):
+			_show_thought(next_text.trim_prefix("[THOUGHT]"), next["dur"])
+		else:
+			_show_hint(next_text, next["pos"], next["dur"])
 
 # -------------------------------------------------------------------
 # Core hint display
