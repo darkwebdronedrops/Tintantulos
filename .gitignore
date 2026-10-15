@@ -2,7 +2,6 @@
 *.tmp
 *.log
 builds/
-export_presets.cfg
 
 # OS files
 .DS_Store
