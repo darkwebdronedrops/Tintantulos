@@ -72,7 +72,7 @@ class_name CardData
 @export var fused_keywords: PackedStringArray = [] # Keywords added by overlay
 
 func get_compiler_weight() -> int:
-	"""Return card weight toward the 50-card Compiler threshold.
+	"""Return card weight toward the Compiler VALUE limb (canon: 60).
 	Fused cards count as 2. Unfused cards count as 1."""
 	return 2 if is_fused else 1
 

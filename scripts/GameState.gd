@@ -144,7 +144,9 @@ static func tick_no_aggro(delta: float):
 func _process(delta):
 	tick_no_aggro(delta)
 
-static var deck_max_size: int = 50
+# Compiler awakening — two-limb canon (50 UNIQUE cards OR deck VALUE 60; fused cards count 2)
+static var compiler_unique_threshold: int = 50
+static var compiler_value_threshold: int = 60
 
 # Offerings & Economy
 static var gear_devil_tokens: Array[int] = []  # Room IDs where tokens collected
@@ -964,9 +966,9 @@ static func clear_all_room_states():
 	boons_active.clear()
 	reset_floor()
 
-static func get_compiler_count() -> int:
-	"""Calculate weighted deck size for Compiler awakening threshold.
-	Fused cards count as 2. Unfused cards count as 1."""
+static func get_compiler_value() -> int:
+	"""Deck VALUE limb of the Compiler trigger (canon: 60).
+	Fused (overlaid) cards count as 2, unfused as 1."""
 	var count = 0
 	for card_id in player_deck:
 		var card = CardDB.get_card(card_id)
@@ -976,23 +978,38 @@ static func get_compiler_count() -> int:
 			count += 1
 	return count
 
+static func get_compiler_count() -> int:
+	"""Alias for get_compiler_value() — kept for existing call sites."""
+	return get_compiler_value()
+
+static func get_compiler_uniques() -> int:
+	"""UNIQUE limb of the Compiler trigger (canon: 50 distinct cards).
+	Overlaid cards add no uniques — they fuse onto existing deck entries."""
+	var seen = {}
+	for card_id in player_deck:
+		seen[card_id] = true
+	return seen.size()
+
 static func is_compiler_triggered() -> bool:
-	"""Check if the 50-card Compiler threshold has been reached."""
-	return get_compiler_count() >= deck_max_size
+	"""Compiler arms when EITHER canon limb is met:
+	50 unique cards, or deck value 60 (fused cards count 2)."""
+	return get_compiler_value() >= compiler_value_threshold \
+		or get_compiler_uniques() >= compiler_unique_threshold
 
 static func get_compiler_warning_level() -> String:
 	"""Return warning string based on proximity to Compiler threshold.
 	"""
-	var count = get_compiler_count()
-	var remaining = deck_max_size - count
+	var value_left = compiler_value_threshold - get_compiler_value()
+	var unique_left = compiler_unique_threshold - get_compiler_uniques()
+	var remaining = min(value_left, unique_left)
 	if remaining <= 0:
 		return "COMPILER AWAKENING"
 	elif remaining <= 5:
-		return "Compiler imminent (%d left)" % remaining
+		return "Compiler imminent (%d to nearest limb)" % remaining
 	elif remaining <= 10:
-		return "Deck heavy (%d left)" % remaining
+		return "Deck heavy (%d to nearest limb)" % remaining
 	elif remaining <= 20:
-		return "Deck growing (%d left)" % remaining
+		return "Deck growing (%d to nearest limb)" % remaining
 	return ""
 
 static func get_overlay_stock_for_floor(floor_num: int) -> Array[String]:
@@ -1025,9 +1042,9 @@ static func get_cleared_room_count() -> int:
 	return cleared_rooms.size()
 
 static func add_card_to_deck(card_id: String) -> bool:
-	"""Add a card to persistent deck. Returns false if compiler threshold reached."""
-	if get_compiler_count() > deck_max_size:
-		push_warning("GameState: Compiler threshold reached (%d/%d)" % [get_compiler_count(), deck_max_size])
+	"""Add a card to persistent deck. Returns false once the Compiler has armed."""
+	if is_compiler_triggered():
+		push_warning("GameState: Compiler armed (value %d/%d, unique %d/%d)" % [get_compiler_value(), compiler_value_threshold, get_compiler_uniques(), compiler_unique_threshold])
 		return false
 	player_deck.append(card_id)
 	GameState.deck_changed.emit()
@@ -1319,11 +1336,10 @@ static func new_game():
 		
 		print("GameState: Survivor threshold reached (%d > 20) — starter deck replaced by archive" % survivor_count)
 	
-	# Enforce compiler threshold (weighted deck cap)
-	while get_compiler_count() > deck_max_size:
-		# Remove last card (could be smarter but this is safe)
-		var removed = player_deck.pop_back()
-		print("GameState: Compiler cap enforced — removed %s (%d/%d weighted)" % [removed, get_compiler_count(), deck_max_size])
+	# Compiler canon: no deck trimming. An overgrown deck carries into the new run
+	# armed — the player faces the Compiler at Floor 10 instead of the Dragon.
+	if is_compiler_triggered():
+		print("GameState: Compiler armed going into new run (value %d/%d, unique %d/%d) — Floor 10 will host the Compiler" % [get_compiler_value(), compiler_value_threshold, get_compiler_uniques(), compiler_unique_threshold])
 	
 	GameState.deck_changed.emit()
 	

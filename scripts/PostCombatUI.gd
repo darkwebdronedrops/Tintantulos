@@ -562,7 +562,7 @@ func _create_deck_section() -> HBoxContainer:
 	deck_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	
 	var deck_header = Label.new()
-	deck_header.text = "Your Deck (%d/%d) — Burn cards for Gems:" % [current_deck.size(), GameState.deck_max_size]
+	deck_header.text = "Your Deck (%d cards) — Burn cards for Gems:" % current_deck.size()
 	deck_header.add_theme_font_size_override("font_size", 14)
 	deck_header.add_theme_color_override("font_color", Color(0.8, 0.8, 0.9))
 	deck_vbox.add_child(deck_header)
@@ -707,9 +707,9 @@ func _on_buy_card(index: int):
 		_show_notification("Not enough Quiddity! Need %d◈" % cost, Color(0.9, 0.5, 0.2))
 		return
 	
-	# Check deck limit
-	if GameState.player_deck.size() >= GameState.deck_max_size:
-		_show_notification("Deck full! (%d/%d) Burn a card first." % [GameState.player_deck.size(), GameState.deck_max_size], Color(0.9, 0.5, 0.2))
+	# Compiler gate: deck may grow until the Compiler arms
+	if GameState.is_compiler_triggered():
+		_show_notification("The Compiler has awoken — the deck will not grow. Burn for gems.", Color(0.9, 0.5, 0.2))
 		return
 	
 	# Purchase
@@ -911,8 +911,8 @@ func _update_currency_display():
 
 func _update_deck_count():
 	if deck_count_label:
-		deck_count_label.text = "Deck: %d/%d" % [GameState.player_deck.size(), GameState.deck_max_size]
-		if GameState.player_deck.size() >= GameState.deck_max_size:
+		deck_count_label.text = "Deck: %d cards · Compiler %d/%d val · %d/%d uniq" % [GameState.player_deck.size(), GameState.get_compiler_value(), GameState.compiler_value_threshold, GameState.get_compiler_uniques(), GameState.compiler_unique_threshold]
+		if GameState.is_compiler_triggered():
 			deck_count_label.add_theme_color_override("font_color", Color(0.9, 0.3, 0.3))
 		else:
 			deck_count_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.8))
