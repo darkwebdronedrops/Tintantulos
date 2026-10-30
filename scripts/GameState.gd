@@ -145,8 +145,10 @@ func _process(delta):
 	tick_no_aggro(delta)
 
 # Compiler awakening — two-limb canon (50 UNIQUE cards OR deck VALUE 60; fused cards count 2)
+# Thresholds and live progress are HIDDEN INFO: players get warning-tier whispers only.
 static var compiler_unique_threshold: int = 50
 static var compiler_value_threshold: int = 60
+static var show_compiler_numbers: bool = false  # dev flag — OFF for release
 
 # Offerings & Economy
 static var gear_devil_tokens: Array[int] = []  # Room IDs where tokens collected

@@ -911,7 +911,11 @@ func _update_currency_display():
 
 func _update_deck_count():
 	if deck_count_label:
-		deck_count_label.text = "Deck: %d cards · Compiler %d/%d val · %d/%d uniq" % [GameState.player_deck.size(), GameState.get_compiler_value(), GameState.compiler_value_threshold, GameState.get_compiler_uniques(), GameState.compiler_unique_threshold]
+		if GameState.show_compiler_numbers:
+			deck_count_label.text = "Deck: %d cards · Compiler %d/%d val · %d/%d uniq" % [GameState.player_deck.size(), GameState.get_compiler_value(), GameState.compiler_value_threshold, GameState.get_compiler_uniques(), GameState.compiler_unique_threshold]
+		else:
+			var whisper = GameState.get_compiler_warning_level()
+			deck_count_label.text = "Deck: %d cards%s" % [GameState.player_deck.size(), (" — " + whisper) if whisper != "" else ""]
 		if GameState.is_compiler_triggered():
 			deck_count_label.add_theme_color_override("font_color", Color(0.9, 0.3, 0.3))
 		else:

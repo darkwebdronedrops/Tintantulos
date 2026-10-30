@@ -266,10 +266,14 @@ func _update_quiddity():
 func _update_deck():
 	if deck_label:
 		var count = GameState.player_deck.size()
-		deck_label.text = "🃏 Deck: %d · Compiler %d/%d val · %d/%d uniq" % [
-			count,
-			GameState.get_compiler_value(), GameState.compiler_value_threshold,
-			GameState.get_compiler_uniques(), GameState.compiler_unique_threshold]
+		if GameState.show_compiler_numbers:
+			deck_label.text = "🃏 Deck: %d · Compiler %d/%d val · %d/%d uniq" % [
+				count,
+				GameState.get_compiler_value(), GameState.compiler_value_threshold,
+				GameState.get_compiler_uniques(), GameState.compiler_unique_threshold]
+		else:
+			var whisper = GameState.get_compiler_warning_level()
+			deck_label.text = "🃏 Deck: %d cards%s" % [count, (" — " + whisper) if whisper != "" else ""]
 		if GameState.is_compiler_triggered():
 			deck_label.add_theme_color_override("font_color", Color(0.9, 0.3, 0.3))
 		else:

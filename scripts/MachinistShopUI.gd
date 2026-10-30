@@ -856,11 +856,18 @@ func _refresh_overlays_tab():
 	var subtitle = Label.new()
 	var floor_num = GameState.current_floor if GameState.current_floor > 0 else 1
 	var shop_tier = "Arcane" if floor_num <= 3 else ("Infernal" if floor_num <= 7 else "Divine")
-	subtitle.text = "Floor %d shop tier: %s Overlays | Compiler: %d/%d val · %d/%d uniq" % [
-		floor_num, shop_tier,
-		GameState.get_compiler_value(), GameState.compiler_value_threshold,
-		GameState.get_compiler_uniques(), GameState.compiler_unique_threshold
-	]
+	if GameState.show_compiler_numbers:
+		subtitle.text = "Floor %d shop tier: %s Overlays | Compiler: %d/%d val · %d/%d uniq" % [
+			floor_num, shop_tier,
+			GameState.get_compiler_value(), GameState.compiler_value_threshold,
+			GameState.get_compiler_uniques(), GameState.compiler_unique_threshold
+		]
+	else:
+		var whisper = GameState.get_compiler_warning_level()
+		subtitle.text = "Floor %d shop tier: %s Overlays%s" % [
+			floor_num, shop_tier,
+			(" | " + whisper) if whisper != "" else ""
+		]
 	subtitle.add_theme_font_size_override("font_size", 11)
 	subtitle.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6))
 	content_container.add_child(subtitle)
