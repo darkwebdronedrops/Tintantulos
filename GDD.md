@@ -431,7 +431,7 @@ This section details the 150+ enemies across five distinct factions (Aberration 
 ## OVERLAY CARDS (30 Cards)
 
 ### Core Mechanic
-Overlays merge onto **ANY card** (Attack, Special, Direct, Field, Trap, Summon). Count as **2 cards** toward 60-card Compiler limit. Occupy one slot in hand/deck.
+Overlays merge onto **ANY card** (Attack, Special, Direct, Field, Trap, Summon). Count as **2 toward deck value** (Compiler limb B: value 60) but add **no new unique** (limb A: 50 unique cards). Occupy one slot in hand/deck.
 
 **How it works:**
 1. Buy an Overlay with Quiddity
@@ -577,7 +577,7 @@ Infernal overlays trade health for power. +0 Attention, adds 1 Corruption when c
 The Compiler is a **secret boss monster** that manifests when your deck grows too large.
 
 #### Unlock Condition
-- **Trigger:** Player deck reaches **50 cards**
+- **Trigger:** Either limb arms it — **50 unique cards** (distinct; Overlays add no uniques) **OR** **deck value of 60** (each card 1, each Overlaid card 2)
 - **Effect:** The Compiler awakens and replaces the Dragon at Floor 10
 - **Warning:** You will face The Compiler instead of the Dragon
 
@@ -596,7 +596,7 @@ The Compiler fights by "optimizing" the player's deck against them:
 
 **Visual:** A towering construct of glowing code, shifting cards, and processed data — half-machine, half-abstraction made manifest.
 
-**Note:** The Compiler is also the name of the deck-size danger mechanic (60+ cards = deck becomes unplayable). The secret boss and the deck mechanic share a name but are different systems.
+**Note:** The Compiler is also the name of the deck-size danger mechanic (50+ unique cards or 60+ deck value = Compiler awakens). The secret boss and the deck mechanic share a name but are different systems.
 
 
 ---
@@ -726,7 +726,7 @@ Enemy design follows standardized templates across all factions. For complete en
 | 9 | Dragon's Approach | Boss gauntlet | Dragon prep | ⏳ Not designed |
 | 10 | The Compiler's Sanctum / Dragon's Lair | Final confrontation | Dragon OR Compiler (Secret) | ⏳ Not designed |
 
-**Note:** Floor 10 normally features the Dragon. If player deck reached 50 cards, The Compiler awakens and replaces the Dragon encounter.
+**Note:** Floor 10 normally features the Dragon. If the player deck reached 50 unique cards or 60 deck value (Overlays count 2), The Compiler awakens and replaces the Dragon encounter.
 
 ### Floor 4: The Abandoned Mall (Complete)
 
@@ -983,7 +983,7 @@ Cards that work with any faction. No faction keywords, pure utility.
 | **TOTAL** | **244** | **101.6% Complete** (4 extra faction cards) |
 
 ### Note on Compiler
-The **Compiler** is a SECRET BOSS, not a card. Triggered at 60 cards in deck. See [Special Mechanics](#special-mechanics).
+The **Compiler** is a SECRET BOSS, not a card. Triggered at 50 unique cards or deck value 60 (Overlays count 2). See [Special Mechanics](#special-mechanics).
 
 ---
 

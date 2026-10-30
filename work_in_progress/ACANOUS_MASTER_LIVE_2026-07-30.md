@@ -543,7 +543,7 @@ Defeat it, choose one Dragon card. Then choose which card receives the **gold bo
 ## OVERLAY SYSTEM
 
 ### Core Mechanic
-Overlays merge onto **ANY card** (Attack, Special, Direct, Field, Trap, Summon). Count as **2 cards** toward deck limits. Occupy one slot in hand/deck.
+Overlays merge onto **ANY card** (Attack, Special, Direct, Field, Trap, Summon). Count as **2 toward deck value** (Compiler limb B) but add **no new unique** (limb A). Occupy one slot in hand/deck.
 
 **How it works:**
 1. Buy an Overlay with Quiddity (gem cost)
@@ -649,7 +649,9 @@ Five cards, five factions (no Construct). Play any one → others auto-play for 
 The Compiler is a **secret boss monster** that manifests when your deck grows too large.
 
 #### Unlock Condition
-- **Trigger:** Player deck reaches **50 cards** (weighted count, `GameState.deck_max_size`)
+- **Trigger — either limb arms it:**
+  - **50 unique cards** in the deck (distinct cards; Overlays add no uniques — they merge onto existing cards), **OR**
+  - **Deck value of 60** (weighted count: each card counts 1, each Overlaid card counts 2 — `GameState.deck_max_size` tracks the value limb)
 - **Effect:** The Compiler awakens and replaces the Dragon at Floor 10
 - **Warning:** You will face The Compiler instead of the Dragon
 
@@ -668,7 +670,7 @@ The Compiler fights by "optimizing" the player's deck against them:
 
 **Visual:** A towering construct of glowing code, shifting cards, and processed data — half-machine, half-abstraction made manifest.
 
-**Note:** The Compiler is also the name of the deck-size danger mechanic (50+ cards = Compiler awakens). The secret boss and the deck mechanic share a name but are different systems.
+**Note:** The Compiler is also the name of the deck-size danger mechanic (50+ unique cards **or** 60+ deck value = Compiler awakens). The secret boss and the deck mechanic share a name but are different systems.
 
 ---
 
@@ -932,7 +934,7 @@ The Compiler fights by "optimizing" the player's deck against them:
 **Unique Features:**
 - Player weight calculation (affects dragon HP)
 - Dragon HP scales with player build
-- **Compiler Secret Boss:** If player deck reaches **50 cards** (weighted), The Compiler awakens and replaces the Dragon
+- **Compiler Secret Boss:** If the deck reaches **50 unique cards** or **60 deck value** (Overlays count 2), The Compiler awakens and replaces the Dragon
 - Compiler mechanics: Debug, Memory Leak, Stack Overflow, Garbage Collection
 - Three endings:
   1. **End the Cycle:** Kill Dragon, tower collapses, New Game+ unlocked
