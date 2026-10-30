@@ -1005,13 +1005,13 @@ static func get_compiler_warning_level() -> String:
 	var unique_left = compiler_unique_threshold - get_compiler_uniques()
 	var remaining = min(value_left, unique_left)
 	if remaining <= 0:
-		return "COMPILER AWAKENING"
+		return "The tower takes notice."
 	elif remaining <= 5:
-		return "Compiler imminent (%d to nearest limb)" % remaining
+		return "The cards whisper to each other."
 	elif remaining <= 10:
-		return "Deck heavy (%d to nearest limb)" % remaining
+		return "The deck grows heavy."
 	elif remaining <= 20:
-		return "Deck growing (%d to nearest limb)" % remaining
+		return "The deck grows."
 	return ""
 
 static func get_overlay_stock_for_floor(floor_num: int) -> Array[String]:

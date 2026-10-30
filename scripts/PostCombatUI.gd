@@ -709,7 +709,7 @@ func _on_buy_card(index: int):
 	
 	# Compiler gate: deck may grow until the Compiler arms
 	if GameState.is_compiler_triggered():
-		_show_notification("The Compiler has awoken — the deck will not grow. Burn for gems.", Color(0.9, 0.5, 0.2))
+		_show_notification("The deck refuses — it has grown too heavy. Burn cards for gems instead.", Color(0.9, 0.5, 0.2))
 		return
 	
 	# Purchase

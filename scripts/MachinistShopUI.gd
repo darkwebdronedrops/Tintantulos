@@ -849,7 +849,7 @@ func _create_empty_slot() -> PanelContainer:
 func _refresh_overlays_tab():
 	"""Overlay shop tab — buy overlay cards with gems."""
 	var header = Label.new()
-	header.text = "Overlay Cards — Fuse with faction cards for power (⚠ counts as 2 toward Compiler)"
+	header.text = "Overlay Cards — Fuse with faction cards for power (⚠ fused cards weigh heavy)"
 	header.add_theme_font_size_override("font_size", 14)
 	content_container.add_child(header)
 	
