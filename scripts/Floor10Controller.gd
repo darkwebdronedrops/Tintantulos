@@ -161,19 +161,12 @@ func _check_condition(choice_id: String) -> bool:
 		_: return false
 
 func _check_cano_protocol_trigger():
-	"""Check if Cano Protocol should trigger instead of Dragon."""
-	var config = floor10_template.get_cano_config()
-	var trigger = config.get("trigger", {})
-	var required_deck = trigger.get("dragon_deck_size", 50)
-	var min_runs = trigger.get("run_count_minimum", 2)
-
-	var current_archive = GameState.get_value("dragon_deck_archive_size", 0)
-	var run_count = GameState.get_value("run_count", 1)
-
-	if current_archive >= required_deck and run_count >= min_runs:
+	"""Compiler (Cano Protocol) arms on the canon player-deck limbs — greed within a run.
+	The survivor archive is progression, not a boss counter."""
+	if GameState.is_compiler_triggered():
 		cano_protocol_triggered = true
 		_show_notification("⚠ NO DRAGON. The throne is empty. The door is open.", Color(0.3, 0.3, 0.9))
-		print("[Floor10] Cano Protocol triggered! Archive: %d | Runs: %d" % [current_archive, run_count])
+		print("[Floor10] Compiler (Cano Protocol) triggered! value: %d | uniques: %d" % [GameState.get_compiler_value(), GameState.get_compiler_uniques()])
 
 func _gather_cross_floor_dialogue():
 	"""Gather all cross-floor dialogue triggers."""
@@ -899,7 +892,7 @@ func _start_cano_fight():
 	cano_archive_remaining = 50
 	cano_ability_index = 0
 
-	_show_dialogue("The Cano Protocol", "RUN COUNT DETECTED: %d.\nDRAGON DECK STATE: 50/50.\nLOCKED.\n\nYOU HAVE FILLED THE TOWER WITH YOURSELF.\nNOW YOU FACE WHAT YOU BUILT.\n\nThe Protocol displays your Docket on the walls.\nEvery choice. Every compromise. Every 'victory.'\nAcross ALL runs.\n\n'You thought purity was the answer.\nYou thought corruption was the answer.\nYou thought leaving was the answer.\nYou kept playing.\nThe only variable that changed was your belief that you had chosen.'")
+	_show_dialogue("The Cano Protocol", "DECK STATE: OVERFULL.\nWEIGHT: EXCESS.\nVARIETY: EXCESS.\nLOCKED.\n\nYOU HAVE FILLED THE TOWER WITH YOURSELF.\nNOW YOU FACE WHAT YOU BUILT.\n\nThe Protocol displays your Docket on the walls.\nEvery choice. Every compromise. Every 'victory.'\nYou called it a collection.\nThe tower called it a census.\n\n'You thought purity was the answer.\nYou thought corruption was the answer.\nYou thought leaving was the answer.\nYou kept playing.\nThe only variable that changed was your belief that you had chosen.'")
 
 	_show_notification("⚠ THE CANO PROTOCOL — DEBUG aura active!", Color(0.3, 0.3, 0.9))
 	_update_cano_display()
@@ -907,7 +900,7 @@ func _start_cano_fight():
 
 func _on_cano_phase_1_diagnosis():
 	"""Phase 1: Protocol explains. No combat yet."""
-	_show_dialogue("The Cano Protocol", "The Compiler does not appear on your first run.\nIt appears when you have done enough runs that the Dragon's deck has accumulated 50 cards from your previous builds.\n\nEach run ending archives your deck to the Dragon's deck.\nDragon deck caps at 50. When it hits 50, the deck locks.\n\nOn the next run, when you reach Floor 10: There is no Dragon.\nThe throne is empty.\nThe door behind it is already open.\n\nBehind it: me.\n\nThe Dragon was never the final boss.\nThe Dragon was the loading screen.")
+	_show_dialogue("The Cano Protocol", "The Compiler does not care how many runs you have made.\nIt cares about one thing: what you carried.\n\nA deck grows one card at a time.\nYou were told it grew heavy. You were told the cards whispered.\nYou kept taking.\n\nFifty different hungers — or sixty weight of them, fused and fat —\nand the tower stops pretending the Dragon is the end of it.\n\nThere is no Dragon.\nThe throne is empty.\nThe door behind it is already open.\n\nBehind it: me.\n\nThe Dragon was never the final boss.\nThe Dragon was the loading screen.")
 
 	# Transition to combat
 	cano_phase = 2
