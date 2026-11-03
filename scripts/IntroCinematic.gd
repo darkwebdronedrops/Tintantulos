@@ -15,7 +15,6 @@ signal cinematic_ended
 
 const PLATE_FAR := "res://assets/sprites/tutorial/cine_tower_far.png"
 const PLATE_NEAR := "res://assets/sprites/tutorial/cine_tower_near.png"
-const PLATE_GROUND := "res://assets/sprites/tutorial/cine_ground_path.png"
 
 var plates: Array[TextureRect] = []
 var current_plate: int = -1
@@ -35,8 +34,8 @@ var steps: Array = [
 	{"text": "One moment I was... somewhere else.\nNow I'm standing before this.", "duration": 3.6, "plate": 0},
 	{"text": "The Tower of Tintantulos.", "duration": 3.2, "plate": 1},
 	{"text": "It shouldn't exist. But it does.\nAnd it's calling me.", "duration": 3.6, "plate": 1},
-	{"text": "", "duration": 1.0, "plate": 2},
-	{"text": "The Door is waiting.", "duration": 2.6, "plate": 2},
+	{"text": "", "duration": 1.0, "plate": 1},
+	{"text": "The Door is waiting.", "duration": 2.6, "plate": 1},
 ]
 
 func _ready():
@@ -46,7 +45,7 @@ func _ready():
 	start_cinematic()
 
 func _build():
-	var plate_paths := [PLATE_FAR, PLATE_NEAR, PLATE_GROUND]
+	var plate_paths := [PLATE_FAR, PLATE_NEAR]
 	for i in range(plate_paths.size()):
 		var tr := TextureRect.new()
 		tr.set_anchors_preset(Control.PRESET_FULL_RECT)
