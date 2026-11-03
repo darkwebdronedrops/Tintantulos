@@ -4,182 +4,163 @@ extends Control
 # ===================================================================
 # INTRO CINEMATIC — Approach the Tower
 # ===================================================================
-# Short cinematic: player approaches the Tower.
-# Music + sequential text overlays. Ends with prompt to fight the Door.
-# Skippable with any key/click.
+# Three painted plates crossfade as the player approaches:
+#   1. cine_tower_far.png    — tower on the horizon
+#   2. cine_tower_near.png   — looming base, gold door
+#   3. cine_ground_path.png  — the path at ground level
+# Narrative text over. Skippable (any key / click). Ends in Floor 1.
 # ===================================================================
 
 signal cinematic_ended
 
-# Cinematic state
+const PLATE_FAR := "res://assets/sprites/tutorial/cine_tower_far.png"
+const PLATE_NEAR := "res://assets/sprites/tutorial/cine_tower_near.png"
+const PLATE_GROUND := "res://assets/sprites/tutorial/cine_ground_path.png"
+
+var plates: Array[TextureRect] = []
+var current_plate: int = -1
 var current_step: int = 0
 var step_timer: float = 0.0
 var is_active: bool = false
 var skip_requested: bool = false
 
-# UI elements
-var background: ColorRect
-var tower_sprite: Sprite2D
 var text_label: Label
 var prompt_label: Label
 var fade_rect: ColorRect
-var vignette: ColorRect
 
-# Cinematic steps: [text, duration, fade_in_time]
-var cinematic_steps: Array = [
-	{"text": "", "duration": 1.5, "fade": 1.0},  # Black screen
-	{"text": "I don't remember how I got here.", "duration": 3.0, "fade": 0.5},
-	{"text": "One moment I was... somewhere else.\nNow I'm standing before this.", "duration": 3.5, "fade": 0.5},
-	{"text": "The Tower of Tintantulos.", "duration": 3.0, "fade": 0.5},
-	{"text": "It shouldn't exist. But it does.\nAnd it's calling me.", "duration": 3.5, "fade": 0.5},
-	{"text": "", "duration": 1.0, "fade": 0.5},  # Brief pause
-	{"text": "The Door is waiting.", "duration": 2.5, "fade": 0.3},
+# [text, duration, plate_index]
+var steps: Array = [
+	{"text": "", "duration": 1.6, "plate": 0},
+	{"text": "I don't remember how I got here.", "duration": 3.2, "plate": 0},
+	{"text": "One moment I was... somewhere else.\nNow I'm standing before this.", "duration": 3.6, "plate": 0},
+	{"text": "The Tower of Tintantulos.", "duration": 3.2, "plate": 1},
+	{"text": "It shouldn't exist. But it does.\nAnd it's calling me.", "duration": 3.6, "plate": 1},
+	{"text": "", "duration": 1.0, "plate": 2},
+	{"text": "The Door is waiting.", "duration": 2.6, "plate": 2},
 ]
 
 func _ready():
 	process_mode = PROCESS_MODE_ALWAYS
-	_build_scene()
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+	_build()
 	start_cinematic()
 
-func _build_scene():
-	# Full-screen black background
-	background = ColorRect.new()
-	background.color = Color(0.02, 0.02, 0.04)
-	background.size = Vector2(1280, 720)
-	add_child(background)
-	
-	# Tower silhouette (placeholder: dark geometric shape)
-	tower_sprite = Sprite2D.new()
-	tower_sprite.position = Vector2(640, 360)
-	# Use a simple polygon as placeholder
-	var tower_poly = Polygon2D.new()
-	tower_poly.polygon = PackedVector2Array([
-		Vector2(-40, 200),   # Bottom left
-		Vector2(-25, -100),  # Mid left
-		Vector2(-10, -180),  # Upper left
-		Vector2(0, -220),    # Peak
-		Vector2(10, -180),   # Upper right
-		Vector2(25, -100),   # Mid right
-		Vector2(40, 200),    # Bottom right
-	])
-	tower_poly.color = Color(0.1, 0.08, 0.15, 0.9)
-	tower_sprite.add_child(tower_poly)
-	add_child(tower_sprite)
-	
-	# Vignette effect (dark edges)
-	vignette = ColorRect.new()
-	vignette.color = Color(0, 0, 0, 0.4)
-	vignette.size = Vector2(1280, 720)
-	add_child(vignette)
-	
-	# Text display
+func _build():
+	var plate_paths := [PLATE_FAR, PLATE_NEAR, PLATE_GROUND]
+	for i in range(plate_paths.size()):
+		var tr := TextureRect.new()
+		tr.set_anchors_preset(Control.PRESET_FULL_RECT)
+		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		if ResourceLoader.exists(plate_paths[i]):
+			tr.texture = load(plate_paths[i])
+		tr.modulate.a = 0.0
+		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(tr)
+		plates.append(tr)
+
 	text_label = Label.new()
-	text_label.position = Vector2(140, 520)
-	text_label.size = Vector2(1000, 80)
+	text_label.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	text_label.position = Vector2(-500, -190)
+	text_label.size = Vector2(1000, 90)
 	text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	text_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	text_label.add_theme_font_size_override("font_size", 20)
-	text_label.add_theme_color_override("font_color", Color(0.85, 0.82, 0.75))
-	text_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0))
-	text_label.add_theme_constant_override("shadow_outline_size", 4)
+	text_label.add_theme_font_size_override("font_size", 21)
+	text_label.add_theme_color_override("font_color", Color(0.88, 0.85, 0.78))
+	text_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
+	text_label.add_theme_constant_override("shadow_offset_x", 2)
+	text_label.add_theme_constant_override("shadow_offset_y", 2)
 	text_label.modulate.a = 0.0
 	add_child(text_label)
-	
-	# Skip prompt
+
 	prompt_label = Label.new()
-	prompt_label.text = "[Press any key to skip]"
-	prompt_label.position = Vector2(540, 680)
-	prompt_label.size = Vector2(200, 25)
+	prompt_label.text = "[ press any key to skip ]"
+	prompt_label.position = Vector2(540, 690)
+	prompt_label.size = Vector2(200, 24)
 	prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	prompt_label.add_theme_font_size_override("font_size", 11)
-	prompt_label.add_theme_color_override("font_color", Color(0.4, 0.4, 0.45))
-	prompt_label.modulate.a = 0.6
+	prompt_label.add_theme_color_override("font_color", Color(0.45, 0.45, 0.5))
+	prompt_label.modulate.a = 0.65
 	add_child(prompt_label)
-	
-	# Fade to black overlay
+
 	fade_rect = ColorRect.new()
 	fade_rect.color = Color(0, 0, 0, 1.0)
-	fade_rect.size = Vector2(1280, 720)
+	fade_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(fade_rect)
 
 func start_cinematic():
 	is_active = true
-	current_step = 0
-	step_timer = 0.0
-	# Play ambient music
 	AudioManager.play_special("title")
-	# Start fade out from black
 	var tween = create_tween()
-	tween.tween_property(fade_rect, "color:a", 0.0, 1.5)
-	print("[IntroCinematic] Starting cinematic")
+	tween.tween_property(fade_rect, "color:a", 0.0, 1.6)
+	print("[IntroCinematic] Starting — %d steps" % steps.size())
 
 func _input(event: InputEvent):
-	if not is_active:
+	if not is_active or skip_requested:
 		return
-	
-	# Skip on any input
-	if event is InputEventKey and event.pressed:
-		_skip_cinematic()
-	elif event is InputEventMouseButton and event.pressed:
-		_skip_cinematic()
+	if (event is InputEventKey and event.pressed and not event.echo) \
+	or (event is InputEventMouseButton and event.pressed):
+		_skip()
 
-func _skip_cinematic():
-	if skip_requested:
-		return
+func _skip():
 	skip_requested = true
-	print("[IntroCinematic] Skipped by player")
-	_end_cinematic()
+	print("[IntroCinematic] Skipped")
+	_end()
 
 func _process(delta: float):
 	if not is_active:
 		return
-	
 	step_timer += delta
-	
-	if current_step < cinematic_steps.size():
-		var step = cinematic_steps[current_step]
-		
-		# Fade in text
-		if step_timer <= step.get("fade", 0.5):
-			var fade_progress = step_timer / step.get("fade", 0.5)
-			text_label.modulate.a = fade_progress
-			text_label.text = step.get("text", "")
-		
-		# Hold text
-		elif step_timer <= step.duration:
-			text_label.modulate.a = 1.0
-		
-		# Fade out and advance
-		else:
-			var fade_out_time = 0.5
-			var fade_progress = (step_timer - step.duration) / fade_out_time
-			text_label.modulate.a = max(0.0, 1.0 - fade_progress)
-			
-			if fade_progress >= 1.0:
-				current_step += 1
-				step_timer = 0.0
-				
-				# Check if cinematic is complete
-				if current_step >= cinematic_steps.size():
-					_end_cinematic()
-	
-	# Tower slowly grows (approach effect)
-	if tower_sprite:
-		var max_scale = 2.0
-		var current_scale = 0.5 + (float(current_step) / cinematic_steps.size()) * (max_scale - 0.5)
-		tower_sprite.scale = Vector2(current_scale, current_scale)
-		# Slight upward movement (camera tilting up)
-		tower_sprite.position.y = 360 - (float(current_step) / cinematic_steps.size()) * 80
 
-func _end_cinematic():
+	if current_step >= steps.size():
+		_end()
+		return
+
+	var step: Dictionary = steps[current_step]
+	_ensure_plate(step.get("plate", 0))
+
+	var hold_end: float = step.duration
+	var fade_in: float = min(0.6, step.duration * 0.25)
+	var fade_out: float = 0.6
+
+	if step_timer <= fade_in:
+		text_label.text = step.get("text", "")
+		text_label.modulate.a = step_timer / fade_in
+	elif step_timer <= hold_end:
+		text_label.modulate.a = 1.0
+	elif step_timer <= hold_end + fade_out:
+		text_label.modulate.a = max(0.0, 1.0 - (step_timer - hold_end) / fade_out)
+	else:
+		current_step += 1
+		step_timer = 0.0
+
+func _ensure_plate(idx: int):
+	if idx == current_plate or idx < 0 or idx >= plates.size():
+		return
+	# slow push-in on the incoming plate
+	var tr := plates[idx]
+	tr.pivot_offset = tr.size / 2.0
+	tr.scale = Vector2(1.0, 1.0)
+	var kb := create_tween()
+	kb.tween_property(tr, "scale", Vector2(1.09, 1.09), 9.0).set_trans(Tween.TRANS_LINEAR)
+	# crossfade
+	var tw := create_tween()
+	for i in range(plates.size()):
+		if i == idx:
+			tw.tween_property(plates[i], "modulate:a", 1.0, 1.4)
+		else:
+			tw.parallel().tween_property(plates[i], "modulate:a", 0.0, 1.4)
+	current_plate = idx
+
+func _end():
+	if not is_active:
+		return
 	is_active = false
-	cinematic_ended.emit()
-	
-	# Fade to black
 	var tween = create_tween()
 	tween.tween_property(fade_rect, "color:a", 1.0, 1.0)
-	tween.tween_callback(_transition_to_tutorial)
+	tween.tween_callback(_go)
 
-func _transition_to_tutorial():
-	# Load Floor 1 (tutorial mode will trigger via GameState.is_first_run)
+func _go():
+	cinematic_ended.emit()
 	get_tree().change_scene_to_file("res://scenes/Floor1.tscn")

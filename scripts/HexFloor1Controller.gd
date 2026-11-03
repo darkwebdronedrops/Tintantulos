@@ -981,7 +981,9 @@ func _ambush_tutorial_door():
 		return
 	
 	_hide_floating_prompt()
-	# The door "notices" the player and spins around
+	# The door "notices" the player: swap to awakened face
+	if tutorial_door and tutorial_door.sprite and ResourceLoader.exists("res://assets/sprites/tutorial/the_door_awakened.png"):
+		tutorial_door.sprite.texture = load("res://assets/sprites/tutorial/the_door_awakened.png")
 	_show_notification("The Door senses you!", Color(0.9, 0.3, 0.3), 3.0)
 	
 	# Face the player
@@ -1144,11 +1146,11 @@ func _spawn_tutorial_door_if_needed():
 		tutorial_door_hex,
 		"Construct",
 		false,
-		"res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"
+		"res://assets/sprites/floor1/the_door.png"
 	)
 	
-	if ResourceLoader.exists("res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png"):
-		tutorial_door.sprite.texture = load("res://assets/sprites/enemies/Construct/enemy_piston_assembly_idle.png")
+	if ResourceLoader.exists("res://assets/sprites/floor1/the_door.png"):
+		tutorial_door.sprite.texture = load("res://assets/sprites/floor1/the_door.png")
 	
 	tutorial_door.max_hp = 8
 	tutorial_door.hp = 8
@@ -1678,6 +1680,9 @@ func _start_guided_tutorial():
 	tutorial_click_move_used = false
 	tutorial_door_defeated = false
 	
+	# Threshold ambience for the tutorial
+	_apply_threshold_look(true)
+	
 	# Player starts in entry room
 	_enter_room("entry")
 	
@@ -1685,12 +1690,40 @@ func _start_guided_tutorial():
 	_show_floating_prompt("The hexes respond. Try W, E, A, D, Z, X.")
 	print("[Floor1-Hex] Guided tutorial started: movement phase")
 
+func _apply_threshold_look(on: bool):
+	"""Swap room dressing for the tutorial threshold; revert when done."""
+	var backdrop := get_node_or_null("Backdrop") as Sprite2D
+	if on:
+		if backdrop and ResourceLoader.exists("res://assets/sprites/tutorial/threshold_backdrop.png"):
+			if not backdrop.has_meta("orig_texture"):
+				backdrop.set_meta("orig_texture", true)
+			backdrop.texture = load("res://assets/sprites/tutorial/threshold_backdrop.png")
+		if hex_map and get_node_or_null("ThresholdRubble") == null:
+			var holder := Node2D.new()
+			holder.name = "ThresholdRubble"
+			for s in [Vector2i(-3, -27), Vector2i(3, -28), Vector2i(-5, -31)]:
+				var spr := Sprite2D.new()
+				spr.texture = load("res://assets/sprites/tutorial/threshold_rubble.png")
+				spr.position = hex_map.hex_to_world(s)
+				spr.z_index = 40
+				spr.scale = Vector2(0.9, 0.9)
+				holder.add_child(spr)
+			add_child(holder)
+	else:
+		if backdrop and backdrop.has_meta("orig_texture"):
+			backdrop.texture = load("res://assets/sprites/floor1/floor1_main_bg.png")
+			backdrop.remove_meta("orig_texture")
+		var rubble := get_node_or_null("ThresholdRubble")
+		if rubble:
+			rubble.queue_free()
+
 func _on_guided_tutorial_complete():
 	"""Called when the entire guided tutorial is finished."""
 	guided_tutorial_active = false
 	GameState.is_first_run = false
 	GameState.door_tutorial_completed = true
 	GameState.save_game()
+	_apply_threshold_look(false)
 	_unlock_all_portals()
 	# Spawn regular enemies now that tutorial is done
 	_spawn_regular_enemies()
